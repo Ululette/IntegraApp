@@ -1,12 +1,11 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-//Abajo importar componentes
+import LandingP from './LandingP/LandingP.jsx';
 
 function App() {
     return (
         <React.Fragment>
-            <div></div>
-            {/* <Route exact path='/' component={LandingPage} /> */}
+            <Route exact path='/' component={LandingP} />
         </React.Fragment>
     );
 }
