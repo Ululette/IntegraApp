@@ -7,7 +7,7 @@ import {
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import styles from './styles/FaqsPage.module.css';
+import styles from './FaqsPage.module.css';
 
 function FaqsPage() {
     return (
