@@ -1,0 +1,54 @@
+.conteinerAll{
+    width: 100%;
+    height: 100%;
+    margin-top: 2%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.formConteiner{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.imgConteiner{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.imgConteiner img{
+    width: 90px;
+    height: 90px;
+}
+
+.inputs{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.textField{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items:center;
+} 
+.textField label{
+    font-family:Roboto, sans-serif;
+    font-style: normal;
+    padding: 10px;
+}
+
+.MuiButton-root{
+    margin-right: 15px;
+}
+
