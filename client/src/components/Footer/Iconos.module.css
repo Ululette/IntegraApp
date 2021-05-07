@@ -1,0 +1,21 @@
+.ft_iconos{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.ft_logo{
+  width: 20px;
+  margin: 0px 3px 0px 3px;
+}
+.ft_env{
+  width: 25px;
+}
+
+.ft_followup{
+  font-family: nunito;
+  font-size: 13px;
+  list-style: none;
+  padding: 0;
+	margin: 10px 0px 10px 0px;
+}
