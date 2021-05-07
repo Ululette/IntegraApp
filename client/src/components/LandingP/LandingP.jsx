@@ -7,6 +7,8 @@ export default function LandingP() {
       <div >
         <h1> Integra salud</h1>
         <p> 'Acá agregamos los componentes por separado importandolos'</p>
+        
+
       </div>
     )
 }
