@@ -4,11 +4,9 @@ import './LandingP.css';
 
 export default function LandingP() {
     return (
-      <div >
+      <div >       
         <h1> Integra salud</h1>
         <p> 'Acá agregamos los componentes por separado importandolos'</p>
-        
-
       </div>
     )
 }

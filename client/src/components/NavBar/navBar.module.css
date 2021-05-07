@@ -1,0 +1,39 @@
+
+.div{
+  align-content: center;
+}
+.bar{
+  display: flex;
+  background-color: #41aea9;
+  height: 75px;
+  box-shadow: 13px ;
+  width: 100%;
+  box-shadow: 0 5px 6px -6px black;
+  align-items: center;
+  justify-content: space-between;
+}
+.logB{
+display: flex;
+font-size: large;
+outline: none;
+border: 0;
+border-radius: 10px;
+background-color: #a6f6f1;
+padding: 10px;
+	-webkit-box-shadow: 0 5px 6px -6px black;
+	   -moz-box-shadow: 0 5px 6px -6px black;
+	        box-shadow: 0 5px 6px -6px black;
+height: fit-content;
+margin-right: 10px;
+}
+ .logB:hover{
+ opacity: 0.8;
+ cursor: pointer;
+}
+.img{
+  width: auto;
+  height: 75px;
+}
+.navL{
+  text-decoration: none;
+}
