@@ -74,6 +74,10 @@
     font-size: 1.3rem;
 }
 
+.warningLogin {
+    color: red;
+}
+
 .userPic {
     width: 150px;
     height: 150px;
@@ -116,4 +120,8 @@
 
 .selectDoc {
     width: 60%;
+}
+
+.progressLoad {
+    margin-top: 1.5rem;
 }

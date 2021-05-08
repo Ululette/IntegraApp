@@ -1,12 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Select, TextField, MenuItem, Avatar } from '@material-ui/core';
+import {
+    Select,
+    TextField,
+    MenuItem,
+    CircularProgress,
+} from '@material-ui/core';
+import 'firebase/auth';
+import { useUser } from 'reactfire';
+import supabase from '../../supabase.config.js';
 import styles from './Login.module.css';
 
-function Login() {
+function Login({ history, firebase }) {
     const [role, setRole] = useState(10);
     const [doc, setDoc] = useState(40);
     const [input, setInput] = useState({ doc: '', pass: '' });
+    const [errors, setErrors] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const userFire = useUser();
+
+    console.log(userFire.data);
+    const userData = JSON.parse(localStorage.getItem('userdata'));
+    if (userData && userData.role === 'admin')
+        window.location = `/${userData.id}/admin`;
 
     const handleChange = (event) => {
         const value = event.target.value;
@@ -15,13 +31,58 @@ function Login() {
 
     const handleInput = (event) => {
         const value = event.target.value;
-        const label = event.target.label;
+        const id = event.target.id;
         const regex = /^[0-9\b]+$/; // this regex is to accept only numbers
 
-        if (label === 'Email') setInput({ doc: value });
+        if (id === 'doc') {
+            if ((value === '' || regex.test(value)) && value.length <= 8)
+                setInput({ doc: value });
+        }
+        if (id === 'pass') setInput({ ...input, pass: value });
+    };
 
-        if ((value === '' || regex.test(value)) && value.length <= 8)
-            setInput({ doc: value });
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        setInput({ doc: '', pass: '' });
+        setLoading(true);
+        try {
+            let { data: users, error } = await supabase
+                .from('users')
+                .select('id, email, role, name')
+                .eq('id', input.doc);
+            if (error) return console.log(error);
+            const numRole =
+                users[0].role === 'socio_titular'
+                    ? 10
+                    : users[0].role === 'medico'
+                    ? 20
+                    : 30;
+            if (numRole !== role) {
+                setLoading(false);
+                return setErrors('Usuario y/o contraseña incorrecto.');
+            } else {
+                setErrors(null);
+            }
+            await firebase
+                .auth()
+                .signInWithEmailAndPassword(users[0].email, input.pass);
+
+            const dataUser = {
+                id: users[0].id,
+                name: users[0].name,
+                email: users[0].email,
+                role: users[0].role,
+            };
+
+            localStorage.setItem('userdata', JSON.stringify(dataUser));
+
+            setLoading(false);
+
+            window.location = `/${userFire.data.uid}/admin`;
+        } catch (error) {
+            setErrors('Usuario y/o contraseña incorrecto.');
+            setLoading(false);
+        }
     };
 
     return (
@@ -36,7 +97,7 @@ function Login() {
                     <button className={styles.buttonRegister}>Asociate</button>
                 </NavLink>
             </aside>
-            <form className={styles.formLogin}>
+            <form className={styles.formLogin} onSubmit={handleSubmit}>
                 <section>
                     <label className={styles.labelRole} htmlFor='role'>
                         Ingresar como:
@@ -58,6 +119,7 @@ function Login() {
                     alt='Logo Integra.'
                     className={styles.logo}
                 />
+                {userFire.data ? <p>{userFire.data.email}</p> : null}
                 <img
                     src='https://picsum.photos/200'
                     alt='Avatar icon.'
@@ -79,28 +141,36 @@ function Login() {
                 )}
                 <TextField
                     className={styles.inputData}
-                    label={
-                        role === 10
-                            ? 'Nº de documento'
-                            : role === 20
-                            ? 'Nº de matricula'
-                            : 'Email'
-                    }
+                    id='doc'
+                    label={role !== 20 ? 'Nº de documento' : 'Nº de matricula'}
                     value={input.doc}
                     onChange={handleInput}
                     required
                 />
                 <TextField
                     className={styles.inputData}
+                    id='pass'
                     label='Contraseña'
                     type='password'
+                    value={input.pass}
+                    onChange={handleInput}
                     required
                 />
-                <input
-                    className={styles.buttonLogin}
-                    type='submit'
-                    value='Ingresar'
-                />
+                {errors ? (
+                    <p className={styles.warningLogin}>
+                        Usuario y/o contraseña incorrecta
+                    </p>
+                ) : null}
+
+                {loading ? (
+                    <CircularProgress className={styles.progressLoad} />
+                ) : (
+                    <input
+                        className={styles.buttonLogin}
+                        type='submit'
+                        value='Ingresar'
+                    />
+                )}
             </form>
         </div>
     );
