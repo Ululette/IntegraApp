@@ -5,7 +5,6 @@ import LandingP from './LandingP/LandingP.jsx';
 import Login from './Login/Login.jsx';
 import AdminLogged from './AdminLogged/AdminLogged.jsx';
 import FaqsPage from './Faqs/FaqsPage.jsx';
-import Test from './useEffect.jsx';
 
 function App() {
     const firebase = useFirebaseApp();
@@ -18,7 +17,6 @@ function App() {
                 render={() => <AdminLogged firebase={firebase} />}
             />
             <Route path='/faqs' component={FaqsPage} />
-            <Route path='/test' component={Test} />
         </React.Fragment>
     );
 }
