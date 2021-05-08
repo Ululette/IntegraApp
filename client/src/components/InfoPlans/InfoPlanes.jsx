@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import InfoCard from './InfoCard';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import Slide from '@material-ui/core/Slide'
 import * as Styles from './InfoPlans.module.css'
 
 const plans = [
@@ -40,14 +41,46 @@ const plans = [
 
 export default function InfoPlanes() {
 
-
   const [currCard, setCurrCard] = useState(0)
+
   const leftPlan = plans[currCard > 1 ? currCard - 1 : plans.length - 1]
   const plan = plans[currCard]
   const rightPlan = plans[currCard < plans.length - 1 ? currCard + 1 : 0]
+  
 
-  const forward = () => (currCard < plans.length - 1 ? setCurrCard(currCard + 1) : setCurrCard(0))
-  const back = () => (currCard > 0 ? setCurrCard(currCard - 1) : setCurrCard(plans.length - 1))
+  const forward = () => {
+    currCard < plans.length - 1 ? setCurrCard(currCard + 1) : setCurrCard(0);
+  }
+
+
+  const back = () => {
+    currCard > 0 ? setCurrCard(currCard - 1) : setCurrCard(plans.length - 1);
+  }
+
+
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 39) {
+      forward();
+    }
+    if (e.keyCode === 37) {
+      back();
+    }
+  };
+
+  // const move = setTimeout
+  // const stop = clearTimeout
+
+  useEffect(() => {
+
+    // move(forward, 1500)
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  });
+
 
   return (
     <div className={Styles.carousel} >
