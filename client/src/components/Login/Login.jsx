@@ -15,10 +15,13 @@ function Login() {
 
     const handleInput = (event) => {
         const value = event.target.value;
+        const label = event.target.label;
         const regex = /^[0-9\b]+$/; // this regex is to accept only numbers
-        if ((value === '' || regex.test(value)) && value.length <= 8) {
+
+        if (label === 'Email') setInput({ doc: value });
+
+        if ((value === '' || regex.test(value)) && value.length <= 8)
             setInput({ doc: value });
-        }
     };
 
     return (
@@ -62,7 +65,7 @@ function Login() {
                 />
                 {role === 20 ? (
                     <p className={styles.matricula}>Bienvenido Doctor</p>
-                ) : (
+                ) : role === 10 ? (
                     <Select
                         value={doc}
                         className={styles.selectDoc}
@@ -71,10 +74,18 @@ function Login() {
                         <MenuItem value={40}>DNI</MenuItem>
                         <MenuItem value={50}>Pasaporte</MenuItem>
                     </Select>
+                ) : (
+                    <p className={styles.matricula}>Bienvenido Admin</p>
                 )}
                 <TextField
                     className={styles.inputData}
-                    label={role !== 20 ? 'Nº de documento' : 'Nº de matricula'}
+                    label={
+                        role === 10
+                            ? 'Nº de documento'
+                            : role === 20
+                            ? 'Nº de matricula'
+                            : 'Email'
+                    }
                     value={input.doc}
                     onChange={handleInput}
                     required
