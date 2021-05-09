@@ -8,6 +8,7 @@ import { useFirebaseApp } from 'reactfire';
 import Login from './Login/Login.jsx';
 import AdminHome from './AdminLogged/AdminHome.jsx';
 import FaqsPage from './Faqs/FaqsPage.jsx';
+import ContactFormGuest from './contact_form_guest/contact_form_guest.jsx';
 
 function App() {
     const firebase = useFirebaseApp();
@@ -22,6 +23,7 @@ function App() {
                 path='/:id/admin'
                 render={() => <AdminHome firebase={firebase} />}
             />
+            <Route exact path='/asociate' component={ContactFormGuest} />
             <Route path='/' component={Footer} />
         </>
     );
