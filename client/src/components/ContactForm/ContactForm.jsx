@@ -218,6 +218,7 @@ function ContactForm(){
                             color="primary" 
                             style={{ borderRadius: 100 , margin: 10 }} 
                             onClick={handleClickOpen} 
+                            disabled = {(!input.age && !input.dni && !input.phone_number && !input.mail && !input.name)}
                         >
                             Consultar
                         </Button>
