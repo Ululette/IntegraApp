@@ -10,7 +10,7 @@ import {
     MenuItem,
     IconButton,
 } from '@material-ui/core';
-
+import { useUser } from 'reactfire';
 import 'firebase/auth';
 import styles from './AdminHome.module.css';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -19,6 +19,7 @@ import CreateIcon from '@material-ui/icons/Create';
 import MenuIcon from '@material-ui/icons/Menu';
 
 function AdminHome({ firebase }) {
+    // const userFire = useUser();
     const userData = JSON.parse(localStorage.getItem('userdata'));
     if (!userData || userData.role !== 'admin') window.location = '/login';
 
@@ -26,9 +27,9 @@ function AdminHome({ firebase }) {
     const dispatch = useDispatch();
     const [anchorEl, setAnchorEl] = useState(null);
 
-    const logout = () => {
+    const logout = async () => {
         if (window.confirm('¿Quiere cerrar sesión?')) {
-            firebase.auth().signOut();
+            await firebase.auth().signOut();
             localStorage.removeItem('userdata');
             window.location = '/login';
         }

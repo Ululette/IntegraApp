@@ -24,8 +24,8 @@ function Login({ history, firebase }) {
 
     console.log(userFire.data);
     const userData = JSON.parse(localStorage.getItem('userdata'));
-    if (userData && userData.role === 'admin')
-        window.location = `/${userData.id}/admin`;
+    // if ((userData && userData.role === 'admin') || userFire.data)
+    //     window.location = `/${userData.id}/admin`;
 
     const handleChange = (event) => {
         const value = event.target.value;
