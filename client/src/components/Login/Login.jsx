@@ -22,10 +22,9 @@ function Login({ history, firebase }) {
     const [loading, setLoading] = useState(false);
     const userFire = useUser();
 
-    console.log(userFire.data);
     const userData = JSON.parse(localStorage.getItem('userdata'));
-    // if ((userData && userData.role === 'admin') || userFire.data)
-    //     window.location = `/${userData.id}/admin`;
+    if (userData && userData.role === 'admin' && userFire.data)
+        window.location = `/${userFire.data.uid}/admin`;
 
     const handleChange = (event) => {
         const value = event.target.value;
@@ -36,12 +35,18 @@ function Login({ history, firebase }) {
         const value = event.target.value;
         const id = event.target.id;
         const regex = /^[0-9\b]+$/; // this regex is to accept only numbers
-
         if (id === 'doc') {
             if ((value === '' || regex.test(value)) && value.length <= 8)
-                setInput({ doc: value });
+                setInput({
+                    ...input,
+                    doc: value,
+                });
+        } else {
+            setInput({
+                ...input,
+                pass: value,
+            });
         }
-        if (id === 'pass') setInput({ ...input, pass: value });
     };
 
     const handleSubmit = async (event) => {
@@ -78,10 +83,9 @@ function Login({ history, firebase }) {
             };
 
             localStorage.setItem('userdata', JSON.stringify(dataUser));
-
+            console.log(userFire.data.uid);
             setLoading(false);
-
-            window.location = `/${userFire.data.uid}/admin`;
+            // window.location = `/${userFire.data.uid}/admin`;
         } catch (error) {
             setErrors('Usuario y/o contraseña incorrecto.');
             setLoading(false);

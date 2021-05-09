@@ -1,24 +1,27 @@
 .first {
   /*  background-color: #a6f6f1; */
   background: rgb(166, 246, 241);
-  background: linear-gradient(
-    90deg,
-    rgba(166, 246, 241, 1) 0%,
-    rgba(225, 232, 233, 1) 39%
-  );
+  background: linear-gradient(90deg,
+      rgba(166, 246, 241, 1) 0%,
+      rgba(225, 232, 233, 1) 39%);
   display: flex;
   justify-content: space-around;
   align-items: center;
 }
+
 .typewriter h1 {
   color: #41aea9;
   font-size: 100px;
   padding: 30px;
   align-items: center;
-  overflow: hidden; /* Ensures the content is not revealed until the animation */
-  white-space: nowrap; /* Keeps the content on a single line */
-  margin: 0 auto; /* Gives that scrolling effect as the typing happens */
-  letter-spacing: 0.15em; /* Adjust as needed */
+  overflow: hidden;
+  /* Ensures the content is not revealed until the animation */
+  white-space: nowrap;
+  /* Keeps the content on a single line */
+  margin: 0 auto;
+  /* Gives that scrolling effect as the typing happens */
+  letter-spacing: 0.15em;
+  /* Adjust as needed */
   animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
 }
 
@@ -27,10 +30,12 @@
   from {
     width: 0;
   }
+
   to {
     width: 100%;
   }
 }
+
 .icons {
   padding: 20px;
   display: flex;
@@ -46,19 +51,23 @@
   width: fit-content;
   padding: 10px;
 }
+
 .each {
   height: 100px;
   width: 100px;
 }
+
 .des {
   width: 100px;
   text-align: center;
   padding-bottom: 20px;
 }
+
 .info {
   display: flex;
   justify-content: space-evenly;
 }
+
 .app {
   display: flex;
   flex-direction: column;
@@ -68,24 +77,22 @@
   height: 500px;
   background-repeat: no-repeat;
   background-color: rgb(166, 246, 241);
-  background-color: linear-gradient(
-    90deg,
-    rgba(166, 246, 241, 1) 0%,
-    rgba(225, 232, 233, 1) 39%
-  );
+  background-color: linear-gradient(90deg,
+      rgba(166, 246, 241, 1) 0%,
+      rgba(225, 232, 233, 1) 39%);
   /* background-color: #988474; */
   opacity: 80%;
   padding-top: 20px;
 }
-h2 {
+
+.all h2 {
   color: #41aea9;
   font-size: 50px;
   padding: 30px;
   align-items: center;
   width: 500px;
-  margin-left:50px
-
-  /*    margin-left: 600px; */
+  margin-left: 50px
+    /*    margin-left: 600px; */
 }
 
 .desM {
@@ -94,9 +101,10 @@ h2 {
   align-items: center;
   width: 650px;
   margin-left: 0px;
-/*   margin: 20px;
+  /*   margin: 20px;
   padding: 30px; */
 }
+
 .images {
   display: flex;
   flex-direction: row;
@@ -104,6 +112,7 @@ h2 {
   align-items: baseline;
   margin-left: 500px;
 }
+
 .deco {
   padding: 50px;
 }
@@ -115,11 +124,13 @@ h2 {
   align-items: center;
   margin: 20px;
   padding: 20px;
-  height:500px
+  height: 500px
 }
+
 h3 {
   font-size: 70px;
 }
+
 .digital {
   display: flex;
   flex-direction: column;
@@ -131,23 +142,21 @@ h3 {
   background-repeat: no-repeat;
   background-position: right top;
   background-color: rgb(166, 246, 241);
-  background-color: linear-gradient(
-    90deg,
-    rgba(166, 246, 241, 1) 0%,
-    rgba(225, 232, 233, 1) 39%
-  );
+  background-color: linear-gradient(90deg,
+      rgba(166, 246, 241, 1) 0%,
+      rgba(225, 232, 233, 1) 39%);
   opacity: 80%;
   padding-top: 20px;
 }
+
 .credential {
   color: #41aea9;
   font-size: 50px;
   padding: 30px;
   align-items: center;
   width: 500px;
-  margin-left:50px
-
-  /*    margin-left: 600px; */
+  margin-left: 50px
+    /*    margin-left: 600px; */
 }
 
 .desC {
@@ -155,7 +164,7 @@ h3 {
   font-size: 30px;
   align-items: center;
   width: 650px;
-  margin-left:50px
-/*   margin: 20px;
+  margin-left: 50px
+    /*   margin: 20px;
   padding: 30px; */
 }

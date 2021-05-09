@@ -3,28 +3,10 @@ import InfoCard from './InfoCard';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import * as Styles from './InfoPlans.module.css';
-// import supabase from '../../supabase.config'
-// import { connect } from 'react-redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { getPlans } from '../../actions/getter.action';
 
-export default function InfoPlanes(props) {
-    // const [fetchPlans, setFetchPlans] = useState([])
-
-    // const fetch = async () => {
-    //   let { data: plans, error } = await supabase.from("plans").select(
-    //     `description,
-    //     price,
-    //     benefits (
-    //       benefit_description
-    //       )`
-    //   );
-    //   console.error(error);
-    //   setFetchPlans(plans);
-    // }
-
-    // const { plans, getPlans } = props;
-
+function InfoPlanes() {
     const plans = useSelector((state) => state.allPlans);
     const dispatch = useDispatch();
 
@@ -68,53 +50,37 @@ export default function InfoPlanes(props) {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+    if (plans.length === 0) return <h2>Loading...</h2>;
 
-    const showData = () => {
-        if (plans.length) {
-            return (
-                <div className={Styles.carousel}>
-                    <div className={Styles.card}>
-                        <div className={Styles.left} onClick={back}>
-                            <ArrowBackIosIcon />
-                        </div>
-                        <InfoCard
-                            key={leftPlan.id_plan}
-                            className={Styles.center}
-                            plan={leftPlan}
-                        />
-                        <InfoCard
-                            key={plan.id_plan}
-                            className={Styles.center}
-                            plan={plan}
-                        />
-                        <InfoCard
-                            key={rightPlan.id_plan}
-                            className={Styles.center}
-                            plan={rightPlan}
-                        />
-                        <div className={Styles.right} onClick={forward}>
-                            <ArrowForwardIosIcon />
-                        </div>
-                    </div>
+    return (
+        <div className={Styles.carousel}>
+            <div className={Styles.card}>
+                <div className={Styles.left} onClick={back}>
+                    <ArrowBackIosIcon />
                 </div>
-            );
-        } else {
-            return <p>Loading...</p>;
-        }
-    };
-
-    return <div>{showData()}</div>;
+                <InfoCard
+                    key={leftPlan.id_plan}
+                    className={Styles.center}
+                    plan={leftPlan}
+                />
+                <InfoCard
+                    key={plan.id_plan}
+                    className={Styles.center}
+                    plan={plan}
+                />
+                <InfoCard
+                    key={rightPlan.id_plan}
+                    className={Styles.center}
+                    plan={rightPlan}
+                />
+                <div className={Styles.right} onClick={forward}>
+                    <ArrowForwardIosIcon />
+                </div>
+            </div>
+        </div>
+    );
 }
 
-// function mapStateToProps (state) {
-//   return {
-//     plans: state.allPlans
-//   }
-// }
-
-// function mapDispatchToProps (dispatch) {
-//    return { getPlans : () => dispatch(getPlans()) }
-// }
-
-// export default connect (mapDispatchToProps, mapStateToProps)(InfoPlanes)
+export default InfoPlanes;

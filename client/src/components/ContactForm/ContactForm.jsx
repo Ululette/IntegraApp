@@ -57,7 +57,7 @@ function ContactForm() {
     const [phone, setPhone] = useState('');
     const [mail, setMail] = useState('');
 
-    const mailPattern = /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
+    const mailPattern = /[a-zA-Z0-9]+[.]?([a-zA-Z0-9]+)?[@][a-z]{3,9}[.][a-z]{2,5}/g;
     const namePattern = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/g;
     const numberPattern = /^\d*$/;
     const mailResult = mailPattern.test(mail);

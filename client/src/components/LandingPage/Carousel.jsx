@@ -9,7 +9,7 @@ export default function InfoPlanes() {
     const [news, setNews] = useState([]);
     useEffect(() => {
         const fetchNews = async () => {
-            let { data: news, error } = await supabase.from('news').select('*');
+            let { data: news } = await supabase.from('news').select('*');
 
             setNews(news);
         };

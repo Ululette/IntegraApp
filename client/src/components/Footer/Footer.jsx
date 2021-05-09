@@ -17,8 +17,6 @@ export default function Footer() {
                     <a
                         href='http://www.sssalud.gob.ar'
                         className='link-unstyled'
-                        to='http://www.sssalud.gob.ar'
-                        target='_blank'
                     >
                         www.sssalud.gob.ar
                     </a>

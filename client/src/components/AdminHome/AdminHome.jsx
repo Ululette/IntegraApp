@@ -10,7 +10,6 @@ import {
     MenuItem,
     IconButton,
 } from '@material-ui/core';
-import { useUser } from 'reactfire';
 import 'firebase/auth';
 import styles from './AdminHome.module.css';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -19,7 +18,6 @@ import CreateIcon from '@material-ui/icons/Create';
 import MenuIcon from '@material-ui/icons/Menu';
 
 function AdminHome({ firebase }) {
-    // const userFire = useUser();
     const userData = JSON.parse(localStorage.getItem('userdata'));
     if (!userData || userData.role !== 'admin') window.location = '/login';
 
@@ -44,6 +42,7 @@ function AdminHome({ firebase }) {
 
     useEffect(() => {
         dispatch(getPlans());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     if (allPlans.length === 0) return <CircularProgress />;

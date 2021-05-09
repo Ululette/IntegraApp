@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import { NavLink } from 'react-router-dom';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         maxWidth: 345,
     },
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function InfoCard(props) {
+function InfoCard(props) {
     const classes = useStyles();
 
     return (
@@ -32,19 +32,16 @@ export default function InfoCard(props) {
                 subheader={props.plan.price}
             />
             <NavLink
-                path
                 to={`planDetails/${props.plan.id_plan}`}
                 style={{ textDecoration: 'none', color: 'black' }}
             >
                 Ver mas
             </NavLink>
             <CardContent>
-                <Typography paragraph>Cobertura:</Typography>
-                <Typography paragraph>
-                    {props.plan.benefits.benefits_title}
-                </Typography>
+                <Typography>Cobertura:</Typography>
+                <Typography>{props.plan.benefits.benefits_title}</Typography>
                 {props.plan.benefits.map((d, index) => (
-                    <Typography key={`cardInfo-${index}`} paragraph>
+                    <Typography key={`cardInfo-${index}`}>
                         {d.benefit_description}
                     </Typography>
                 ))}
@@ -52,3 +49,5 @@ export default function InfoCard(props) {
         </Card>
     );
 }
+
+export default InfoCard;
