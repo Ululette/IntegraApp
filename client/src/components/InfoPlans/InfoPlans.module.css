@@ -1,0 +1,43 @@
+.carousel {
+    position:absolute;
+    left: 5%;
+    width: 70%;
+    height: auto;
+    background-color: rgba(75, 155, 128, 0.281);
+    border-radius: 10px;
+}
+
+.card {
+    height: 100%;
+    width: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+}
+
+.card .left {
+    flex: 0.5%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: grid;
+    place-items: center;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    border-radius: 10px 0 0 10px;
+}
+
+.card .center {
+    flex: 99%;
+    height: 100%;
+}
+
+.card .right {
+    flex: 0.5%;
+    background-color: rgba(0, 0, 0, 0.4);
+    background-size: cover;
+    display: grid;
+    place-items: center;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    border-radius: 0 10px 10px 0;
+}

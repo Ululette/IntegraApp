@@ -1,18 +1,18 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import './index.global.css';
 import App from './components/App.jsx';
 import { BrowserRouter } from 'react-router-dom';
-//import { Provider } from 'react-redux';
-//import store from "./store/index";
+import { Provider } from 'react-redux';
+import store from "./store/root.store";
+import './index.global.css';
 
 ReactDOM.render(
-    <React.StrictMode>
-    	{/* <Provider store={store}>*/}
-    	 <BrowserRouter> 
-    	    <App />
-    	 </BrowserRouter>
-    	{/*</Provider> */}
-    </React.StrictMode>,
-    document.getElementById('root')
+		<Provider store={store}>
+			<Suspense fallback={'Conectando...'}>
+				<BrowserRouter>
+					<App />
+				</BrowserRouter>
+			</Suspense>
+		</Provider>,
+	document.getElementById('root')
 );
