@@ -96,7 +96,7 @@ function Login({ history, firebase }) {
                     Aqui podras administrar tu informacion, gestionar tramites,
                     recetas, estudios. Todo en un mismo lugar y mucho mas facil.
                 </p>
-                <NavLink to='/register'>
+                <NavLink to='/asociate'>
                     <button className={styles.buttonRegister}>Asociate</button>
                 </NavLink>
             </aside>

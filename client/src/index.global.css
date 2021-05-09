@@ -8,3 +8,7 @@
   box-sizing: border-box;
   font-family: 'Nunito', sans-serif;
 }
+
+html {
+  scroll-behavior: smooth;
+}

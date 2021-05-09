@@ -1,39 +1,61 @@
-
-.div{
+.div {
   align-content: center;
 }
-.bar{
-  display: flex;
-  background-color: #41aea9;
-  height: 75px;
-  box-shadow: 13px ;
-  width: 100%;
-  box-shadow: 0 5px 6px -6px black;
+
+.bar {
   align-items: center;
+  background-color: #41aea9;
+  box-shadow: 0 5px 6px -6px black;
+  box-shadow: 13px;
+  display: flex;
+  height: 75px;
   justify-content: space-between;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1;
 }
-.logB{
-display: flex;
-font-size: large;
-outline: none;
-border: 0;
-border-radius: 10px;
-background-color: #a6f6f1;
-padding: 10px;
-	-webkit-box-shadow: 0 5px 6px -6px black;
-	   -moz-box-shadow: 0 5px 6px -6px black;
-	        box-shadow: 0 5px 6px -6px black;
-height: fit-content;
-margin-right: 10px;
+
+.logB {
+  -moz-box-shadow: 0 5px 6px -6px black;
+  -webkit-box-shadow: 0 5px 6px -6px black;
+  background-color: #a6f6f1;
+  border-radius: 10px;
+  border: 0;
+  box-shadow: 0 5px 6px -6px black;
+  color: black;
+  display: flex;
+  font-size: large;
+  height: fit-content;
+  margin-right: 10px;
+  outline: none;
+  padding: 10px;
 }
- .logB:hover{
- opacity: 0.8;
- cursor: pointer;
+
+.logB a {
+  color: #000;
 }
-.img{
+
+.logB:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.img {
   width: auto;
   height: 75px;
 }
-.navL{
+
+.navL {
   text-decoration: none;
+}
+
+.buttonContainer {
+  display: flex;
+  width: 30%;
+  justify-content: flex-end;
+}
+
+.buttonContainer button a {
+  color: black
 }
