@@ -15,6 +15,7 @@ import 'firebase/auth';
 import styles from './AdminHome.module.css';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
+import CreateIcon from '@material-ui/icons/Create';
 import MenuIcon from '@material-ui/icons/Menu';
 
 function AdminHome({ firebase }) {
@@ -86,7 +87,12 @@ function AdminHome({ firebase }) {
                         key={`plan-${index}`}
                         className={styles.detailContainer}
                     >
-                        <h4>{plan.description}</h4>
+                        <div className={styles.editIcon}>
+                            <h4>{plan.description}</h4>
+                            <Tooltip title='Editar plan'>
+                                <CreateIcon />
+                            </Tooltip>
+                        </div>
                         <h5>{`$${plan.price}`}</h5>
                         <ul className={styles.benefitContainer}>
                             {plan.benefits.map((el, i) => (

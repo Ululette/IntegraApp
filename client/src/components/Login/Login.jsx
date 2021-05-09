@@ -6,6 +6,9 @@ import {
     MenuItem,
     CircularProgress,
 } from '@material-ui/core';
+import PersonIcon from '@material-ui/icons/Person';
+import HealingIcon from '@material-ui/icons/Healing';
+import SecurityIcon from '@material-ui/icons/Security';
 import 'firebase/auth';
 import { useUser } from 'reactfire';
 import supabase from '../../supabase.config.js';
@@ -108,9 +111,18 @@ function Login({ history, firebase }) {
                         className={styles.selectRole}
                         onChange={handleChange}
                     >
-                        <MenuItem value={10}>Socio</MenuItem>
-                        <MenuItem value={20}>Medico</MenuItem>
-                        <MenuItem value={30}>Admin</MenuItem>
+                        <MenuItem value={10} className={styles.itemRole}>
+                            <PersonIcon />
+                            Socio
+                        </MenuItem>
+                        <MenuItem value={20} className={styles.itemRole}>
+                            <HealingIcon />
+                            Medico
+                        </MenuItem>
+                        <MenuItem value={30} className={styles.itemRole}>
+                            <SecurityIcon />
+                            Admin
+                        </MenuItem>
                     </Select>
                 </section>
 

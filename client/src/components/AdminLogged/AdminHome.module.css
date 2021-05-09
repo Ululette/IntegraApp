@@ -8,6 +8,10 @@
     width: 100%;
 }
 
+.container svg {
+    cursor: pointer;
+}
+
 .semiNav {
     align-items: center;
     background-color: #313131;
@@ -39,6 +43,13 @@
     height: 60px;
 }
 
+.editIcon {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+}
+
 .semiNav div button {
     border: none;
     color: white;
@@ -62,7 +73,6 @@
     background-color: white;
     border: 1px solid #000;
     border-radius: 10px;
-    cursor: pointer;
     display: flex;
     flex-direction: column;
     height: 300px;
