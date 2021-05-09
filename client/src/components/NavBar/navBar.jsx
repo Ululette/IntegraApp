@@ -6,7 +6,8 @@ import Logb from './loginB';
 import { NavLink } from 'react-router-dom';
 
 const NavBar = ({ history }) => {
-    return history.location.pathname === '/login' ? null : (
+    const location = history.location.pathname;
+    return location === '/login' || location.includes('admin') ? null : (
         <nav position='static' className={styles.bar}>
             <NavLink to='/'>
                 <IconButton edge='start' color='inherit' aria-label='menu'>
