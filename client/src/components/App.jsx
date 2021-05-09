@@ -1,13 +1,15 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import LandingP from './LandingP/LandingP.jsx';
+import LandingPage from './LandingPage/LandingPage';
 
 function App() {
     return (
         <React.Fragment>
-            <Route exact path='/' component={LandingP} />
+            <Route exact path='/' component={LandingPage} />
         </React.Fragment>
     );
 }
 
 export default App;
+
+
