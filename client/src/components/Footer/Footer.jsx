@@ -3,8 +3,9 @@ import React from 'react';
 import styles from './Footer.module.css';
 import Iconos from './Iconos.jsx';
 //rfc
-export default function Footer() {
-    return (
+export default function Footer({ history }) {
+    const location = history.location.pathname;
+    return location.includes('admin') || location === '/login' ? null : (
         <div className={styles.allfoot}>
             <ul className={`text-left  ${styles.listunstyled}`}>
                 <li>Superintendencia de Servicios de Salud</li>
