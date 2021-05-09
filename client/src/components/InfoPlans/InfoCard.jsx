@@ -31,7 +31,7 @@ export default function InfoCard(props) {
         title={props.plan.description}
         subheader={props.plan.price}
       />
-      <NavLink path to={`planDetails/${props.id_plan}`} style={{ textDecoration: 'none', color: 'black' }}>
+      <NavLink path to={`planDetails/${props.plan.id_plan}`} style={{ textDecoration: 'none', color: 'black' }}>
         Ver mas
       </NavLink>
       <CardContent>

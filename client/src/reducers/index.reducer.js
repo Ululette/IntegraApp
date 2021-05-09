@@ -1,4 +1,19 @@
-import { combineReducers } from 'redux';
-import plans from './plans.reducer'
+import { GET_PLANS_BENEFITS } from '../actions/constants.actions';
 
-export default rootReducer = combineReducers(plans)
+const initialState = {
+    allPlans: [],
+};
+
+function rootReducer(state = initialState, action) {
+    switch (action.type) {
+        case GET_PLANS_BENEFITS:
+            return {
+                ...state,
+                allPlans: action.payload,
+            };
+        default:
+            return state;
+    }
+}
+
+export default rootReducer;
