@@ -12,20 +12,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
   },
-  media: {
-    height: 0,
-    paddingTop: '56.25%', // 16:9
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
   avatar: {
     backgroundColor: red[500],
   },
@@ -35,25 +21,30 @@ export default function InfoCard(props) {
   const classes = useStyles();
 
   return (
-      <Card className={classes.root} key={props.plan.id}>
-        <CardHeader
+    <Card className={classes.root} >
+      <CardHeader
         avatar={
           <Avatar aria-label="plans" className={classes.avatar}>
             P
           </Avatar>
         }
-        title={props.plan.title}
-        subheader={props.plan.sub}
+        title={props.plan.description}
+        subheader={props.plan.price}
       />
-      <NavLink path to={`plansDetails/${props.plan.id}`} style={{textDecoration:'none'}}>
+      <NavLink path to={`planDetails/${props.id_plan}`} style={{ textDecoration: 'none', color: 'black' }}>
         Ver mas
       </NavLink>
-        <CardContent>
-          <Typography paragraph>Covertura:</Typography>
+      <CardContent>
+        <Typography paragraph>Cobertura:</Typography>
+        <Typography paragraph>
+          {props.plan.benefits.benefits_title}
+        </Typography>
+        {props.plan.benefits.map(d => (
           <Typography paragraph>
-            {props.plan.cover}
-          </Typography>
-        </CardContent>
+            {d.benefit_description}
+          </Typography>)
+        )}
+      </CardContent>
     </Card>
   );
 }

@@ -1,7 +1,7 @@
 .carousel {
     position:absolute;
     left: 5%;
-    width: 80%;
+    width: 70%;
     height: auto;
     background-color: rgba(75, 155, 128, 0.281);
     border-radius: 10px;
@@ -17,8 +17,7 @@
 }
 
 .card .left {
-    flex: 5%;
-    size: cover;
+    flex: 0.5%;
     background-color: rgba(0, 0, 0, 0.4);
     display: grid;
     place-items: center;
@@ -28,13 +27,12 @@
 }
 
 .card .center {
-    flex: 90%;
+    flex: 99%;
     height: 100%;
 }
 
 .card .right {
-    flex: 5%;
-    size: cover;
+    flex: 0.5%;
     background-color: rgba(0, 0, 0, 0.4);
     background-size: cover;
     display: grid;
