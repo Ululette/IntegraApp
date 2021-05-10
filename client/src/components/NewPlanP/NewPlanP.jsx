@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import MultiSelectBenef from './MultiSelectBenef';
 import NewBenef from './NewBenef';
-import { saveNpBenefSel, sendedNpForm } from '../../actions';
+import { saveNpBenefSel, sendedNpForm } from '../../actions/plans.actions';
 import './NewPlanP.css';
 // import axios from 'axios';
 // import AdminNav from ''

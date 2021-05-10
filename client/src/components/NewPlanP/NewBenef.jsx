@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import './NewBenef.css';
-import { addNpBen } from '../../actions/actions';
+import { addNpBen } from '../../actions/plans.actions';
 
 export default function NewBenef() {
   let dispatch = useDispatch();

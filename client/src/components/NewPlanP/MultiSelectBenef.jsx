@@ -3,7 +3,7 @@ import parseJson from 'parse-json';
 import { useSelector, useDispatch } from 'react-redux';
 import { createClient } from '@supabase/supabase-js'
 import './MultiSelectBenef.css';
-import { saveNpBenefSel } from '../../actions/actions';
+import { saveNpBenefSel } from '../../actions/plans.actions';
 
 // Información de la base de datos
 const supabaseUrl = 'https://qeubfsxlcvapzvjihzep.supabase.co'
