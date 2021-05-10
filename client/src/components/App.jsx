@@ -8,6 +8,7 @@ import Login from './Login/Login.jsx';
 import AdminHome from './AdminHome/AdminHome.jsx';
 import FaqsPage from './Faqs/FaqsPage.jsx';
 import ContactForm from './ContactForm/ContactForm.jsx';
+import NewPlanP from './NewPlanP/NewPlanP.jsx';
 
 function App() {
     const firebase = useFirebaseApp();
@@ -22,6 +23,7 @@ function App() {
                 render={() => <AdminHome firebase={firebase} />}
             />
             <Route exact path='/asociate' component={ContactForm} />
+            <Route exact path='/admin/NewPlanP' component={NewPlanP} />
             <Route path='/' component={Footer} />
         </>
     );
