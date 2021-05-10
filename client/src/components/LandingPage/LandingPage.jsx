@@ -60,12 +60,16 @@ export default function LandingPage() {
 
 
             <div className={styles.app}>
-            
-          
+        <div id={styles.photo}>
+            <p>hola</p>
+        </div>
+        <div  className= {styles.adjust}>
+            <div className = {styles.mob}>
                 <h2>Integra mobile</h2>
                 <p className={styles.desM}>
                     Toda la información que necesitas en un solo lugar
                 </p>
+                </div>
                 <div className={styles.images}>
                     <img
                         className={styles.deco}
@@ -83,6 +87,7 @@ export default function LandingPage() {
                         alt=''
                     />
                 </div>
+                </div>
             </div>
 
 
@@ -98,15 +103,23 @@ export default function LandingPage() {
                 <Carousel />
             </div>
             <div className={styles.digital}>
+                <div className={styles.doctor}>
+
+                </div>
+                <div className={styles.cd}>
                 <h2 className={styles.credential}>Credencial digital</h2>
                 <p className={styles.desC}>
-                    La credencial va siempre con vos y sin ocupar lugar en tu
-                    billetera
+                📱 La credencial va siempre con vos y sin ocupar lugar en tu
+                             billetera
                 </p>
                 <p className={styles.desC}>
-                    Todas las credenciales de tu grupo familiaren un solo lugar
+                📱Todas las credenciales de tu grupo familiaren un solo lugar
                 </p>
+                </div>
             </div>
+
+
+
             <div id={styles.nov}> 
                 <h3 >Nuestros planes</h3>
                 </div>
