@@ -5,6 +5,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-top: 400px;
+    margin: 20px;
 }
 
 .formConteiner{
@@ -50,5 +52,6 @@
 
 .MuiButton-root{
     margin-right: 15px;
+    background-color: #a6f6f1;
 }
 

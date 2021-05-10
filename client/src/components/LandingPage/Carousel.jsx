@@ -4,6 +4,8 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import Styles from './Carousel.module.css';
 import supabase from '../../supabase.config';
+import { teal } from '@material-ui/core/colors';
+
 
 export default function InfoPlanes() {
     const [news, setNews] = useState([]);
@@ -31,16 +33,18 @@ export default function InfoPlanes() {
 
     return (
         <div className={Styles.carousel}>
-            <div className={Styles.card}>
-                <div className={Styles.left} onClick={back}>
-                    <ArrowBackIosIcon />
+              <div className={Styles.left} onClick={back}>
+                    <ArrowBackIosIcon style={{ color: teal [300] }} />
                 </div>
+            <div className={Styles.card}>
+              
                 <MediaCard className={Styles.center} neww={leftNeww} />
                 <MediaCard className={Styles.center} neww={neww} />
                 <MediaCard className={Styles.center} neww={rightNeww} />
-                <div className={Styles.right} onClick={forward}>
-                    <ArrowForwardIosIcon />
-                </div>
+             
+            </div>
+            <div className={Styles.right} onClick={forward}>
+                    <ArrowForwardIosIcon style={{ color: teal [300] }} />
             </div>
         </div>
     );

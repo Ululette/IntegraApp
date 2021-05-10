@@ -7,10 +7,10 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 
-const PopUp = (props) => {
+const PopUp = (props) => {
 
   const descriptionElementRef = useRef(null);
-   const { Img, Title, Description } = props.news;
+   const { Img, Title, Description, Summary } = props.news;
    const { closePopup } = props;
    const { show } = props;
 
@@ -39,8 +39,6 @@ const PopUp = (props) => {
             ref={descriptionElementRef}
             tabIndex={-1}
           >
-            <img src={Img} alt='news img' />
-            <br/>
             {Description}
           </DialogContentText>
         </DialogContent>

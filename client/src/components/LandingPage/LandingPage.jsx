@@ -50,16 +50,25 @@ export default function LandingPage() {
                     Urgencias y emergencias - 0810-454-999{' '}
                 </p>
                 <p className={styles.des}>
-                    Orientacion medica telefonica - 0810-963-952{' '}
+                    Orientación medica telefonica - 0810-963-952{' '}
                 </p>
                 <p className={styles.des}>Preguntas frecuentes</p>
             </div>
 
+
+
+
+
             <div className={styles.app}>
+        <div id={styles.photo}>
+        </div>
+        <div  className= {styles.adjust}>
+            <div className = {styles.mob}>
                 <h2>Integra mobile</h2>
                 <p className={styles.desM}>
                     Toda la información que necesitas en un solo lugar
                 </p>
+                </div>
                 <div className={styles.images}>
                     <img
                         className={styles.deco}
@@ -77,22 +86,45 @@ export default function LandingPage() {
                         alt=''
                     />
                 </div>
+                </div>
             </div>
+
+
+
+
+
+
+            <div id={styles.nov}> 
+                <h3 >Novedades</h3>
+                </div>
             <div className={styles.news}>
-                <h3>Novedades</h3>
+               
                 <Carousel />
             </div>
             <div className={styles.digital}>
+                <div className={styles.doctor}>
+
+                </div>
+                <div className={styles.cd}>
                 <h2 className={styles.credential}>Credencial digital</h2>
                 <p className={styles.desC}>
-                    La credencial va siempre con vos y sin ocupar lugar en tu
-                    billetera
+                📱 La credencial va siempre con vos y sin ocupar lugar en tu
+                             billetera
                 </p>
                 <p className={styles.desC}>
-                    Todas las credenciales de tu grupo familiaren un solo lugar
+                📱Todas las credenciales de tu grupo familiaren un solo lugar
                 </p>
+                </div>
             </div>
+
+
+
+            <div id={styles.nov}> 
+                <h3 >Nuestros planes</h3>
+                </div>
+            <div className = {styles.plans}> 
             <InfoPlanes id='infoPlans' />
+            </div>
             <div id='contact'>
                 <ContactForm />
             </div>

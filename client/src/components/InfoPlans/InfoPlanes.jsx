@@ -7,6 +7,7 @@ import * as Styles from './InfoPlans.module.css';
 // import { connect } from 'react-redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { getPlans } from '../../actions/getter.action';
+import { teal } from '@material-ui/core/colors';
 
 export default function InfoPlanes(props) {
     // const [fetchPlans, setFetchPlans] = useState([])
@@ -74,10 +75,11 @@ export default function InfoPlanes(props) {
         if (plans.length) {
             return (
                 <div className={Styles.carousel}>
-                    <div className={Styles.card}>
-                        <div className={Styles.left} onClick={back}>
-                            <ArrowBackIosIcon />
+                    <div className={Styles.left} onClick={back}>
+                            <ArrowBackIosIcon style={{ color: teal [300] }} />
                         </div>
+                    <div className={Styles.card}>
+                        
                         <InfoCard
                             key={leftPlan.id_plan}
                             className={Styles.center}
@@ -93,10 +95,11 @@ export default function InfoPlanes(props) {
                             className={Styles.center}
                             plan={rightPlan}
                         />
-                        <div className={Styles.right} onClick={forward}>
-                            <ArrowForwardIosIcon />
-                        </div>
+                       
                     </div>
+                    <div className={Styles.right} onClick={forward}>
+                            <ArrowForwardIosIcon style={{ color: teal [300] }} />
+                        </div>
                 </div>
             );
         } else {
