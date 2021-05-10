@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getPlans } from '../../actions/getter.action.js';
@@ -16,6 +17,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import CreateIcon from '@material-ui/icons/Create';
 import MenuIcon from '@material-ui/icons/Menu';
+import supabase from '../../supabase.config';
 
 function AdminHome({ firebase }) {
     const userData = JSON.parse(localStorage.getItem('userdata'));
@@ -33,6 +35,29 @@ function AdminHome({ firebase }) {
         }
     };
 
+    const handleDelete = async (planDescription) => {
+        const res = window.confirm(
+            `¿Desea eliminar el plan ${planDescription}?`
+        );
+        if (res) {
+            const { data: idPlan } = await supabase
+                .from('plans')
+                .select('id_plan')
+                .eq('description', planDescription);
+            const { data: deleteRelation, error } = await supabase
+                .from('plans_benefits')
+                .delete()
+                .match({ plans_id_plan: idPlan[0].id_plan });
+            const { data: deletePlan, error: errorDeletePlan } = await supabase
+                .from('plans')
+                .delete()
+                .eq('id_plan', idPlan[0].id_plan);
+
+            if (!error && !errorDeletePlan)
+                return alert(`${planDescription} eliminado con exito.`);
+        }
+    };
+
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -42,8 +67,7 @@ function AdminHome({ firebase }) {
 
     useEffect(() => {
         dispatch(getPlans());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [allPlans]);
 
     if (allPlans.length === 0) return <CircularProgress />;
 
@@ -102,7 +126,11 @@ function AdminHome({ firebase }) {
                             ))}
                         </ul>
                         <div className={styles.deleteButton}>
-                            <Tooltip title='Eliminar plan' aria-label='delete'>
+                            <Tooltip
+                                title='Eliminar plan'
+                                aria-label='delete'
+                                onClick={() => handleDelete(plan.description)}
+                            >
                                 <DeleteIcon />
                             </Tooltip>
                         </div>

@@ -14,7 +14,7 @@ import { useUser } from 'reactfire';
 import supabase from '../../supabase.config.js';
 import styles from './Login.module.css';
 
-function Login({ history, firebase }) {
+function Login({ firebase }) {
     const [role, setRole] = useState(10);
     const [doc, setDoc] = useState(40);
     const [input, setInput] = useState({ doc: '', pass: '' });
