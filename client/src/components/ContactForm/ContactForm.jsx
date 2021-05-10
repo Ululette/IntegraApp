@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Styles from './ContactForm.module.css'
 
+import LogoNav from '../../assets/logo-integra.png'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { createMuiTheme } from '@material-ui/core/styles';
@@ -15,9 +16,6 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = 'https://qeubfsxlcvapzvjihzep.supabase.co'
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyMDMyNDU4NCwiZXhwIjoxOTM1OTAwNTg0fQ.l9ZzKLUoPFsMWMCismH6RkXsEzBiSrDMylGB9V_HHjI'
 const supabase = createClient(supabaseUrl, supabaseKey)
-
-// const LOGOLOCAL = 'client/src/components/contact_form_guest/logo-integra.png';
-const LOGO = "https://cdn.discordapp.com/attachments/837738450736250918/839883762019860490/manos1.png";
 
 const theme = createMuiTheme({
     palette: {
@@ -54,12 +52,12 @@ function ContactForm(){
 
     const[input,setInput] = useState({name:'',age:'',dni:'',phone_number:'',mail:''});
     const[errors,setErrors] = useState({name:false,age:false,dni:false,phone_number:false,mail:false});
-    const[openGood, setOpenGood] =useState(false);
-    const[openBad, setOpenBad] =useState(false);
+    const[successRequest, setSuccessRequest] =useState(false);
+    const[errorRequest, setErrorRequest] =useState(false);
 
     const handleClickOpen = async() => {
         if(!errors.age && !errors.dni && !errors.phone_number && !errors.mail && !errors.name){
-            setOpenGood(true);
+            setSuccessRequest(true);
             const { data, error } = await supabase
             .from('request_form')
             .insert([
@@ -67,15 +65,15 @@ function ContactForm(){
             ])
             console.log(error)
             console.log(data)
+            setInput({name:'',age:'',dni:'',phone_number:'',mail:''});
         } else {
-            setOpenBad(true);
+            setErrorRequest(true);
         }
-        setInput({name:'',age:'',dni:'',phone_number:'',mail:''});
     };
     
     const handleClose = () => {
-        setOpenGood(false);
-        setOpenBad(false);
+        setSuccessRequest(false);
+        setErrorRequest(false);
     };
 
     const handleInputChange = (e) => {
@@ -94,7 +92,7 @@ function ContactForm(){
     function validate(input) {
         const mailPattern = /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
         const namePattern = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/g;
-        const numberPattern = /^\d*$/;
+        const numberPattern = /^[0-9\b]+$/;
         let errors = {};
         if (!namePattern.test(input.name)) {
             errors.name = true;
@@ -108,13 +106,13 @@ function ContactForm(){
             errors.age = false;
         }
 
-        if (!numberPattern.test(input.dni)&&(input.dni.length===10)) {
+        if (!numberPattern.test(input.dni)||(input.dni.length!==8)) {
             errors.dni = true;
         } else{
             errors.dni = false;
         }
 
-        if (!numberPattern.test(input.phone_number)&&(input.phone_number.length<=12)) {
+        if (!numberPattern.test(input.phone_number)||(input.phone_number.length<10)) {
             errors.phone_number = true;
         } else{
             errors.phone_number = false;
@@ -132,12 +130,12 @@ function ContactForm(){
         <div className={Styles.conteinerAll}>
             <ThemeProvider theme={theme}>
             <Card className={classes.root}>
-                <Snackbar open={openGood} autoHideDuration={6000} onClose={handleClose}>
+                <Snackbar open={successRequest} autoHideDuration={6000} onClose={handleClose}>
                     <Alert onClose={handleClose} severity="success">
                         Gracias por contactarse, nos comunicaremos con usted en breve.
                     </Alert>
                 </Snackbar>
-                <Snackbar open={openBad} autoHideDuration={6000} onClose={handleClose}>
+                <Snackbar open={errorRequest} autoHideDuration={6000} onClose={handleClose}>
                     <Alert onClose={handleClose} severity="error">
                         Error, verifique los datos.
                     </Alert>
@@ -145,7 +143,7 @@ function ContactForm(){
                 <div className={Styles.formConteiner}>
                     <div className={Styles.inputs}>
                         <div className={Styles.imgConteiner}>
-                            <img src={LOGO} alt="" />
+                            <img src={LogoNav} alt="Logo" />
                         </div>
                         <div className={Styles.textField}>
                             <label htmlFor="">Me llamo </label>
@@ -203,7 +201,7 @@ function ContactForm(){
                             <label htmlFor="">Mi mail es </label>
                             <TextField
                                 id="mail-input"
-                                type="email"
+                                type="text"
                                 name="mail"
                                 autoComplete='off'
                                 value={input.mail}
@@ -218,7 +216,7 @@ function ContactForm(){
                             color="primary" 
                             style={{ borderRadius: 100 , margin: 10 }} 
                             onClick={handleClickOpen} 
-                            disabled = {(!input.age && !input.dni && !input.phone_number && !input.mail && !input.name)}
+                            disabled = {(!input.age || !input.dni || !input.phone_number || !input.mail || !input.name)}
                         >
                             Consultar
                         </Button>
