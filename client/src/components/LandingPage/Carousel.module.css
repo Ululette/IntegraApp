@@ -1,12 +1,45 @@
 .carousel {
+    margin-top:0px;
+    padding-top:0px;
+    display: flex;
+    flex-direction: row;
     position:absolute;
     left: 10%;
     width: 80%;
     height: auto;
-    background-color: rgb(166, 246, 241);
-    border-radius: 10px;
+/*     background-color: rgb(166, 246, 241);
+ */    border-radius: 10px;
 }
+.left{
+     display: flex;
+    align-self: center;
+    flex-direction:row;
+    justify-content: center;
+    align-items: center;
+    background-color: #a6f6f1;
+    width: 50px;
+    height: 50px;
+    border-radius: 20px; 
+    padding-right:10px;
+    margin-right:10px;
+    cursor: pointer;
 
+}
+.right{
+    display: flex;
+   align-self: center;
+   flex-direction:row;
+   justify-content: center;
+   align-items: center;
+   background-color: #a6f6f1;
+   width: 50px;
+   height: 50px;
+   border-radius: 20px; 
+   padding-left:10px;
+   margin-left:10px;
+   cursor: pointer;
+
+}
 .card {
     height: 100%;
     width: 100%;
@@ -17,6 +50,10 @@
 }
 
 .card .left {
+    display: flex;
+    flex-direction:row;
+    align-items: center;
+    background-color: black;
     flex: 5%;
     size: cover;
     background-color: rgba(0, 0, 0, 0.4);

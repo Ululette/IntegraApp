@@ -50,12 +50,18 @@ export default function LandingPage() {
                     Urgencias y emergencias - 0810-454-999{' '}
                 </p>
                 <p className={styles.des}>
-                    Orientacion medica telefonica - 0810-963-952{' '}
+                    Orientación medica telefonica - 0810-963-952{' '}
                 </p>
                 <p className={styles.des}>Preguntas frecuentes</p>
             </div>
 
+
+
+
+
             <div className={styles.app}>
+            
+          
                 <h2>Integra mobile</h2>
                 <p className={styles.desM}>
                     Toda la información que necesitas en un solo lugar
@@ -78,8 +84,17 @@ export default function LandingPage() {
                     />
                 </div>
             </div>
+
+
+
+
+
+
+            <div id={styles.nov}> 
+                <h3 >Novedades</h3>
+                </div>
             <div className={styles.news}>
-                <h3>Novedades</h3>
+               
                 <Carousel />
             </div>
             <div className={styles.digital}>
@@ -92,7 +107,12 @@ export default function LandingPage() {
                     Todas las credenciales de tu grupo familiaren un solo lugar
                 </p>
             </div>
+            <div id={styles.nov}> 
+                <h3 >Nuestros planes</h3>
+                </div>
+            <div className = {styles.plans}> 
             <InfoPlanes id='infoPlans' />
+            </div>
             <div id='contact'>
                 <ContactForm />
             </div>

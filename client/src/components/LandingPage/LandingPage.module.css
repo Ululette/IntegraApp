@@ -77,6 +77,7 @@
   opacity: 80%;
   padding-top: 20px;
 }
+
 h2 {
   color: #41aea9;
   font-size: 50px;
@@ -115,7 +116,10 @@ h2 {
   align-items: center;
   margin: 20px;
   padding: 20px;
-  height:500px
+  height:500px;
+  padding-top: 0px;
+  margin-top:0px;
+
 }
 h3 {
   font-size: 70px;
@@ -158,4 +162,26 @@ h3 {
   margin-left:50px
 /*   margin: 20px;
   padding: 30px; */
+}
+#contact{
+  height:1000px;
+
+}
+.plans{
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  align-items: center;
+  margin: 20px;
+  padding: 20px;
+  width:800px;
+  height: fit-content;
+
+
+}
+#nov{
+  display: flex;
+  justify-content: center;
+  padding-top:40px;
+  padding-bottom: 0px;
 }
