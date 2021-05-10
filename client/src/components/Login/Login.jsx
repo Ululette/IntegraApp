@@ -158,7 +158,7 @@ function Login({ history, firebase }) {
                 <TextField
                     className={styles.inputData}
                     id='doc'
-                    label={role !== 20 ? 'Nº de documento' : 'Nº de matricula'}
+                    label='Nº de documento'
                     value={input.doc}
                     onChange={handleInput}
                     required
