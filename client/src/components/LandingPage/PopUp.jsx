@@ -5,6 +5,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { Typography } from '@material-ui/core';
 
 
 const PopUp = (props) => {
@@ -39,7 +40,15 @@ const PopUp = (props) => {
             ref={descriptionElementRef}
             tabIndex={-1}
           >
+            <img src ={Img} alt='News img'/>
+            <br/>
+            <Typography variant='subtitle1'>
+              {Summary}
+            </Typography>
+            <br/>
+            <Typography paragraph variant='body2'>  
             {Description}
+            </Typography>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
