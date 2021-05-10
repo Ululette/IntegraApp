@@ -7,7 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import PopUp from './PupUp';
+import PopUp from './PopUp';
 
 const useStyles = makeStyles({
     root: {
@@ -26,7 +26,6 @@ export default function MediaCard(props) {
 
     const togglePopup = () => {
         setShowPup(!showPopup);
-        console.error('show: ', showPopup)
     }
 
     const [showPopup, setShowPup] = useState(false)

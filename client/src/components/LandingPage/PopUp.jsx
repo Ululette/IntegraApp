@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -10,11 +10,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 const PopUp = (props) => {
 
   const descriptionElementRef = useRef(null);
-   const { Img, Title, Description, Summary } = props.news;
+   const { Img, Title, Description } = props.news;
    const { closePopup } = props;
    const { show } = props;
 
-   console.error('props', closePopup  )
 
    useEffect(() => {
     if (show) {
@@ -40,6 +39,7 @@ const PopUp = (props) => {
             ref={descriptionElementRef}
             tabIndex={-1}
           >
+            <img src={Img} alt='news img' />
             {Description}
           </DialogContentText>
         </DialogContent>
