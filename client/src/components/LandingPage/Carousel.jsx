@@ -10,13 +10,14 @@ export default function InfoPlanes() {
     useEffect(() => {
         const fetchNews = async () => {
             let { data: news, error } = await supabase.from('news').select('*');
-
+            console.error(error);
             setNews(news);
         };
         fetchNews();
     }, []);
 
     const [currCard, setCurrCard] = useState(0);
+    
     if (news.length === 0) return <h1>Cargando...</h1>;
 
     const leftNeww = news[currCard > 1 ? currCard - 1 : news.length - 1];
