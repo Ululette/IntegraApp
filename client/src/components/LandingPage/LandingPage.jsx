@@ -61,7 +61,6 @@ export default function LandingPage() {
 
             <div className={styles.app}>
         <div id={styles.photo}>
-            <p>hola</p>
         </div>
         <div  className= {styles.adjust}>
             <div className = {styles.mob}>
