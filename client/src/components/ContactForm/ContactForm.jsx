@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Redirect } from 'react-router-dom';
 import Styles from './ContactForm.module.css'
 
 import LogoNav from '../../assets/logo-integra.png'
@@ -54,6 +55,7 @@ function ContactForm(){
     const[errors,setErrors] = useState({name:false,age:false,dni:false,phone_number:false,mail:false});
     const[successRequest, setSuccessRequest] =useState(false);
     const[errorRequest, setErrorRequest] =useState(false);
+    const[redirect, setRedirect] = useState(false);
 
     const handleClickOpen = async() => {
         if(!errors.age && !errors.dni && !errors.phone_number && !errors.mail && !errors.name){
@@ -75,6 +77,9 @@ function ContactForm(){
         setSuccessRequest(false);
         setErrorRequest(false);
     };
+    const handleBack = () => {
+        setRedirect(true);
+    }
 
     const handleInputChange = (e) => {
         setInput({
@@ -126,106 +131,122 @@ function ContactForm(){
         return errors;
     };
 
+    const renderRedirect = () => {
+        if (redirect) {
+          return <Redirect to='/' />
+        }
+    }
+    
     return(
         <div className={Styles.conteinerAll}>
             <ThemeProvider theme={theme}>
-            <Card className={classes.root}>
-                <Snackbar open={successRequest} autoHideDuration={6000} onClose={handleClose}>
-                    <Alert onClose={handleClose} severity="success">
-                        Gracias por contactarse, nos comunicaremos con usted en breve.
-                    </Alert>
-                </Snackbar>
-                <Snackbar open={errorRequest} autoHideDuration={6000} onClose={handleClose}>
-                    <Alert onClose={handleClose} severity="error">
-                        Error, verifique los datos.
-                    </Alert>
-                </Snackbar>
-                <div className={Styles.formConteiner}>
-                    <div className={Styles.inputs}>
-                        <div className={Styles.imgConteiner}>
-                            <img src={LogoNav} alt="Logo" />
+                <div className={Styles.successRequest} style={!successRequest?{display: 'none'}:{}}>
+                    <div className={Styles.successRequestContent}>
+                        <p className={Styles.successRequestTitle}>¡Gracias por escribirnos!</p>
+                        <div></div>
+                        <div>
+                            <p className={Styles.successRequestSubTitle}> Un asesor se comunicara con vos</p>
+                            <p className={Styles.successRequestSubTitle}> para charlar sobre tu próximo plan.</p> 
                         </div>
-                        <div className={Styles.textField}>
-                            <label htmlFor="">Me llamo </label>
-                            <TextField
-                                id="name-input"
-                                type="text"
-                                name="name"
-                                autoComplete='off'
-                                value={input.name}
-                                onChange={(e) => handleInputChange(e)}
-                                {...(errors.name && {error:errors.name,helperText:'Nombre invalido'})}
-                                />
-                        </div>
-                        <div className={Styles.textField}>
-                            <label htmlFor="">Tengo </label>
-                            <TextField
-                                id="age-input"
-                                type="tel"
-                                name="age"
-                                autoComplete='off'
-                                value={input.age}
-                                onChange={(e) => handleInputChange(e)}
-                                {...errors.age && {error:true,helperText:'Edad invalido'}}
-                                inputProps={{ maxLength: 3 }}
-                            />
-                            <label htmlFor=""> años.</label>
-                        </div>
-                        <div className={Styles.textField}>
-                            <label htmlFor="">Mi DNI es </label>
-                            <TextField
-                                id="dni-input"
-                                type="tel"
-                                name="dni"
-                                autoComplete='off'
-                                value={input.dni}
-                                onChange={(e) => handleInputChange(e)}
-                                {...(errors.dni && {error:true,helperText:'Dni invalido'})}
-                                inputProps={{ maxLength: 8 }}
-                            />
-                        </div>
-                        <div className={Styles.textField}>
-                            <label htmlFor="">Mi teléfono es </label>
-                            <TextField
-                                id="phone-input"
-                                type="tel"
-                                name="phone_number"
-                                autoComplete='off'
-                                value={input.phone_number}
-                                onChange={(e) => handleInputChange(e)}
-                                {...(errors.phone_number && {error:true,helperText:'Teléfono invalido'})}
-                                inputProps={{ maxLength: 12 }}
-                            />
-                        </div>
-                        <div className={Styles.textField}>
-                            <label htmlFor="">Mi mail es </label>
-                            <TextField
-                                id="mail-input"
-                                type="text"
-                                name="mail"
-                                autoComplete='off'
-                                value={input.mail}
-                                onChange={(e) => handleInputChange(e)}
-                                {...(errors.mail && {error:true,helperText:'Mail invalido'})}
-                            />
-                        </div>
-                    </div>
-                    <div>
-                        <Button 
-                            variant="contained" 
-                            color="primary" 
-                            style={{ borderRadius: 100 , margin: 10 }} 
-                            onClick={handleClickOpen} 
-                            disabled = {(!input.age || !input.dni || !input.phone_number || !input.mail || !input.name)}
-                        >
-                            Consultar
-                        </Button>
-                        <Button variant="contained" color="secondary" style={{ borderRadius: 100 , margin: 10 }} >
+                        <Button className={Styles.buttonVolverSuccess} variant="contained" color="secondary" onClick={handleBack} style={{ borderRadius: 100 }} >
                             Volver
                         </Button>
+                        {renderRedirect()}
                     </div>
                 </div>
-            </Card>
+                <Card className={classes.root}>
+                    <Snackbar open={errorRequest} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert onClose={handleClose} severity="error">
+                            Error, verifique los datos.
+                        </Alert>
+                    </Snackbar>
+                    <div className={Styles.formConteiner}>
+                        <div className={Styles.inputs}>
+                            <div className={Styles.imgConteiner}>
+                                <img src={LogoNav} alt="Logo" />
+                            </div>
+                            <div className={Styles.textField}>
+                                <label htmlFor="">Me llamo </label>
+                                <TextField
+                                    id="name-input"
+                                    type="text"
+                                    name="name"
+                                    autoComplete='off'
+                                    value={input.name}
+                                    onChange={(e) => handleInputChange(e)}
+                                    {...(errors.name && {error:errors.name,helperText:'Nombre invalido'})}
+                                    />
+                            </div>
+                            <div className={Styles.textField}>
+                                <label htmlFor="">Tengo </label>
+                                <TextField
+                                    id="age-input"
+                                    type="tel"
+                                    name="age"
+                                    autoComplete='off'
+                                    value={input.age}
+                                    onChange={(e) => handleInputChange(e)}
+                                    {...errors.age && {error:true,helperText:'Edad invalido'}}
+                                    inputProps={{ maxLength: 3 }}
+                                />
+                                <label htmlFor=""> años.</label>
+                            </div>
+                            <div className={Styles.textField}>
+                                <label htmlFor="">Mi DNI es </label>
+                                <TextField
+                                    id="dni-input"
+                                    type="tel"
+                                    name="dni"
+                                    autoComplete='off'
+                                    value={input.dni}
+                                    onChange={(e) => handleInputChange(e)}
+                                    {...(errors.dni && {error:true,helperText:'Dni invalido'})}
+                                    inputProps={{ maxLength: 8 }}
+                                />
+                            </div>
+                            <div className={Styles.textField}>
+                                <label htmlFor="">Mi teléfono es </label>
+                                <TextField
+                                    id="phone-input"
+                                    type="tel"
+                                    name="phone_number"
+                                    autoComplete='off'
+                                    value={input.phone_number}
+                                    onChange={(e) => handleInputChange(e)}
+                                    {...(errors.phone_number && {error:true,helperText:'Teléfono invalido'})}
+                                    inputProps={{ maxLength: 12 }}
+                                />
+                            </div>
+                            <div className={Styles.textField}>
+                                <label htmlFor="">Mi mail es </label>
+                                <TextField
+                                    id="mail-input"
+                                    type="text"
+                                    name="mail"
+                                    autoComplete='off'
+                                    value={input.mail}
+                                    onChange={(e) => handleInputChange(e)}
+                                    {...(errors.mail && {error:true,helperText:'Mail invalido'})}
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <Button 
+                                variant="contained" 
+                                color="primary" 
+                                style={{ borderRadius: 100 , margin: 10 }} 
+                                onClick={handleClickOpen} 
+                                disabled = {(!input.age || !input.dni || !input.phone_number || !input.mail || !input.name)}
+                            >
+                                Consultar
+                            </Button>
+                            <Button variant="contained" color="secondary" onClick={handleBack} style={{ borderRadius: 100 , margin: 10 }} >
+                                Volver
+                            </Button>
+                            {renderRedirect()}
+                        </div>
+                    </div>
+                </Card>
             </ThemeProvider>
         </div>
     );
