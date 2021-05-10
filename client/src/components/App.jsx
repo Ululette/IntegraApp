@@ -23,7 +23,7 @@ function App() {
                 render={() => <AdminHome firebase={firebase} />}
             />
             <Route exact path='/asociate' component={ContactForm} />
-            <Route exact path='/admin/NewPlanP' component={NewPlanP} />
+            <Route exact path='/NewPlanP' component={NewPlanP} />
             <Route path='/' component={Footer} />
         </>
     );

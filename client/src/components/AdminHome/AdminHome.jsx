@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getPlans, getBenefits } from '../../actions/getter.action.js';
+import { NavLink } from 'react-router-dom';
 import {
     CircularProgress,
     Fab,
@@ -262,11 +263,13 @@ function AdminHome({ firebase }) {
                 </Dialog>
             </section>
             <section className={styles.addButton}>
-                <Tooltip title='Agregar plan' aria-label='add'>
-                    <Fab color='primary'>
-                        <AddIcon />
-                    </Fab>
-                </Tooltip>
+                <NavLink to='/NewPlanP'>
+                    <Tooltip title='Agregar plan' aria-label='add'>
+                        <Fab color='primary'>
+                            <AddIcon />
+                        </Fab>
+                    </Tooltip>
+                </NavLink>
             </section>
         </div>
     );
