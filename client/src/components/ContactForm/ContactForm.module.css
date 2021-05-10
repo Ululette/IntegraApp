@@ -3,6 +3,7 @@
     height: 100%;
     display: flex;
     align-items: center;
+    margin-bottom: 1rem;
     justify-content: center;
 }
 
@@ -14,6 +15,7 @@
     margin-top: 2rem;
     margin-bottom: 2rem;
     width: 100%;
+    height: 90%;
 }
 
 .imgConteiner {
@@ -24,8 +26,8 @@
 }
 
 .imgConteiner img {
-    width: 90px;
-    height: 90px;
+    width: 250px;
+    height: 85px;
 }
 
 .inputs {
@@ -45,7 +47,34 @@
     padding: 10px;
 }
 
-.MuiButton-root {
-    margin-right: 15px;
-    background-color: #a6f6f1;
+.successRequest {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    background-color: #41aea9;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+}
+
+.successRequestContent {
+    margin-left: 4%;
+    margin-top: 16%;
+}
+
+.successRequestTitle {
+    color: #213e3b;
+    font-size: 50px;
+    margin-bottom: 50px;
+}
+
+.successRequestSubTitle {
+    font-size: 30px;
+    color: #ffffff;
+}
+
+.buttonVolverSuccess {
+    margin-top: 50px;
+    width: 90px;
+    height: 30px;
 }
