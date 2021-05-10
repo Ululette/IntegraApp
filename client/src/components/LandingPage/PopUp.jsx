@@ -40,6 +40,7 @@ const PopUp = (props) => {
             tabIndex={-1}
           >
             <img src={Img} alt='news img' />
+            <br/>
             {Description}
           </DialogContentText>
         </DialogContent>
