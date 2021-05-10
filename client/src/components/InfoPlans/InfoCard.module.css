@@ -1,0 +1,14 @@
+.root {
+    width: 33%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.picture {
+    height: 100px;
+    width: 300px;
+    margin-left: 1rem;
+    padding: 0;
+}

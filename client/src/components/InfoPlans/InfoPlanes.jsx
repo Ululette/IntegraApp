@@ -5,6 +5,7 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import * as Styles from './InfoPlans.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { getPlans } from '../../actions/getter.action';
+import { teal } from '@material-ui/core/colors';
 
 function InfoPlanes() {
     const plans = useSelector((state) => state.allPlans);
@@ -37,13 +38,8 @@ function InfoPlanes() {
         }
     };
 
-    // const move = setTimeout
-    // const stop = clearTimeout
-
     useEffect(() => {
         dispatch(getPlans());
-
-        // move(forward, 1500)
 
         window.addEventListener('keydown', handleKeyDown);
 
@@ -56,10 +52,10 @@ function InfoPlanes() {
 
     return (
         <div className={Styles.carousel}>
+            <div className={Styles.left} onClick={back}>
+                <ArrowBackIosIcon style={{ color: teal[300] }} />
+            </div>
             <div className={Styles.card}>
-                <div className={Styles.left} onClick={back}>
-                    <ArrowBackIosIcon />
-                </div>
                 <InfoCard
                     key={leftPlan.id_plan}
                     className={Styles.center}
@@ -75,9 +71,9 @@ function InfoPlanes() {
                     className={Styles.center}
                     plan={rightPlan}
                 />
-                <div className={Styles.right} onClick={forward}>
-                    <ArrowForwardIosIcon />
-                </div>
+            </div>
+            <div className={Styles.right} onClick={forward}>
+                <ArrowForwardIosIcon style={{ color: teal[300] }} />
             </div>
         </div>
     );

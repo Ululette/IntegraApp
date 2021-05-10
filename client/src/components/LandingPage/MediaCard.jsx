@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -7,6 +7,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import styles from './MediaCard.module.css';
+import PopUp from './PopUp';
 
 const useStyles = makeStyles({
     root: {
@@ -19,8 +21,13 @@ const useStyles = makeStyles({
 
 export default function MediaCard(props) {
     const classes = useStyles();
+    const togglePopup = () => {
+        setShowPup(!showPopup);
+    };
+
+    const [showPopup, setShowPup] = useState(false);
     return (
-        <Card className={classes.root}>
+        <Card className={styles.root}>
             <CardActionArea>
                 <CardMedia
                     className={classes.media}
@@ -28,7 +35,11 @@ export default function MediaCard(props) {
                     title='Contemplative Reptile'
                 />
                 <CardContent>
-                    <Typography gutterBottom variant='h5' component='h2'>
+                    <Typography
+                        className={styles.title}
+                        gutterBottom
+                        variant='h5' /*component='h2' */
+                    >
                         {props.neww.Title}
                     </Typography>
                     <Typography
@@ -41,10 +52,18 @@ export default function MediaCard(props) {
                 </CardContent>
             </CardActionArea>
             <CardActions>
-                <Button size='small' color='primary'>
+                <Button size='small' color='primary' onClick={togglePopup}>
                     Mas información
                 </Button>
             </CardActions>
+            {showPopup && (
+                <PopUp
+                    news={props.neww}
+                    text='Cerrar'
+                    closePopup={togglePopup}
+                    show={showPopup}
+                />
+            )}
         </Card>
     );
 }

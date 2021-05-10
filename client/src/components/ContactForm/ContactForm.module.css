@@ -1,54 +1,51 @@
-.conteinerAll{
+.conteinerAll {
     width: 100%;
     height: 100%;
-    margin-top: 2%;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.formConteiner{
+.formConteiner {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    margin: auto;
     margin-top: 2rem;
     margin-bottom: 2rem;
     width: 100%;
 }
 
-.imgConteiner{
+.imgConteiner {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
 }
 
-.imgConteiner img{
+.imgConteiner img {
     width: 90px;
     height: 90px;
 }
 
-.inputs{
+.inputs {
     display: flex;
     justify-content: center;
     flex-direction: column;
 }
 
-.textField{
+.textField {
     margin-top: 20px;
     margin-bottom: 20px;
     display: flex;
-    align-items:center;
-} 
-.textField label{
-    font-family:Roboto, sans-serif;
-    font-style: normal;
+    align-items: center;
+}
+
+.textField label {
     padding: 10px;
 }
 
-.MuiButton-root{
+.MuiButton-root {
     margin-right: 15px;
+    background-color: #a6f6f1;
 }
-

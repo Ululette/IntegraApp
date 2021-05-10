@@ -50,49 +50,67 @@ export default function LandingPage() {
                     Urgencias y emergencias - 0810-454-999{' '}
                 </p>
                 <p className={styles.des}>
-                    Orientacion medica telefonica - 0810-963-952{' '}
+                    Orientación medica telefonica - 0810-963-952{' '}
                 </p>
                 <p className={styles.des}>Preguntas frecuentes</p>
             </div>
 
             <div className={styles.app}>
-                <h2>Integra mobile</h2>
-                <p className={styles.desM}>
-                    Toda la información que necesitas en un solo lugar
-                </p>
-                <div className={styles.images}>
-                    <img
-                        className={styles.deco}
-                        src='https://image.flaticon.com/icons/png/128/3538/3538424.png'
-                        alt=''
-                    />
-                    <img
-                        className={styles.deco}
-                        src='https://image.flaticon.com/icons/png/128/2937/2937428.png'
-                        alt=''
-                    />
-                    <img
-                        className={styles.deco}
-                        src='https://image.flaticon.com/icons/png/128/4163/4163340.png'
-                        alt=''
-                    />
+                <div id={styles.photo}></div>
+                <div className={styles.adjust}>
+                    <div className={styles.mob}>
+                        <h2>Integra mobile</h2>
+                        <p className={styles.desM}>
+                            Toda la información que necesitas en un solo lugar
+                        </p>
+                    </div>
+                    <div className={styles.images}>
+                        <img
+                            className={styles.deco}
+                            src='https://image.flaticon.com/icons/png/128/3538/3538424.png'
+                            alt=''
+                        />
+                        <img
+                            className={styles.deco}
+                            src='https://image.flaticon.com/icons/png/128/2937/2937428.png'
+                            alt=''
+                        />
+                        <img
+                            className={styles.deco}
+                            src='https://image.flaticon.com/icons/png/128/4163/4163340.png'
+                            alt=''
+                        />
+                    </div>
                 </div>
             </div>
-            <div className={styles.news}>
+
+            <div id={styles.nov}>
                 <h3>Novedades</h3>
+            </div>
+            <div className={styles.news}>
                 <Carousel />
             </div>
             <div className={styles.digital}>
-                <h2 className={styles.credential}>Credencial digital</h2>
-                <p className={styles.desC}>
-                    La credencial va siempre con vos y sin ocupar lugar en tu
-                    billetera
-                </p>
-                <p className={styles.desC}>
-                    Todas las credenciales de tu grupo familiaren un solo lugar
-                </p>
+                <div className={styles.doctor}></div>
+                <div className={styles.cd}>
+                    <h2 className={styles.credential}>Credencial digital</h2>
+                    <p className={styles.desC}>
+                        📱 La credencial va siempre con vos y sin ocupar lugar
+                        en tu billetera
+                    </p>
+                    <p className={styles.desC}>
+                        📱Todas las credenciales de tu grupo familiaren un solo
+                        lugar
+                    </p>
+                </div>
             </div>
-            <InfoPlanes id='infoPlans' />
+
+            <div id={styles.nov}>
+                <h3>Nuestros planes</h3>
+            </div>
+            <div className={styles.plans}>
+                <InfoPlanes id='infoPlans' />
+            </div>
             <div id='contact'>
                 <ContactForm />
             </div>

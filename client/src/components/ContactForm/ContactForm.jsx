@@ -21,7 +21,7 @@ const theme = createMuiTheme({
             main: '#41aea9',
         },
         secondary: {
-            main: '#e8ffff',
+            main: '#a6f6f1',
         },
     },
 });
@@ -199,7 +199,7 @@ function ContactForm() {
                             </Button>
                             <Button
                                 variant='contained'
-                                color='secondary'
+                                color='secondary' 
                                 style={{ borderRadius: 100, margin: 10 }}
                             >
                                 Volver
