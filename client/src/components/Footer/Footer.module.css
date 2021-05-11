@@ -1,0 +1,31 @@
+.allfoot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* background-color: #213e3b; */
+  /* background-color: #F3F5F7; */
+  background-color: #41aea9;
+  box-shadow: 0 5px 6px -6px black;
+  width: 100%;
+  color: #E9E9E9;
+  left: 0;
+  padding: 15px 50px;
+  text-decoration: none;
+}
+
+ul.listunstyled {
+  font-family: nunito;
+  font-size: 13px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  text-decoration: none;
+  color: #E9E9E9
+}

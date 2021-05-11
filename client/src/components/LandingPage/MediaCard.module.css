@@ -1,0 +1,23 @@
+  .root {
+     display: grid;
+     width: 345px;
+     height: 350px;
+     margin: 0 25px;
+     align-content: flex-start;
+  }
+
+  .media {
+     height: 150px;
+  }
+
+  .containerData {
+     height: 150px;
+  }
+
+  .title {
+     font-size: 1.3rem;
+  }
+
+  .popup {
+     justify-self: center;
+  }
