@@ -35,9 +35,9 @@ export default function InfoPlanes() {
                 <ArrowBackIosIcon style={{ color: teal[300] }} />
             </div>
             <div className={styles.card}>
-                <MediaCard className={styles.center} neww={leftNeww} />
-                <MediaCard className={styles.center} neww={neww} />
-                <MediaCard className={styles.center} neww={rightNeww} />
+                <MediaCard neww={leftNeww} />
+                <MediaCard neww={neww} />
+                <MediaCard neww={rightNeww} />
             </div>
             <div className={styles.right} onClick={forward}>
                 <ArrowForwardIosIcon style={{ color: teal[300] }} />

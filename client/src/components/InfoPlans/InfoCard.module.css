@@ -1,14 +1,23 @@
 .root {
-    width: 33%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    width: 345px;
+    height: 350px;
+    margin: 0 25px;
+    align-content: flex-start;
 }
 
-.picture {
-    height: 100px;
-    width: 300px;
-    margin-left: 1rem;
-    padding: 0;
+.media {
+    height: 150px;
+}
+
+.containerData {
+    height: 150px;
+}
+
+.title {
+    font-size: 1.3rem;
+}
+
+.popup {
+    justify-self: center;
 }

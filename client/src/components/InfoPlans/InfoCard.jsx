@@ -63,27 +63,17 @@ import styles from './InfoCard.module.css';
 import logoNav from '../../assets/images/logo.png';
 import { NavLink } from 'react-router-dom';
 
-const useStyles = makeStyles({
-    root: {
-        maxWidth: 345,
-    },
-    media: {
-        height: 140,
-    },
-});
-
 function InfoCard(props) {
-    const classes = useStyles();
     return (
         <Card className={styles.root}>
             <CardActionArea>
                 <CardMedia
-                    className={(classes.media, styles.picture)}
+                    className={styles.media}
                     image={logoNav}
                     title='Logo'
                 />
-                <CardContent>
-                    <Typography gutterBottom variant='h5' /*component='h2' */>
+                <CardContent className={styles.containerData}>
+                    <Typography gutterBottom variant='h5'>
                         {props.plan.description}
                     </Typography>
                     <Typography
@@ -94,7 +84,7 @@ function InfoCard(props) {
                         {props.plan.benefits.benefits_title}
                     </Typography>
                 </CardContent>
-                <CardContent>
+                <CardContent className={styles.containerData}>
                     <Typography paragraph>Cobertura:</Typography>
                     <Typography paragraph>
                         {props.plan.benefits.benefits_title}
@@ -106,7 +96,7 @@ function InfoCard(props) {
                     ))}
                 </CardContent>
             </CardActionArea>
-            <CardActions>
+            <CardActions className={styles.popup}>
                 <NavLink to={`planDetails/${props.plan.id_plan}`}>
                     <Button size='small' color='primary'>
                         Mas información

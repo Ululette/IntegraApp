@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -10,17 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import styles from './MediaCard.module.css';
 import PopUp from './PopUp';
 
-const useStyles = makeStyles({
-    root: {
-        maxWidth: 345,
-    },
-    media: {
-        height: 140,
-    },
-});
-
 export default function MediaCard(props) {
-    const classes = useStyles();
     const togglePopup = () => {
         setShowPup(!showPopup);
     };
@@ -29,16 +18,12 @@ export default function MediaCard(props) {
     return (
         <Card className={styles.root}>
             <CardActionArea>
-                <CardMedia
-                    className={classes.media}
-                    image={props.neww.Img}
-                    title='Contemplative Reptile'
-                />
-                <CardContent>
+                <CardMedia className={styles.media} image={props.neww.Img} />
+                <CardContent className={styles.containerData}>
                     <Typography
                         className={styles.title}
                         gutterBottom
-                        variant='h5' /*component='h2' */
+                        variant='h5'
                     >
                         {props.neww.Title}
                     </Typography>
@@ -51,7 +36,7 @@ export default function MediaCard(props) {
                     </Typography>
                 </CardContent>
             </CardActionArea>
-            <CardActions>
+            <CardActions className={styles.popup}>
                 <Button size='small' color='primary' onClick={togglePopup}>
                     Mas información
                 </Button>

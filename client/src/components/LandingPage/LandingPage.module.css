@@ -88,7 +88,7 @@
   margin: 0px;
 }
 
-.all h2 {
+h2 {
   color: #41aea9;
   font-size: 50px;
   padding: 30px;
@@ -122,12 +122,17 @@
 .news {
   display: flex;
   justify-content: center;
+  align-self: center;
   align-items: center;
-  width: 95%;
-  height: 400px;
+  margin: 20px;
+  padding: 20px;
+  height: 500px;
+  padding-top: 0px;
+  margin-top: 0px;
+
 }
 
-.all h3 {
+h3 {
   font-size: 70px;
 }
 
@@ -170,14 +175,22 @@
   padding: 30px; */
 }
 
+#contact {
+  height: 1000px;
+
+}
+
 .plans {
   display: flex;
   justify-content: center;
+  align-self: center;
   align-items: center;
   margin: 20px;
   padding: 20px;
-  width: 90%;
-  height: 500px;
+  width: 800px;
+  height: fit-content;
+
+
 }
 
 #nov {
@@ -194,7 +207,6 @@
   height: 100%;
   padding-top: 0px;
   margin-top: 0px;
-
 }
 
 .adjust {
