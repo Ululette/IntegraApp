@@ -16,10 +16,8 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: teal ['A100'],
     },
 }));
-
-function InfoCard(props) {
+export default function InfoCard(props) {
     const classes = useStyles();
-
     return (
         <Card className={classes.root, styles.root}>
             <CardHeader
@@ -32,16 +30,19 @@ function InfoCard(props) {
                 subheader={props.plan.price}
             />
             <NavLink
+                path
                 to={`planDetails/${props.plan.id_plan}`}
                 style={{ textDecoration: 'none', color: 'black' }}
             >
                 Ver mas
             </NavLink>
             <CardContent>
-                <Typography>Cobertura:</Typography>
-                <Typography>{props.plan.benefits.benefits_title}</Typography>
+                <Typography paragraph>Cobertura:</Typography>
+                <Typography paragraph>
+                    {props.plan.benefits.benefits_title}
+                </Typography>
                 {props.plan.benefits.map((d, index) => (
-                    <Typography key={`cardInfo-${index}`}>
+                    <Typography key={`cardInfo-${index}`} paragraph>
                         {d.benefit_description}
                     </Typography>
                 ))}
@@ -63,17 +64,27 @@ import styles from './InfoCard.module.css';
 import logoNav from '../../assets/images/logo.png';
 import { NavLink } from 'react-router-dom';
 
-function InfoCard(props) {
+const useStyles = makeStyles({
+    root: {
+        maxWidth: 345,
+    },
+    media: {
+        height: 140,
+    },
+});
+
+export default function InfoCard(props) {
+    const classes = useStyles();
     return (
-        <Card className={styles.root}>
+        <Card className={classes.root}>
             <CardActionArea>
                 <CardMedia
-                    className={styles.media}
+                    className={(classes.media, styles.picture)}
                     image={logoNav}
                     title='Logo'
                 />
-                <CardContent className={styles.containerData}>
-                    <Typography gutterBottom variant='h5'>
+                <CardContent>
+                    <Typography gutterBottom variant='h5' /*component='h2' */>
                         {props.plan.description}
                     </Typography>
                     <Typography
@@ -84,7 +95,7 @@ function InfoCard(props) {
                         {props.plan.benefits.benefits_title}
                     </Typography>
                 </CardContent>
-                <CardContent className={styles.containerData}>
+                <CardContent>
                     <Typography paragraph>Cobertura:</Typography>
                     <Typography paragraph>
                         {props.plan.benefits.benefits_title}
@@ -96,7 +107,7 @@ function InfoCard(props) {
                     ))}
                 </CardContent>
             </CardActionArea>
-            <CardActions className={styles.popup}>
+            <CardActions>
                 <NavLink to={`planDetails/${props.plan.id_plan}`}>
                     <Button size='small' color='primary'>
                         Mas información
@@ -106,5 +117,3 @@ function InfoCard(props) {
         </Card>
     );
 }
-
-export default InfoCard;
