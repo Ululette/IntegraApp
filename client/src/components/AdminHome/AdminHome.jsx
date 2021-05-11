@@ -54,6 +54,29 @@ function AdminHome({ firebase }) {
         setAnchorEl(null);
     };
 
+    const handleDelete = async (planDescription) => {
+        const res = window.confirm(
+            `¿Desea eliminar el plan ${planDescription}?`
+        );
+        if (res) {
+            const { data: idPlan } = await supabase
+                .from('plans')
+                .select('id_plan')
+                .eq('description', planDescription);
+            const { data: deleteRelation, error } = await supabase
+                .from('plans_benefits')
+                .delete()
+                .match({ plans_id_plan: idPlan[0].id_plan });
+            const { data: deletePlan, error: errorDeletePlan } = await supabase
+                .from('plans')
+                .delete()
+                .eq('id_plan', idPlan[0].id_plan);
+
+            if (!error && !errorDeletePlan)
+                return alert(`${planDescription} eliminado con exito.`);
+        }
+    };
+
     useEffect(() => {
         dispatch(getPlans());
         dispatch(getBenefits());
@@ -175,7 +198,11 @@ function AdminHome({ firebase }) {
                             ))}
                         </ul>
                         <div className={styles.deleteButton}>
-                            <Tooltip title='Eliminar plan' aria-label='delete'>
+                            <Tooltip
+                                title='Eliminar plan'
+                                aria-label='delete'
+                                onClick={() => handleDelete(plan.description)}
+                            >
                                 <DeleteIcon />
                             </Tooltip>
                         </div>
