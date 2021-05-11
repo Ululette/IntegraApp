@@ -9,7 +9,8 @@ import AdminHome from './AdminHome/AdminHome.jsx';
 import FaqsPage from './Faqs/FaqsPage.jsx';
 import ContactForm from './ContactForm/ContactForm.jsx';
 import NewPlanP from './NewPlanP/NewPlanP.jsx';
-import UserNav from './UserNav/UserNav';
+import AdminNav from './AdminNav/AdminNav';
+import UserNav from './UserNav/UserNav.jsx';
 
 function App() {
     const firebase = useFirebaseApp();
