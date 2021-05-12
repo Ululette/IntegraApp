@@ -12,18 +12,25 @@ function InfoPlanes() {
     const dispatch = useDispatch();
 
     const [currCard, setCurrCard] = useState(0);
+    const [shouldAutoSlide,setAutoSlide] = useState(true);
 
     const leftPlan = plans[currCard > 1 ? currCard - 1 : plans.length - 1];
     const plan = plans[currCard];
     const rightPlan = plans[currCard < plans.length - 1 ? currCard + 1 : 0];
 
     const forward = () => {
+        if(shouldAutoSlide){
+            setAutoSlide(false);
+        }
         currCard < plans.length - 1
             ? setCurrCard(currCard + 1)
             : setCurrCard(0);
     };
 
     const back = () => {
+        if(shouldAutoSlide){
+            setAutoSlide(false);
+        }
         currCard > 0
             ? setCurrCard(currCard - 1)
             : setCurrCard(plans.length - 1);
@@ -37,6 +44,18 @@ function InfoPlanes() {
             back();
         }
     };
+
+    const autoSlide=()=>{
+        currCard < plans.length - 1
+            ? setCurrCard(currCard + 1)
+            : setCurrCard(0);
+    }
+
+    setTimeout(()=>{
+        if(shouldAutoSlide){
+            autoSlide()
+        }
+    },2000);
 
     useEffect(() => {
         dispatch(getPlans());

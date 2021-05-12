@@ -2,7 +2,6 @@
     margin-top: 0px;
     padding-top: 0px;
     display: flex;
-    flex-direction: row;
     width: 100%;
     height: 450px;
     border-radius: 10px;
@@ -41,6 +40,8 @@
 }
 
 .card {
+    display: flex;
+    justify-content: center;
     height: 100%;
     width: 100%;
     background-position: center;
@@ -55,7 +56,9 @@
     align-items: center;
     background-color: black;
     flex: 5%;
-    size: cover;
+    /* size: cover; */
+    height: 100%;
+    width: 100%;
     background-color: rgba(0, 0, 0, 0.4);
     display: grid;
     place-items: center;
@@ -71,7 +74,9 @@
 
 .card .right {
     flex: 5%;
-    size: cover;
+    /* size: cover; */
+    height: 100%;
+    width: 100%;
     background-color: rgba(0, 0, 0, 0.4);
     background-size: cover;
     display: grid;
