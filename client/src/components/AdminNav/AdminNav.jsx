@@ -115,31 +115,32 @@ function AdminNav() {
                     </article>
                     <article>
                         <FavoriteBorderIcon />
-                        <li>Mi carpeta medica</li>
+                        <li>Solicitudes de asociacion</li>
                     </article>
                     <article>
                         <NoteIcon />
-                        <li>Mi plan</li>
+                        <li>Planes</li>
                     </article>
                     <article>
                         <DoneAllIcon />
-                        <li>Mis autorizaciones</li>
-                    </article>
-                    <article>
-                        <PhoneAndroidIcon />
-                        <li>Mi credencial</li>
-                    </article>
-                    <article>
-                        <AssignmentIcon />
-                        <li>Cartilla medica</li>
+                        {/* Autorizacion de ordenes y recetas */}
+                        <li>Autorizaciones</li>
                     </article>
                     <article>
                         <PaymentIcon />
-                        <li>Pago online</li>
+                        <li>Socios</li>
                     </article>
                     <article>
                         <ForumIcon />
-                        <li>Contactanos</li>
+                        <li>Medicos</li>
+                    </article>
+                    <article>
+                        <PhoneAndroidIcon />
+                        <li>Consultas de socios</li>
+                    </article>
+                    <article>
+                        <AssignmentIcon />
+                        <li>Tickets</li>
                     </article>
                 </ul>
             </aside>
