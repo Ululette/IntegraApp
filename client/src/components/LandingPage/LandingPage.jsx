@@ -10,7 +10,7 @@ export default function LandingPage() {
         <div className={styles.all}>
             <div className={styles.first}>
                 <div className={styles.typewriter}>
-                    <h1>Bienvenido</h1>
+                    <h2 id = {styles.welcome}>Bienvenido</h2>
                 </div>
                 <img
                     id={styles.dr1}
@@ -18,7 +18,7 @@ export default function LandingPage() {
                     alt=''
                 />
             </div>
-
+            <div className = {styles.infoAll}>
             <div className={styles.icons}>
                 <div className={styles.icon}>
                     <img
@@ -54,12 +54,12 @@ export default function LandingPage() {
                 </p>
                 <p className={styles.des}>Preguntas frecuentes</p>
             </div>
-
+        </div>
             <div className={styles.app}>
                 <div id={styles.photo}></div>
                 <div className={styles.adjust}>
                     <div className={styles.mob}>
-                        <h2>Integra mobile</h2>
+                        <h2 className = {styles.h2h}>Integra mobile</h2>
                         <p className={styles.desM}>
                             Toda la información que necesitas en un solo lugar
                         </p>
