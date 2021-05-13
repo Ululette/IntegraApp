@@ -12,39 +12,37 @@ import Card from "@material-ui/core/Card";
 import { makeStyles } from "@material-ui/core/styles";
 import supabase from "../../supabase.config";
 import "firebase/auth";
-/* const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: "#41aea9",
+const theme = createMuiTheme({
+    palette: {
+        primary: {
+            main: '#41aea9',
+        },
+        secondary: {
+            main: '#e8ffff',
+        },
     },
-    secondary: {
-      main: "#e8ffff",
-    },
-  },
 });
 
 const useStyles = makeStyles({
-  root: {
-    width: "50%",
-    height: "70%",
-    background: "#e8ffff",
-  },
-  bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)",
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
-}); */
-
+    root: {
+        width: '50%',
+        height: '70%',
+        background: '#e8ffff',
+    },
+    bullet: {
+        display: 'inline-block',
+        margin: '0 2px',
+        transform: 'scale(0.8)',
+    },
+    title: {
+        fontSize: 14,
+    },
+    pos: {
+        marginBottom: 12,
+    },
+});
 function AdminRegistration({firebase}) {
-  /* const classes = useStyles();
- */
+ 
   const [input, setInput] = useState({
     name: "",
     lastname: "",
@@ -69,6 +67,7 @@ function AdminRegistration({firebase}) {
     if (
       !errors.name &&
       !errors.lastname &&
+      !errors.dni &&
       !errors.mail &&
       !errors.password &&
       !errors.confirmPassword
@@ -83,21 +82,18 @@ function AdminRegistration({firebase}) {
           email: input.mail.toLowerCase(),
         },
       ]);
-   
  
-      const addUserFirebase =  async () => {
         await firebase
             .auth()
-            .createUserWithEmailAndPassword(input.email, input.password)
+            .createUserWithEmailAndPassword(input.mail, input.password)
          alert('Usuario creado')
-      }  
-      addUserFirebase()
+    
       setInput({
         name: "",
         lastname: "",
         dni: "",
         mail: "",
-        pasword: "",
+        password: "",
         confirmPassword: "",
       });
     } else {
@@ -130,7 +126,7 @@ function AdminRegistration({firebase}) {
     let errors = {};
     switch(inputName){
         case 'name':{
-            if (!input.name) {
+            if (!value) {
                 errors.name = true;
               } else {
                 errors.name = false;
@@ -138,7 +134,7 @@ function AdminRegistration({firebase}) {
               break
             }
             case 'lastname':{
-                if (!input.lastname) {
+                if (!value) {
                     errors.lastname = true;
                   } else {
                     errors.lastname = false;
@@ -146,7 +142,7 @@ function AdminRegistration({firebase}) {
                   break
             }
             case 'dni':{
-                if (!numberPattern.test(input.dni) || input.dni.length !== 8) {
+                if (!numberPattern.test(value) || value.length !== 8) {
                     errors.dni = true;
                   } else {
                     errors.dni = false;
@@ -154,7 +150,7 @@ function AdminRegistration({firebase}) {
                   break
             }
             case 'mail':{
-                if (!mailPattern.test(input.mail)) {
+                if (!mailPattern.test(value)) {
                     errors.mail = true;
                   } else {
                     errors.mail = false;
@@ -162,7 +158,7 @@ function AdminRegistration({firebase}) {
                   break
             }
             case 'password':{
-                if (!passwordPattern.test(input.password)) {
+                if (!passwordPattern.test(value)) {
                     errors.password = true;
                   } else {
                     errors.password = false;
@@ -170,7 +166,7 @@ function AdminRegistration({firebase}) {
                   break
             }
             case 'confirmPassword':{
-                if (input.password !== input.confirmPassword) {
+                if (input.password !== value) {
                     errors.confirmPassword = true;
                   } else {
                     errors.confirmPassword = false;
@@ -183,9 +179,8 @@ function AdminRegistration({firebase}) {
 
   return (
     <div className={Styles.conteinerAll}>
-     {/*  <ThemeProvider theme={theme}>
-        <Card className={classes.root}> */}
-          <Snackbar
+        <h2> Agregar nuevo admin </h2>
+              <Snackbar
             open={errorRequest}
             autoHideDuration={6000}
             onClose={handleClose}
@@ -200,12 +195,12 @@ function AdminRegistration({firebase}) {
                 <img src={LogoNav} alt="Logo" />
               </div>
               <div className={Styles.textField}>
-                <label htmlFor="">Nombre </label>
-                <TextField id="outlined-search" label="Search field" type="search" variant="outlined" 
+                <TextField id="outlined-search" label="Nombre"  variant="outlined" 
                   id="name-input"
                   type="text"
                   name="name"
                   autoComplete="off"
+                  size="small"
                   value={input.name}
                   onChange={(e) => handleInputChange(e)}
                   {...(errors.name && {
@@ -215,12 +210,12 @@ function AdminRegistration({firebase}) {
                 />
               </div>
               <div className={Styles.textField}>
-                <label htmlFor="">Apellido </label>
-                <TextField id="outlined-search" label="Search field" type="search" variant="outlined"
+                <TextField id="outlined-search" label="Apellido" variant="outlined"
                   id="lastname-input"
                   type="text"
                   name="lastname"
                   autoComplete="off"
+                  size="small"
                   value={input.lastname}
                   onChange={(e) => handleInputChange(e)}
                   {...(errors.lastname && {
@@ -230,13 +225,12 @@ function AdminRegistration({firebase}) {
                 />
               </div>
               <div className={Styles.textField}>
-                  
-                <label htmlFor="">DNI </label>
-                <TextField id="outlined-search" label="Search field" type="search" variant="outlined"
+     <TextField id="outlined-search" label="DNI" variant="outlined"
                   id="dni-input"
                   type="tel"
                   name="dni"
                   autoComplete="off"
+                  size="small"
                   value={input.dni}
                   onChange={(e) => handleInputChange(e)}
                   {...(errors.dni && {
@@ -248,12 +242,12 @@ function AdminRegistration({firebase}) {
               </div>
 
               <div className={Styles.textField}>
-                <label htmlFor="">Mi mail es </label>
-                <TextField id="outlined-search" label="Search field" type="search" variant="outlined" 
+                <TextField id="outlined-search" label="E-mail" variant="outlined" 
                   id="mail-input"
                   type="text"
                   name="mail"
                   autoComplete="off"
+                  size="small"
                   value={input.mail}
                   onChange={(e) => handleInputChange(e)}
                   {...(errors.mail && {
@@ -263,12 +257,12 @@ function AdminRegistration({firebase}) {
                 />
               </div>
               <div className={Styles.textField}>
-                <label htmlFor="">Contraseña</label>
-                <TextField id="outlined-search" label="Search field" type="search" variant="outlined"
+                <TextField id="outlined-search" label="Contraseña" variant="outlined"
                   id="password-input"
                   type="password"
                   name="password"
                   autoComplete="off"
+                  size="small"
                   value={input.password}
                   onChange={(e) => handleInputChange(e)}
                   {...(errors.password && {
@@ -278,12 +272,12 @@ function AdminRegistration({firebase}) {
                 />
               </div>
               <div className={Styles.textField}>
-                <label htmlFor="">Confirmar contraseña</label>
-                <TextField id="outlined-search" label="Search field" type="search" variant="outlined"
+                <TextField id="outlined-search" label="Confirmas contraseña"  variant="outlined"
                   id="confirm-password-input"
                   type="password"
                   name="confirmPassword"
                   autoComplete="off"
+                  size="small"
                   value={input.confirmPassword}
                   onChange={(e) => handleInputChange(e)}
                   {...(errors.confirmPassword && {
@@ -299,21 +293,13 @@ function AdminRegistration({firebase}) {
                 color="primary"
                 style={{ borderRadius: 100, margin: 10 }}
                 onClick={handleClickOpen}
-         /*        disabled={
-                  !input.name ||
-                  !input.lastame || 
-                  !input.dni ||
-                  !input.mail ||
-                  !input.password ||
-                  !input.confirmPassword
-                } */
               >
+                
                 Agregar Admin
               </Button>
             </div>
           </div>
-       {/*  </Card>
-      </ThemeProvider> */}
+  
     </div>
   );
 }
