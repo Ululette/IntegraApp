@@ -26,7 +26,7 @@ function App() {
             <Route exact path='/asociate' component={ContactForm} />
             <Route exact path='/NewPlanP' component={NewPlanP} />
             <Route path='/' component={Footer} />
-            <Route exact path='/NewAdmin' component={AdminRegistration} />
+            <Route exact path='/NewAdmin' render={() => <AdminRegistration firebase={firebase} />}   />
         </>
     );
 }
