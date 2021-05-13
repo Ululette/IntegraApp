@@ -22,19 +22,8 @@ function AdminMedic() {
         setListMedics(medics);
     };
 
-    const listPlans = async () => {
-        const { data: plans, error } = await supabase
-            .from('plans')
-            .select(
-                'name, price, benefits (title), benefits_descriptions (benefit_id, plan_id)'
-            );
-        if (error) return console.log(error);
-        console.log(plans);
-    };
-
     useEffect(() => {
         fetchMedics();
-        listPlans();
         console.log('useRender activated');
     }, []);
 
@@ -53,6 +42,13 @@ function AdminMedic() {
                         className={styles.medicContainer}
                     >
                         <CreateIcon className={styles.editMedic} />
+                        {el.profilePic ? (
+                            <img
+                                className={styles.profilePic}
+                                src={el.profilePic}
+                                alt='Medic profile pic'
+                            />
+                        ) : null}
                         <p>DNI: {el.dni}</p>
                         <p>Nombre: {el.name}</p>
                         <p>Apellido: {el.lastname}</p>
