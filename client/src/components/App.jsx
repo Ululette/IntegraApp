@@ -11,6 +11,7 @@ import ContactForm from './ContactForm/ContactForm.jsx';
 import NewPlanP from './NewPlanP/NewPlanP.jsx';
 import AdminNav from './AdminNav/AdminNav';
 import UserNav from './UserNav/UserNav.jsx';
+import AdminMedic from './AdminMedics/AdminMedics';
 
 function App() {
     const firebase = useFirebaseApp();
@@ -24,7 +25,8 @@ function App() {
                 path='/:id/admin'
                 render={() => <AdminHome firebase={firebase} />}
             />
-            <Route path='/user' component={AdminNav} />
+            <Route path='/:id/admin' component={AdminNav} />
+            <Route path='/listmedic' component={AdminMedic} />
             <Route exact path='/asociate' component={ContactForm} />
             <Route exact path='/NewPlanP' component={NewPlanP} />
             <Route exact path='/' component={Footer} />
