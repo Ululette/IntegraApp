@@ -88,7 +88,7 @@
   margin: 0px;
 }
 
-h2 {
+.first h2 {
   color: #41aea9;
   font-size: 50px;
   padding: 30px;
@@ -132,7 +132,7 @@ h2 {
 
 }
 
-h3 {
+.first h3 {
   font-size: 70px;
 }
 

@@ -26,14 +26,14 @@
   box-shadow: 0 2px 2px 0 rgb(46 53 66 / 10%), 0 5px 25px 0 rgb(46 53 66 / 5%);
 }
 
-hr.sep1 {
+.sep1 {
   height: 0.6px;
   background: rgb(218, 219, 219);
   border: none;
   outline: none;
   margin: 10px 0 0px 0;
 }
-hr.sep2 {
+.sep2 {
   height: 0.6px;
   background: white;
   border: none;
@@ -64,11 +64,6 @@ hr.sep2 {
   flex-direction: row;
   align-items: center;
   margin-bottom: 10px;
-}
-
-textarea{
-  resize: vertical;
-  min-height: 35px;
 }
 
 .np_nameinput{

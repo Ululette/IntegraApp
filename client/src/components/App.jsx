@@ -25,8 +25,8 @@ function App() {
                 path='/:id/admin'
                 render={() => <AdminHome firebase={firebase} />}
             />
-            <Route path='/:id/admin' component={AdminNav} />
-            <Route path='/listmedic' component={AdminMedic} />
+            <Route path='/admin' component={AdminNav} />
+            <Route exact path='/admin/listmedic' component={AdminMedic} />
             <Route exact path='/asociate' component={ContactForm} />
             <Route exact path='/NewPlanP' component={NewPlanP} />
             <Route exact path='/' component={Footer} />

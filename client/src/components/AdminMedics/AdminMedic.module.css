@@ -1,0 +1,21 @@
+.container {
+    display: flex;
+    margin: 25px auto;
+}
+
+.editMedic {
+    visibility: hidden;
+    cursor: pointer;
+}
+
+.medicContainer:hover>.editMedic {
+    visibility: visible;
+}
+
+.medicContainer {
+    text-transform: capitalize;
+}
+
+.email {
+    text-transform: lowercase;
+}

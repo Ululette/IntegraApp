@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import {
     Button,
     Menu,
@@ -132,17 +133,17 @@ function AdminNav() {
                         <GroupIcon />
                         <li>Socios</li>
                     </article>
-                    <article>
+                    <NavLink to={'/admin/listmedic'} className={styles.link}>
                         <HealingIcon />
                         <li>Medicos</li>
-                    </article>
+                    </NavLink>
                     <article>
                         <Badge
                             className={styles.notifications}
                             color='secondary'
                             badgeContent={2}
                         >
-                            <PhoneAndroidIcon />
+                            <PhoneAndroidIcon className={styles.iconAside} />
                             <li>Consultas de socios</li>
                         </Badge>
                     </article>
