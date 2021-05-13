@@ -16,27 +16,17 @@ import styles from './AdminNav.module.css';
 
 //Icons
 import MailIcon from '@material-ui/icons/Mail';
-import PhoneIcon from '@material-ui/icons/Phone';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import HomeIcon from '@material-ui/icons/Home';
 import FaceIcon from '@material-ui/icons/Face';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import GroupIcon from '@material-ui/icons/Group';
 import NoteIcon from '@material-ui/icons/Note';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import PhoneAndroidIcon from '@material-ui/icons/PhoneAndroid';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import PaymentIcon from '@material-ui/icons/Payment';
-import ForumIcon from '@material-ui/icons/Forum';
-
-import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
-import PhoneInTalkIcon from '@material-ui/icons/PhoneInTalk';
-import DateRangeIcon from '@material-ui/icons/DateRange';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction='down' ref={ref} {...props} />;
-});
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import HealingIcon from '@material-ui/icons/Healing';
 
 function AdminNav() {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -114,33 +104,57 @@ function AdminNav() {
                         <li>Mi cuenta</li>
                     </article>
                     <article>
-                        <FavoriteBorderIcon />
-                        <li>Solicitudes de asociacion</li>
+                        <Badge
+                            className={styles.notifications}
+                            color='secondary'
+                            badgeContent={2}
+                        >
+                            <GroupAddIcon />
+                            <li>Solicitudes de asociacion</li>
+                        </Badge>
                     </article>
                     <article>
                         <NoteIcon />
                         <li>Planes</li>
                     </article>
                     <article>
-                        <DoneAllIcon />
-                        {/* Autorizacion de ordenes y recetas */}
-                        <li>Autorizaciones</li>
+                        <Badge
+                            className={styles.notifications}
+                            color='secondary'
+                            badgeContent={2}
+                        >
+                            <DoneAllIcon />
+                            {/* Autorizacion de ordenes y recetas */}
+                            <li>Autorizaciones</li>
+                        </Badge>
                     </article>
                     <article>
-                        <PaymentIcon />
+                        <GroupIcon />
                         <li>Socios</li>
                     </article>
                     <article>
-                        <ForumIcon />
+                        <HealingIcon />
                         <li>Medicos</li>
                     </article>
                     <article>
-                        <PhoneAndroidIcon />
-                        <li>Consultas de socios</li>
+                        <Badge
+                            className={styles.notifications}
+                            color='secondary'
+                            badgeContent={2}
+                        >
+                            <PhoneAndroidIcon />
+                            <li>Consultas de socios</li>
+                        </Badge>
                     </article>
                     <article>
-                        <AssignmentIcon />
-                        <li>Tickets</li>
+                        <Badge
+                            className={styles.notifications}
+                            color='secondary'
+                            badgeContent={2}
+                        >
+                            <AssignmentIcon />
+                            <li>Tickets</li>
+                        </Badge>
                     </article>
                 </ul>
             </aside>
