@@ -32,13 +32,14 @@ export default function ComparativaP() {
   return (
     <div className='comp_page'>
       <div className='comp_header'>
-        <h1 className=' comp_header_title'> Tenemos un plan para vos </h1>
+        <h1 className=' comp_header_title'>Tenemos un plan para vos </h1>
         <img className='comp_header_image' src={family} width="100" height="100" alt="" />
       </div>
       <div className='container_img'>
         <img src={fondo} className='fondotop' />
       </div>
       <div className='back-definer'>
+      <h3 className='comp_sub_header_title'> Todos los planes incluyen el básico: </h3>
         <div className='comp_cont'>
           {plans.length && <InfoPlanCard
             name={plans[0].name}
