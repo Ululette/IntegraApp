@@ -76,7 +76,6 @@ function AdminMedicAdd({ medicSpecialities }) {
             .eq('postal_code', input.adressPostalCode);
         if (errorSearch) return console.log(errorSearch);
         setLocalities(info);
-        console.log(info);
     };
 
     const handleSubmit = async (e) => {

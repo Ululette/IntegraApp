@@ -10,8 +10,12 @@ function AdminMedicEdit({ medicData, medicSpecialities, setEditActive }) {
         lastname: medicData.lastname,
         email: medicData.email,
         phoneNumber: medicData.phone_number,
-        specialitiesA: medicData.medical_specialities[0].name,
+        specialitiesA: medicData.medical_specialities[0].id,
         specialitiesB: medicData.medical_specialities[1]
+            ? medicData.medical_specialities[1].id
+            : null,
+        specialitiesAname: medicData.medical_specialities[0].name,
+        specialitiesBname: medicData.medical_specialities[1]
             ? medicData.medical_specialities[1].name
             : null,
         state: medicData.state,
@@ -23,28 +27,38 @@ function AdminMedicEdit({ medicData, medicSpecialities, setEditActive }) {
         setInput({ ...input, [name]: value });
     };
 
+    console.log(input);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (window.confirm('Esta seguro de actualizar estos campos?')) {
             try {
+                await supabase
+                    .from('medics_medical_specialities')
+                    .update({
+                        medic_dni: medicData.dni,
+                        speciality_id: input.specialitiesA,
+                    })
+                    .eq('medic_dni', medicData.dni);
                 if (input.specialitiesB) {
-                    await supabase.from('medics_medical_specialities').insert([
-                        {
-                            medic_dni: medicData.dni,
-                            speciality_id: input.specialitiesA,
-                        },
-                        {
-                            medic_dni: medicData.dni,
-                            speciality_id: input.specialitiesB,
-                        },
-                    ]);
-                } else {
-                    await supabase.from('medics_medical_specialities').insert([
-                        {
-                            medic_dni: medicData.dni,
-                            speciality_id: input.specialitiesA,
-                        },
-                    ]);
+                    if (medicData.medical_specialities[1]) {
+                        await supabase
+                            .from('medics_medical_specialities')
+                            .update({
+                                medic_dni: medicData.dni,
+                                speciality_id: input.specialitiesB,
+                            })
+                            .eq('medic_dni', medicData.dni);
+                    } else {
+                        await supabase
+                            .from('medics_medical_specialities')
+                            .insert([
+                                {
+                                    medic_dni: medicData.dni,
+                                    speciality_id: input.specialitiesB,
+                                },
+                            ]);
+                    }
                 }
             } catch (error) {
                 console.log(error);
@@ -123,7 +137,7 @@ function AdminMedicEdit({ medicData, medicSpecialities, setEditActive }) {
             >
                 {medicSpecialities.map((spec, index) => (
                     <option
-                        selected={spec.name === input.specialitiesA}
+                        selected={spec.name === input.specialitiesAname}
                         key={`spec-${index}`}
                         value={`${spec.id}`}
                     >
@@ -140,7 +154,7 @@ function AdminMedicEdit({ medicData, medicSpecialities, setEditActive }) {
                 <option value={null}>No hay especialidad 2</option>
                 {medicSpecialities.map((spec, index) => (
                     <option
-                        selected={spec.name === input.specialitiesB}
+                        selected={spec.name === input.specialitiesBname}
                         key={`spec-${index + 100}`}
                         value={`${spec.id}`}
                     >
