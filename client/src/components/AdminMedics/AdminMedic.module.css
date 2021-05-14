@@ -25,3 +25,23 @@
     height: 60px;
     border-radius: 100%;
 }
+
+.accepted {
+    background-color: #01FF70;
+    border-radius: 25px;
+}
+
+.pending {
+    background-color: #FF851B;
+    border-radius: 25px;
+}
+
+.rejected {
+    background-color:#FFCCCC;
+    border-radius: 25px;
+}
+
+.withdrawn {
+    background-color:#aaaaaa;
+    border-radius: 25px;
+}

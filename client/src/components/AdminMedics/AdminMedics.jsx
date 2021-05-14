@@ -1,33 +1,64 @@
 import React, { useState, useEffect } from 'react';
 import supabase from '../../supabase.config.js';
 import 'firebase/auth';
+import AdminMedicEdit from './AdminMedicEdit.jsx';
 
 //styles
 import styles from './AdminMedic.module.css';
 
 //icons
 import CreateIcon from '@material-ui/icons/Create';
+import DeleteIcon from '@material-ui/icons/Delete';
+
+// functions
+import calculateAge from '../../functions/calculateAge.js';
 
 function AdminMedic() {
     const [listMedics, setListMedics] = useState([]);
+    const [medicSpecialities, setMedicSpecialities] = useState([]);
     const [editActive, setEditActive] = useState(false);
+    const [medicData, setMedicData] = useState(null);
 
     const fetchMedics = async () => {
         const { data: medics, error: errorFetchMedics } = await supabase
             .from('medics')
             .select(
-                'dni, name, age, lastname, medic_license, email, phone_number, age, profilePic, medical_specialities (name)'
+                'dni, name, lastname, medic_license, email, phone_number, birthdate, state, profilePic, medical_specialities (name)'
             );
         if (errorFetchMedics) return console.log(errorFetchMedics);
         setListMedics(medics);
     };
 
+    const fetchSpecialities = async () => {
+        const { data: specialities, error: errorFetchSpecialities } =
+            await supabase.from('medical_specialities').select('name, id');
+        if (errorFetchSpecialities) return console.log(errorFetchSpecialities);
+        setMedicSpecialities(specialities);
+    };
+
     useEffect(() => {
         fetchMedics();
+        fetchSpecialities();
         console.log('useRender activated');
     }, []);
 
-    const handleSubmit = (e) => {};
+    const handleEdit = (medicData) => {
+        setMedicData(medicData);
+        setEditActive(true);
+    };
+
+    const handleDelete = async (medicData) => {
+        const confirm = window.confirm(
+            `Desea eliminar al medico ${medicData.name} ${medicData.lastname} de la obra social? (Esta accion no se puede deshacer)`
+        );
+        if (confirm) {
+            try {
+                await supabase.from('medics').delete().eq('dni', medicData.dni);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    };
 
     if (listMedics.length === 0) return <h2>Cargando...</h2>;
     console.log(listMedics);
@@ -41,7 +72,14 @@ function AdminMedic() {
                         key={`medic-${index}`}
                         className={styles.medicContainer}
                     >
-                        <CreateIcon className={styles.editMedic} />
+                        <CreateIcon
+                            className={styles.editMedic}
+                            onClick={() => handleEdit(el)}
+                        />
+                        <DeleteIcon
+                            className={styles.editMedic}
+                            onClick={() => handleDelete(el)}
+                        />
                         {el.profilePic ? (
                             <img
                                 className={styles.profilePic}
@@ -53,8 +91,21 @@ function AdminMedic() {
                         <p>Nombre: {el.name}</p>
                         <p>Apellido: {el.lastname}</p>
                         <p>Matricula: {el.medic_license}</p>
-                        <p>Edad {el.age}</p>
+                        <p>Edad: {calculateAge(el.birthdate)}</p>
                         <p className={styles.email}>Email: {el.email}</p>
+                        <p
+                            className={
+                                el.state === 'accepted'
+                                    ? styles.accepted
+                                    : el.state === 'pending'
+                                    ? styles.pending
+                                    : el.state === 'rejected'
+                                    ? styles.rejected
+                                    : styles.withdrawn
+                            }
+                        >
+                            Estado: {el.state}
+                        </p>
                         <p>Especialidades:</p>
                         <ul>
                             {el.medical_specialities.map(
@@ -68,18 +119,12 @@ function AdminMedic() {
                     </li>
                 ))}
             </ul>
-            <form className={styles.formEdit} onSubmit={handleSubmit}>
-                <input type='text' value={'Jorge Juan Cruz'} disabled />
-                <input type='text' value={'Perez'} disabled />
-                <input type='text' value={'MN102030'} disabled />
-                <input type='text' value={'40'} disabled />
-                <input
-                    type='text'
-                    value={'jorgitonosoyunalfajor@gmail.Com'}
-                    disabled
+            {editActive ? (
+                <AdminMedicEdit
+                    medicData={medicData}
+                    medicSpecialities={medicSpecialities}
                 />
-                <input type='text' value={'Perez'} disabled />
-            </form>
+            ) : null}
         </div>
     );
 }
