@@ -25,11 +25,18 @@ function App() {
             <Route path='/login' render={() => <Login firebase={firebase} />} />
             <Route
                 path='/:id/admin'
-                render={() => <AdminHome firebase={firebase} />}
+                render={() => <AdminNav firebase={firebase} />}
             />
-            <Route path='/:id/admin' component={AdminNav} />
-            <Route exact path='/:id/admin/listmedic' component={AdminMedic} />
-            <Route exact path='/admin/affiliate' component={AdminAffiliate} />
+            {/* <Route
+                path='/:id/admin'
+                render={() => <AdminHome firebase={firebase} />}
+            /> */}
+            <Route exact path='/:id/admin/medics' component={AdminMedic} />
+            <Route
+                exact
+                path='/:id/admin/affiliates'
+                component={AdminAffiliate}
+            />
             <Route exact path='/NewPlanP' component={NewPlanP} />
             <Route
                 exact

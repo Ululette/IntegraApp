@@ -11,6 +11,7 @@ import {
     Badge,
     Slide,
 } from '@material-ui/core';
+import { useUser } from 'reactfire';
 
 //Styles
 import styles from './AdminNav.module.css';
@@ -32,6 +33,7 @@ import HealingIcon from '@material-ui/icons/Healing';
 function AdminNav() {
     const [anchorEl, setAnchorEl] = useState(null);
     const [open, setOpen] = React.useState(false);
+    const userDataFirebase = useUser();
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -52,13 +54,13 @@ function AdminNav() {
     return (
         <div className={styles.container}>
             <nav className={styles.navbar}>
-                <section>
+                <NavLink to={`/${userDataFirebase}/admin/`}>
                     <img
                         src='../../assets/images/logo.png'
                         alt='Integra icon.'
                         className={styles.ppLogo}
                     />
-                </section>
+                </NavLink>
                 <section className={styles.userData}>
                     <Badge
                         badgeContent={2}
@@ -96,10 +98,13 @@ function AdminNav() {
             </nav>
             <aside className={styles.aside}>
                 <ul className={styles.buttonsContainer}>
-                    <article>
+                    <NavLink
+                        to={`/${userDataFirebase}/admin/`}
+                        className={styles.link}
+                    >
                         <HomeIcon />
                         <li>Inicio</li>
-                    </article>
+                    </NavLink>
                     <article>
                         <FaceIcon />
                         <li>Mi cuenta</li>
@@ -129,11 +134,17 @@ function AdminNav() {
                             <li>Autorizaciones</li>
                         </Badge>
                     </article>
-                    <article>
+                    <NavLink
+                        to={`/${userDataFirebase}/admin/affiliates`}
+                        className={styles.link}
+                    >
                         <GroupIcon />
                         <li>Socios</li>
-                    </article>
-                    <NavLink to={'/admin/listmedic'} className={styles.link}>
+                    </NavLink>
+                    <NavLink
+                        to={`/${userDataFirebase}/admin/medics`}
+                        className={styles.link}
+                    >
                         <HealingIcon />
                         <li>Medicos</li>
                     </NavLink>
