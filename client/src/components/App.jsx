@@ -12,6 +12,7 @@ import NewPlanP from './NewPlanP/NewPlanP.jsx';
 import AdminNav from './AdminNav/AdminNav';
 import UserNav from './UserNav/UserNav.jsx';
 import AdminMedic from './AdminMedics/AdminMedics';
+import UserHome from './UserHome/UserHome.jsx';
 
 function App() {
     const firebase = useFirebaseApp();
@@ -29,6 +30,16 @@ function App() {
             <Route exact path='/admin/listmedic' component={AdminMedic} />
             <Route exact path='/asociate' component={ContactForm} />
             <Route exact path='/NewPlanP' component={NewPlanP} />
+            <Route
+                exact
+                path='/:id/affiliate'
+                render={() => <UserNav firebase={firebase} />}
+            />
+            <Route
+                exact
+                path='/:id/affiliate'
+                render={() => <UserHome firebase={firebase} />}
+            />
             <Route exact path='/' component={Footer} />
         </>
     );

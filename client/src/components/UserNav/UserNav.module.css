@@ -44,6 +44,10 @@
     text-align: end;
 }
 
+.planName {
+    text-transform: capitalize;
+}
+
 .profilePic {
     color: #fff;
     height: 50px;

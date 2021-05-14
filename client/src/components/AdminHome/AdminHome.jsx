@@ -138,6 +138,7 @@ function AdminHome({ firebase }) {
         // FALTA HACER EL UPDATE DE LOS BENEFICIOS SELECCIONADOS
     };
 
+    console.log(allPlans);
     if (allPlans.length === 0) return <CircularProgress />;
 
     return (

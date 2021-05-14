@@ -26,6 +26,12 @@ function Login({ firebase }) {
     if (userData && userData.role === 'admin' && userFire.data)
         window.location = `/${userFire.data.uid}/admin`;
 
+    if (userData && userData.role === 'medic' && userFire.data)
+        window.location = `/${userFire.data.uid}/medic`;
+
+    if (userData && userData.role === 'affiliate' && userFire.data)
+        window.location = `/${userFire.data.uid}/affiliate`;
+
     const handleChange = (event) => {
         const value = event.target.value;
         value <= 30 ? setRole(value) : setDoc(value);
@@ -56,11 +62,11 @@ function Login({ firebase }) {
         try {
             let { data: users, error } = await supabase
                 .from('users')
-                .select('id, email, role, name')
-                .eq('id', input.doc);
+                .select('dni, email, role')
+                .eq('dni', input.doc);
             if (error) return console.log(error);
             const numRole =
-                users[0].role === 'socio_titular'
+                users[0].role === 'affiliate'
                     ? 10
                     : users[0].role === 'medico'
                     ? 20
@@ -76,7 +82,7 @@ function Login({ firebase }) {
                 .signInWithEmailAndPassword(users[0].email, input.pass);
 
             const dataUser = {
-                id: users[0].id,
+                dni: users[0].dni,
                 name: users[0].name,
                 email: users[0].email,
                 role: users[0].role,

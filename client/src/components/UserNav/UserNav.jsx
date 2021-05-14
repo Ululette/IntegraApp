@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Button,
     Menu,
@@ -10,6 +10,8 @@ import {
     Badge,
     Slide,
 } from '@material-ui/core';
+import supabase from '../../supabase.config';
+import 'firebase/auth';
 
 //Styles
 import styles from './UserNav.module.css';
@@ -38,9 +40,26 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction='down' ref={ref} {...props} />;
 });
 
-function UserNav() {
+function UserNav({ firebase }) {
     const [anchorEl, setAnchorEl] = useState(null);
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
+    const [user, setUser] = useState(null);
+    let userData = localStorage.getItem('userdata');
+    userData = JSON.parse(userData);
+
+    const fetchUserData = async () => {
+        const { data: userInfo, error: errorFetchUser } = await supabase
+            .from('partners')
+            .select('name, lastname, plans (id, name)')
+            .eq('dni', userData.dni);
+        if (errorFetchUser) return console.log(errorFetchUser);
+        setUser(userInfo.pop());
+        console.log(userInfo);
+    };
+
+    useEffect(() => {
+        fetchUserData();
+    }, []);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -57,6 +76,17 @@ function UserNav() {
     const handleClickClose = () => {
         setOpen(false);
     };
+
+    const logout = async () => {
+        if (window.confirm('¿Quiere cerrar sesión?')) {
+            await firebase.auth().signOut();
+            localStorage.removeItem('userdata');
+            window.location = '/login';
+        }
+    };
+
+    if (!user) return <h1>Cargando...</h1>;
+    console.log(user);
 
     return (
         <div className={styles.container}>
@@ -119,8 +149,10 @@ function UserNav() {
                         </DialogActions>
                     </Dialog>
                     <article className={styles.namesContainer}>
-                        <p>Nombre usuario</p>
-                        <p>Nombre plan</p>
+                        <p>{`${user.name} ${user.lastname}`}</p>
+                        <p
+                            className={styles.planName}
+                        >{`${user.plans.name}`}</p>
                     </article>
                     <div>
                         <Button
@@ -143,9 +175,7 @@ function UserNav() {
                             onClose={handleClose}
                         >
                             <MenuItem onClick={handleClose}>Mi perfil</MenuItem>
-                            <MenuItem onClick={handleClose}>
-                                Cerrar Sesion
-                            </MenuItem>
+                            <MenuItem onClick={logout}>Cerrar Sesion</MenuItem>
                             <p onClick={handleClose}>Grupo Familiar</p>
                         </Menu>
                     </div>
