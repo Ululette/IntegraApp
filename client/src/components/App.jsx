@@ -13,6 +13,7 @@ import AdminNav from './AdminNav/AdminNav';
 import UserNav from './UserNav/UserNav.jsx';
 import AdminMedic from './AdminMedics/AdminMedics';
 import UserHome from './UserHome/UserHome.jsx';
+import AdminRegistration from './AdminRegistration/AdminRegistration.jsx';
 
 function App() {
     const firebase = useFirebaseApp();
@@ -39,6 +40,11 @@ function App() {
                 exact
                 path='/:id/affiliate'
                 render={() => <UserHome firebase={firebase} />}
+            />
+            <Route
+                exact
+                path='/NewAdmin'
+                render={() => <AdminRegistration firebase={firebase} />}
             />
             <Route exact path='/' component={Footer} />
         </>
