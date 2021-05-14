@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import states from '../../functions/states.js';
 import styles from './AdminMedicEdit.module.css';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import supabase from '../../supabase.config.js';
 
 function AdminMedicEdit({ medicData, medicSpecialities }) {
@@ -11,7 +9,10 @@ function AdminMedicEdit({ medicData, medicSpecialities }) {
         lastname: medicData.lastname,
         email: medicData.email,
         phoneNumber: medicData.phone_number,
-        specialities: [],
+        specialitiesA: medicData.medical_specialities[0].name,
+        specialitiesB: medicData.medical_specialities[1]
+            ? medicData.medical_specialities[1].name
+            : null,
         state: medicData.state,
     });
 
@@ -19,19 +20,6 @@ function AdminMedicEdit({ medicData, medicSpecialities }) {
         const name = e.target.name;
         const value = e.target.value;
         setInput({ ...input, [name]: value });
-    };
-
-    const handleCheck = (e) => {
-        const value = e.target.value;
-        const checked = e.target.checked;
-        if (checked) {
-            input.specialities.push(value);
-        } else {
-            input.specialities = input.specialities.filter(
-                (el) => el !== value
-            );
-        }
-        console.log(input.specialities);
     };
 
     const handleSubmit = async (e) => {
@@ -103,29 +91,28 @@ function AdminMedicEdit({ medicData, medicSpecialities }) {
                 value={input.phoneNumber}
                 onChange={handleChange}
             />
-            {medicSpecialities.map((spec, index) => {
-                return (
-                    <FormControlLabel
-                        className={styles.switchSpec}
-                        control={
-                            <Switch
-                                value={spec.id}
-                                name={String(index)}
-                                onChange={handleCheck}
-                                disabled={
-                                    medicData.medical_specialities.find(
-                                        (el) => el.name === spec.name
-                                    )
-                                        ? true
-                                        : false
-                                }
-                            />
-                        }
-                        label={spec.name}
-                        key={`speciality-${index}`}
-                    />
-                );
-            })}
+            <select
+                value={input.specialitiesA}
+                name='specialitiesA'
+                onChange={handleChange}
+            >
+                {medicSpecialities.map((spec, index) => (
+                    <option key={`spec-${index}`} value={`${spec.id}`}>
+                        {spec.name}
+                    </option>
+                ))}
+            </select>
+            <select
+                value={input.specialitiesB}
+                name='specialitiesB'
+                onChange={handleChange}
+            >
+                {medicSpecialities.map((spec, index) => (
+                    <option key={`spec-${index + 100}`} value={`${spec.id}`}>
+                        {spec.name}
+                    </option>
+                ))}
+            </select>
             <select name='state' onChange={handleChange} value={input.state}>
                 {states.map((state, index) => (
                     <option key={`state-${index}`}>{state}</option>

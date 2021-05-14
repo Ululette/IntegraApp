@@ -23,7 +23,7 @@ function AdminMedic() {
         const { data: medics, error: errorFetchMedics } = await supabase
             .from('medics')
             .select(
-                'dni, name, lastname, medic_license, email, phone_number, birthdate, state, profilePic, medical_specialities (name)'
+                'dni, name, lastname, medic_license, email, phone_number, birthdate, state, profilePic, medical_specialities (id, name)'
             );
         if (errorFetchMedics) return console.log(errorFetchMedics);
         setListMedics(medics);
