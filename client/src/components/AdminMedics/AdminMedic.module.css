@@ -6,6 +6,8 @@
 .editMedic {
     visibility: hidden;
     cursor: pointer;
+    background: transparent;
+    border: none;
 }
 
 .medicContainer:hover>.editMedic {
@@ -44,4 +46,10 @@
 .withdrawn {
     background-color:#aaaaaa;
     border-radius: 25px;
+}
+
+.fab {
+    position: sticky;
+    bottom: 0;
+    right: 0;
 }

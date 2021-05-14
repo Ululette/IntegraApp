@@ -1,3 +1,3 @@
-const states = ['accepted', 'pending', 'rejected', 'withdrawn'];
+const states = ['Aceptado', 'Pendiente', 'Rechazado', 'De baja'];
 
 export default states;

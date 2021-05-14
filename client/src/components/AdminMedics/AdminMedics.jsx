@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import supabase from '../../supabase.config.js';
 import 'firebase/auth';
 import AdminMedicEdit from './AdminMedicEdit.jsx';
+import AdminMedicAdd from './AdminMedicAdd.jsx';
 
 //styles
 import styles from './AdminMedic.module.css';
@@ -9,7 +10,6 @@ import styles from './AdminMedic.module.css';
 //icons
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
-
 // functions
 import calculateAge from '../../functions/calculateAge.js';
 
@@ -39,12 +39,12 @@ function AdminMedic() {
     useEffect(() => {
         fetchMedics();
         fetchSpecialities();
-        console.log('useRender activated');
     }, []);
 
     const handleEdit = (medicData) => {
         setMedicData(medicData);
         setEditActive(true);
+        if (editActive) setEditActive(false);
     };
 
     const handleDelete = async (medicData) => {
@@ -72,14 +72,20 @@ function AdminMedic() {
                         key={`medic-${index}`}
                         className={styles.medicContainer}
                     >
-                        <CreateIcon
+                        <button
+                            disabled={editActive}
                             className={styles.editMedic}
                             onClick={() => handleEdit(el)}
-                        />
-                        <DeleteIcon
+                        >
+                            <CreateIcon />
+                        </button>
+                        <button
+                            disabled={editActive}
                             className={styles.editMedic}
                             onClick={() => handleDelete(el)}
-                        />
+                        >
+                            <DeleteIcon />
+                        </button>
                         {el.profilePic ? (
                             <img
                                 className={styles.profilePic}
@@ -123,8 +129,10 @@ function AdminMedic() {
                 <AdminMedicEdit
                     medicData={medicData}
                     medicSpecialities={medicSpecialities}
+                    setEditActive={setEditActive}
                 />
             ) : null}
+            <AdminMedicAdd medicSpecialities={medicSpecialities} />
         </div>
     );
 }

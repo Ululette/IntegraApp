@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import states from '../../functions/states.js';
 import styles from './AdminMedicEdit.module.css';
 import supabase from '../../supabase.config.js';
+import CloseIcon from '@material-ui/icons/Close';
 
-function AdminMedicEdit({ medicData, medicSpecialities }) {
+function AdminMedicEdit({ medicData, medicSpecialities, setEditActive }) {
     let [input, setInput] = useState({
         name: medicData.name,
         lastname: medicData.lastname,
@@ -62,63 +63,101 @@ function AdminMedicEdit({ medicData, medicSpecialities }) {
         window.location.reload();
     };
 
+    const handleClose = () => {
+        setEditActive(false);
+    };
+
     if (!medicData) return <h2>Cargando...</h2>;
+
+    console.log(input.specialitiesA);
+    console.log(input.specialitiesB);
 
     return (
         <form className={styles.formEdit} onSubmit={handleSubmit}>
-            <input type='text' value={medicData.dni} disabled />
+            <label htmlFor='dni'>DNI</label>
+            <input type='text' id='dni' value={medicData.dni} disabled />
+            <label htmlFor='name'>Nombre</label>
             <input
                 type='text'
                 name='name'
+                id='name'
                 value={input.name}
                 onChange={handleChange}
             />
+            <label htmlFor='lastname'>Apellido</label>
             <input
                 type='text'
                 name='lastname'
+                id='lastname'
                 value={input.lastname}
                 onChange={handleChange}
             />
+            <label htmlFor='email'>Email</label>
             <input
                 type='text'
                 name='email'
+                id='email'
                 value={input.email}
                 onChange={handleChange}
             />
+            <label htmlFor='phoneNumber'>Nro de telefono</label>
             <input
                 type='text'
                 name='phoneNumber'
+                id='phoneNumber'
                 value={input.phoneNumber}
                 onChange={handleChange}
             />
+            <label htmlFor='specialitiesA'>Especialidad 1</label>
             <select
-                value={input.specialitiesA}
                 name='specialitiesA'
+                id='specialitiesA'
                 onChange={handleChange}
             >
                 {medicSpecialities.map((spec, index) => (
-                    <option key={`spec-${index}`} value={`${spec.id}`}>
+                    <option
+                        selected={spec.name === input.specialitiesA}
+                        key={`spec-${index}`}
+                        value={`${spec.id}`}
+                    >
                         {spec.name}
                     </option>
                 ))}
             </select>
+            <label htmlFor='specialitiesB'>Especialidad 2</label>
             <select
-                value={input.specialitiesB}
                 name='specialitiesB'
+                id='specialitiesB'
                 onChange={handleChange}
             >
                 {medicSpecialities.map((spec, index) => (
-                    <option key={`spec-${index + 100}`} value={`${spec.id}`}>
+                    <option
+                        selected={spec.name === input.specialitiesB}
+                        key={`spec-${index + 100}`}
+                        value={`${spec.id}`}
+                    >
                         {spec.name}
                     </option>
                 ))}
             </select>
-            <select name='state' onChange={handleChange} value={input.state}>
+            <label htmlFor='state'>Estado</label>
+            <select
+                name='state'
+                id='state'
+                onChange={handleChange}
+                value={input.state}
+            >
                 {states.map((state, index) => (
-                    <option key={`state-${index}`}>{state}</option>
+                    <option
+                        selected={state === input.state}
+                        key={`state-${index}`}
+                    >
+                        {state}
+                    </option>
                 ))}
             </select>
             <input type='submit' value='Actualizar' />
+            <CloseIcon onClick={handleClose} />
         </form>
     );
 }
