@@ -1,6 +1,8 @@
 import {
-  SET_NP_BEN_SEL, ADD_NP_BEN, SEND_NP_FORM
-} from '../actions/actions';
+  SET_NP_BEN_SEL, 
+  ADD_NP_BEN, SEND_NP_FORM
+} from '../actions/constants.actions' ;
+
 
 const initialState = {
   //------New plan------

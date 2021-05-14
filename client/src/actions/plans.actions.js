@@ -1,7 +1,5 @@
-//import fetch from 'node-fetch';
-export const SET_NP_BEN_SEL = "SET_NP_BEN_SEL";
-export const ADD_NP_BEN = "ADD_NP_BEN";
-export const SEND_NP_FORM = "SEND_NP_FORM";
+
+import {SET_NP_BEN_SEL,ADD_NP_BEN,SEND_NP_FORM } from './constants.actions'
 
 export function saveNpBenefSel(arr) {
   return { type: SET_NP_BEN_SEL, payload: arr };
