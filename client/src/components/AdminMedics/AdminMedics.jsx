@@ -101,12 +101,8 @@ function AdminMedic() {
                         <p className={styles.email}>Email: {el.email}</p>
                         <p
                             className={
-                                el.state === 'accepted'
+                                el.state === 'active'
                                     ? styles.accepted
-                                    : el.state === 'pending'
-                                    ? styles.pending
-                                    : el.state === 'rejected'
-                                    ? styles.rejected
                                     : styles.withdrawn
                             }
                         >

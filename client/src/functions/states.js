@@ -1,3 +1,4 @@
-const states = ['Aceptado', 'Pendiente', 'Rechazado', 'De baja'];
+const statesMedic = ['active', 'down'];
+const statesAff = ['accepted', 'pending', 'rejected', 'down'];
 
-export default states;
+export { statesMedic, statesAff };

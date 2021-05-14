@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import states from '../../functions/states.js';
+import { statesMedic } from '../../functions/states.js';
 import styles from './AdminMedicEdit.module.css';
 import supabase from '../../supabase.config.js';
 import CloseIcon from '@material-ui/icons/Close';
@@ -26,21 +26,28 @@ function AdminMedicEdit({ medicData, medicSpecialities, setEditActive }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (window.confirm('Esta seguro de actualizar estos campos?')) {
-            if (input.specialities.length > 0) {
-                try {
-                    for (let id_speciality of input.specialities) {
-                        await supabase
-                            .from('medics_medical_specialities')
-                            .insert([
-                                {
-                                    medic_dni: medicData.dni,
-                                    speciality_id: id_speciality,
-                                },
-                            ]);
-                    }
-                } catch (error) {
-                    console.log(error);
+            try {
+                if (input.specialitiesB) {
+                    await supabase.from('medics_medical_specialities').insert([
+                        {
+                            medic_dni: medicData.dni,
+                            speciality_id: input.specialitiesA,
+                        },
+                        {
+                            medic_dni: medicData.dni,
+                            speciality_id: input.specialitiesB,
+                        },
+                    ]);
+                } else {
+                    await supabase.from('medics_medical_specialities').insert([
+                        {
+                            medic_dni: medicData.dni,
+                            speciality_id: input.specialitiesA,
+                        },
+                    ]);
                 }
+            } catch (error) {
+                console.log(error);
             }
         }
         try {
@@ -130,6 +137,7 @@ function AdminMedicEdit({ medicData, medicSpecialities, setEditActive }) {
                 id='specialitiesB'
                 onChange={handleChange}
             >
+                <option value={null}>No hay especialidad 2</option>
                 {medicSpecialities.map((spec, index) => (
                     <option
                         selected={spec.name === input.specialitiesB}
@@ -147,7 +155,7 @@ function AdminMedicEdit({ medicData, medicSpecialities, setEditActive }) {
                 onChange={handleChange}
                 value={input.state}
             >
-                {states.map((state, index) => (
+                {statesMedic.map((state, index) => (
                     <option
                         selected={state === input.state}
                         key={`state-${index}`}
