@@ -234,7 +234,9 @@ function EnhancedTable() {
         state: '',
     });
 
-    const allAffiliates = useSelector((state) => state.allAffiliates);
+    const allAffiliates = useSelector(
+        (state) => state.affiliates.allAffiliates
+    );
     const allPlans = useSelector((state) => state.allPlans);
     const dispatch = useDispatch();
 
