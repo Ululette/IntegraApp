@@ -17,8 +17,18 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 
-import { getAffiliates } from '../../actions/getter.action.js';
+import { statesAff } from '../../functions/states';
+import { getAffiliates, getPlans } from '../../actions/getter.action.js';
 import calculateAge from '../../functions/calculateAge.js';
 import styles from './AdminAffiliate.module.css';
 
@@ -203,11 +213,30 @@ function EnhancedTable() {
     const [orderBy, setOrderBy] = React.useState('calories');
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [open, setOpen] = React.useState(false);
+    const [input, setInput] = React.useState({
+        dni: '',
+        lastname: '',
+        name: '',
+        age: '',
+        plan: '',
+        planId: '',
+        gender: '',
+        contact: '',
+        email: '',
+        titular: '',
+        familyBond: '',
+        familyGroup: '',
+        state: '',
+    });
+
     const allAffiliates = useSelector((state) => state.allAffiliates);
+    const allPlans = useSelector((state) => state.allPlans);
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(getAffiliates());
+        dispatch(getPlans());
     }, []);
 
     const rows = allAffiliates.map((el) => {
@@ -242,19 +271,44 @@ function EnhancedTable() {
         setPage(0);
     };
 
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     const emptyRows =
         rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
-    const handleEdit = () => {
-        alert('editar');
+    const handleEdit = (row) => {
+        setInput({
+            dni: row.dni,
+            lastname: row.lastname,
+            name: row.name,
+            age: row.age,
+            plan: row.plan,
+            gender: row.gender,
+            contact: row.contact,
+            email: row.email,
+            titular: row.titular,
+            familyBond: row.familyBond,
+            familyGroup: row.familyGroup,
+            state: row.state,
+        });
+        setOpen(true);
+        console.log(row);
     };
 
-    const handleDelete = (e) => {
-        console.log(e.target.value);
-        alert('borrar');
+    const handleDelete = (row) => {
+        console.log(row);
     };
 
-    if (rows.length === 0) return <h2>Cargando...</h2>;
+    const handleChange = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+        setInput({ ...input, [name]: value });
+    };
+
+    if (rows.length === 0) return <CircularProgress />;
+    console.log(input);
 
     return (
         <div className={classes.root}>
@@ -292,7 +346,9 @@ function EnhancedTable() {
                                                 <div className={styles.toolbar}>
                                                     <Tooltip
                                                         title='Editar'
-                                                        onClick={handleEdit}
+                                                        onClick={() =>
+                                                            handleEdit(row)
+                                                        }
                                                     >
                                                         <IconButton aria-label='edit'>
                                                             <EditIcon />
@@ -300,7 +356,9 @@ function EnhancedTable() {
                                                     </Tooltip>
                                                     <Tooltip
                                                         title='Eliminar'
-                                                        onClick={handleDelete}
+                                                        onClick={() =>
+                                                            handleDelete(row)
+                                                        }
                                                     >
                                                         <IconButton aria-label='delete'>
                                                             <DeleteIcon />
@@ -405,6 +463,140 @@ function EnhancedTable() {
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                 />
             </Paper>
+            <div>
+                <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby='form-dialog-title'
+                >
+                    <DialogTitle id='form-dialog-title'>
+                        Editar socio
+                    </DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            autoFocus
+                            margin='dense'
+                            label='DNI'
+                            type='number'
+                            value={input.dni}
+                            disabled
+                            fullWidth
+                            onChange={handleChange}
+                        />
+                        <TextField
+                            autoFocus
+                            margin='dense'
+                            label='Apellido/s'
+                            type='text'
+                            name='lastname'
+                            value={input.lastname}
+                            fullWidth
+                            onChange={handleChange}
+                        />
+                        <TextField
+                            autoFocus
+                            margin='dense'
+                            label='Nombre/s'
+                            type='text'
+                            name='name'
+                            value={input.name}
+                            fullWidth
+                            onChange={handleChange}
+                        />
+                        <TextField
+                            autoFocus
+                            margin='dense'
+                            label='Email'
+                            type='email'
+                            value={input.email}
+                            name='email'
+                            fullWidth
+                            onChange={handleChange}
+                        />
+                        <TextField
+                            autoFocus
+                            margin='dense'
+                            label='Telefono'
+                            type='text'
+                            value={input.contact}
+                            name='contact'
+                            fullWidth
+                            onChange={handleChange}
+                        />
+                        <Select
+                            autoFocus
+                            margin='dense'
+                            label='Genero'
+                            type='text'
+                            value={input.gender}
+                            name='gender'
+                            fullWidth
+                            onChange={handleChange}
+                        >
+                            <MenuItem value='hombre'>Hombre</MenuItem>
+                            <MenuItem value='mujer'>Mujer</MenuItem>
+                            <MenuItem value='otro'>Otro</MenuItem>
+                        </Select>
+                        <Select
+                            autoFocus
+                            margin='dense'
+                            label='Titular'
+                            type='text'
+                            name='titular'
+                            value={input.titular}
+                            fullWidth
+                            onChange={handleChange}
+                        >
+                            <MenuItem value='true'>True</MenuItem>
+                            <MenuItem value='false'>False</MenuItem>
+                        </Select>
+                        <Select
+                            autoFocus
+                            margin='dense'
+                            label='Plan'
+                            name='plan'
+                            type='text' //select
+                            value={input.plan}
+                            fullWidth
+                            onChange={handleChange}
+                        >
+                            {allPlans.map((plan) => (
+                                <MenuItem
+                                    key={`plan-${plan.id}`}
+                                    value={plan.name}
+                                    id={plan.id}
+                                >
+                                    {plan.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                        <Select
+                            autoFocus
+                            margin='dense'
+                            label='Estado'
+                            value={input.state}
+                            type='text'
+                            name='state'
+                            fullWidth
+                            onChange={handleChange}
+                        >
+                            {statesAff.map((state, index) => (
+                                <MenuItem key={`state-${index}`} value={state}>
+                                    {state}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose} color='primary'>
+                            Cancel
+                        </Button>
+                        <Button onClick={handleClose} color='primary'>
+                            Subscribe
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
         </div>
     );
 }
