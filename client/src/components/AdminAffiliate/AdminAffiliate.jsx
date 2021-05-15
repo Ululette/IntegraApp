@@ -202,6 +202,7 @@ function EnhancedTable() {
     const [open, setOpen] = React.useState({
         edit: false,
         delete: false,
+        add: false,
     });
     const classesFilter = useToolbarStyles();
     const [inputFilters, setInputFilters] = React.useState({
@@ -222,6 +223,21 @@ function EnhancedTable() {
         familyBond: '',
         familyGroup: '',
         state: '',
+    });
+
+    const [inputAdd, setInputAdd] = React.useState({
+        dni: '',
+        lastname: '',
+        name: '',
+        titular: '',
+        familyBond: '',
+        familyGroup: '',
+        contact: '',
+        email: '',
+        birthdate: '',
+        gender: '',
+        state: '',
+        plan: '',
     });
 
     const allAffiliates = useSelector(
@@ -368,6 +384,59 @@ function EnhancedTable() {
         setInput({ ...input, [name]: value });
     };
 
+    const handleChangeAdd = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+        setInputAdd({ ...inputAdd, [name]: value });
+    };
+
+    const handleOpenDialogAdd = () => {
+        setOpen({ ...open, add: true });
+        setInputAdd({
+            dni: '',
+            lastname: '',
+            name: '',
+            titular: '',
+            familyBond: '',
+            familyGroup: '',
+            contact: '',
+            email: '',
+            birthdate: '',
+            gender: '',
+            state: '',
+            plan: '',
+        });
+    };
+
+    const handleAdd = async () => {
+        const { error: errorAddAffiliate } = await supabase
+            .from('partners')
+            .insert([
+                {
+                    dni: inputAdd.dni,
+                    name: inputAdd.name,
+                    lastname: inputAdd.lastname,
+                    birthdate: inputAdd.birthdate,
+                    phone_number: inputAdd.contact,
+                    titular: inputAdd.titular,
+                    family_bond: inputAdd.familyBond,
+                    family_group: inputAdd.familyGroup,
+                    state: inputAdd.state,
+                    email: inputAdd.email,
+                    gender: inputAdd.gender,
+                    plan_id: inputAdd.plan,
+                },
+            ]);
+        if (errorAddAffiliate) {
+            alert(errorAddAffiliate.message);
+            return console.log(errorAddAffiliate);
+        }
+        alert(
+            `Socio con DNI ${inputAdd.dni} y nombre/s apellido/s ${inputAdd.name} ${inputAdd.lastname} se inserto con exito en la db.`
+        );
+        handleClose('add');
+    };
+
     if (rows.length === 0) return <CircularProgress />;
 
     //Toolbar Row
@@ -383,13 +452,11 @@ function EnhancedTable() {
         rows = rows.filter((el) =>
             el[inputFilters.select].includes(inputFilters.text)
         );
-        console.log(rows);
     } else {
         rows = rowsOriginal.map((el) => el);
     }
 
-    console.log(inputFilters);
-    console.log(rows);
+    console.log(inputAdd);
 
     return (
         <div className={classes.root}>
@@ -403,7 +470,11 @@ function EnhancedTable() {
                     >
                         Lista de socios
                     </Typography>
-                    <Fab color='primary' aria-label='add'>
+                    <Fab
+                        onClick={handleOpenDialogAdd}
+                        color='primary'
+                        aria-label='add'
+                    >
                         <AddIcon />
                     </Fab>
                     <InputLabel id='filter-select'>Filtro</InputLabel>
@@ -832,6 +903,153 @@ function EnhancedTable() {
                             color='primary'
                         >
                             Borrar
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog open={open.add} onClose={() => handleClose('add')}>
+                    <DialogTitle>Agregar Socio</DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            autoFocus
+                            margin='dense'
+                            name='dni'
+                            label='DNI'
+                            type='number'
+                            value={inputAdd.dni}
+                            onChange={handleChangeAdd}
+                            fullWidth
+                        />
+                        <TextField
+                            autoFocus
+                            margin='dense'
+                            name='lastname'
+                            label='Apellido/s'
+                            value={inputAdd.lastname}
+                            type='text'
+                            onChange={handleChangeAdd}
+                            fullWidth
+                        />
+                        <TextField
+                            autoFocus
+                            margin='dense'
+                            value={inputAdd.name}
+                            name='name'
+                            label='Nombre/s'
+                            type='text'
+                            onChange={handleChangeAdd}
+                            fullWidth
+                        />
+                        <TextField
+                            autoFocus
+                            value={inputAdd.titular}
+                            margin='dense'
+                            name='titular'
+                            label='Titular'
+                            type='text'
+                            onChange={handleChangeAdd}
+                            fullWidth
+                        />
+                        <TextField
+                            autoFocus
+                            value={inputAdd.familyBond}
+                            margin='dense'
+                            name='familyBond'
+                            label='Parentesco'
+                            type='text'
+                            onChange={handleChangeAdd}
+                            fullWidth
+                        />
+                        <TextField
+                            autoFocus
+                            value={inputAdd.familyGroup}
+                            margin='dense'
+                            name='familyGroup'
+                            label='Grupo Familiar'
+                            type='number'
+                            onChange={handleChangeAdd}
+                            fullWidth
+                        />
+                        <TextField
+                            autoFocus
+                            margin='dense'
+                            value={inputAdd.contact}
+                            name='contact'
+                            label='Numero de telefono'
+                            type='text'
+                            onChange={handleChangeAdd}
+                            fullWidth
+                        />
+                        <TextField
+                            autoFocus
+                            value={inputAdd.email}
+                            margin='dense'
+                            name='email'
+                            label='Email'
+                            type='email'
+                            onChange={handleChangeAdd}
+                            fullWidth
+                        />
+                        <TextField
+                            name='birthdate'
+                            label='Fecha de nacimiento'
+                            type='date'
+                            value={inputAdd.birthdate}
+                            defaultValue={Date.now()}
+                            onChange={handleChangeAdd}
+                            className={classes.textField}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                        <TextField
+                            name='gender'
+                            label='Genero'
+                            type='text'
+                            value={inputAdd.gender}
+                            onChange={handleChangeAdd}
+                            className={classes.textField}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                        <InputLabel htmlFor='state'>Estado</InputLabel>
+                        <Select
+                            value={inputAdd.state}
+                            name='state'
+                            onChange={handleChangeAdd}
+                        >
+                            {statesAff.map((el, index) => (
+                                <MenuItem key={`state-${index}`} value={el}>
+                                    {el}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                        <InputLabel htmlFor='plan'>Plan</InputLabel>
+                        <Select
+                            value={inputAdd.plan}
+                            name='plan'
+                            onChange={handleChangeAdd}
+                        >
+                            {allPlans.map((el, index) => (
+                                <MenuItem key={`plan-${index}`} value={el.id}>
+                                    {el.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            onClick={() => handleClose('add')}
+                            color='primary'
+                        >
+                            Cancelar
+                        </Button>
+                        <Button
+                            onClick={handleAdd}
+                            type='submit'
+                            color='primary'
+                        >
+                            Agregar
                         </Button>
                     </DialogActions>
                 </Dialog>
