@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -17,149 +18,9 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
-import supabase from '../../supabase.config.js';
+import { getAffiliates } from '../../actions/getter.action.js';
+import calculateAge from '../../functions/calculateAge.js';
 import styles from './AdminAffiliate.module.css';
-
-function createData(
-    dni,
-    lastname,
-    name,
-    age,
-    plan,
-    gender,
-    contact,
-    email,
-    titular,
-    familyBond,
-    familyGroup,
-    address
-) {
-    return {
-        dni,
-        lastname,
-        name,
-        age,
-        plan,
-        gender,
-        contact,
-        email,
-        titular,
-        familyBond,
-        familyGroup,
-        address,
-    };
-}
-
-const fetchUserData = async () => {
-    const { data: user, error: errorFetchUserData } = await supabase
-        .from('partners')
-        .select('*, plans (id, name)');
-    if (errorFetchUserData) return console.log(errorFetchUserData);
-    console.log(user);
-};
-
-fetchUserData();
-
-const rows = [
-    createData(
-        54454,
-        'Salud',
-        'Integra',
-        33,
-        'Integra 210',
-        'undefined',
-        '2223-444555',
-        'mimail@mail.com',
-        'true',
-        'Unico',
-        1,
-        'Pepe 123, BSAS, BSAS'
-    ),
-    createData(
-        243234,
-        'Salud',
-        'Integra',
-        33,
-        'Integra 210',
-        'undefined',
-        '2223-444555',
-        'mimail@mail.com',
-        'true',
-        'Unico',
-        1,
-        'Pepe 123, BSAS, BSAS'
-    ),
-    createData(
-        655656,
-        'Salud',
-        'Integra',
-        33,
-        'Integra 210',
-        'undefined',
-        '2223-444555',
-        'mimail@mail.com',
-        'true',
-        'Unico',
-        1,
-        'Pepe 123, BSAS, BSAS'
-    ),
-    createData(
-        232323,
-        'Salud',
-        'Integra',
-        33,
-        'Integra 210',
-        'undefined',
-        '2223-444555',
-        'mimail@mail.com',
-        'true',
-        'Unico',
-        1,
-        'Pepe 123, BSAS, BSAS'
-    ),
-    createData(
-        45678,
-        'Salud',
-        'Integra',
-        33,
-        'Integra 210',
-        'undefined',
-        '2223-444555',
-        'mimail@mail.com',
-        'true',
-        'Unico',
-        1,
-        'Pepe 123, BSAS, BSAS'
-    ),
-    createData(
-        3232323,
-        'Salud',
-        'Integra',
-        33,
-        'Integra 210',
-        'undefined',
-        '2223-444555',
-        'mimail@mail.com',
-        'true',
-        'Unico',
-        1,
-        'Pepe 123, BSAS, BSAS'
-    ),
-    createData(
-        12345672,
-        'Salud',
-        'Integra',
-        33,
-        'Integra 210',
-        'undefined',
-        '2223-444555',
-        'mimail@mail.com',
-        'true',
-        'Unico',
-        1,
-        'Pepe 123, BSAS, BSAS'
-    ),
-];
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -191,13 +52,11 @@ const headCells = [
     {
         id: 'dni',
         numeric: true,
-        disablePadding: false,
         label: 'DNI',
     },
     {
         id: 'lastname',
         numeric: false,
-        disablePadding: false,
         label: 'Apellido/s',
     },
     { id: 'name', numeric: false, disablePadding: false, label: 'Nombre/s' },
@@ -205,14 +64,12 @@ const headCells = [
     {
         id: 'plan',
         numeric: false,
-        disablePadding: false,
         label: 'Plan',
     },
     { id: 'gender', numeric: false, disablePadding: false, label: 'Genero' },
     {
         id: 'phoneNumber',
         numeric: false,
-        disablePadding: false,
         label: 'Contacto',
     },
     { id: 'email', numeric: false, disablePadding: false, label: 'Email' },
@@ -220,20 +77,17 @@ const headCells = [
     {
         id: 'familyBond',
         numeric: false,
-        disablePadding: false,
         label: 'Rol familiar',
     },
     {
         id: 'groupFamily',
         numeric: true,
-        disablePadding: false,
         label: 'Grupo Familiar',
     },
     {
-        id: 'address',
+        id: 'state',
         numeric: false,
-        disablePadding: false,
-        label: 'Direccion',
+        label: 'Estado',
     },
 ];
 
@@ -277,9 +131,7 @@ function EnhancedTableHead(props) {
 
 EnhancedTableHead.propTypes = {
     classes: PropTypes.object.isRequired,
-    numSelected: PropTypes.number.isRequired,
     onRequestSort: PropTypes.func.isRequired,
-    onSelectAllClick: PropTypes.func.isRequired,
     order: PropTypes.oneOf(['asc', 'desc']).isRequired,
     orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired,
@@ -322,10 +174,6 @@ const EnhancedTableToolbar = () => {
     );
 };
 
-EnhancedTableToolbar.propTypes = {
-    numSelected: PropTypes.number.isRequired,
-};
-
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -349,12 +197,35 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function EnhancedTable() {
+function EnhancedTable() {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const allAffiliates = useSelector((state) => state.allAffiliates);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getAffiliates());
+    }, []);
+
+    const rows = allAffiliates.map((el) => {
+        return {
+            dni: el.dni,
+            lastname: el.lastname,
+            name: el.name,
+            age: calculateAge(el.birthdate),
+            plan: el.plans.name,
+            gender: el.gender,
+            contact: el.phone_number,
+            email: el.email,
+            titular: String(el.titular),
+            familyBond: el.family_bond,
+            familyGroup: el.family_group,
+            state: el.state,
+        };
+    });
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -381,6 +252,8 @@ export default function EnhancedTable() {
     const handleDelete = () => {
         alert('borrar');
     };
+
+    if (rows.length === 0) return <h2>Cargando...</h2>;
 
     return (
         <div className={classes.root}>
@@ -461,7 +334,7 @@ export default function EnhancedTable() {
                                             <TableCell align='center'>
                                                 {row.contact}
                                             </TableCell>
-                                            <TableCell align='center'>
+                                            <TableCell align='left'>
                                                 {row.email}
                                             </TableCell>
                                             <TableCell align='center'>
@@ -474,7 +347,7 @@ export default function EnhancedTable() {
                                                 {row.familyGroup}
                                             </TableCell>
                                             <TableCell align='center'>
-                                                {row.address}
+                                                {row.state}
                                             </TableCell>
                                         </TableRow>
                                     );
@@ -500,3 +373,5 @@ export default function EnhancedTable() {
         </div>
     );
 }
+
+export default EnhancedTable;

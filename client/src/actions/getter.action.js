@@ -1,4 +1,8 @@
-import { GET_PLANS_BENEFITS, GET_BENEFITS } from './constants.actions';
+import {
+    GET_PLANS_BENEFITS,
+    GET_BENEFITS,
+    GET_AFFILIATES,
+} from './constants.actions';
 import supabase from '../supabase.config';
 
 function getPlans() {
@@ -27,4 +31,18 @@ function getBenefits() {
     };
 }
 
-export { getPlans, getBenefits };
+function getAffiliates() {
+    return async (dispatch) => {
+        try {
+            const { data: user, error: errorFetchUserData } = await supabase
+                .from('partners')
+                .select('*, plans (id, name)');
+            if (errorFetchUserData) return console.log(errorFetchUserData);
+            dispatch({ type: GET_AFFILIATES, payload: user });
+        } catch (err) {
+            console.log(err);
+        }
+    };
+}
+
+export { getPlans, getBenefits, getAffiliates };
