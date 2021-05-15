@@ -26,6 +26,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
 
 import { statesAff } from '../../functions/states';
 import { getAffiliates, getPlans } from '../../actions/getter.action.js';
@@ -168,8 +169,28 @@ const useToolbarStyles = makeStyles((theme) => ({
     },
 }));
 
-const EnhancedTableToolbar = () => {
+const EnhancedTableToolbar = ({ rows }) => {
     const classes = useToolbarStyles();
+    const [inputFilters, setInputFilters] = React.useState({
+        select: '',
+        text: '',
+    });
+    let rowsFiltered = rows.map((el) => el);
+
+    const handleChange = (e) => {
+        const value = e.target.value;
+        const name = e.target.name;
+        setInputFilters({ ...inputFilters, [name]: value });
+
+        if (inputFilters.text !== '' && inputFilters.select !== '') {
+            rowsFiltered = rowsFiltered.filter(
+                (el) => el[inputFilters.select] == inputFilters.text
+            );
+            console.log(rowsFiltered);
+        } else {
+            rowsFiltered = rows.map((el) => el);
+        }
+    };
 
     return (
         <Toolbar>
@@ -181,6 +202,26 @@ const EnhancedTableToolbar = () => {
             >
                 Lista de socios
             </Typography>
+            <InputLabel id='filter-select'>Filtro</InputLabel>
+            <Select
+                labelId='filter-select'
+                name='select'
+                onChange={handleChange}
+                value={inputFilters.select}
+            >
+                {headCells.map((head) => (
+                    <MenuItem key={head.label} value={head.label}>
+                        {head.label}
+                    </MenuItem>
+                ))}
+            </Select>
+            <TextField
+                label='Filtro'
+                type='text'
+                name='text'
+                value={inputFilters.text}
+                onChange={handleChange}
+            />
         </Toolbar>
     );
 };
@@ -218,6 +259,11 @@ function EnhancedTable() {
         edit: false,
         delete: false,
     });
+    const classesFilter = useToolbarStyles();
+    const [inputFilters, setInputFilters] = React.useState({
+        select: '',
+        text: '',
+    });
     const [input, setInput] = React.useState({
         dni: '',
         lastname: '',
@@ -248,19 +294,19 @@ function EnhancedTable() {
         dispatch(getAffiliates());
     }, [open, setOpen]);
 
-    const rows = allAffiliates.map((el) => {
+    let rows = allAffiliates.map((el) => {
         return {
-            dni: el.dni,
+            dni: String(el.dni),
             lastname: el.lastname,
             name: el.name,
-            age: calculateAge(el.birthdate),
+            age: String(calculateAge(el.birthdate)),
             plan: el.plans.name,
             gender: el.gender,
             contact: el.phone_number,
             email: el.email,
             titular: String(el.titular),
             familyBond: el.family_bond,
-            familyGroup: el.family_group,
+            familyGroup: String(el.family_group),
             state: el.state,
         };
     });
@@ -380,10 +426,67 @@ function EnhancedTable() {
 
     if (rows.length === 0) return <CircularProgress />;
 
+    //Toolbar Row
+    const rowsOriginal = rows.map((el) => el);
+
+    const handleChangeFilters = (e) => {
+        let value = e.target.value;
+        let name = e.target.name;
+        setInputFilters({ ...inputFilters, [name]: value });
+    };
+
+    if (inputFilters.text !== '' && inputFilters.select !== '') {
+        rows = rows.filter((el) =>
+            el[inputFilters.select].includes(inputFilters.text)
+        );
+        console.log(rows);
+    } else {
+        rows = rowsOriginal.map((el) => el);
+    }
+
+    console.log(inputFilters);
+    console.log(rows);
+
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
-                <EnhancedTableToolbar />
+                <Toolbar>
+                    <Typography
+                        className={classesFilter.title}
+                        variant='h6'
+                        id='tableTitle'
+                        component='div'
+                    >
+                        Lista de socios
+                    </Typography>
+                    <InputLabel id='filter-select'>Filtro</InputLabel>
+                    <Select
+                        labelId='filter-select'
+                        name='select'
+                        onChange={handleChangeFilters}
+                        value={inputFilters.select}
+                    >
+                        <MenuItem value='dni'>DNI</MenuItem>
+                        <MenuItem value='age'>Edad</MenuItem>
+                        <MenuItem value='contact'>Telefono</MenuItem>
+                        <MenuItem value='email'>Email</MenuItem>
+                        <MenuItem value='familyBond'>Parentezco</MenuItem>
+                        <MenuItem value='familyGroup'>Grupo Familiar</MenuItem>
+                        <MenuItem value='gender'>Genero</MenuItem>
+                        <MenuItem value='name'>Nombre/s</MenuItem>
+                        <MenuItem value='lastname'>Apellido/s</MenuItem>
+                        <MenuItem value='plan'>Plan</MenuItem>
+                        <MenuItem value='state'>Estado</MenuItem>
+                        <MenuItem value='titular'>Titularidad</MenuItem>
+                    </Select>
+                    <TextField
+                        label='Filtro'
+                        type='text'
+                        name='text'
+                        value={inputFilters.text}
+                        onChange={handleChangeFilters}
+                    />
+                </Toolbar>
                 <TableContainer>
                     <Table
                         className={classes.table}
