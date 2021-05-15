@@ -12,10 +12,12 @@ function InfoPlanes() {
     const dispatch = useDispatch();
 
     const [currCard, setCurrCard] = useState(0);
-
+    
     const leftPlan = plans[currCard > 1 ? currCard - 1 : plans.length - 1];
     const plan = plans[currCard];
     const rightPlan = plans[currCard < plans.length - 1 ? currCard + 1 : 0];
+    
+    
 
     const forward = () => {
         currCard < plans.length - 1

@@ -1,4 +1,8 @@
-import { SET_NP_BEN_SEL, ADD_NP_BEN, SEND_NP_FORM } from '../actions/actions';
+import {
+    SET_NP_BEN_SEL,
+    ADD_NP_BEN,
+    SEND_NP_FORM,
+} from '../actions/constants.actions';
 
 const initialState = {
     //------New plan------
@@ -7,7 +11,7 @@ const initialState = {
     sended: false,
 };
 
-function reducer(state = initialState, action) {
+function planReducer(state = initialState, action) {
     switch (action.type) {
         //------New Plan------
         case SET_NP_BEN_SEL:
@@ -29,3 +33,5 @@ function reducer(state = initialState, action) {
             return state;
     }
 }
+
+export default planReducer;

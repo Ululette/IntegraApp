@@ -14,6 +14,7 @@ import UserNav from './UserNav/UserNav.jsx';
 import AdminMedic from './AdminMedics/AdminMedics';
 import UserHome from './UserHome/UserHome.jsx';
 import AdminAffiliate from './AdminAffiliate/AdminAffiliate.jsx';
+import FormSpecialities from './Speciality/FormSpecialities.jsx';
 
 function App() {
     const firebase = useFirebaseApp();
@@ -21,16 +22,17 @@ function App() {
         <>
             <Route exact path='/' component={NavBar} />
             <Route exact path='/' component={LandingPage} />
+            <Route
+                exact
+                path='/:id/admin/specialities'
+                component={FormSpecialities}
+            />
             <Route path='/faqs' component={FaqsPage} />
             <Route path='/login' render={() => <Login firebase={firebase} />} />
             <Route
                 path='/:id/admin'
                 render={() => <AdminNav firebase={firebase} />}
             />
-            {/* <Route
-                path='/:id/admin'
-                render={() => <AdminHome firebase={firebase} />}
-            /> */}
             <Route exact path='/:id/admin/medics' component={AdminMedic} />
             <Route
                 exact

@@ -2,12 +2,10 @@ import {
     GET_PLANS_BENEFITS,
     GET_BENEFITS,
     GET_AFFILIATES,
-} from '../actions/constants.actions';
-import {
     SET_NP_BEN_SEL,
     ADD_NP_BEN,
     SEND_NP_FORM,
-} from '../actions/plans.actions';
+} from '../actions/constants.actions.js';
 
 const initialState = {
     allPlans: [],
