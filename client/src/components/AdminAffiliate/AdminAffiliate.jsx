@@ -193,7 +193,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function EnhancedTable() {
+function AdminAffiliate() {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -455,8 +455,6 @@ function EnhancedTable() {
     } else {
         rows = rowsOriginal.map((el) => el);
     }
-
-    console.log(inputAdd);
 
     return (
         <div className={classes.root}>
@@ -917,6 +915,7 @@ function EnhancedTable() {
                             type='number'
                             value={inputAdd.dni}
                             onChange={handleChangeAdd}
+                            helperText='Dni de 8 digitos'
                             fullWidth
                         />
                         <TextField
@@ -1058,4 +1057,4 @@ function EnhancedTable() {
     );
 }
 
-export default EnhancedTable;
+export default AdminAffiliate;
