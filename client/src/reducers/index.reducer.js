@@ -1,7 +1,6 @@
 import {
     GET_PLANS_BENEFITS,
     GET_BENEFITS,
-    GET_AFFILIATES,
     SET_NP_BEN_SEL,
     ADD_NP_BEN,
     SEND_NP_FORM,
@@ -44,11 +43,6 @@ function rootReducer(state = initialState, action) {
             return {
                 ...state,
                 sended: action.payload,
-            };
-        case GET_AFFILIATES:
-            return {
-                ...state,
-                allAffiliates: action.payload,
             };
         default:
             return state;

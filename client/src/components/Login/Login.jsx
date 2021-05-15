@@ -62,13 +62,13 @@ function Login({ firebase }) {
         try {
             let { data: users, error } = await supabase
                 .from('users')
-                .select('dni, email, role')
+                .select('dni, email, role, avatar_url')
                 .eq('dni', input.doc);
             if (error) return console.log(error);
             const numRole =
                 users[0].role === 'affiliate'
                     ? 10
-                    : users[0].role === 'medico'
+                    : users[0].role === 'medic'
                     ? 20
                     : 30;
             if (numRole !== role) {
@@ -77,21 +77,66 @@ function Login({ firebase }) {
             } else {
                 setErrors(null);
             }
+
+            if (users[0].role === 'affiliate') {
+                let { data: userInfo, error: errorFetchUserInfo } =
+                    await supabase
+                        .from(`partners`)
+                        .select('name, lastname, plans (id, name)')
+                        .eq('dni', users[0].dni);
+
+                if (errorFetchUserInfo) {
+                    console.log(errorFetchUserInfo);
+                    setLoading(false);
+                    return alert('Error en fetch user info.');
+                }
+
+                const affiliateData = {
+                    name: userInfo[0].name,
+                    lastname: userInfo[0].lastname,
+                    plan_id: userInfo[0].plans.id,
+                    plan_name: userInfo[0].plans.name,
+                };
+                localStorage.setItem(
+                    'affiliatedata',
+                    JSON.stringify(affiliateData)
+                );
+            }
+
+            if (users[0].role === 'admin') {
+                let { data: userInfo, error: errorFetchUserInfo } =
+                    await supabase
+                        .from(`admins`)
+                        .select('name, lastname, root')
+                        .eq('dni', users[0].dni);
+
+                if (errorFetchUserInfo) {
+                    console.log(errorFetchUserInfo);
+                    setLoading(false);
+                    return alert('Error en fetch user info.');
+                }
+
+                const adminData = {
+                    name: userInfo[0].name,
+                    lastname: userInfo[0].lastname,
+                    root: userInfo[0].root,
+                };
+                localStorage.setItem('admindata', JSON.stringify(adminData));
+            }
+
             await firebase
                 .auth()
                 .signInWithEmailAndPassword(users[0].email, input.pass);
 
             const dataUser = {
                 dni: users[0].dni,
-                name: users[0].name,
                 email: users[0].email,
                 role: users[0].role,
+                avatar_url: users[0].avatar_url,
             };
 
             localStorage.setItem('userdata', JSON.stringify(dataUser));
-            console.log(userFire.data.uid);
             setLoading(false);
-            // window.location = `/${userFire.data.uid}/admin`;
         } catch (error) {
             setErrors('Usuario y/o contraseña incorrecto.');
             setLoading(false);

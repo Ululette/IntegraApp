@@ -1,39 +1,34 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import {
-    Button,
-    Menu,
-    MenuItem,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    Badge,
-    Slide,
-} from '@material-ui/core';
 import { useUser } from 'reactfire';
-
+import AdminAside from './AdminAside';
 //Styles
 import styles from './AdminNav.module.css';
+
+// Material-UI components
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { Button, Menu, MenuItem, Badge } from '@material-ui/core';
 
 //Icons
 import MailIcon from '@material-ui/icons/Mail';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import HomeIcon from '@material-ui/icons/Home';
-import FaceIcon from '@material-ui/icons/Face';
-import GroupIcon from '@material-ui/icons/Group';
-import NoteIcon from '@material-ui/icons/Note';
-import DoneAllIcon from '@material-ui/icons/DoneAll';
-import PhoneAndroidIcon from '@material-ui/icons/PhoneAndroid';
-import AssignmentIcon from '@material-ui/icons/Assignment';
-import GroupAddIcon from '@material-ui/icons/GroupAdd';
-import HealingIcon from '@material-ui/icons/Healing';
 
-function AdminNav() {
+function AdminNav({ firebase }) {
     const [anchorEl, setAnchorEl] = useState(null);
-    const [open, setOpen] = React.useState(false);
     const userDataFirebase = useUser();
+    let adminData = localStorage.getItem('admindata');
+    adminData = JSON.parse(adminData);
+    let userData = localStorage.getItem('userdata');
+    userData = JSON.parse(userData);
+
+    if (
+        (!userDataFirebase || !userDataFirebase.data) &&
+        !adminData &&
+        !userData
+    ) {
+        window.location = '/login';
+    }
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -43,24 +38,26 @@ function AdminNav() {
         setAnchorEl(null);
     };
 
-    const handleClickOpen = () => {
-        setOpen(true);
+    const logout = async () => {
+        if (window.confirm('¿Quiere cerrar sesión?')) {
+            await firebase.auth().signOut();
+            localStorage.removeItem('userdata');
+            window.location = '/login';
+        }
     };
 
-    const handleClickClose = () => {
-        setOpen(false);
-    };
+    if (!userDataFirebase.data) return <CircularProgress />;
 
     return (
         <div className={styles.container}>
             <nav className={styles.navbar}>
-                <NavLink to={`/${userDataFirebase}/admin/`}>
+                <a href={`/${userDataFirebase.uid}/admin/`}>
                     <img
                         src='../../assets/images/logo.png'
                         alt='Integra icon.'
                         className={styles.ppLogo}
                     />
-                </NavLink>
+                </a>
                 <section className={styles.userData}>
                     <Badge
                         badgeContent={2}
@@ -70,12 +67,17 @@ function AdminNav() {
                         <MailIcon />
                     </Badge>
                     <article className={styles.namesContainer}>
-                        <p>Nombre admin</p>
-                        <p>Administrador</p>
+                        <p>{`${adminData.name} ${adminData.lastname}`}</p>
+                        <p>
+                            Administrador{' '}
+                            {adminData.root ? 'root' : 'moderador'}
+                        </p>
                     </article>
                     <div>
                         <Button onClick={handleClick}>
-                            <AccountCircleIcon
+                            <img
+                                src={userData.avatar_url}
+                                alt={`${adminData.name} profile pic.`}
                                 className={styles.profilePic}
                                 width='45px'
                                 height='45px'
@@ -89,87 +91,12 @@ function AdminNav() {
                             onClose={handleClose}
                         >
                             <MenuItem onClick={handleClose}>Mi perfil</MenuItem>
-                            <MenuItem onClick={handleClose}>
-                                Cerrar Sesion
-                            </MenuItem>
+                            <MenuItem onClick={logout}>Cerrar Sesion</MenuItem>
                         </Menu>
                     </div>
                 </section>
             </nav>
-            <aside className={styles.aside}>
-                <ul className={styles.buttonsContainer}>
-                    <NavLink
-                        to={`/${userDataFirebase}/admin/`}
-                        className={styles.link}
-                    >
-                        <HomeIcon />
-                        <li>Inicio</li>
-                    </NavLink>
-                    <article>
-                        <FaceIcon />
-                        <li>Mi cuenta</li>
-                    </article>
-                    <article>
-                        <Badge
-                            className={styles.notifications}
-                            color='secondary'
-                            badgeContent={2}
-                        >
-                            <GroupAddIcon />
-                            <li>Solicitudes de asociacion</li>
-                        </Badge>
-                    </article>
-                    <article>
-                        <NoteIcon />
-                        <li>Planes</li>
-                    </article>
-                    <article>
-                        <Badge
-                            className={styles.notifications}
-                            color='secondary'
-                            badgeContent={2}
-                        >
-                            <DoneAllIcon />
-                            {/* Autorizacion de ordenes y recetas */}
-                            <li>Autorizaciones</li>
-                        </Badge>
-                    </article>
-                    <NavLink
-                        to={`/${userDataFirebase}/admin/affiliates`}
-                        className={styles.link}
-                    >
-                        <GroupIcon />
-                        <li>Socios</li>
-                    </NavLink>
-                    <NavLink
-                        to={`/${userDataFirebase}/admin/medics`}
-                        className={styles.link}
-                    >
-                        <HealingIcon />
-                        <li>Medicos</li>
-                    </NavLink>
-                    <article>
-                        <Badge
-                            className={styles.notifications}
-                            color='secondary'
-                            badgeContent={2}
-                        >
-                            <PhoneAndroidIcon className={styles.iconAside} />
-                            <li>Consultas de socios</li>
-                        </Badge>
-                    </article>
-                    <article>
-                        <Badge
-                            className={styles.notifications}
-                            color='secondary'
-                            badgeContent={2}
-                        >
-                            <AssignmentIcon />
-                            <li>Tickets</li>
-                        </Badge>
-                    </article>
-                </ul>
-            </aside>
+            <AdminAside />
         </div>
     );
 }

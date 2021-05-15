@@ -22,11 +22,7 @@ function App() {
         <>
             <Route exact path='/' component={NavBar} />
             <Route exact path='/' component={LandingPage} />
-            <Route
-                exact
-                path='/:id/admin/specialities'
-                component={FormSpecialities}
-            />
+
             <Route path='/faqs' component={FaqsPage} />
             <Route path='/login' render={() => <Login firebase={firebase} />} />
             <Route
@@ -34,6 +30,11 @@ function App() {
                 render={() => <AdminNav firebase={firebase} />}
             />
             <Route exact path='/:id/admin/medics' component={AdminMedic} />
+            <Route
+                exact
+                path='/:id/admin/specialities'
+                component={FormSpecialities}
+            />
             <Route
                 exact
                 path='/:id/admin/affiliates'
