@@ -31,6 +31,7 @@ import { statesAff } from '../../functions/states';
 import { getAffiliates, getPlans } from '../../actions/getter.action.js';
 import calculateAge from '../../functions/calculateAge.js';
 import styles from './AdminAffiliate.module.css';
+import supabase from '../../supabase.config';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -213,7 +214,10 @@ function EnhancedTable() {
     const [orderBy, setOrderBy] = React.useState('calories');
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState({
+        edit: false,
+        delete: false,
+    });
     const [input, setInput] = React.useState({
         dni: '',
         lastname: '',
@@ -235,9 +239,12 @@ function EnhancedTable() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getAffiliates());
         dispatch(getPlans());
     }, []);
+
+    useEffect(() => {
+        dispatch(getAffiliates());
+    }, [open, setOpen]);
 
     const rows = allAffiliates.map((el) => {
         return {
@@ -271,8 +278,8 @@ function EnhancedTable() {
         setPage(0);
     };
 
-    const handleClose = () => {
-        setOpen(false);
+    const handleClose = (name) => {
+        setOpen({ ...open, [name]: false });
     };
 
     const emptyRows =
@@ -293,12 +300,74 @@ function EnhancedTable() {
             familyGroup: row.familyGroup,
             state: row.state,
         });
-        setOpen(true);
-        console.log(row);
+        setOpen({ ...open, edit: true });
     };
 
-    const handleDelete = (row) => {
-        console.log(row);
+    const handleUpdate = async () => {
+        try {
+            // Busco en la db el id del plan actualizado.
+            let { data: idPlan, error: errorFetchIdPlan } = await supabase
+                .from('plans')
+                .select('id')
+                .eq('name', input.plan);
+            if (errorFetchIdPlan) return console.log(errorFetchIdPlan);
+            idPlan = idPlan.pop().id;
+            console.log('Plan id: ', idPlan);
+            // Update de los datos del socio.
+            let { error: errorUpdateAff } = await supabase
+                .from('partners')
+                .update({
+                    name: input.name,
+                    lastname: input.lastname,
+                    phone_number: input.contact,
+                    titular: Boolean(input.titular),
+                    state: input.state,
+                    email: input.email,
+                    plan_id: idPlan,
+                    gender: input.gender,
+                })
+                .eq('dni', input.dni);
+            if (errorUpdateAff) return console.log(errorUpdateAff);
+            alert('Usuario actualizado.');
+            setOpen(false);
+        } catch (error) {
+            alert('Error.');
+            console.log(error);
+        }
+    };
+
+    const openDialogDelete = (row) => {
+        setInput({
+            dni: row.dni,
+            lastname: row.lastname,
+            name: row.name,
+            age: row.age,
+            plan: row.plan,
+            gender: row.gender,
+            contact: row.contact,
+            email: row.email,
+            titular: row.titular,
+            familyBond: row.familyBond,
+            familyGroup: row.familyGroup,
+            state: row.state,
+        });
+        setOpen({ ...open, delete: true });
+    };
+
+    const handleDelete = async () => {
+        try {
+            const { error: errorDeleteUser } = await supabase
+                .from('partners')
+                .delete()
+                .eq('dni', input.dni);
+            if (errorDeleteUser) return console.log(errorDeleteUser);
+            alert(
+                `Socio con DNI: ${input.dni} y apellido/nombre : ${input.lastname}, ${input.name} ha sido borrado con exito.`
+            );
+        } catch (error) {
+            alert('Error con el delete');
+            console.log(error);
+        }
     };
 
     const handleChange = (e) => {
@@ -308,7 +377,6 @@ function EnhancedTable() {
     };
 
     if (rows.length === 0) return <CircularProgress />;
-    console.log(input);
 
     return (
         <div className={classes.root}>
@@ -357,7 +425,9 @@ function EnhancedTable() {
                                                     <Tooltip
                                                         title='Eliminar'
                                                         onClick={() =>
-                                                            handleDelete(row)
+                                                            openDialogDelete(
+                                                                row
+                                                            )
                                                         }
                                                     >
                                                         <IconButton aria-label='delete'>
@@ -465,8 +535,8 @@ function EnhancedTable() {
             </Paper>
             <div>
                 <Dialog
-                    open={open}
-                    onClose={handleClose}
+                    open={open.edit}
+                    onClose={() => handleClose('edit')}
                     aria-labelledby='form-dialog-title'
                 >
                     <DialogTitle id='form-dialog-title'>
@@ -555,7 +625,7 @@ function EnhancedTable() {
                             margin='dense'
                             label='Plan'
                             name='plan'
-                            type='text' //select
+                            type='text'
                             value={input.plan}
                             fullWidth
                             onChange={handleChange}
@@ -589,10 +659,127 @@ function EnhancedTable() {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose} color='primary'>
-                            Cancel
+                            Cancelar
                         </Button>
-                        <Button onClick={handleClose} color='primary'>
-                            Subscribe
+                        <Button onClick={handleUpdate} color='primary'>
+                            Actualizar
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
+            <div>
+                <Dialog
+                    open={open.delete}
+                    onClose={() => handleClose('delete')}
+                    aria-labelledby='form-dialog-title'
+                >
+                    <DialogTitle id='form-dialog-title'>
+                        Eliminar socio
+                    </DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            autoFocus
+                            margin='dense'
+                            label='DNI'
+                            type='number'
+                            value={input.dni}
+                            disabled
+                            fullWidth
+                        />
+                        <TextField
+                            autoFocus
+                            margin='dense'
+                            label='Apellido/s'
+                            type='text'
+                            name='lastname'
+                            value={input.lastname}
+                            fullWidth
+                        />
+                        <TextField
+                            autoFocus
+                            margin='dense'
+                            label='Nombre/s'
+                            type='text'
+                            name='name'
+                            value={input.name}
+                            fullWidth
+                        />
+                        <TextField
+                            autoFocus
+                            margin='dense'
+                            label='Email'
+                            type='email'
+                            value={input.email}
+                            name='email'
+                            fullWidth
+                        />
+                        <TextField
+                            autoFocus
+                            margin='dense'
+                            label='Telefono'
+                            type='text'
+                            value={input.contact}
+                            name='contact'
+                            fullWidth
+                        />
+                        <TextField
+                            autoFocus
+                            margin='dense'
+                            label='Genero'
+                            type='text'
+                            value={input.gender}
+                            name='gender'
+                            fullWidth
+                        />
+                        <TextField
+                            autoFocus
+                            margin='dense'
+                            label='Titular'
+                            type='text'
+                            name='titular'
+                            value={input.titular}
+                            fullWidth
+                        />
+                        <TextField
+                            autoFocus
+                            margin='dense'
+                            label='Plan'
+                            name='plan'
+                            type='text'
+                            value={input.plan}
+                            fullWidth
+                        />
+                        <TextField
+                            autoFocus
+                            margin='dense'
+                            label='Estado'
+                            value={input.state}
+                            type='text'
+                            name='state'
+                            fullWidth
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            onClick={() => handleClose('delete')}
+                            color='primary'
+                        >
+                            Cancelar
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                if (
+                                    window.confirm(
+                                        'Esta seguro de borrar este socio? (ESTA ACCION NO ES REVERSIBLE)'
+                                    )
+                                ) {
+                                    handleDelete();
+                                }
+                                handleClose('delete');
+                            }}
+                            color='primary'
+                        >
+                            Borrar
                         </Button>
                     </DialogActions>
                 </Dialog>
