@@ -10,6 +10,7 @@ import {
     Badge,
     Slide,
 } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import supabase from '../../supabase.config';
 import 'firebase/auth';
 
@@ -85,7 +86,7 @@ function UserNav({ firebase }) {
         }
     };
 
-    if (!user) return <h1>Cargando...</h1>;
+    if (!user) return <CircularProgress />;
     console.log(user);
 
     return (

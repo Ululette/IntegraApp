@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
 import { useUser } from 'reactfire';
 import AdminAside from './AdminAside';
 //Styles
@@ -11,7 +10,6 @@ import { Button, Menu, MenuItem, Badge } from '@material-ui/core';
 
 //Icons
 import MailIcon from '@material-ui/icons/Mail';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 function AdminNav({ firebase }) {

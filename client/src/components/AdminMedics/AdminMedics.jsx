@@ -3,6 +3,7 @@ import supabase from '../../supabase.config.js';
 import 'firebase/auth';
 import AdminMedicEdit from './AdminMedicEdit.jsx';
 import AdminMedicAdd from './AdminMedicAdd.jsx';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 //styles
 import styles from './AdminMedic.module.css';
@@ -60,7 +61,7 @@ function AdminMedic() {
         }
     };
 
-    if (listMedics.length === 0) return <h2>Cargando...</h2>;
+    if (listMedics.length === 0) return <CircularProgress color='secondary' />;
     console.log(listMedics);
 
     return (
