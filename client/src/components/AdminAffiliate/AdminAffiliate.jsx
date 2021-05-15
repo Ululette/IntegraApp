@@ -249,7 +249,8 @@ function EnhancedTable() {
         alert('editar');
     };
 
-    const handleDelete = () => {
+    const handleDelete = (e) => {
+        console.log(e.target.value);
         alert('borrar');
     };
 
@@ -308,6 +309,7 @@ function EnhancedTable() {
                                                 </div>
                                             </TableCell>
                                             <TableCell
+                                                value={row.dni}
                                                 component='th'
                                                 id={labelId}
                                                 scope='row'
@@ -316,37 +318,70 @@ function EnhancedTable() {
                                             >
                                                 {row.dni}
                                             </TableCell>
-                                            <TableCell align='center'>
+                                            <TableCell
+                                                value={row.lastname}
+                                                align='center'
+                                            >
                                                 {row.lastname}
                                             </TableCell>
-                                            <TableCell align='center'>
+                                            <TableCell
+                                                value={row.name}
+                                                align='center'
+                                            >
                                                 {row.name}
                                             </TableCell>
-                                            <TableCell align='center'>
+                                            <TableCell
+                                                value={row.age}
+                                                align='center'
+                                            >
                                                 {row.age}
                                             </TableCell>
-                                            <TableCell align='center'>
+                                            <TableCell
+                                                value={row.plan}
+                                                align='center'
+                                            >
                                                 {row.plan}
                                             </TableCell>
-                                            <TableCell align='center'>
+                                            <TableCell
+                                                value={row.gender}
+                                                align='center'
+                                            >
                                                 {row.gender}
                                             </TableCell>
-                                            <TableCell align='center'>
+                                            <TableCell
+                                                value={row.contact}
+                                                align='center'
+                                            >
                                                 {row.contact}
                                             </TableCell>
-                                            <TableCell align='left'>
+                                            <TableCell
+                                                value={row.email}
+                                                align='left'
+                                            >
                                                 {row.email}
                                             </TableCell>
-                                            <TableCell align='center'>
+                                            <TableCell
+                                                value={row.titular}
+                                                align='center'
+                                            >
                                                 {row.titular}
                                             </TableCell>
-                                            <TableCell align='center'>
+                                            <TableCell
+                                                value={row.familyBond}
+                                                align='center'
+                                            >
                                                 {row.familyBond}
                                             </TableCell>
-                                            <TableCell align='center'>
+                                            <TableCell
+                                                value={row.familyGroup}
+                                                align='center'
+                                            >
                                                 {row.familyGroup}
                                             </TableCell>
-                                            <TableCell align='center'>
+                                            <TableCell
+                                                value={row.state}
+                                                align='center'
+                                            >
                                                 {row.state}
                                             </TableCell>
                                         </TableRow>
