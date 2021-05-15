@@ -27,7 +27,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
-
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 import { statesAff } from '../../functions/states';
 import { getAffiliates, getPlans } from '../../actions/getter.action.js';
 import calculateAge from '../../functions/calculateAge.js';
@@ -168,63 +169,6 @@ const useToolbarStyles = makeStyles((theme) => ({
         flex: '1 1 100%',
     },
 }));
-
-const EnhancedTableToolbar = ({ rows }) => {
-    const classes = useToolbarStyles();
-    const [inputFilters, setInputFilters] = React.useState({
-        select: '',
-        text: '',
-    });
-    let rowsFiltered = rows.map((el) => el);
-
-    const handleChange = (e) => {
-        const value = e.target.value;
-        const name = e.target.name;
-        setInputFilters({ ...inputFilters, [name]: value });
-
-        if (inputFilters.text !== '' && inputFilters.select !== '') {
-            rowsFiltered = rowsFiltered.filter(
-                (el) => el[inputFilters.select] == inputFilters.text
-            );
-            console.log(rowsFiltered);
-        } else {
-            rowsFiltered = rows.map((el) => el);
-        }
-    };
-
-    return (
-        <Toolbar>
-            <Typography
-                className={classes.title}
-                variant='h6'
-                id='tableTitle'
-                component='div'
-            >
-                Lista de socios
-            </Typography>
-            <InputLabel id='filter-select'>Filtro</InputLabel>
-            <Select
-                labelId='filter-select'
-                name='select'
-                onChange={handleChange}
-                value={inputFilters.select}
-            >
-                {headCells.map((head) => (
-                    <MenuItem key={head.label} value={head.label}>
-                        {head.label}
-                    </MenuItem>
-                ))}
-            </Select>
-            <TextField
-                label='Filtro'
-                type='text'
-                name='text'
-                value={inputFilters.text}
-                onChange={handleChange}
-            />
-        </Toolbar>
-    );
-};
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -459,6 +403,9 @@ function EnhancedTable() {
                     >
                         Lista de socios
                     </Typography>
+                    <Fab color='primary' aria-label='add'>
+                        <AddIcon />
+                    </Fab>
                     <InputLabel id='filter-select'>Filtro</InputLabel>
                     <Select
                         labelId='filter-select'

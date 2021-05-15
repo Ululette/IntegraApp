@@ -69,14 +69,14 @@ function AdminMedicAdd({ medicSpecialities }) {
         setInput({ ...input, [name]: value });
     };
 
-    const handlePostalCode = async () => {
-        const { data: info, error: errorSearch } = await supabase
-            .from('localities')
-            .select('id, name, states (name)')
-            .eq('postal_code', input.adressPostalCode);
-        if (errorSearch) return console.log(errorSearch);
-        setLocalities(info);
-    };
+    // const handlePostalCode = async () => {
+    //     const { data: info, error: errorSearch } = await supabase
+    //         .from('localities')
+    //         .select('id, name, states (name)')
+    //         .eq('postal_code', input.adressPostalCode);
+    //     if (errorSearch) return console.log(errorSearch);
+    //     setLocalities(info);
+    // };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -117,7 +117,6 @@ function AdminMedicAdd({ medicSpecialities }) {
 
     return (
         <div>
-            <button onClick={() => handlePostalCode(1814)}>TEST!</button>
             <Tooltip title='Agregar medico' onClick={handleClickOpen}>
                 <Fab color='primary' className={classes.fab}>
                     <AddIcon />
@@ -205,7 +204,7 @@ function AdminMedicAdd({ medicSpecialities }) {
                                 shrink: true,
                             }}
                         />
-                        <InputLabel htmlFor='state'>Estado</InputLabel>
+                        {/* <InputLabel htmlFor='state'>Estado</InputLabel> */}
                         <p name='state'>active</p>
                         <InputLabel htmlFor='specialityA'>
                             Especialidad 1
@@ -238,7 +237,7 @@ function AdminMedicAdd({ medicSpecialities }) {
                                 </MenuItem>
                             ))}
                         </Select>
-                        <p>Direccion</p>
+                        {/* <p>Direccion</p>
                         <TextField
                             autoFocus
                             value={input.adressStreet}
@@ -307,7 +306,7 @@ function AdminMedicAdd({ medicSpecialities }) {
                             type='text'
                             onChange={handleChange}
                             fullWidth
-                        />
+                        /> */}
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleCancel} color='primary'>
