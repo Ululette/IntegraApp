@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import {
-    Fab,
-    IconButton,
-    Tooltip,
-    InputLabel,
-    MenuItem,
-    Select,
-} from '@material-ui/core';
+import { Fab, Tooltip, InputLabel, MenuItem, Select } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -40,7 +33,7 @@ const resetInputs = {
     adressPostalCode: '',
     birthdate: '',
     specialityA: '',
-    specialityB: '',
+    // specialityB: '',
 };
 
 function AdminMedicAdd({ medicSpecialities }) {
@@ -48,7 +41,7 @@ function AdminMedicAdd({ medicSpecialities }) {
 
     const [input, setInput] = useState(resetInputs);
     const [open, setOpen] = useState(false);
-    const [localities, setLocalities] = useState([]);
+    // const [localities, setLocalities] = useState([]);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -99,14 +92,14 @@ function AdminMedicAdd({ medicSpecialities }) {
                     speciality_id: input.specialityA,
                 },
             ]);
-            if (input.specialityB) {
-                await supabase.from('medics_medical_specialities').insert([
-                    {
-                        medic_dni: input.dni,
-                        speciality_id: input.specialityB,
-                    },
-                ]);
-            }
+            // if (input.specialityB) {
+            //     await supabase.from('medics_medical_specialities').insert([
+            //         {
+            //             medic_dni: input.dni,
+            //             speciality_id: input.specialityB,
+            //         },
+            //     ]);
+            // }
         } catch (error) {
             console.log(error);
             alert('Error. (ver en consola)');
@@ -220,7 +213,7 @@ function AdminMedicAdd({ medicSpecialities }) {
                                 </MenuItem>
                             ))}
                         </Select>
-                        <InputLabel htmlFor='specialityB'>
+                        {/* <InputLabel htmlFor='specialityB'>
                             Especialidad 2
                         </InputLabel>
                         <Select name='specialityB' onChange={handleChange}>
@@ -236,7 +229,7 @@ function AdminMedicAdd({ medicSpecialities }) {
                                     {el.name}
                                 </MenuItem>
                             ))}
-                        </Select>
+                        </Select> */}
                         {/* <p>Direccion</p>
                         <TextField
                             autoFocus
