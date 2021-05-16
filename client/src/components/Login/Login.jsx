@@ -29,7 +29,7 @@ function Login({ firebase }) {
     if (userData && userData.role === 'medic' && userFire.data)
         window.location = `/${userFire.data.uid}/medic`;
 
-    if (userData && userData.role === 'partner' && userFire.data)
+    if (userData && userData.role === 'affiliate' && userFire.data)
         window.location = `/${userFire.data.uid}/affiliate`;
 
     const handleChange = (event) => {
@@ -66,7 +66,7 @@ function Login({ firebase }) {
                 .eq('dni', input.doc);
             if (error) return console.log(error);
             const numRole =
-                users[0].role === 'partner'
+                users[0].role === 'affiliate'
                     ? 10
                     : users[0].role === 'medico'
                     ? 20
