@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useUser } from 'reactfire';
 import AdminAside from './AdminAside';
+import { NavLink } from 'react-router-dom';
 //Styles
 import styles from './AdminNav.module.css';
 
@@ -104,6 +105,13 @@ function AdminNav({ firebase }) {
                             onClose={handleClose}
                         >
                             <MenuItem onClick={handleClose}>Mi perfil</MenuItem>
+                            <NavLink to={`/${userData.dni}/admin/newadmin`}>
+                                {' '}
+                                <MenuItem onClick={handleClose}>
+                                    Agregar Administrador
+                                </MenuItem>
+                            </NavLink>
+
                             <MenuItem onClick={logout}>Cerrar Sesion</MenuItem>
                         </Menu>
                     </div>

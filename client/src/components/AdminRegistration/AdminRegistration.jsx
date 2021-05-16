@@ -3,6 +3,8 @@ import { Redirect } from 'react-router-dom';
 import Styles from '../ContactForm/ContactForm.module.css';
 import LogoNav from '../../assets/logo-integra.png';
 import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
@@ -47,6 +49,8 @@ function AdminRegistration({ firebase }) {
         lastname: '',
         dni: '',
         mail: '',
+        birthdate: '',
+        root: '',
         password: '',
         confirmPassword: '',
     });
@@ -54,6 +58,8 @@ function AdminRegistration({ firebase }) {
         name: false,
         lastname: false,
         dni: false,
+        birthdate: false,
+        root: false,
         mail: false,
         password: false,
         confirmPassword: false,
@@ -69,16 +75,26 @@ function AdminRegistration({ firebase }) {
             !errors.dni &&
             !errors.mail &&
             !errors.password &&
-            !errors.confirmPassword
+            !errors.confirmPassword &&
+            !errors.birthdate &&
+            !errors.root
         ) {
             setSuccessRequest(true);
             await supabase.from('users').insert([
                 {
+                    dni: input.dni,
                     role: 'admin',
-                    name: input.name.toLowerCase(),
-                    lastname: input.lastname.toLowerCase(),
-                    id: input.dni,
-                    email: input.mail.toLowerCase(),
+                    email: input.mail,
+                },
+            ]);
+
+            await supabase.from('admins').insert([
+                {
+                    name: input.name,
+                    lastname: input.lastname,
+                    birthdate: input.birthdate,
+                    dni: input.dni,
+                    root: input.root,
                 },
             ]);
 
@@ -92,6 +108,8 @@ function AdminRegistration({ firebase }) {
                 lastname: '',
                 dni: '',
                 mail: '',
+                birthdate: '',
+                root: '',
                 password: '',
                 confirmPassword: '',
             });
@@ -154,6 +172,22 @@ function AdminRegistration({ firebase }) {
                 }
                 break;
             }
+            case 'birthdate': {
+                if (!value) {
+                    errors.birthdate = true;
+                } else {
+                    errors.birthdate = false;
+                }
+                break;
+            }
+            case 'root': {
+                if (!value) {
+                    errors.root = true;
+                } else {
+                    errors.root = false;
+                }
+                break;
+            }
             case 'password': {
                 if (!passwordPattern.test(value)) {
                     errors.password = true;
@@ -178,7 +212,6 @@ function AdminRegistration({ firebase }) {
 
     return (
         <div className={Styles.conteinerAll}>
-            <h2> Agregar nuevo admin </h2>
             <Snackbar
                 open={errorRequest}
                 autoHideDuration={6000}
@@ -248,7 +281,35 @@ function AdminRegistration({ firebase }) {
                             inputProps={{ maxLength: 8 }}
                         />
                     </div>
-
+                    <div className={Styles.textField}>
+                        <TextField
+                            label='Fecha de nacimiento'
+                            variant='outlined'
+                            id='name-input'
+                            type='date'
+                            name='birthdate'
+                            autoComplete='off'
+                            size='small'
+                            value={input.birthdate}
+                            onChange={(e) => handleInputChange(e)}
+                        />
+                    </div>
+                    <div className={Styles.textField}>
+                        <Select
+                            label='Es root?'
+                            variant='outlined'
+                            id='name-input'
+                            type='text'
+                            name='root'
+                            autoComplete='off'
+                            size='small'
+                            value={input.root}
+                            onChange={(e) => handleInputChange(e)}
+                        >
+                            <MenuItem value='true'>Si</MenuItem>
+                            <MenuItem value='false'>No</MenuItem>
+                        </Select>
+                    </div>
                     <div className={Styles.textField}>
                         <TextField
                             id='outlined-search'
