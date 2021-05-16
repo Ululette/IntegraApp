@@ -105,8 +105,10 @@ function AdminNav({ firebase }) {
                             onClose={handleClose}
                         >
                             <MenuItem onClick={handleClose}>Mi perfil</MenuItem>
-                            <NavLink to={`/${userData.dni}/admin/newadmin`}>
-                                {' '}
+                            <NavLink
+                                to={`/${userData.dni}/admin/newadmin`}
+                                className={styles.newAdmin}
+                            >
                                 <MenuItem onClick={handleClose}>
                                     Agregar Administrador
                                 </MenuItem>

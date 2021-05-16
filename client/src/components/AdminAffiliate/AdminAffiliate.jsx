@@ -714,6 +714,8 @@ function AdminAffiliate() {
                             fullWidth
                             onChange={handleChange}
                         />
+                        <InputLabel>Genero</InputLabel>
+
                         <Select
                             autoFocus
                             margin='dense'
@@ -728,6 +730,7 @@ function AdminAffiliate() {
                             <MenuItem value='mujer'>Mujer</MenuItem>
                             <MenuItem value='otro'>Otro</MenuItem>
                         </Select>
+                        <InputLabel>Es titular?</InputLabel>
                         <Select
                             autoFocus
                             margin='dense'
@@ -741,6 +744,7 @@ function AdminAffiliate() {
                             <MenuItem value='true'>True</MenuItem>
                             <MenuItem value='false'>False</MenuItem>
                         </Select>
+                        <InputLabel>Plan</InputLabel>
                         <Select
                             autoFocus
                             margin='dense'
@@ -761,6 +765,7 @@ function AdminAffiliate() {
                                 </MenuItem>
                             ))}
                         </Select>
+                        <InputLabel>Estado</InputLabel>
                         <Select
                             autoFocus
                             margin='dense'

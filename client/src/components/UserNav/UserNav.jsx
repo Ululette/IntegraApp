@@ -4,12 +4,16 @@ import {
     Menu,
     MenuItem,
     Dialog,
+    List,
     DialogActions,
     DialogContent,
     DialogContentText,
     Badge,
     Slide,
+    ListItem,
+    ListItemText,
     CircularProgress,
+    Divider,
 } from '@material-ui/core';
 import 'firebase/auth';
 import supabase from '../../supabase.config.js';
@@ -192,22 +196,33 @@ function UserNav({ firebase }) {
                             keepMounted
                             open={Boolean(anchorEl)}
                             onClose={handleClose}
+                            className={styles.myOptions}
                         >
                             <MenuItem onClick={handleClose}>Mi perfil</MenuItem>
                             <MenuItem onClick={logout}>Cerrar Sesion</MenuItem>
-                            <p onClick={handleClose}>Grupo Familiar</p>
-                            {familyGroup.map((familiar, index) => (
-                                <p key={`familiar-${index}`}>
-                                    <strong>{`${familiar.name} ${familiar.lastname}`}</strong>
+                            <Divider />
+                            <List>
+                                <p className={styles.divider}>
+                                    <strong>Grupo Familiar</strong>
                                 </p>
-                            ))}
+                                {familyGroup.map((familiar, index) => (
+                                    <ListItem button key={`familiar-${index}`}>
+                                        <ListItemText
+                                            primary={`${familiar.name} ${familiar.lastname}`}
+                                        />
+                                    </ListItem>
+                                ))}
+                            </List>
                         </Menu>
                     </div>
                 </section>
             </nav>
             <aside className={styles.aside}>
                 <ul className={styles.buttonsContainer}>
-                    <NavLink to={`/${userData.dni}/affiliate`}>
+                    <NavLink
+                        to={`/${userData.dni}/affiliate`}
+                        className={styles.link}
+                    >
                         <HomeIcon />
                         <li>Inicio</li>
                     </NavLink>
@@ -215,7 +230,11 @@ function UserNav({ firebase }) {
                         <FaceIcon />
                         <li>Mi cuenta</li>
                     </article>
-                    <NavLink to={`/${userData.dni}/affiliate/mymedicalrecords`}>
+                    <NavLink
+                        to={`/${userData.dni}/affiliate/mymedicalrecords`}
+                        className={styles.link}
+                        activeClassName={styles.activeLink}
+                    >
                         <FavoriteBorderIcon />
                         <li>Mi carpeta medica</li>
                     </NavLink>
@@ -231,7 +250,11 @@ function UserNav({ firebase }) {
                         <PhoneAndroidIcon />
                         <li>Mi credencial</li>
                     </article>
-                    <NavLink to={`/${userData.dni}/affiliate/doctor`}>
+                    <NavLink
+                        to={`/${userData.dni}/affiliate/doctor`}
+                        className={styles.link}
+                        activeClassName={styles.activeLink}
+                    >
                         <AssignmentIcon />
                         <li>Cartilla medica</li>
                     </NavLink>

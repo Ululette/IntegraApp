@@ -61,6 +61,7 @@ function AdminAside({ firebase, userDataFirebase }) {
                 <NavLink
                     to={`/${userDataFirebase}/admin/affiliates`}
                     className={styles.link}
+                    activeClassName={styles.activeLink}
                 >
                     <GroupIcon />
                     <li>Socios</li>
@@ -68,6 +69,7 @@ function AdminAside({ firebase, userDataFirebase }) {
                 <NavLink
                     to={`/${userDataFirebase}/admin/medics`}
                     className={styles.link}
+                    activeClassName={styles.activeLink}
                 >
                     <HealingIcon />
                     <li>Medicos</li>
