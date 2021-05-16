@@ -82,7 +82,9 @@ function Login({ firebase }) {
                 let { data: userInfo, error: errorFetchUserInfo } =
                     await supabase
                         .from(`partners`)
-                        .select('name, lastname, plans (id, name)')
+                        .select(
+                            'name, lastname, family_group, plans (id, name)'
+                        )
                         .eq('dni', users[0].dni);
 
                 if (errorFetchUserInfo) {
@@ -96,6 +98,7 @@ function Login({ firebase }) {
                     lastname: userInfo[0].lastname,
                     plan_id: userInfo[0].plans.id,
                     plan_name: userInfo[0].plans.name,
+                    family_group: userInfo[0].family_group,
                 };
                 localStorage.setItem(
                     'affiliatedata',

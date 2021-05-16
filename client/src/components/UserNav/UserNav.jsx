@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Button,
     Menu,
@@ -9,9 +9,10 @@ import {
     DialogContentText,
     Badge,
     Slide,
+    CircularProgress,
 } from '@material-ui/core';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import 'firebase/auth';
+import supabase from '../../supabase.config.js';
 import { useUser } from 'reactfire';
 
 //Styles
@@ -44,6 +45,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 function UserNav({ firebase }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [open, setOpen] = useState(false);
+    const [familyGroup, setFamilyGroup] = useState([]);
     const userData = JSON.parse(localStorage.getItem('userdata'));
     const affiliateData = JSON.parse(localStorage.getItem('affiliatedata'));
     const userFirebase = useUser();
@@ -51,6 +53,10 @@ function UserNav({ firebase }) {
     if ((!userFirebase || !userFirebase.data) && !affiliateData && !userData) {
         window.location = '/login';
     }
+
+    useEffect(() => {
+        getFamilyGroup();
+    }, []);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -77,9 +83,21 @@ function UserNav({ firebase }) {
         }
     };
 
-    if (!userData && !affiliateData) return <CircularProgress />;
-    console.log(userData);
-    console.log(affiliateData);
+    const getFamilyGroup = async () => {
+        let { data: familyGroup, error: fetchFamilyGroup } = await supabase
+            .from('partners')
+            .select('name, lastname')
+            .eq('family_group', affiliateData.family_group);
+        if (fetchFamilyGroup) {
+            console.log(fetchFamilyGroup);
+            alert(fetchFamilyGroup.message);
+            return 'Error en fetchFamilyGroup';
+        }
+        setFamilyGroup(familyGroup);
+    };
+
+    if (familyGroup.length === 0) return <CircularProgress />;
+
     return (
         <div className={styles.container}>
             <nav className={styles.navbar}>
@@ -169,6 +187,11 @@ function UserNav({ firebase }) {
                             <MenuItem onClick={handleClose}>Mi perfil</MenuItem>
                             <MenuItem onClick={logout}>Cerrar Sesion</MenuItem>
                             <p onClick={handleClose}>Grupo Familiar</p>
+                            {familyGroup.map((familiar, index) => (
+                                <p key={`familiar-${index}`}>
+                                    <strong>{`${familiar.name} ${familiar.lastname}`}</strong>
+                                </p>
+                            ))}
                         </Menu>
                     </div>
                 </section>
