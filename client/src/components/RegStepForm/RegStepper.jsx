@@ -45,7 +45,7 @@ function getStepContent(stepIndex) {
   }
 }
 
-export default function HorizontalLabelPositionBelowStepper() {
+export default function RegStepper() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const steps = getSteps();

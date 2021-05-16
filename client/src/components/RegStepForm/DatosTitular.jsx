@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getStates, getLocalities} from '../../actions/getter.action';
+// import { getStates, getLocalities} from '../../actions/getter.action';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -8,8 +8,8 @@ import FormControl from '@material-ui/core/FormControl';
 import styles from './DatosTitular.module.css'
 
 const DatosTitular = () =>{
-	const allStates = useSelector((state) => state.allStates);
-	const allLocalities = useSelector((state) => state.allLocalities);
+	// const allStates = useSelector((state) => state.allStates);
+	// const allLocalities = useSelector((state) => state.allLocalities);
     const dispatch = useDispatch();
 
 	const [input, setInput] = useState({
@@ -43,10 +43,10 @@ const DatosTitular = () =>{
 		apartment:false
     });
 
-	useEffect(()=>{
-		dispatch(getStates());
-		dispatch(getLocalities());
-	},[])
+	// useEffect(()=>{
+	// 	dispatch(getStates());
+	// 	dispatch(getLocalities());
+	// },[])
 	
 	// useEffect(()=>{
 	// 	console.log('useEffect '+input.state)
@@ -54,20 +54,20 @@ const DatosTitular = () =>{
 	// },[input.state])
 
 	
-	const states = allStates.map((s)=>{
-		return(
-			<option value={s.id}>{s.name}</option>
-			)
-		})
+	// const states = allStates.map((s)=>{
+	// 	return(
+	// 		<option value={s.id}>{s.name}</option>
+	// 		)
+	// 	})
 		
-	const localities = 
-	allLocalities
-	.filter(l=>l.state_id == input.state)
-	.map((l)=>{
-		return(
-			<option value={l.id}>{l.name}</option>
-			)
-		})
+	// const localities = 
+	// allLocalities
+	// .filter(l=>l.state_id == input.state)
+	// .map((l)=>{
+	// 	return(
+	// 		<option value={l.id}>{l.name}</option>
+	// 		)
+	// 	})
 
 	const handleInputChange = (e) => {
 		setInput({
@@ -407,7 +407,7 @@ const DatosTitular = () =>{
 				<div className={styles.input}>
 					<FormControl variant="outlined" >
 						<InputLabel htmlFor="marital_status-select">Provincia</InputLabel>
-						<Select
+						{/* <Select
 							native
 							value={input.state}
 							onChange={(e) => handleInputChange(e)}
@@ -420,13 +420,13 @@ const DatosTitular = () =>{
 						>
 							<option aria-label="None" value="" />
 							{states}
-						</Select>
+						</Select> */}
 					</FormControl>
 				</div>
 				<div className={styles.input}>
 					<FormControl variant="outlined" >
 						<InputLabel htmlFor="locality-select">Localidad</InputLabel>
-						<Select
+						{/* <Select
 							native
 							value={input.locality}
 							onChange={(e) => handleInputChange(e)}
@@ -439,7 +439,7 @@ const DatosTitular = () =>{
 						>
 							<option aria-label="None" value="" />
 							{localities}
-						</Select>
+						</Select> */}
 					</FormControl>
 				</div>
 			</div>
