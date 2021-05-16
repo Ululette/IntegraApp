@@ -9,6 +9,10 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import styles from './InfoCard.module.css';
 import logoNav from '../../assets/images/logo.png';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import { NavLink } from 'react-router-dom';
 
 const useStyles = makeStyles({
@@ -38,29 +42,31 @@ export default function InfoCard({ plan }) {
                 </CardContent>
                 <CardContent>
                     <Typography paragraph>Cobertura:</Typography>
-                    <ul>
-                        <li>
-                            {
+                    <List component='li'>
+                        <ListItem button>
+                            <ListItemText
+                                primary={`${
+                                    plan.benefits[
+                                        Math.floor(Math.random() * (8 - 1) + 1)
+                                    ].title
+                                }`}
+                            />
+                        </ListItem>
+                        <ListItemText
+                            primary={`${
                                 plan.benefits[
-                                    Math.floor(Math.random() * (16 - 1) + 1)
-                                ]
-                            }
-                        </li>
-                        <li>
-                            {
+                                    Math.floor(Math.random() * (8 - 1) + 1)
+                                ].title
+                            }`}
+                        />
+                        <ListItemText
+                            primary={`${
                                 plan.benefits[
-                                    Math.floor(Math.random() * (16 - 1) + 1)
-                                ]
-                            }
-                        </li>
-                        <li>
-                            {
-                                plan.benefits[
-                                    Math.floor(Math.random() * (16 - 1) + 1)
-                                ]
-                            }
-                        </li>
-                    </ul>
+                                    Math.floor(Math.random() * (8 - 1) + 1)
+                                ].title
+                            }`}
+                        />
+                    </List>
                 </CardContent>
             </CardActionArea>
             <CardActions>
