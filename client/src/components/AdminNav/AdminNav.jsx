@@ -5,8 +5,14 @@ import AdminAside from './AdminAside';
 import styles from './AdminNav.module.css';
 
 // Material-UI components
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { Button, Menu, MenuItem, Badge } from '@material-ui/core';
+import {
+    Button,
+    Menu,
+    MenuItem,
+    Badge,
+    CircularProgress,
+} from '@material-ui/core';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 //Icons
 import MailIcon from '@material-ui/icons/Mail';
@@ -74,13 +80,18 @@ function AdminNav({ firebase }) {
                     </article>
                     <div>
                         <Button onClick={handleClick}>
-                            <img
-                                src={userData.avatar_url}
-                                alt={`${adminData.name} profile pic.`}
-                                className={styles.profilePic}
-                                width='45px'
-                                height='45px'
-                            />
+                            {userData.avatar_url ? (
+                                <img
+                                    src={userData.avatar_url}
+                                    alt='User profile pic.'
+                                />
+                            ) : (
+                                <AccountCircleIcon
+                                    className={styles.profilePic}
+                                    width='45px'
+                                    height='45px'
+                                />
+                            )}
                             <ExpandMoreIcon className={styles.expandMore} />
                         </Button>
                         <Menu

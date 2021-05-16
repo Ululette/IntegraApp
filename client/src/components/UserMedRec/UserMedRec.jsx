@@ -1,15 +1,17 @@
 import React from 'react';
+import Button from '@material-ui/core/Button';
 
-function UserMedRec({ match }) {
-    const idUser = match.params.id;
+function UserMedRec() {
     return (
         <div>
             <a
-                href={`/${idUser}/mymedicalrecords/pdf`}
+                href={`../mymedicalrecords/pdf`}
                 target='_blank'
                 rel='noreferrer'
             >
-                <button>Ir a mi ficha medica</button>
+                <Button variant='outlined' color='secondary'>
+                    Ir a mi ficha medica
+                </Button>
             </a>
         </div>
     );

@@ -24,13 +24,13 @@ function Login({ firebase }) {
 
     const userData = JSON.parse(localStorage.getItem('userdata'));
     if (userData && userData.role === 'admin' && userFire.data)
-        window.location = `/${userFire.data.uid}/admin`;
+        window.location = `/${userData.dni}/admin`;
 
     if (userData && userData.role === 'medic' && userFire.data)
-        window.location = `/${userFire.data.uid}/medic`;
+        window.location = `/${userData.dni}/medic`;
 
     if (userData && userData.role === 'affiliate' && userFire.data)
-        window.location = `/${userFire.data.uid}/affiliate`;
+        window.location = `/${userData.dni}/affiliate`;
 
     const handleChange = (event) => {
         const value = event.target.value;

@@ -54,19 +54,13 @@ function App() {
             />
             <Route
                 exact
-                path='/:id/affiliate/medicalrecords'
-                component={UserMedRec}
-            />
-
-            <Route
-                exact
                 path='/:id/affiliate/mymedicalrecords'
                 component={UserMedRec}
             />
             <Route
                 exact
                 path='/:id/mymedicalrecords/pdf'
-                component={RenderPDF}
+                render={() => <RenderPDF firebase={firebase} />}
             />
             <Route exact path='/asociate' component={ContactForm} />
             <Route exact path='/' component={Footer} />

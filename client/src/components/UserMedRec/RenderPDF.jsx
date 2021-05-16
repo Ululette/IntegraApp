@@ -1,24 +1,55 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import '@firebase/firestore';
+import '@firebase/auth';
+import '@firebase/storage';
 
-function RenderPDF() {
+function RenderPDF({ firebase }) {
+    const [urlFile, setUrlFile] = useState(null);
+    const storage = firebase.storage();
+    const medRecRef = storage.ref('medical_records_affiliates');
+    const userData = JSON.parse(localStorage.getItem('userdata'));
+    const fileName = `${userData.dni}.pdf`;
+    const fileRef = medRecRef.child(fileName);
+
+    const handleRedirect = async () => {
+        const url = await fileRef.getDownloadURL();
+        setUrlFile(url);
+    };
     useEffect(() => {
         if (typeof window.orientation !== 'undefined') {
             document.getElementById('descargaPdf').click();
             window.close();
         }
+        handleRedirect();
     }, []);
+
+    if (!urlFile)
+        return (
+            <div
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '100%',
+                    height: '100vh',
+                }}
+            >
+                <CircularProgress />
+            </div>
+        );
 
     return (
         <div style={{ position: 'absolute', width: '100%', height: '100%' }}>
             <object
-                data='../../assets/docs/F10.pdf'
+                data={urlFile}
                 type='application/pdf'
                 width='100%'
                 height='100%'
                 aria-label='Error loading PDF'
             >
                 <a
-                    href='../../assets/docs/F10.pdf'
+                    href={urlFile}
                     id='descargaPdf'
                     download='mymedicalrecords.pdf'
                 >

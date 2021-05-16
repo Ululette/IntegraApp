@@ -14,6 +14,7 @@ import {
 import 'firebase/auth';
 import supabase from '../../supabase.config.js';
 import { useUser } from 'reactfire';
+import { NavLink } from 'react-router-dom';
 
 //Styles
 import styles from './UserNav.module.css';
@@ -50,7 +51,7 @@ function UserNav({ firebase }) {
     const affiliateData = JSON.parse(localStorage.getItem('affiliatedata'));
     const userFirebase = useUser();
 
-    if ((!userFirebase || !userFirebase.data) && !affiliateData && !userData) {
+    if (!userFirebase.data && !affiliateData && !userData) {
         window.location = '/login';
     }
 
@@ -170,11 +171,19 @@ function UserNav({ firebase }) {
                             aria-haspopup='true'
                             onClick={handleClick}
                         >
-                            <AccountCircleIcon
-                                className={styles.profilePic}
-                                width='45px'
-                                height='45px'
-                            />
+                            {userData.avatar_url ? (
+                                <img
+                                    src={userData.avatar_url}
+                                    alt='User profile pic.'
+                                />
+                            ) : (
+                                <AccountCircleIcon
+                                    className={styles.profilePic}
+                                    width='45px'
+                                    height='45px'
+                                />
+                            )}
+
                             <ExpandMoreIcon className={styles.expandMore} />
                         </Button>
                         <Menu
@@ -198,18 +207,18 @@ function UserNav({ firebase }) {
             </nav>
             <aside className={styles.aside}>
                 <ul className={styles.buttonsContainer}>
-                    <article>
+                    <NavLink to={`/${userData.dni}/affiliate`}>
                         <HomeIcon />
                         <li>Inicio</li>
-                    </article>
+                    </NavLink>
                     <article>
                         <FaceIcon />
                         <li>Mi cuenta</li>
                     </article>
-                    <article>
+                    <NavLink to={`/${userData.dni}/affiliate/mymedicalrecords`}>
                         <FavoriteBorderIcon />
                         <li>Mi carpeta medica</li>
-                    </article>
+                    </NavLink>
                     <article>
                         <NoteIcon />
                         <li>Mi plan</li>
