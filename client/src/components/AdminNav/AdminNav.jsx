@@ -84,6 +84,9 @@ function AdminNav({ firebase }) {
                                 <img
                                     src={userData.avatar_url}
                                     alt='User profile pic.'
+                                    width='45px'
+                                    height='45px'
+                                    className={styles.profilePic}
                                 />
                             ) : (
                                 <AccountCircleIcon
