@@ -15,6 +15,8 @@ import AdminMedic from './AdminMedics/AdminMedics';
 import UserHome from './UserHome/UserHome.jsx';
 import AdminAffiliate from './AdminAffiliate/AdminAffiliate.jsx';
 import FormSpecialities from './Speciality/FormSpecialities.jsx';
+import UserMedRec from './UserMedRec/UserMedRec.jsx';
+import RenderPDF from './UserMedRec/RenderPDF';
 
 function App() {
     const firebase = useFirebaseApp();
@@ -42,7 +44,6 @@ function App() {
             />
             <Route exact path='/NewPlanP' component={NewPlanP} />
             <Route
-                exact
                 path='/:id/affiliate'
                 render={() => <UserNav firebase={firebase} />}
             />
@@ -50,6 +51,22 @@ function App() {
                 exact
                 path='/:id/affiliate'
                 render={() => <UserHome firebase={firebase} />}
+            />
+            <Route
+                exact
+                path='/:id/affiliate/medicalrecords'
+                component={UserMedRec}
+            />
+
+            <Route
+                exact
+                path='/:id/affiliate/mymedicalrecords'
+                component={UserMedRec}
+            />
+            <Route
+                exact
+                path='/:id/mymedicalrecords/pdf'
+                component={RenderPDF}
             />
             <Route exact path='/asociate' component={ContactForm} />
             <Route exact path='/' component={Footer} />
