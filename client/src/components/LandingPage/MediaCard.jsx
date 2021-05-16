@@ -9,30 +9,30 @@ import Typography from '@material-ui/core/Typography';
 import styles from './MediaCard.module.css';
 import PopUp from './PopUp';
 
-export default function MediaCard(props) {
+export default function MediaCard({ neww }) {
     const togglePopup = () => {
         setShowPup(!showPopup);
     };
-
     const [showPopup, setShowPup] = useState(false);
+
     return (
         <Card className={styles.root}>
             <CardActionArea>
-                <CardMedia className={styles.media} image={props.neww.Img} />
+                <CardMedia className={styles.media} image={neww.img} />
                 <CardContent className={styles.containerData}>
                     <Typography
                         className={styles.title}
                         gutterBottom
                         variant='h5'
                     >
-                        {props.neww.Title}
+                        {neww.title}
                     </Typography>
                     <Typography
                         variant='body2'
                         color='textSecondary'
                         component='p'
                     >
-                        {props.neww.Summary}
+                        {neww.summary}
                     </Typography>
                 </CardContent>
             </CardActionArea>
@@ -43,7 +43,7 @@ export default function MediaCard(props) {
             </CardActions>
             {showPopup && (
                 <PopUp
-                    news={props.neww}
+                    news={neww}
                     text='Cerrar'
                     closePopup={togglePopup}
                     show={showPopup}
