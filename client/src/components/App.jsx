@@ -14,7 +14,7 @@ import UserNav from './UserNav/UserNav.jsx';
 import AdminMedic from './AdminMedics/AdminMedics';
 import UserHome from './UserHome/UserHome.jsx';
 import AdminRegistration from './AdminRegistration/AdminRegistration.jsx';
-
+import MedicalDirectory from './AffiliateDoctors/AffiliateDoctors'
 function App() {
     const firebase = useFirebaseApp();
     return (
@@ -41,6 +41,8 @@ function App() {
                 path='/:id/affiliate'
                 render={() => <UserHome firebase={firebase} />}
             />
+            <Route exact path ='/:id/affiliate/doctor'
+            component={MedicalDirectory}/>
             <Route
                 exact
                 path='/NewAdmin'
