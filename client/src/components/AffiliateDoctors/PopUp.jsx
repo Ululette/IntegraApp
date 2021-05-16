@@ -20,7 +20,7 @@ const PopUp = (props) => {
             }
         }
     }, [show]);
-
+console.log(props)
     return (
         <Dialog
             open={show}
@@ -29,7 +29,7 @@ const PopUp = (props) => {
             aria-labelledby='scroll-dialog-title'
             aria-describedby='scroll-dialog-description'
         >
-            <DialogTitle id='scroll-dialog-title'>{props.doctors.name}</DialogTitle>
+            <DialogTitle id='scroll-dialog-title'>{props.doctors.map(d =>  d.name)}</DialogTitle>
         
             <DialogTitle id='scroll-dialog-title'>{props.doctors.lastname}</DialogTitle>
                 <DialogTitle id='scroll-dialog-title'>{props.doctors.email}</DialogTitle>

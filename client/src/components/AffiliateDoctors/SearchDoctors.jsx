@@ -66,8 +66,16 @@ export default function SearchDoctors() {
     const [speciality, setSpeciality] = useState([])
     const [doctors, setDoctors] = useState([])
     const [pageNumber, setPageNumber] = useState(0);
+    const[user, setUser] = useState(null)
     const docsPerPage = 10;
     const pagesVisited = pageNumber * docsPerPage;
+
+/*     const fetchUserData = async => {
+        const  {data: userInfo, error: errorFetchUser} = await supabase
+        .from('partners')
+        .select('plans(id, name')
+
+    } */
 /*     useEffect(() => {
         const fetchState = async () => {
             let { data: state } = await supabase.from('states').select('*');
@@ -121,9 +129,7 @@ export default function SearchDoctors() {
   const handleChangeSpeciality = (e) => {
     e.preventDefault();
     setState(e.target.value);
-    doctors.filter( d => d.medical_specialities.find(name => {
-    console.log(name.name, 'name.name');
-    return name.name !==  e.target.value}));
+    doctors.filter( d  =>  (d.medical_specialities.name ===  e.target.value));
     console.log(doctors, 'docs')
     console.log(e.target.value, 'e.target')
   };
