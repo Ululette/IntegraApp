@@ -231,10 +231,10 @@ function UserNav({ firebase }) {
                         <PhoneAndroidIcon />
                         <li>Mi credencial</li>
                     </article>
-                    <article>
+                    <NavLink to={`/${userData.dni}/affiliate/doctor`}>
                         <AssignmentIcon />
                         <li>Cartilla medica</li>
-                    </article>
+                    </NavLink>
                     <article>
                         <PaymentIcon />
                         <li>Pago online</li>

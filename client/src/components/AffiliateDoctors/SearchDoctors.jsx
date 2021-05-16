@@ -53,34 +53,33 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SearchDoctors() {
-  
-
     const [showPopup, setShowPup] = useState(false);
     const [medicalSpeciality, setMedicalSpeciality] = useState('');
     const [locality, setLocality] = useState([]);
     const [speciality, setSpeciality] = useState([]);
     let [doctors, setDoctors] = useState([]);
     const [pageNumber, setPageNumber] = useState(0);
-    const[user, setUser] = useState(null)
-    const [doctor, setDoctor] = useState({})
+    const [user, setUser] = useState(null);
+    const [doctor, setDoctor] = useState({});
     const docsPerPage = 10;
     const pagesVisited = pageNumber * docsPerPage;
 
     function togglePopup(index) {
-        if(index){
-        let selected = doctors.filter(d => (d.id === index))
-        setDoctor(...selected)
+        if (index) {
+            console.log(doctors, 'hola');
+            let selected = doctors.filter((d) => d.dni === index);
+            setDoctor(...selected);
         }
         setShowPup(!showPopup);
-       console.log(index, 'index')
-    };
-/*      const fetchUserData = async => {
+        console.log(index, 'index');
+    }
+    /*      const fetchUserData = async => {
         const  {data: userInfo, error: errorFetchUser} = await supabase
         .from('partners')
         .select('plans(id, name')
 
     }   */
-/*     useEffect(() => {
+    /*     useEffect(() => {
         const fetchState = async () => {
             let { data: state } = await supabase.from('states').select('*');
             setState(state);
@@ -114,7 +113,7 @@ export default function SearchDoctors() {
             let { data: doctors } = await supabase
                 .from('medics')
                 .select(
-                    'id, name, lastname, email, phone_number, profilePic, address, medical_specialities(id, name)'
+                    'dni, name, lastname, email, phone_number, profilePic, address, medical_specialities(id, name), plans(id, name)'
                 );
             setDoctors(doctors);
             console.log(doctors);
@@ -122,6 +121,10 @@ export default function SearchDoctors() {
         fetchDoctors();
     }, []);
 
+    const myPlan = JSON.parse(localStorage.getItem('affiliatedata'));
+    doctors = doctors.filter((doc) =>
+        doc.plans.find((plan) => plan.id === myPlan.plan_id)
+    );
     const classes = useStyles();
 
     /* const handleChangeState = (e) => {
@@ -133,30 +136,31 @@ export default function SearchDoctors() {
     e.preventDefault();
     setState(e.target.value);
   }; */
-  const handleChangeSpeciality = (e) => {
-    setMedicalSpeciality(e.target.value);
-};
-const copyDoctors = doctors.map((d) => d);
-if (medicalSpeciality !== '') {
-    doctors = doctors.filter((doc) =>
-        doc.medical_specialities.find(
-            (speciality) => speciality.name === medicalSpeciality
-        )
-    );
-} else {
-    doctors = copyDoctors.map((d) => d);
-}
+    const handleChangeSpeciality = (e) => {
+        setMedicalSpeciality(e.target.value);
+    };
+    const copyDoctors = doctors.map((d) => d);
+    if (medicalSpeciality !== '') {
+        doctors = doctors.filter((doc) =>
+            doc.medical_specialities.find(
+                (speciality) => speciality.name === medicalSpeciality
+            )
+        );
+    } else {
+        doctors = copyDoctors.map((d) => d);
+    }
 
-
-const pageCount = Math.ceil(doctors.length / docsPerPage);
-const changePage = ({ selected }) => {
-  setPageNumber(selected);
-};
-  return (
-    <div>
-      <FormControl className={classes.margin}>
-        <InputLabel htmlFor="demo-customized-select-native">Especialidad</InputLabel>
-   {/*      <NativeSelect
+    const pageCount = Math.ceil(doctors.length / docsPerPage);
+    const changePage = ({ selected }) => {
+        setPageNumber(selected);
+    };
+    return (
+        <div>
+            <FormControl className={classes.margin}>
+                <InputLabel htmlFor='demo-customized-select-native'>
+                    Especialidad
+                </InputLabel>
+                {/*      <NativeSelect
         onChange= {handleChangeState}>
         <option className="labels">Provincia</option>
         {state.map((x) => (
@@ -189,7 +193,10 @@ const changePage = ({ selected }) => {
                     {doctors
                         .slice(pagesVisited, pagesVisited + docsPerPage)
                         .map((d) => (
-                             <button key={d.id} onClick={ () => togglePopup(d.id)}>
+                            <button
+                                key={d.id}
+                                onClick={() => togglePopup(d.dni)}
+                            >
                                 {' '}
                                 {`${d.name} ${d.lastname}`}
                             </button>
