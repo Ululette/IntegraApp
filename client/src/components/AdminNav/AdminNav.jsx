@@ -40,6 +40,7 @@ function AdminNav({ firebase }) {
         if (window.confirm('¿Quiere cerrar sesión?')) {
             await firebase.auth().signOut();
             localStorage.removeItem('userdata');
+            localStorage.removeItem('admindata');
             window.location = '/login';
         }
     };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
     Button,
     Menu,
@@ -11,8 +11,8 @@ import {
     Slide,
 } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import supabase from '../../supabase.config';
 import 'firebase/auth';
+import { useUser } from 'reactfire';
 
 //Styles
 import styles from './UserNav.module.css';
@@ -44,23 +44,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 function UserNav({ firebase }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [open, setOpen] = useState(false);
-    const [user, setUser] = useState(null);
-    let userData = localStorage.getItem('userdata');
-    userData = JSON.parse(userData);
+    const userData = JSON.parse(localStorage.getItem('userdata'));
+    const affiliateData = JSON.parse(localStorage.getItem('affiliatedata'));
+    const userFirebase = useUser();
 
-    const fetchUserData = async () => {
-        const { data: userInfo, error: errorFetchUser } = await supabase
-            .from('partners')
-            .select('name, lastname, plans (id, name)')
-            .eq('dni', userData.dni);
-        if (errorFetchUser) return console.log(errorFetchUser);
-        setUser(userInfo.pop());
-        console.log(userInfo);
-    };
-
-    useEffect(() => {
-        fetchUserData();
-    }, []);
+    if ((!userFirebase || !userFirebase.data) && !affiliateData && !userData) {
+        window.location = '/login';
+    }
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -82,13 +72,14 @@ function UserNav({ firebase }) {
         if (window.confirm('¿Quiere cerrar sesión?')) {
             await firebase.auth().signOut();
             localStorage.removeItem('userdata');
+            localStorage.removeItem('affiliatedata');
             window.location = '/login';
         }
     };
 
-    if (!user) return <CircularProgress />;
-    console.log(user);
-
+    if (!userData && !affiliateData) return <CircularProgress />;
+    console.log(userData);
+    console.log(affiliateData);
     return (
         <div className={styles.container}>
             <nav className={styles.navbar}>
@@ -150,10 +141,10 @@ function UserNav({ firebase }) {
                         </DialogActions>
                     </Dialog>
                     <article className={styles.namesContainer}>
-                        <p>{`${user.name} ${user.lastname}`}</p>
+                        <p>{`${affiliateData.name} ${affiliateData.lastname}`}</p>
                         <p
                             className={styles.planName}
-                        >{`${user.plans.name}`}</p>
+                        >{`${affiliateData.plan_name}`}</p>
                     </article>
                     <div>
                         <Button
