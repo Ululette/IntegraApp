@@ -17,9 +17,9 @@ import AdminAffiliate from './AdminAffiliate/AdminAffiliate.jsx';
 import FormSpecialities from './Speciality/FormSpecialities.jsx';
 import UserMedRec from './UserMedRec/UserMedRec.jsx';
 import RenderPDF from './UserMedRec/RenderPDF';
-
 import AdminRegistration from './AdminRegistration/AdminRegistration.jsx';
 import MedicalDirectory from './AffiliateDoctors/AffiliateDoctors';
+
 function App() {
     const firebase = useFirebaseApp();
     return (
@@ -72,7 +72,7 @@ function App() {
             />
             <Route
                 exact
-                path='/NewAdmin'
+                path='/:id/admin/newadmin'
                 render={() => <AdminRegistration firebase={firebase} />}
             />
             <Route exact path='/' component={Footer} />
