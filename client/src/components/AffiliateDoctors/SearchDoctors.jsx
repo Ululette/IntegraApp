@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import InputBase from '@material-ui/core/InputBase';
 import supabase from '../../supabase.config';
 import ReactPaginate from 'react-paginate';
-import { NavLink } from 'react-router-dom';
 import PopUp from './PopUp';
 
 const BootstrapInput = withStyles((theme) => ({
@@ -55,11 +52,11 @@ const useStyles = makeStyles((theme) => ({
 export default function SearchDoctors() {
     const [showPopup, setShowPup] = useState(false);
     const [medicalSpeciality, setMedicalSpeciality] = useState('');
-    const [locality, setLocality] = useState([]);
+    // const [locality, setLocality] = useState([]);
     const [speciality, setSpeciality] = useState([]);
     let [doctors, setDoctors] = useState([]);
     const [pageNumber, setPageNumber] = useState(0);
-    const [user, setUser] = useState(null);
+    // const [user, setUser] = useState(null);
     const [doctor, setDoctor] = useState({});
     const docsPerPage = 10;
     const pagesVisited = pageNumber * docsPerPage;

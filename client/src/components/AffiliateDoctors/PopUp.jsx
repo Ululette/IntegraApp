@@ -1,14 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 const PopUp = (props) => {
     const descriptionElementRef = useRef(null);
-    const { name, lastname, email, phone_number, profilePic, address, dni } =
+    const { name, lastname, email, phone_number, profilePic, address } =
         props.doctor;
     const { closePopup } = props;
     const { show } = props;
