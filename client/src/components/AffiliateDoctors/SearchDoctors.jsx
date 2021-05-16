@@ -53,9 +53,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SearchDoctors() {
-    const togglePopup = () => {
-        setShowPup(!showPopup);
-    };
+  
 
     const [showPopup, setShowPup] = useState(false);
     const [medicalSpeciality, setMedicalSpeciality] = useState('');
@@ -64,15 +62,24 @@ export default function SearchDoctors() {
     let [doctors, setDoctors] = useState([]);
     const [pageNumber, setPageNumber] = useState(0);
     const[user, setUser] = useState(null)
+    const [doctor, setDoctor] = useState({})
     const docsPerPage = 10;
     const pagesVisited = pageNumber * docsPerPage;
 
-   /*  const fetchUserData = async => {
+    function togglePopup(index) {
+        if(index){
+        let selected = doctors.filter(d => (d.id === index))
+        setDoctor(...selected)
+        }
+        setShowPup(!showPopup);
+       console.log(index, 'index')
+    };
+/*      const fetchUserData = async => {
         const  {data: userInfo, error: errorFetchUser} = await supabase
         .from('partners')
         .select('plans(id, name')
 
-    }  */
+    }   */
 /*     useEffect(() => {
         const fetchState = async () => {
             let { data: state } = await supabase.from('states').select('*');
@@ -107,7 +114,7 @@ export default function SearchDoctors() {
             let { data: doctors } = await supabase
                 .from('medics')
                 .select(
-                    'name, lastname, email, phone_number, profilePic, address, medical_specialities(id, name)'
+                    'id, name, lastname, email, phone_number, profilePic, address, medical_specialities(id, name)'
                 );
             setDoctors(doctors);
             console.log(doctors);
@@ -182,7 +189,7 @@ const changePage = ({ selected }) => {
                     {doctors
                         .slice(pagesVisited, pagesVisited + docsPerPage)
                         .map((d) => (
-                            <button onClick={togglePopup}>
+                             <button key={d.id} onClick={ () => togglePopup(d.id)}>
                                 {' '}
                                 {`${d.name} ${d.lastname}`}
                             </button>
@@ -191,7 +198,7 @@ const changePage = ({ selected }) => {
             </FormControl>
             {showPopup && (
                 <PopUp
-                    doctors={doctors}
+                    doctor={doctor}
                     text='Cerrar'
                     closePopup={togglePopup}
                     show={showPopup}
