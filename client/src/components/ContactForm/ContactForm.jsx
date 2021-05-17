@@ -64,7 +64,6 @@ function ContactForm() {
     });
     const [successRequest, setSuccessRequest] = useState(false);
     const [errorRequest, setErrorRequest] = useState(false);
-    const [redirect, setRedirect] = useState(false);
 
     const handleClickOpen = async (e) => {
         if (
@@ -109,7 +108,6 @@ function ContactForm() {
         setErrorRequest(false);
     };
     const handleBack = () => {
-        setRedirect(true);
         setSuccessRequest(false);
     };
 
