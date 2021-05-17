@@ -6,6 +6,8 @@ import Footer from './Footer/Footer.jsx';
 import { useFirebaseApp } from 'reactfire';
 import Login from './Login/Login.jsx';
 import AdminHome from './AdminHome/AdminHome.jsx';
+import AdminPlans from './AdminPlans/AdminPlans.jsx';
+import FamilyMembers from './UserFamilyMembers/FamilyMembers.jsx';
 import FaqsPage from './Faqs/FaqsPage.jsx';
 import ContactForm from './ContactForm/ContactForm.jsx';
 import NewPlanP from './NewPlanP/NewPlanP.jsx';
@@ -33,6 +35,7 @@ function App() {
                 path='/:id/admin'
                 render={() => <AdminNav firebase={firebase} />}
             />
+            <Route exact path='/:id/admin' component={AdminHome} />
             <Route exact path='/:id/admin/medics' component={AdminMedicTabs} />
             <Route
                 exact
@@ -44,6 +47,11 @@ function App() {
                 path='/:id/admin/affiliates'
                 component={AdminAffiliate}
             />
+            <Route
+                exact
+                path='/:id/admin/plans'
+                render={() => <AdminPlans firebase={firebase} />}
+            />
             <Route exact path='/NewPlanP' component={NewPlanP} />
             <Route
                 path='/:id/affiliate'
@@ -53,6 +61,11 @@ function App() {
                 exact
                 path='/:id/affiliate'
                 render={() => <UserHome firebase={firebase} />}
+            />
+            <Route
+                exact
+                path='/:id/affiliate/familymembers'
+                component={FamilyMembers}
             />
             <Route
                 exact

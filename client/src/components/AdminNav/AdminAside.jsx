@@ -18,14 +18,12 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import HealingIcon from '@material-ui/icons/Healing';
 
-function AdminAside({ firebase, userDataFirebase }) {
+function AdminAside() {
+    const userData = JSON.parse(localStorage.getItem('userdata'));
     return (
         <aside className={styles.aside}>
             <ul className={styles.buttonsContainer}>
-                <NavLink
-                    to={`/${userDataFirebase}/admin/`}
-                    className={styles.link}
-                >
+                <NavLink to={`/${userData.dni}/admin/`} className={styles.link}>
                     <HomeIcon />
                     <li>Inicio</li>
                 </NavLink>
@@ -43,10 +41,10 @@ function AdminAside({ firebase, userDataFirebase }) {
                         <li>Solicitudes de asociacion</li>
                     </Badge>
                 </article>
-                <article>
+                <NavLink to={`/${userData.dni}/admin/plans`}>
                     <NoteIcon />
                     <li>Planes</li>
-                </article>
+                </NavLink>
                 <article>
                     <Badge
                         className={styles.notifications}
@@ -59,7 +57,7 @@ function AdminAside({ firebase, userDataFirebase }) {
                     </Badge>
                 </article>
                 <NavLink
-                    to={`/${userDataFirebase}/admin/affiliates`}
+                    to={`/${userData.dni}/admin/affiliates`}
                     className={styles.link}
                     activeClassName={styles.activeLink}
                 >
@@ -67,7 +65,7 @@ function AdminAside({ firebase, userDataFirebase }) {
                     <li>Socios</li>
                 </NavLink>
                 <NavLink
-                    to={`/${userDataFirebase}/admin/medics`}
+                    to={`/${userData.dni}/admin/medics`}
                     className={styles.link}
                     activeClassName={styles.activeLink}
                 >
