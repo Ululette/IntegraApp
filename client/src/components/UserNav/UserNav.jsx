@@ -226,7 +226,11 @@ function UserNav({ firebase }) {
                         <HomeIcon />
                         <li>Inicio</li>
                     </NavLink>
-                    <NavLink to={`/${userData.dni}/affiliate/familymembers`}>
+                    <NavLink
+                        to={`/${userData.dni}/affiliate/familymembers`}
+                        className={styles.link}
+                        activeClassName={styles.activeLink}
+                    >
                         <FaceIcon />
                         <li>Mi cuenta</li>
                     </NavLink>
