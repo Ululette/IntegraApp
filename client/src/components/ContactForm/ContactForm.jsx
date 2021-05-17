@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import { Redirect } from 'react-router-dom';
@@ -11,6 +11,7 @@ import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import Card from '@material-ui/core/Card';
+import { _reCAPTCHA_site_key_ } from '../../recaptcha.config.js'
 import supabase from '../../supabase.config';
 
 const theme = createMuiTheme({
@@ -167,10 +168,10 @@ function ContactForm() {
             }
             case 'email': {
                 inputEmailFetchCheck(value)
-                if ( !emailPattern.test(value) ) {
+                if (!emailPattern.test(value)) {
                     validateErrors = { ...errors, [inputName]: true };
                 } else {
-                    validateErrors = { ...errors, [inputName]: false};
+                    validateErrors = { ...errors, [inputName]: false };
                 }
                 break;
             }
@@ -184,7 +185,7 @@ function ContactForm() {
         const { data: emails, error: emailError } = await supabase.from('guest_contacts').select('email').eq('email', email)
         emails && console.log('emails!', emails)
         console.log(emails.length > 0)
-        setErrors({...errors, onProcess: emails.length > 0})
+        setErrors({ ...errors, onProcess: emails.length > 0 })
     }
 
     function sendEmail() {
@@ -196,6 +197,24 @@ function ContactForm() {
                 console.log('error:', error.text);
             });
     }
+
+    function onClick(e) {
+        e.preventDefault();
+        window.grecaptcha.ready(function () {
+            window.grecaptcha.execute(_reCAPTCHA_site_key_, { action: 'submit' }).then(function (token) {
+                console.log(token)
+            });
+        });
+    }
+
+    useEffect(() => {
+        // Add reCaptcha
+        const script = document.createElement("script")
+        script.src = `https://www.google.com/recaptcha/api.js?render=${_reCAPTCHA_site_key_}`
+        script.addEventListener("load", onClick)
+        document.body.appendChild(script)
+    }, [])
+
 
     // const renderRedirect = () => {
     //     if (redirect) {
@@ -378,6 +397,12 @@ function ContactForm() {
                             Éste correo ya tiene una solicitud en proceso!
                         </Alert>
                         </Snackbar>
+                        <div
+                            className="g-recaptcha"
+                            data-sitekey={_reCAPTCHA_site_key_}
+                            data-size="explicit"
+                            data-callback='onClick'
+                        ></div>
                     </div>
                 </Card>
             </ThemeProvider>
