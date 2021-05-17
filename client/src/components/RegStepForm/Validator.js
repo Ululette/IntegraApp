@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> d578cead48f67768406d6e987589be908202b8ae
 const validator = (input,tipo) =>{
     const errors={};
     let size = Object.keys(input).length;
