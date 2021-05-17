@@ -84,8 +84,8 @@ export default function MedicalDirectory() {
                     variant='fullWidth'
                     aria-label='full width tabs example'
                 >
-                    <Tab label='Favoritoss' {...a11yProps(0)} />
-                    <Tab label='Buscar medicos' {...a11yProps(1)} />
+                    <Tab label='Buscar médicos' {...a11yProps(0)} />
+                    <Tab label='Favoritos' {...a11yProps(1)} />
                     <Tab label='Buscar instituciones' {...a11yProps(2)} />
                 </Tabs>
             </AppBar>
