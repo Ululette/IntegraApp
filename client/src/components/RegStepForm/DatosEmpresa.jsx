@@ -113,103 +113,86 @@ const DatosEmpresa = () => {
 
 	return (
 		<div className={styles.form}>
-			<div className={styles.firstColumn}>
-				<label>Datos de la empresa: </label>
-				<div className={styles.input}>
-					<TextField
-						name="bussines_name"
-						label="Razon Social"
-						variant="outlined"
-						value={inputsMix.bussines_name}
-						type='text'
-						onChange={(e) => handleMixChange(e)}
-						onBlur={saveInLocalStorage}
-						{...(errors.textErrors.bussines_name && {
-							error: !!errors.textErrors.bussines_name,
-							helperText: errors.textErrors.bussines_name,
-						})}
-						
-						// error= {errors.textErrors.bussines_name && !!errors.textErrors.bussines_name}
-					/>
-				</div>
-				<div className={styles.input}>
-					<TextField
-						name="bussines_group"
-						label="Grupo Empresarial"
-						variant="outlined"
-						value={inputsMix.bussines_group}
-						onChange={(e) => handleMixChange(e)}
-						onBlur={saveInLocalStorage}
-						{...(errors.textErrors.bussines_group && {
-							error: errors.textErrors.bussines_group,
-							// helperText: errors.textErrors.bussines_group,
-						})}
-					/>
-				</div>
-				<div className={styles.input}>
-					<TextField
-						name="rh_name"
-						label="Nombre y Apellido de RRHH"
-						variant="outlined"
-						value={inputsText.rh_name}
-						onChange={(e) => handleTextChange(e)}
-						onBlur={saveInLocalStorage}
-						{...(errors.textErrors.rh_name && {
-							error: errors.textErrors.rh_name,
-							// helperText: errors.textErrors.rh_name,
-						})}
-					/>
-				</div> 
-				<div className={styles.input}>
-					<TextField
-						name="company_phone"
-						label="Telefono"
-						variant="outlined"
-						value={inputsNumber.company_phone}
-						onChange={(e) => handleNumberChange(e)}
-						onBlur={saveInLocalStorage}
-						{...(errors.textErrors.company_phone && {
-							error: errors.textErrors.company_phone,
-							// helperText: errors.textErrors.company_phone,
-						})}
-					/>
-				</div>
-				<div className={styles.input}>
-					<TextField
-						name="company_email"
-						label="E-mail"
-						variant="outlined"
-						value={inputsEmail.company_email}
-						onChange={(e) => handleEmailChange(e)}
-						onBlur={saveInLocalStorage}
-						{...(errors.textErrors.company_email && {
-							error: errors.textErrors.company_email,
-							// helperText: errors.textErrors.company_email,
-						})}
-					/>
-				</div>
+			<div className={styles.title}>
+				<h2>Datos de la empresa: </h2>
 			</div>
-			<div className={styles.secondColumn}>
-				<label>Modalidades de pago de la empresa: </label>
-				<div className={styles.input}>
-					<TextField 
-						label="Hasta un plan determinado" 
-						variant="outlined" 
-					/>
+			<div className={styles.data}>
+				<div className={styles.firstColumn}>
+					<div className={styles.input}>
+						<TextField
+							name="bussines_name"
+							label="Razon Social"
+							variant="outlined"
+							value={inputsMix.bussines_name}
+							type='text'
+							onChange={(e) => handleMixChange(e)}
+							onBlur={saveInLocalStorage}
+							{...(errors.textErrors.bussines_name && {
+								error: !!errors.textErrors.bussines_name,
+								helperText: errors.textErrors.bussines_name,
+							})}
+							
+							// error= {errors.textErrors.bussines_name && !!errors.textErrors.bussines_name}
+						/>
+					</div>
+					<div className={styles.input}>
+						<TextField
+							name="bussines_group"
+							label="Grupo Empresarial"
+							variant="outlined"
+							value={inputsMix.bussines_group}
+							onChange={(e) => handleMixChange(e)}
+							onBlur={saveInLocalStorage}
+							{...(errors.textErrors.bussines_group && {
+								error: errors.textErrors.bussines_group,
+								// helperText: errors.textErrors.bussines_group,
+							})}
+						/>
+					</div>
+					<div className={styles.input}>
+						<TextField
+							name="rh_name"
+							label="Nombre y Apellido de RRHH"
+							variant="outlined"
+							value={inputsText.rh_name}
+							onChange={(e) => handleTextChange(e)}
+							onBlur={saveInLocalStorage}
+							{...(errors.textErrors.rh_name && {
+								error: errors.textErrors.rh_name,
+								// helperText: errors.textErrors.rh_name,
+							})}
+						/>
+					</div> 
 				</div>
-				<div className={styles.input}>
-					<FormControlLabel
-						value="top"
-						control={<Checkbox color="primary" />}
-						label="Aportes de Ley"
-						labelPlacement="start"
-					/>
-				</div>
-				<div className={styles.input}>
-					<TextField 
-						label="otros"
-						variant="outlined" 
-					/>
+				<div className={styles.secondColumn}>
+					<div className={styles.input}>
+						<TextField
+							name="company_phone"
+							label="Telefono"
+							variant="outlined"
+							value={inputsNumber.company_phone}
+							onChange={(e) => handleNumberChange(e)}
+							onBlur={saveInLocalStorage}
+							{...(errors.textErrors.company_phone && {
+								error: errors.textErrors.company_phone,
+								// helperText: errors.textErrors.company_phone,
+							})}
+						/>
+					</div>
+					<div className={styles.input}>
+						<TextField
+							name="company_email"
+							label="E-mail"
+							variant="outlined"
+							value={inputsEmail.company_email}
+							onChange={(e) => handleEmailChange(e)}
+							onBlur={saveInLocalStorage}
+							{...(errors.textErrors.company_email && {
+								error: errors.textErrors.company_email,
+								// helperText: errors.textErrors.company_email,
+							})}
+						/>
+					</div>
 				</div>
 			</div>
 		</div>
