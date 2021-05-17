@@ -21,6 +21,7 @@ import UserMedRec from './UserMedRec/UserMedRec.jsx';
 import RenderPDF from './UserMedRec/RenderPDF';
 import AdminRegistration from './AdminRegistration/AdminRegistration.jsx';
 import MedicalDirectory from './AffiliateDoctors/AffiliateDoctors';
+import ComparativaP from './ComparativaP/ComparativaP.jsx';
 
 function App() {
     const firebase = useFirebaseApp();
@@ -89,6 +90,8 @@ function App() {
                 render={() => <AdminRegistration firebase={firebase} />}
             />
             <Route exact path='/' component={Footer} />
+            <Route exact path='/ComparativaP' component={ComparativaP} />
+            <Route path='/' component={Footer} />
         </>
     );
 }

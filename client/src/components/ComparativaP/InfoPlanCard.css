@@ -1,0 +1,47 @@
+.pi_card{
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  margin: 20px 10px 20px 10px;
+  background-color: white;
+  padding: 10px 30px 10px 30px;
+  border: 1px solid rgba(46,53,66,.1);
+  box-shadow:  4px 4px 7px rgb(46 53 66 / 10%), 0 9px 25px 0 rgb(46 53 66 / 5%);
+}
+.pi_card:hover {
+  box-shadow: 0 0 8px #3e3e3e;
+  transform: scale(1.005);
+}
+
+.pi_card_title{
+  align-self: center;
+  font-size: 18px;
+  color: #38948f;
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.pi_card_benef_li{
+  font-size: 14px;
+  text-align: justify;
+  margin-bottom: 10px;
+}
+
+/* ul.listunstyled{
+  font-size: 13px;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+} */
+ul.liststyled{
+  font-size: 13px;
+  padding: 0;
+  margin: 0 0 10px 5px;
+}
+
+.pi_card_price{
+  font-size: 14px;
+  text-align: right;
+  margin-bottom: 10px;
+}
