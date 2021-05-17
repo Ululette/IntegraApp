@@ -5,8 +5,6 @@ import { Badge } from '@material-ui/core';
 //Styles
 import styles from './AdminNav.module.css';
 
-// Material-UI components
-
 //Icons
 import HomeIcon from '@material-ui/icons/Home';
 import FaceIcon from '@material-ui/icons/Face';
@@ -41,7 +39,11 @@ function AdminAside() {
                         <li>Solicitudes de asociacion</li>
                     </Badge>
                 </article>
-                <NavLink to={`/${userData.dni}/admin/plans`}>
+                <NavLink
+                    to={`/${userData.dni}/admin/plans`}
+                    className={styles.link}
+                    activeClassName={styles.activeLink}
+                >
                     <NoteIcon />
                     <li>Planes</li>
                 </NavLink>
