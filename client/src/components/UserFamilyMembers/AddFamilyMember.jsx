@@ -13,6 +13,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useState } from 'react';
 import validator from '../../functions/validator.js';
+import supabase from '../../supabase.config.js';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -35,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AddFamilyMember() {
     const classes = useStyles();
-
+    const affData = JSON.parse(localStorage.getItem('affiliatedata'));
     const [errors, setErrors] = useState({});
 
     const [inputNumber, setInputsNumber] = useState({
@@ -137,8 +138,37 @@ export default function AddFamilyMember() {
         setFamilyBond(event.target.value);
     };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        let { error: errorFetchFamily } = await supabase
+            .from('partners')
+            .insert([
+                {
+                    name: inputsText.name,
+                    lastname: inputsText.lastName,
+                    birthdate: inputDate.birthdayDate,
+                    family_bond: familyBond,
+                    gender: gender.genderRad,
+                    dni: inputNumber.dni,
+                    email: inputEmail.email,
+                    phone_number: inputNumber.phoneNumber,
+                    family_group: affData.family_group,
+                    plan_id: affData.plan_id,
+                    titular: false,
+                    state: 'aceptado',
+                },
+            ]);
+        if (errorFetchFamily) {
+            console.log(errorFetchFamily);
+            alert('Error al agregar. Contacte al administrador.');
+            return null;
+        }
+        alert('Familiar agregado con exito.');
+        window.location.reload();
+    };
+
     return (
-        <form className={classes.container} noValidate>
+        <form className={classes.container} noValidate onSubmit={handleSubmit}>
             <TextField
                 onChange={handleChangeInputsText}
                 id='name'
