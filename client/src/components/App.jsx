@@ -19,6 +19,7 @@ import UserMedRec from './UserMedRec/UserMedRec.jsx';
 import RenderPDF from './UserMedRec/RenderPDF';
 import AdminRegistration from './AdminRegistration/AdminRegistration.jsx';
 import MedicalDirectory from './AffiliateDoctors/AffiliateDoctors';
+import RegStepper from './RegStepForm/RegStepper'
 
 function App() {
     const firebase = useFirebaseApp();
@@ -26,6 +27,7 @@ function App() {
         <>
             <Route exact path='/' component={NavBar} />
             <Route exact path='/' component={LandingPage} />
+            <Route exact path='/step' component={RegStepper} />
 
             <Route path='/faqs' component={FaqsPage} />
             <Route path='/login' render={() => <Login firebase={firebase} />} />

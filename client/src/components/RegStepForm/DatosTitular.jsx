@@ -6,52 +6,129 @@ import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import styles from './DatosTitular.module.css'
+import validator from './Validator'
 
 const DatosTitular = () =>{
-	const allStates = useSelector((state) => state.allStates);
-	const allLocalities = useSelector((state) => state.allLocalities);
+	const allStates = useSelector((state) => state.plans.allStates);
+	const allLocalities = useSelector((state) => state.plans.allLocalities);
     const dispatch = useDispatch();
-
-	const [input, setInput] = useState({
-        first_name: '',
+	//---CODIGO SEBA
+	const [textInputs,setTextInputs] = useState({
+		first_name: '',
 		last_name:'',
-        birth_date: '',
-		gender:'',
-        dni: '',
+		occupation:'',
+	});
+	const [textInputsNum,setInputsTextNum]= useState({
+		dni: '',
 		cuil:'',
         phone_number: '',
-		occupation:'',
-		marital_status:'',
-        mail: '',
-
-		street_name:'',
-		number:'',
+		number:''
+	})
+	const [textInputsMix,setInputsTextMix] = useState({
 		apartment:'',
+		street_name:''
+	})
+	const [dateInputs,setDateInputs] = useState({
+		birth_date: ''
+	});
+	const [selectInputs,setSelectInputs] = useState({
+		marital_status:'',
+		gender:'',
 		locality:'',//falta
-		state:null
-    });
-    const [errors, setErrors] = useState({
-        first_name: false,
-		last_name:false,
-        dni: false,
-		cuil:false,
-        phone_number: false,
-		occupation:false,
-        mail: false,
-		street_name:false,
-		number:false,
-		apartment:false
-    });
+		state:''
+	});
+	const [emailInputs, setEmailInputs] = useState({email: ''})
+	const [errors,setErrors]=useState({
+		textErrors:{
+			first_name: '',
+			last_name:'',
+			dni: '',
+			cuil:'',
+			phone_number: '',
+			occupation:'',
+			street_name:'',
+			number:'',
+			apartment:''
+		},
+		textNumErrors:{
+			dni: '',
+			cuil:'',
+			phone_number: '',
+			number:''
+		},
+		textMixErrors:{
+			apartment:'',
+			street_name:''
+		},
+		dateErrors:{birth_date: ''},
+		selectErrors:{
+			marital_status:'',
+			gender:'',
+			locality:'',//falta
+			state:''
+		},
+		emailErrors:{email:''}
+	})
+	const handleTextChange = (e) => {
+		setTextInputs(
+			{...textInputs,
+			[e.target.name]: e.target.value
+			})
+		
+		setErrors({...errors,textErrors:validator({...textInputs,[e.target.name]: e.target.value},"text")})
+	  };
+	  const handleTextNumberChange = (e) => {
+		setInputsTextNum(
+			{...textInputsNum,
+			[e.target.name]: e.target.value
+			})
+		
+		setErrors({...errors,textNumErrors:validator({...textInputsNum,[e.target.name]: e.target.value},"number")})
+	  };
+	  const handleTextMixChange = (e) => {
+		setInputsTextMix(
+			{...textInputsMix,
+			[e.target.name]: e.target.value
+			})
+		
+		setErrors({...errors,textMixErrors:validator({...textInputsMix,[e.target.name]: e.target.value},"mix")})
+	  };
+
+	const handleDateChange = (e) => {
+		setDateInputs(
+			{...dateInputs,
+			[e.target.name]: e.target.value
+			})
+		
+		setErrors({...errors,dateErrors:validator({...dateInputs,[e.target.name]: e.target.value},"date")})
+	};
+
+	const handleSelectChange = (e) => {
+		setSelectInputs(
+			{...selectInputs,
+			[e.target.name]: e.target.value
+			})
+		
+		setErrors({...errors,selectErrors:validator({...selectInputs,[e.target.name]: e.target.value},"select")})
+	};
+
+	const handleEmailChange = (e) => {
+		setEmailInputs({
+			...emailInputs,
+			[e.target.name]: e.target.value,
+		});
+		setErrors({...errors,emailErrors:validator({...emailInputs,[e.target.name]: e.target.value},"email")})
+	};
 
 	useEffect(()=>{
 		dispatch(getStates());
 		dispatch(getLocalities());
 	},[])
 	
-	// useEffect(()=>{
-	// 	console.log('useEffect '+input.state)
-	// 	dispatch(getLocalities(input.state));
-	// },[input.state])
+	useEffect(()=>{
+		//console.log('useEffect '+input.state)
+		dispatch(getLocalities(selectInputs.state));
+	},[selectInputs.state])
 
 	
 	const states = allStates.map((s)=>{
@@ -62,117 +139,12 @@ const DatosTitular = () =>{
 		
 	const localities = 
 	allLocalities
-	.filter(l=>l.state_id == input.state)
+	.filter(l=>l.state_id == selectInputs.state)
 	.map((l)=>{
 		return(
 			<option value={l.id}>{l.name}</option>
 			)
 		})
-
-	const handleInputChange = (e) => {
-		setInput({
-			...input,
-			[e.target.name]: e.target.value,
-		});
-		setErrors(
-			validate(e.target.name, e.target.value)
-		);
-	};
-			
-    function validate(inputName,value) {
-        const mailPattern =
-            /[a-zA-Z0-9]+[.]?([a-zA-Z0-9]+)?[@][a-z]{3,9}[.][a-z]{2,5}/g;
-        const namePattern = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/g;
-		const streetPattern = /^[A-Za-z0-9\s]+$/g;
-        const numberPattern = /^[0-9\b]+$/;
-        let errors = {};
-
-        switch(inputName){
-            case 'first_name':{
-                if (!namePattern.test(value) && value.length>0) {
-                    errors.first_name = true;
-                } else {
-                    errors.first_name = false;
-                }
-                break;
-            }
-            case 'last_name':{
-                if (!namePattern.test(value) && value.length>0) {
-                    errors.last_name = true;
-                } else {
-                    errors.last_name = false;
-                }
-                break;
-            }
-            case 'dni':{
-                if (!numberPattern.test(value) || value.length === 8) {
-                    errors.dni = true;
-                } else {
-                    errors.dni = false;
-                }  
-                break;     
-            }
-            case 'cuil':{
-                if (!numberPattern.test(value) || (value.length === 11)) {
-                    errors.cuil = true;
-                } else {
-                    errors.cuil = false;
-                }  
-                break;     
-            }
-            case 'phone_number':{
-                if (
-                    !numberPattern.test(value) || (value.length < 10 && value.length>7)
-                ) {
-                    errors.phone_number = true;
-                } else {
-                    errors.phone_number = false;
-                } 
-                break;     
-            }
-			case 'occupation':{
-                if (!namePattern.test(value) && value.length>0) {
-                    errors.occupation = true;
-                } else {
-                    errors.occupation = false;
-                }
-                break;
-            }
-            case 'mail':{
-                if (!mailPattern.test(value) && value.length>0) {
-                    errors.mail = true;
-                } else {
-                    errors.mail = false;
-                }
-                break;     
-            }
-			case 'street_name':{
-                if (!streetPattern.test(value) && value.length>0) {
-                    errors.street_name = true;
-                } else {
-                    errors.street_name = false;
-                }
-                break;
-            }
-			case 'number':{
-				if (!numberPattern.test(value) && (value.length>0 && value.length<8)) {
-					errors.number = true;
-                } else {
-					errors.number = false;
-                }
-                break;
-            }
-			case 'apartment':{
-				if (!streetPattern.test(value) && value.length>0) {
-					errors.apartment = true;
-				} else {
-					errors.apartment = false;
-				}
-				break;
-			}
-      default:  }
-        return errors;
-    }
 
 	return (
 		<div className={styles.form}>
@@ -186,11 +158,11 @@ const DatosTitular = () =>{
 							type='text'
 							name='first_name'
 							autoComplete='off'
-							value={input.first_name}
+							value={textInputs.first_name}
 							variant='outlined'
-							onChange={(e) => handleInputChange(e)}
-							{...(errors.first_name && {
-								error: errors.first_name,
+							onChange={(e) => handleTextChange(e)}
+							{...(errors.textErrors.first_name && {
+								error: !!errors.textErrors.first_name,
 								helperText: 'Nombre invalido',
 							})}
 						/>
@@ -202,23 +174,23 @@ const DatosTitular = () =>{
 							type='text'
 							name='last_name'
 							autoComplete='off'
-							value={input.last_name}
+							value={textInputs.last_name}
 							variant='outlined'
-							onChange={(e) => handleInputChange(e)}
-							{...(errors.last_name && {
-								error: errors.last_name,
+							onChange={(e) => handleTextChange(e)}
+							{...(errors.textErrors.last_name && {
+								error: !!errors.textErrors.last_name,
 								helperText: 'Nombre invalido',
 							})}
 						/>
 					</div>
 					<div className={styles.input}>
-						<FormControl variant="outlined" >
+						<FormControl variant="outlined" error={!selectInputs.gender}>
 							<InputLabel htmlFor="gender-select">Sexo</InputLabel>
 							<Select
 								native
-								value={input.gender}
-								onChange={(e) => handleInputChange(e)}
-								label="Sexo"
+								value={selectInputs.gender}
+								onChange={(e) => handleSelectChange(e)}
+								label="Genero"
 								inputProps={{
 									name: "gender",
 									id: "gender-select",
@@ -239,11 +211,11 @@ const DatosTitular = () =>{
 							type='tel'
 							name='dni'
 							autoComplete='off'
-							value={input.dni}
+							value={textInputsNum.dni}
 							variant='outlined'
-							onChange={(e) => handleInputChange(e)}
-							{...(errors.dni && {
-								error: true,
+							onChange={(e) => handleTextNumberChange(e)}
+							{...(errors.textNumErrors.dni && {
+								error: !!errors.textNumErrors.dni,
 								helperText: 'Dni invalido',
 							})}
 							inputProps={{ maxLength: 8 }}
@@ -252,16 +224,16 @@ const DatosTitular = () =>{
 					<div className={styles.input}>
 						<TextField
 							id='cuil-input'
-							label='Cuil'
+							label='CUIL'
 							type='tel'
 							name='cuil'
 							autoComplete='off'
-							value={input.cuil}
+							value={textInputsNum.cuil}
 							variant='outlined'
-							onChange={(e) => handleInputChange(e)}
-							{...(errors.cuil && {
-								error: true,
-								helperText: 'Edad invalido',
+							onChange={(e) => handleTextNumberChange(e)}
+							{...(errors.textNumErrors.cuil && {
+								error: !!errors.textNumErrors.cuil,
+								helperText: 'CUIL invalida.',
 							})}
 						/>
 					</div>
@@ -272,11 +244,11 @@ const DatosTitular = () =>{
 							type='tel'
 							name='phone_number'
 							autoComplete='off'
-							value={input.phone_number}
+							value={textInputsNum.phone_number}
 							variant='outlined'
-							onChange={(e) => handleInputChange(e)}
-							{...(errors.phone_number && {
-								error: true,
+							onChange={(e) => handleTextNumberChange(e)}
+							{...(errors.textNumErrors.phone_number && {
+								error: !!errors.textNumErrors.phone_number,
 								helperText: 'Teléfono invalido',
 							})}
 							inputProps={{ maxLength: 12 }}
@@ -290,14 +262,14 @@ const DatosTitular = () =>{
 							id='mail-input'
 							label='Email'
 							type='text'
-							name='mail'
+							name='email'
 							autoComplete='off'
-							value={input.mail}
+							value={setEmailInputs.email}
 							variant='outlined'
-							onChange={(e) => handleInputChange(e)}
-							{...(errors.mail && {
-								error: true,
-								helperText: 'Mail invalido',
+							onChange={(e) => handleEmailChange(e)}
+							{...(errors.emailErrors.email && {
+								error: !!errors.emailErrors.email,
+								helperText: 'Email invalido',
 							})}
 						/>
 					</div>
@@ -306,24 +278,24 @@ const DatosTitular = () =>{
 							id='occupation-input'
 							label='Ocupacion'
 							type='text'
-							name='ocupation'
+							name='occupation'
 							autoComplete='off'
-							value={input.occupation}
+							value={textInputs.occupation}
 							variant='outlined'
-							onChange={(e) => handleInputChange(e)}
-							{...(errors.occupation && {
-								error: true,
-								helperText: 'Ocupación invalida',
+							onChange={(e) => handleTextChange(e)}
+							{...(errors.textErrors.occupation && {
+								error: !!errors.textErrors.occupation,
+								helperText: 'Debe ingresar una ocupacion',
 							})}
 						/>
 					</div>
 					<div className={styles.input}>
-						<FormControl variant="outlined" >
+						<FormControl variant="outlined" error={!selectInputs.marital_status}>
 							<InputLabel htmlFor="marital_status-select">Estado civil</InputLabel>
 							<Select
 								native
-								value={input.marital_status}
-								onChange={(e) => handleInputChange(e)}
+								value={selectInputs.marital_status}
+								onChange={(e) => handleSelectChange(e)}
 								label="Estado civil"
 								
 								inputProps={{
@@ -348,8 +320,11 @@ const DatosTitular = () =>{
 							// style={{width:'177px'}}
 							InputLabelProps={{
 								shrink: true,
-								
 							}}
+							onChange={handleDateChange}
+							value={dateInputs.birth_date}
+							error={!!errors.dateErrors.birth_date}
+							helperText = {errors.dateErrors.birth_date&&errors.dateErrors.birth_date}
 						/>
 					</div>
 				</div>
@@ -363,28 +338,12 @@ const DatosTitular = () =>{
 						type='text'
 						name='street_name'
 						autoComplete='off'
-						value={input.street_name}
+						value={textInputsMix.street_name}
 						variant='outlined'
-						onChange={(e) => handleInputChange(e)}
-						{...(errors.street_name && {
-							error: true,
+						onChange={(e) => handleTextMixChange(e)}
+						{...(errors.textMixErrors.street_name && {
+							error: !!errors.textMixErrors.street_name ,
 							helperText: 'Calle invalida',
-						})}
-					/>
-				</div>
-				<div className={styles.input}>
-					<TextField
-						id='apartment-input'
-						label='Piso/Depto'
-						type='text'
-						name='apartment'
-						autoComplete='off'
-						value={input.apartment}
-						variant='outlined'
-						onChange={(e) => handleInputChange(e)}
-						{...(errors.apartment && {
-							error: true,
-							helperText: 'Piso/Depto invalido',
 						})}
 					/>
 				</div>
@@ -395,12 +354,28 @@ const DatosTitular = () =>{
 						type='text'
 						name='number'
 						autoComplete='off'
-						value={input.number}
+						value={textInputsNum.number}
 						variant='outlined'
-						onChange={(e) => handleInputChange(e)}
-						{...(errors.number && {
-							error: true,
+						onChange={(e) => handleTextNumberChange(e)}
+						{...(errors.textNumErrors.number && {
+							error: !!errors.textNumErrors.number,
 							helperText: 'Numero invalido',
+						})}
+					/>
+				</div>
+				<div className={styles.input}>
+					<TextField
+						id='apartment-input'
+						label='Piso/Depto'
+						type='text'
+						name='apartment'
+						autoComplete='off'
+						value={textInputsMix.apartment}
+						variant='outlined'
+						onChange={(e) => handleTextMixChange(e)}
+						{...(errors.textMixErrors.apartment && {
+							error: !!errors.textMixErrors.apartment,
+							helperText: 'Piso/Depto invalido',
 						})}
 					/>
 				</div>
@@ -409,8 +384,8 @@ const DatosTitular = () =>{
 						<InputLabel htmlFor="marital_status-select">Provincia</InputLabel>
 						<Select
 							native
-							value={input.state}
-							onChange={(e) => handleInputChange(e)}
+							value={selectInputs.state}
+							onChange={(e) => handleSelectChange(e)}
 							label="Provincia"
 							name='state'
 							inputProps={{
@@ -428,8 +403,8 @@ const DatosTitular = () =>{
 						<InputLabel htmlFor="locality-select">Localidad</InputLabel>
 						<Select
 							native
-							value={input.locality}
-							onChange={(e) => handleInputChange(e)}
+							value={textInputs.locality}
+							onChange={(e) => handleSelectChange(e)}
 							label="Localidad"
 							name= 'locality'
 							inputProps={{
