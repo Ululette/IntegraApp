@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-  return ["Datos del Titular","Datos de la Empresa","Declaracion Jurada","titulo4"];
+  return ["Datos del Titular","Datos de la Empresa","Resumen",];
 }
 
 function getStepContent(stepIndex) {
@@ -34,11 +34,11 @@ function getStepContent(stepIndex) {
       return <DatosTitular/> ;
     case 1:
       return <DatosEmpresa/> ;
-    case 2:
-      return <DatosSalud/>;
-    case 3: 
-      return <DatosFamiliares/>;
-    case 4: 
+    // case 2:
+    //   return <DatosSalud/>;
+    // case 3: 
+    //   return <DatosFamiliares/>;
+    case 2: 
       return <DatosRevision/>
     default:
       return 'Unknown stepIndex';

@@ -1,10 +1,4 @@
 
-// const complete = {
-//   page1:false,
-//   page2:false,
-//   page3:false,
-//   page4:false}
-
 const validator = (input,tipo) =>{
     const errors={};
     
