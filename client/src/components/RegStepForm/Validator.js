@@ -11,8 +11,8 @@ const validator = (input,tipo) =>{
                     errors[key] = "Datos invalidos,solo se admiten numeros sin puntos ni comas.";
                 }else ++contador;
         }
-        if(contador===size) errors.textNumberComplete=true;
-        else errors.textNumberComplete=false;
+        if(contador===size) errors.textNumComplete=true;
+        else errors.textNumComplete=false;
     }
 
     if (tipo==="text") {
@@ -51,8 +51,8 @@ const validator = (input,tipo) =>{
             if (!input[key]) errors[key] = "Debe seleccionar una opción";
             else ++contador
         }
-            if(contador===size) errors.Radcomplete=true
-            else errors.Radcomplete=false
+            if(contador===size) errors.radComplete=true
+            else errors.radComplete=false
     }
 
     if (tipo ==="date"){
@@ -62,8 +62,8 @@ const validator = (input,tipo) =>{
                             let aux = new Date(input[key]);
                             if( Date.now() < Date.parse(aux)){
                                 errors[key] = "Debe seleccionar una fecha anterior a la actual";
-                            }
-                        }else ++contador;
+                            }else ++contador;
+            }else ++contador;
             }
     if(contador===size) errors.dateComplete=true 
     else errors.dateComplete=false;

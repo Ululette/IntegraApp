@@ -82,7 +82,7 @@ const DatosTitular = () =>{
 				number:datosTitular.number
             })
             setInputsTextMix({
-                apartment:datosTitular.apartmen,
+                apartment:datosTitular.apartment,
 				street_name:datosTitular.street_name
             })
             setEmailInputs({
@@ -111,6 +111,9 @@ const DatosTitular = () =>{
 					...emailInputs,
 					...selectInputs
         }))
+		localStorage
+		.setItem('errorsTitular',
+		JSON.stringify({...errors}))
     }
 
 	const handleTextChange = (e) => {
@@ -150,10 +153,10 @@ const DatosTitular = () =>{
 	const handleSelectChange = (e) => {
 		setSelectInputs(
 			{...selectInputs,
-			[e.target.name]: e.target.value
+			[e.target.name]: e.target.value 
 			})
 		
-		setErrors({...errors,selectErrors:validator({...selectInputs,[e.target.name]: e.target.value},"select")})
+		setErrors({...errors,selectErrors:validator({...selectInputs,[e.target.name]: e.target.value},"radio")})
 	};
 
 	const handleEmailChange = (e) => {
@@ -177,19 +180,20 @@ const DatosTitular = () =>{
 	
 	const states = allStates.map((s)=>{
 		return(
-			<option value={s.id}>{s.name}</option>
+			<option value={`${s.id}-${s.name}`}>{s.name}</option>
 			)
 		})
-		
+	//1-buenos aires
 	const localities = 
 	allLocalities
-	.filter(l=>l.state_id == selectInputs.state)
+	.filter(l=>l.state_id == selectInputs.state.split('-')[0])
 	.map((l)=>{
 		return(
-			<option value={l.id}>{l.name}</option>
+			<option value={`${l.id}-${l.name}`}>{l.name}</option>
 			)
+		
 		})
-
+		console.log('localities',localities)		
 	return (
 		<div className={styles.form}>
 			<div className={styles.personalData}>
@@ -230,7 +234,7 @@ const DatosTitular = () =>{
 						/>
 					</div>
 					<div className={styles.input}>
-						<FormControl variant="outlined" error={!selectInputs.gender&&true}>
+						<FormControl variant="outlined" error={errors.selectErrors.gender}>
 							<InputLabel htmlFor="gender-select">Sexo</InputLabel>
 							<Select
 								native
@@ -315,7 +319,7 @@ const DatosTitular = () =>{
 							type='text'
 							name='email'
 							autoComplete='off'
-							value={setEmailInputs.email}
+							value={emailInputs.email}
 							variant='outlined'
 							onChange={(e) => handleEmailChange(e)}
 							{...(errors.emailErrors.email && {
@@ -343,7 +347,7 @@ const DatosTitular = () =>{
 						/>
 					</div>
 					<div className={styles.input}>
-						<FormControl variant="outlined" error={!selectInputs.marital_status}>
+						<FormControl variant="outlined" error={errors.selectErrors.marital_status}>
 							<InputLabel htmlFor="marital_status-select">Estado civil</InputLabel>
 							<Select
 								native
@@ -446,6 +450,9 @@ const DatosTitular = () =>{
 							onChange={(e) => handleSelectChange(e)}
 							label="Provincia"
 							name='state'
+							InputLabelProps={{
+								shrink: true,
+							}}
 							inputProps={{
 								id: 'state-select',
 								style:{width:'177px'}
@@ -466,9 +473,12 @@ const DatosTitular = () =>{
 							onChange={(e) => handleSelectChange(e)}
 							label="Localidad"
 							name= 'locality'
+							InputLabelProps={{
+								shrink: true,
+							}}
 							inputProps={{
 								id: 'locality-select',
-								style:{width:'177px'}
+								style:{width:'177px'},
 							}}
 							onBlur={saveInLocalStorage}
 						>

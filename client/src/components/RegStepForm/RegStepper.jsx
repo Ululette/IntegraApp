@@ -50,11 +50,35 @@ export default function RegStepper() {
   const [activeStep, setActiveStep] = useState(0);
   const steps = getSteps();
 
+  const errorsT =  JSON.parse(localStorage.getItem('errorsTitular'));
+  // const algo = ()=>{
+
+  //   if(errorsT){
+      
+  //   }
+  // }
+  // algo();
+
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    console.log('errorsT',!!errorsT)
+    console.log('step',!!activeStep)
+    // if(errorsT){
+    //   const {dateErrors,emailErrors,selectErrors,textErrors,textMixErrors,textNumErrors} = JSON.parse(localStorage.getItem('errorsTitular'))
+    //  if(dateErrors.dateComplete && emailErrors.emailComplete && 
+    //   selectErrors.radComplete && textErrors.textComplete &&
+    //   textMixErrors.textMixComplete && textNumErrors.textNumComplete 
+    //   && activeStep===0){
+
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    //   }
+      
+    //   else alert('debe completar los datos.')
+    // }
+    
   };
 
   const handleBack = () => {
+    const {dateErrors,emailErrors,selectErrors,textErrors,textMixErrors,textNumErrors} = JSON.parse(localStorage.getItem('errorsTitular'))
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
