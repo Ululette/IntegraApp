@@ -100,6 +100,8 @@ function AdminMedicAdd({ medicSpecialities }) {
             //         },
             //     ]);
             // }
+            alert('Se agrego al medico con exito.');
+            window.location.reload();
         } catch (error) {
             console.log(error);
             alert('Error. (ver en consola)');

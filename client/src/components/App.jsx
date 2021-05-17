@@ -11,7 +11,7 @@ import ContactForm from './ContactForm/ContactForm.jsx';
 import NewPlanP from './NewPlanP/NewPlanP.jsx';
 import AdminNav from './AdminNav/AdminNav';
 import UserNav from './UserNav/UserNav.jsx';
-import AdminMedic from './AdminMedics/AdminMedics';
+import AdminMedicTabs from './MedicsTable/AdminTabs';
 import UserHome from './UserHome/UserHome.jsx';
 import AdminAffiliate from './AdminAffiliate/AdminAffiliate.jsx';
 import FormSpecialities from './Speciality/FormSpecialities.jsx';
@@ -33,7 +33,7 @@ function App() {
                 path='/:id/admin'
                 render={() => <AdminNav firebase={firebase} />}
             />
-            <Route exact path='/:id/admin/medics' component={AdminMedic} />
+            <Route exact path='/:id/admin/medics' component={AdminMedicTabs} />
             <Route
                 exact
                 path='/:id/admin/specialities'

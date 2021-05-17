@@ -5,6 +5,7 @@ import supabase from '../../supabase.config.js';
 import CloseIcon from '@material-ui/icons/Close';
 
 function AdminMedicEdit({ medicData, medicSpecialities, setEditActive }) {
+    console.log(medicData);
     let [input, setInput] = useState({
         name: medicData.name,
         lastname: medicData.lastname,

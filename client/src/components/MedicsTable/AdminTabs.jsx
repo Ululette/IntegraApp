@@ -6,16 +6,15 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import TextField from '@material-ui/core/TextField';
-import MedicsTable from "./MedicsTable"
-import FormSpecialities from "../Speciality/FormSpecialities"
+import MedicsTable from './MedicsTable';
+import FormSpecialities from '../Speciality/FormSpecialities';
 
 function TabPanel(props) {
     const { children, value, index } = props;
 
     return (
         <div
-            role="tabpanel"
+            role='tabpanel'
             hidden={value !== index}
             id={`simple-tabpanel-${index}`}
             aria-labelledby={`wrapped-tab-${index}`}
@@ -42,7 +41,7 @@ function a11yProps(index) {
     };
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         marginTop: '0%',
         alignItems: 'center',
@@ -53,26 +52,23 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'space-around',
         width: '100%',
         flexGrow: -1,
-        backgroundColor: theme.palette.background.paper,
     },
     tab: {
         position: 'relative',
-        marginTop: '-33%',
-        marginBottom: '1%',
         alignItems: 'flex-start',
         backgroundColor: '#4ca1a3',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-betwen',
-        height:'min-content',
+        height: 'min-content',
         width: 'min-content',
         flexGrow: -1,
-        flexWrap: 'wrap'
-    }
+        flexWrap: 'wrap',
+    },
 }));
 
 export default function AdminMedicTabs(props) {
-    const { listMedics } = props
+    const { listMedics } = props;
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 
@@ -82,18 +78,22 @@ export default function AdminMedicTabs(props) {
 
     return (
         <div className={classes.root}>
-            <AppBar bgcolor="background.paper" className={classes.tab} >
-                <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" >
-                    <Tab label="Medics" {...a11yProps(0)} />
-                    <Tab label="Specialties" {...a11yProps(1)} />
+            <AppBar bgcolor='background.paper' className={classes.tab}>
+                <Tabs
+                    value={value}
+                    onChange={handleChange}
+                    aria-label='simple tabs example'
+                >
+                    <Tab label='Medicos' {...a11yProps(0)} />
+                    <Tab label='Especialidades' {...a11yProps(1)} />
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
-             <MedicsTable rows={listMedics}/>
+                <MedicsTable />
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <FormSpecialities />
+                <FormSpecialities />
             </TabPanel>
         </div>
     );
-}   
+}
