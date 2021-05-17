@@ -7,11 +7,12 @@ const DatosRevision = () =>{
 	const datosTitular = JSON.parse(localStorage.getItem('datosTitular'));
 	const datosEmpresa = JSON.parse(localStorage.getItem('datosEmpresa'));
 
+
 	return (
 		<div className={styles.form}>
 
 			<div className={styles.title}>
-				<h1>Revision de Datos</h1>
+				<h1>Revision de Datos </h1>
 			</div>
 
 			<div className={styles.datos}>
@@ -45,7 +46,7 @@ const DatosRevision = () =>{
 					<h4>E-mail:{datosEmpresa.company_email}</h4>
 				</div>
 			</div>
-		</div>
+		</div> 
 		)
 }
 export default DatosRevision
