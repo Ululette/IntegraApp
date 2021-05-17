@@ -1,0 +1,39 @@
+.form{
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-around; */
+    margin:20px;
+    width: 80%;
+    height: 470px;
+    /* margin:10px; */
+    /* align-items: center; */
+}
+
+.title{
+    display: flex;
+    margin-left:13%;
+    padding-bottom: 20px;
+}
+
+
+.data{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.firstColumn{
+    display: flex;
+    flex-direction: column;
+}
+
+.secondColumn{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+}
+
+.input{
+    padding-top:10px;
+    padding-bottom: 10px;
+}

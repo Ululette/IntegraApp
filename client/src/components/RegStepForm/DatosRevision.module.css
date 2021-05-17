@@ -1,0 +1,33 @@
+.form{
+    display: flex;
+    flex-direction:column;
+    margin:20px;
+    width: 80%;
+    height: 470px;
+}
+
+.datos{
+    display: flex;
+    flex-direction:row;
+    justify-content:space-around;
+    margin:20px;
+}
+
+.title{
+    display: flex;
+    margin-left:13%;
+}
+
+.datosTitular{
+    display: flex;
+    flex-direction:row;
+}
+.firstColumn{
+    display: flex;
+    flex-direction:column;
+}
+
+.datosEmpresa{
+    display: flex;
+    flex-direction:column;
+}
