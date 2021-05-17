@@ -8,6 +8,9 @@ import { teal } from '@material-ui/core/colors';
 
 export default function InfoPlanes() {
     const [news, setNews] = useState([]);
+    const [currCard, setCurrCard] = useState(0);
+    const [shouldAutoSlide,setAutoSlide] = useState(true);
+
     useEffect(() => {
         const fetchNews = async () => {
             let { data: news } = await supabase.from('news').select('*');
@@ -15,19 +18,35 @@ export default function InfoPlanes() {
         };
         fetchNews();
     }, []);
-
-    const [currCard, setCurrCard] = useState(0);
-
+    
     if (news.length === 0) return <h1>Cargando...</h1>;
-
+    
     const leftNeww = news[currCard > 1 ? currCard - 1 : news.length - 1];
     const neww = news[currCard];
     const rightNeww = news[currCard < news.length - 1 ? currCard + 1 : 0];
 
-    const forward = () =>
+    const forward = () =>{
+        if(shouldAutoSlide){
+            setAutoSlide(false);
+        }
         currCard < news.length - 1 ? setCurrCard(currCard + 1) : setCurrCard(0);
-    const back = () =>
+    }
+    const back = () =>{
+        if(shouldAutoSlide){
+            setAutoSlide(false);
+        }
         currCard > 0 ? setCurrCard(currCard - 1) : setCurrCard(news.length - 1);
+    }
+    
+    const autoSlide=()=>{
+        currCard < news.length - 1 ? setCurrCard(currCard + 1) : setCurrCard(0);
+    }
+
+    setTimeout(()=>{
+        if(shouldAutoSlide){
+            autoSlide()
+        }
+    },2000);
 
     return (
         <div className={styles.carousel}>

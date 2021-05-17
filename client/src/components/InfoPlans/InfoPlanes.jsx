@@ -16,22 +16,42 @@ function InfoPlanes() {
         dispatch(getPlans());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+    const [shouldAutoSlide, setAutoSlide] = useState(true);
+
+    useEffect(() => {
+        dispatch(getPlans());
+    }, []);
 
     const forward = () => {
+        if (shouldAutoSlide) {
+            setAutoSlide(false);
+        }
         currCard < plans.length - 1
             ? setCurrCard(currCard + 1)
             : setCurrCard(0);
     };
 
     const back = () => {
+        if (shouldAutoSlide) {
+            setAutoSlide(false);
+        }
         currCard > 0
             ? setCurrCard(currCard - 1)
             : setCurrCard(plans.length - 1);
     };
 
-    console.log(plans);
-
     if (plans.length === 0) return <CircularProgress />;
+    const autoSlide = () => {
+        currCard < plans.length - 1
+            ? setCurrCard(currCard + 1)
+            : setCurrCard(0);
+    };
+
+    setTimeout(() => {
+        if (shouldAutoSlide) {
+            autoSlide();
+        }
+    }, 2000);
 
     const leftPlan = plans[currCard > 1 ? currCard - 1 : plans.length - 1];
     const plan = plans[currCard];

@@ -263,9 +263,9 @@
   align-items: center;
   margin: 20px;
   padding: 20px;
-  width: 800px;
+  /* width: 800px; */
+  width: 100%;
   height: fit-content;
-
 
 }
 
