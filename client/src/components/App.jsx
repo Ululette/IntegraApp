@@ -22,6 +22,7 @@ import RenderPDF from './UserMedRec/RenderPDF';
 import AdminRegistration from './AdminRegistration/AdminRegistration.jsx';
 import MedicalDirectory from './AffiliateDoctors/AffiliateDoctors';
 import ComparativaP from './ComparativaP/ComparativaP.jsx';
+import UserProfile from './UserProfile/UserProfile.jsx';
 
 function App() {
     const firebase = useFirebaseApp();
@@ -78,6 +79,11 @@ function App() {
                 path='/:id/mymedicalrecords/pdf'
                 render={() => <RenderPDF firebase={firebase} />}
             />
+            <Route
+                exact
+                path='/:id/affiliate/profile'
+                render={() => <UserProfile firebase={firebase} />}
+            />
             <Route exact path='/asociate' component={ContactForm} />
             <Route
                 exact
@@ -90,7 +96,7 @@ function App() {
                 render={() => <AdminRegistration firebase={firebase} />}
             />
             <Route exact path='/' component={Footer} />
-            <Route exact path='/ComparativaP' component={ComparativaP} />
+            <Route exact path='/plandetails' component={ComparativaP} />
             <Route path='/' component={Footer} />
         </>
     );
