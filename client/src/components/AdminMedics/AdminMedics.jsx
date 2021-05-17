@@ -4,6 +4,7 @@ import 'firebase/auth';
 import AdminMedicEdit from './AdminMedicEdit.jsx';
 import AdminMedicAdd from './AdminMedicAdd.jsx';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import AdminTabs from "../MedicsTable/AdminTabs"
 
 //styles
 import styles from './AdminMedic.module.css';
@@ -66,7 +67,8 @@ function AdminMedic() {
 
     return (
         <div className={styles.container}>
-            <h2>Lista de medicos</h2>
+            <AdminTabs listMedics={listMedics} />
+            {/* <h2>Lista de medicos</h2>
             <ul>
                 {listMedics.map((el, index) => (
                     <li
@@ -129,7 +131,7 @@ function AdminMedic() {
                     setEditActive={setEditActive}
                 />
             ) : null}
-            <AdminMedicAdd medicSpecialities={medicSpecialities} />
+            <AdminMedicAdd medicSpecialities={medicSpecialities} /> */}
         </div>
     );
 }
