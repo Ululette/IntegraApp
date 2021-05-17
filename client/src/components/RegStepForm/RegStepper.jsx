@@ -125,6 +125,7 @@ export default function RegStepper() {
 
   const handleReset = () => {
     setActiveStep(0);
+    localStorage.clear();
   };
 
   return (
