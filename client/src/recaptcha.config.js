@@ -1,1 +1,0 @@
-export const _reCAPTCHA_site_key_ ='6Lee79gaAAAAACvwRaqbtnFTebHHo2_SmppuTuPf';
