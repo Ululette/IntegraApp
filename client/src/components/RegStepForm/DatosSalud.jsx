@@ -69,36 +69,37 @@ otherPatD: ""
     bloodTransDate: "",
     treatmentDate: "",
   });
+  const [checkInputs, setcheckInputs] = useState({})
   const [errors, setErrors] = useState({
-    dateErrors:{
-      dateSurgery: "",
-      prosthesisDate: "",
-      psychhospitalizationDate: "",
-      hospitalizationnDate: "",
-      medicalStudiesDate: "",
-      bloodTransDate: "",
-      treatmentDate: "",
-    },
-    radioErrors:{
-      surgeryRad: "",
-      paceMakerRad: "",
-      prosthesisRad: "",
-      psychiatricRad: "",
-      psychActuallyRad: "",
-      hospitalizationRad: "",
-      otherTreatmentsRad: "",
-      medicalResultsRad: "",
-      hereditaryDiseasesRad: "",
-      bloodTransRad: "",
-      pregnantRad: "",
-      studiesSixMonthsRad: "",
-      visionHearingRad: "",
-      diabetesRad: "",
-      adictionsRad: "",
-      treatmentAdictionsRad: "",
-      eatingDisordersRad: "",
-      otherPatRad: "",
-    }
+    // dateErrors:{
+    //   dateSurgery: "",
+    //   prosthesisDate: "",
+    //   psychhospitalizationDate: "",
+    //   hospitalizationnDate: "",
+    //   medicalStudiesDate: "",
+    //   bloodTransDate: "",
+    //   treatmentDate: "",
+    // },
+    // radioErrors:{
+    //   surgeryRad: "",
+    //   paceMakerRad: "",
+    //   prosthesisRad: "",
+    //   psychiatricRad: "",
+    //   psychActuallyRad: "",
+    //   hospitalizationRad: "",
+    //   otherTreatmentsRad: "",
+    //   medicalResultsRad: "",
+    //   hereditaryDiseasesRad: "",
+    //   bloodTransRad: "",
+    //   pregnantRad: "",
+    //   studiesSixMonthsRad: "",
+    //   visionHearingRad: "",
+    //   diabetesRad: "",
+    //   adictionsRad: "",
+    //   treatmentAdictionsRad: "",
+    //   eatingDisordersRad: "",
+    //   otherPatRad: "",
+    // }
   });
   // const [errorsDate,setErrorsDate] = useState({})
   const handleChange = (e) => {
@@ -108,7 +109,7 @@ otherPatD: ""
         [e.target.name]: e.target.value,
       };
     });
-    // setErrors({...errors,textErrors:validator({...inputs,[e.target.name]: e.target.value},"text")})
+     setErrors({...errors,textErrors:validator({...inputs,[e.target.name]: e.target.value},"text")})
   };
   const handleRadioInputs = (e) => {
     SetRadioInputs((prevState) => {
@@ -127,7 +128,7 @@ otherPatD: ""
         [e.target.name]: (e.target.value),
       };
     });
-    setErrors({...errors,dateErrors:validator({...radioInputs,[e.target.name]: e.target.value},"date")})
+    setErrors({...errors,dateErrors:validator({...dateInputs,[e.target.name]: e.target.value},"date")})
   };
   // const labigfuncion = ()=>{
   //   setErrors({...errors,dateErrors:validator(dateInputs,"date")})
@@ -149,6 +150,9 @@ otherPatD: ""
           value={inputs.completeName}
           onChange={handleChange}
           
+          error={checkInputs.accept&&errors.input}
+          helperText= "Apretaste cualquiera"
+        
         />
         <TextField
           name="dni"
@@ -192,8 +196,6 @@ otherPatD: ""
               }}
               onChange={handleDate}
               value={dateInputs.dateSurgery}
-              error={!!errors.dateErrors.dateSurgery}
-              helperText = {errors.dateErrors.dateSurgery&&errors.dateErrors.dateSurgery}
             />
             <TextField
               name="surgeryDiagnosis"
@@ -715,8 +717,13 @@ otherPatD: ""
 
       <div>
         <Checkbox
+          name= "accept"
           color="primary"
           inputProps={{ "aria-label": "secondary checkbox" }}
+          onChange= {(e)=>setcheckInputs({
+            [e.target.name] : e.target.checked
+          })}
+          
         />
         <FormLabel component="legend">
     

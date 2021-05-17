@@ -1,3 +1,5 @@
+
+
 const validator = (input,tipo) =>{
     const errors={};
     let size = Object.keys(input).length;
@@ -69,4 +71,4 @@ const validator = (input,tipo) =>{
     }
     return errors;
 }
-export default validator; 
+export default validator;

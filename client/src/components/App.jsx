@@ -30,6 +30,7 @@ function App() {
             <Route exact path='/step' component={RegStepper} />
 
             <Route path='/faqs' component={FaqsPage} />
+            <Route path='/step' component={RegStepper} />
             <Route path='/login' render={() => <Login firebase={firebase} />} />
             <Route
                 path='/:id/admin'

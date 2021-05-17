@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getStates, getLocalities} from '../../actions/getter.action';
+// import { getStates, getLocalities} from '../../actions/getter.action';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -120,10 +120,10 @@ const DatosTitular = () =>{
 		setErrors({...errors,emailErrors:validator({...emailInputs,[e.target.name]: e.target.value},"email")})
 	};
 
-	useEffect(()=>{
-		dispatch(getStates());
-		dispatch(getLocalities());
-	},[])
+	// useEffect(()=>{
+	// 	dispatch(getStates());
+	// 	dispatch(getLocalities());
+	// },[])
 	
 	useEffect(()=>{
 		//console.log('useEffect '+input.state)
@@ -131,11 +131,11 @@ const DatosTitular = () =>{
 	},[selectInputs.state])
 
 	
-	const states = allStates.map((s)=>{
-		return(
-			<option value={s.id}>{s.name}</option>
-			)
-		})
+	// const states = allStates.map((s)=>{
+	// 	return(
+	// 		<option value={s.id}>{s.name}</option>
+	// 		)
+	// 	})
 		
 	const localities = 
 	allLocalities
@@ -382,7 +382,7 @@ const DatosTitular = () =>{
 				<div className={styles.input}>
 					<FormControl variant="outlined" >
 						<InputLabel htmlFor="marital_status-select">Provincia</InputLabel>
-						<Select
+						{/* <Select
 							native
 							value={selectInputs.state}
 							onChange={(e) => handleSelectChange(e)}
@@ -395,13 +395,13 @@ const DatosTitular = () =>{
 						>
 							<option aria-label="None" value="" />
 							{states}
-						</Select>
+						</Select> */}
 					</FormControl>
 				</div>
 				<div className={styles.input}>
 					<FormControl variant="outlined" >
 						<InputLabel htmlFor="locality-select">Localidad</InputLabel>
-						<Select
+						{/* <Select
 							native
 							value={textInputs.locality}
 							onChange={(e) => handleSelectChange(e)}
@@ -414,7 +414,7 @@ const DatosTitular = () =>{
 						>
 							<option aria-label="None" value="" />
 							{localities}
-						</Select>
+						</Select> */}
 					</FormControl>
 				</div>
 			</div>
