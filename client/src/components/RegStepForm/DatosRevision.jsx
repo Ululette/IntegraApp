@@ -32,8 +32,8 @@ const DatosRevision = () =>{
 						<h4>Calle: {datosTitular.street_name}</h4>
 						<h4>Numero: {datosTitular.number}</h4>
 						<h4>Piso/Depto: {datosTitular.apartment}</h4>
-						<h4>Provincia: </h4>
-						<h4>Localidad: </h4>
+						<h4>Provincia:  {datosTitular.state.split("-")[1]}</h4>
+						<h4>Localidad: {datosTitular.locality.split("-")[1]}</h4>
 					</div>
 				</div>
 				<div className={styles.datosEmpresa}>
