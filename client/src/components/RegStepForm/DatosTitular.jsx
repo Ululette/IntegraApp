@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-// import { getStates, getLocalities} from '../../actions/getter.action';
+import { getStates, getLocalities} from '../../actions/getter.action';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -16,7 +16,7 @@ const DatosTitular = () =>{
 	const [textInputs,setTextInputs] = useState({
 		first_name: '',
 		last_name:'',
-		occupation:'',
+		occupation:''
 	});
 	const [textInputsNum,setInputsTextNum]= useState({
 		dni: '',
@@ -34,20 +34,17 @@ const DatosTitular = () =>{
 	const [selectInputs,setSelectInputs] = useState({
 		marital_status:'',
 		gender:'',
-		locality:'',//falta
-		state:''
+		state:'',
+		locality:''
+		
 	});
 	const [emailInputs, setEmailInputs] = useState({email: ''})
 	const [errors,setErrors]=useState({
 		textErrors:{
 			first_name: '',
 			last_name:'',
-			dni: '',
-			cuil:'',
-			phone_number: '',
 			occupation:'',
 			street_name:'',
-			number:'',
 			apartment:''
 		},
 		textNumErrors:{
@@ -69,6 +66,53 @@ const DatosTitular = () =>{
 		},
 		emailErrors:{email:''}
 	})
+
+	useEffect(() => {
+        let datosTitular = JSON.parse(localStorage.getItem('datosTitular')) 
+        if(datosTitular){
+            setTextInputs({
+                first_name: datosTitular.first_name,
+				last_name:datosTitular.last_name,
+				occupation:datosTitular.occupation
+            })
+            setInputsTextNum({
+                dni: datosTitular.dni,
+				cuil:datosTitular.cuil,
+				phone_number: datosTitular.phone_number,
+				number:datosTitular.number
+            })
+            setInputsTextMix({
+                apartment:datosTitular.apartmen,
+				street_name:datosTitular.street_name
+            })
+            setEmailInputs({
+				email:datosTitular.email
+            })
+			setDateInputs({
+				birth_date:datosTitular.birth_date
+			})
+			setSelectInputs({
+				marital_status:datosTitular.marital_status,
+				gender:datosTitular.gender,
+				locality:datosTitular.locality,//falta
+				state:datosTitular.state
+			})
+        }
+    }, []);
+
+	function saveInLocalStorage(){
+        localStorage
+        .setItem('datosTitular', 
+                JSON.stringify({
+                    ...textInputs,
+                    ...textInputsNum,
+                    ...textInputsMix,
+                    ...dateInputs,
+					...emailInputs,
+					...selectInputs
+        }))
+    }
+
 	const handleTextChange = (e) => {
 		setTextInputs(
 			{...textInputs,
@@ -76,7 +120,7 @@ const DatosTitular = () =>{
 			})
 		
 		setErrors({...errors,textErrors:validator({...textInputs,[e.target.name]: e.target.value},"text")})
-	  };
+	};
 	  const handleTextNumberChange = (e) => {
 		setInputsTextNum(
 			{...textInputsNum,
@@ -84,7 +128,7 @@ const DatosTitular = () =>{
 			})
 		
 		setErrors({...errors,textNumErrors:validator({...textInputsNum,[e.target.name]: e.target.value},"number")})
-	  };
+	};
 	  const handleTextMixChange = (e) => {
 		setInputsTextMix(
 			{...textInputsMix,
@@ -92,7 +136,7 @@ const DatosTitular = () =>{
 			})
 		
 		setErrors({...errors,textMixErrors:validator({...textInputsMix,[e.target.name]: e.target.value},"mix")})
-	  };
+	};
 
 	const handleDateChange = (e) => {
 		setDateInputs(
@@ -120,10 +164,10 @@ const DatosTitular = () =>{
 		setErrors({...errors,emailErrors:validator({...emailInputs,[e.target.name]: e.target.value},"email")})
 	};
 
-	// useEffect(()=>{
-	// 	dispatch(getStates());
-	// 	dispatch(getLocalities());
-	// },[])
+	useEffect(()=>{
+		dispatch(getStates());
+		dispatch(getLocalities());
+	},[])
 	
 	useEffect(()=>{
 		//console.log('useEffect '+input.state)
@@ -131,11 +175,11 @@ const DatosTitular = () =>{
 	},[selectInputs.state])
 
 	
-	// const states = allStates.map((s)=>{
-	// 	return(
-	// 		<option value={s.id}>{s.name}</option>
-	// 		)
-	// 	})
+	const states = allStates.map((s)=>{
+		return(
+			<option value={s.id}>{s.name}</option>
+			)
+		})
 		
 	const localities = 
 	allLocalities
@@ -165,6 +209,7 @@ const DatosTitular = () =>{
 								error: !!errors.textErrors.first_name,
 								helperText: 'Nombre invalido',
 							})}
+							onBlur={saveInLocalStorage}
 						/>
 					</div>
 					<div className={styles.input}>
@@ -181,10 +226,11 @@ const DatosTitular = () =>{
 								error: !!errors.textErrors.last_name,
 								helperText: 'Nombre invalido',
 							})}
+							onBlur={saveInLocalStorage}
 						/>
 					</div>
 					<div className={styles.input}>
-						<FormControl variant="outlined" error={!selectInputs.gender}>
+						<FormControl variant="outlined" error={!selectInputs.gender&&true}>
 							<InputLabel htmlFor="gender-select">Sexo</InputLabel>
 							<Select
 								native
@@ -196,11 +242,13 @@ const DatosTitular = () =>{
 									id: "gender-select",
 									style:{width:'177px'}
 								}}
+								onBlur={saveInLocalStorage}
 							>
 								<option aria-label="None" value="" />
 								<option value={"male"}>Masculino</option>
 								<option value={"female"}>Femenino</option>
 								<option value={"other"}>Otro</option>
+						
 							</Select>
 						</FormControl>
 					</div>
@@ -208,7 +256,7 @@ const DatosTitular = () =>{
 						<TextField
 							id='dni-input'
 							label='DNI'
-							type='tel'
+							type='text'
 							name='dni'
 							autoComplete='off'
 							value={textInputsNum.dni}
@@ -219,13 +267,14 @@ const DatosTitular = () =>{
 								helperText: 'Dni invalido',
 							})}
 							inputProps={{ maxLength: 8 }}
+							onBlur={saveInLocalStorage}
 						/>
 					</div>
 					<div className={styles.input}>
 						<TextField
 							id='cuil-input'
 							label='CUIL'
-							type='tel'
+							type='text'
 							name='cuil'
 							autoComplete='off'
 							value={textInputsNum.cuil}
@@ -235,13 +284,14 @@ const DatosTitular = () =>{
 								error: !!errors.textNumErrors.cuil,
 								helperText: 'CUIL invalida.',
 							})}
+							onBlur={saveInLocalStorage}
 						/>
 					</div>
 					<div className={styles.input}>
 						<TextField
 							id='phone-input'
 							label='Teléfono'
-							type='tel'
+							type='text'
 							name='phone_number'
 							autoComplete='off'
 							value={textInputsNum.phone_number}
@@ -252,6 +302,7 @@ const DatosTitular = () =>{
 								helperText: 'Teléfono invalido',
 							})}
 							inputProps={{ maxLength: 12 }}
+							onBlur={saveInLocalStorage}
 						/>
 					</div>
 				</div>
@@ -271,6 +322,7 @@ const DatosTitular = () =>{
 								error: !!errors.emailErrors.email,
 								helperText: 'Email invalido',
 							})}
+							onBlur={saveInLocalStorage}
 						/>
 					</div>
 					<div className={styles.input}>
@@ -287,6 +339,7 @@ const DatosTitular = () =>{
 								error: !!errors.textErrors.occupation,
 								helperText: 'Debe ingresar una ocupacion',
 							})}
+							onBlur={saveInLocalStorage}
 						/>
 					</div>
 					<div className={styles.input}>
@@ -303,6 +356,7 @@ const DatosTitular = () =>{
 									id: 'marital_status-select',
 									style:{width:'177px'}
 								}}
+								onBlur={saveInLocalStorage}
 							>
 								<option aria-label="None" value="" />
 								<option value={"married"}>Casado/a</option>
@@ -325,6 +379,7 @@ const DatosTitular = () =>{
 							value={dateInputs.birth_date}
 							error={!!errors.dateErrors.birth_date}
 							helperText = {errors.dateErrors.birth_date&&errors.dateErrors.birth_date}
+							onBlur={saveInLocalStorage}
 						/>
 					</div>
 				</div>
@@ -345,6 +400,7 @@ const DatosTitular = () =>{
 							error: !!errors.textMixErrors.street_name ,
 							helperText: 'Calle invalida',
 						})}
+						onBlur={saveInLocalStorage}
 					/>
 				</div>
 				<div className={styles.input}>
@@ -361,6 +417,7 @@ const DatosTitular = () =>{
 							error: !!errors.textNumErrors.number,
 							helperText: 'Numero invalido',
 						})}
+						onBlur={saveInLocalStorage}
 					/>
 				</div>
 				<div className={styles.input}>
@@ -377,12 +434,13 @@ const DatosTitular = () =>{
 							error: !!errors.textMixErrors.apartment,
 							helperText: 'Piso/Depto invalido',
 						})}
+						onBlur={saveInLocalStorage}
 					/>
 				</div>
 				<div className={styles.input}>
 					<FormControl variant="outlined" >
 						<InputLabel htmlFor="marital_status-select">Provincia</InputLabel>
-						{/* <Select
+						<Select
 							native
 							value={selectInputs.state}
 							onChange={(e) => handleSelectChange(e)}
@@ -392,18 +450,19 @@ const DatosTitular = () =>{
 								id: 'state-select',
 								style:{width:'177px'}
 							}}
+							onBlur={saveInLocalStorage}
 						>
 							<option aria-label="None" value="" />
 							{states}
-						</Select> */}
+						</Select>
 					</FormControl>
 				</div>
 				<div className={styles.input}>
 					<FormControl variant="outlined" >
 						<InputLabel htmlFor="locality-select">Localidad</InputLabel>
-						{/* <Select
+						<Select
 							native
-							value={textInputs.locality}
+							value={selectInputs.locality}
 							onChange={(e) => handleSelectChange(e)}
 							label="Localidad"
 							name= 'locality'
@@ -411,10 +470,11 @@ const DatosTitular = () =>{
 								id: 'locality-select',
 								style:{width:'177px'}
 							}}
+							onBlur={saveInLocalStorage}
 						>
 							<option aria-label="None" value="" />
 							{localities}
-						</Select> */}
+						</Select>
 					</FormControl>
 				</div>
 			</div>

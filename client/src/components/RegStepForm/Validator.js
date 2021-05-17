@@ -7,7 +7,7 @@ const validator = (input,tipo) =>{
     
     if (tipo==="number") {
         for (const key in input) {
-                if (!/^\d*$/.test(input[key])){//comprabar que solo haya numeros sin otros caracter
+                if (!/^\d*$/.test(input[key])||!input[key]){//comprabar que solo haya numeros sin otros caracter
                     errors[key] = "Datos invalidos,solo se admiten numeros sin puntos ni comas.";
                 }else ++contador;
         }
