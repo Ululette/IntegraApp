@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
-import { Redirect } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Styles from './ContactForm.module.css';
-import emailjs from 'emailjs-com'
+import emailjs from 'emailjs-com';
 import LogoNav from '../../assets/logo-integra.png';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import Card from '@material-ui/core/Card';
+import { _reCAPTCHA_site_key_ } from '../../recaptcha.config.js';
 import supabase from '../../supabase.config';
 
 const theme = createMuiTheme({
@@ -60,14 +60,13 @@ function ContactForm() {
         dni: false,
         phone_number: false,
         email: false,
-        onProcess: false
+        onProcess: false,
     });
     const [successRequest, setSuccessRequest] = useState(false);
     const [errorRequest, setErrorRequest] = useState(false);
     const [redirect, setRedirect] = useState(false);
 
     const handleClickOpen = async (e) => {
-
         if (
             !errors.age &&
             !errors.dni &&
@@ -76,19 +75,21 @@ function ContactForm() {
             !errors.name &&
             !errors.onProcess
         ) {
-            console.log('No hay errores!', errors)
+            console.log('No hay errores!', errors);
             setSuccessRequest(true);
-            const { data: contactFormResolve, error: insertError } = await supabase.from('guest_contacts').insert([
-                {
-                    dni: parseInt(input.dni),
-                    name: input.name,
-                    age: parseInt(input.age),
-                    phone_number: parseInt(input.phone_number),
-                    email: input.email
-                }
-            ]);
+            const { data: contactFormResolve } = await supabase
+                .from('guest_contacts')
+                .insert([
+                    {
+                        dni: parseInt(input.dni),
+                        name: input.name,
+                        age: parseInt(input.age),
+                        phone_number: parseInt(input.phone_number),
+                        email: input.email,
+                    },
+                ]);
 
-            contactFormResolve && sendEmail()
+            contactFormResolve && sendEmail();
 
             setInput({
                 name: '',
@@ -98,7 +99,7 @@ function ContactForm() {
                 email: '',
             });
         } else {
-            console.log('Hay errores!', errors)
+            console.log('Hay errores!', errors);
             setErrorRequest(true);
         }
     };
@@ -109,7 +110,7 @@ function ContactForm() {
     };
     const handleBack = () => {
         setRedirect(true);
-        setSuccessRequest(false)
+        setSuccessRequest(false);
     };
 
     const handleInputChange = (e) => {
@@ -117,9 +118,7 @@ function ContactForm() {
             ...input,
             [e.target.name]: e.target.value,
         });
-        setErrors(
-            validate(e.target.name, e.target.value)
-        );
+        setErrors(validate(e.target.name, e.target.value));
     };
 
     function validate(inputName, value) {
@@ -127,7 +126,7 @@ function ContactForm() {
             /[a-zA-Z0-9]+[.]?([a-zA-Z0-9]+)?[@][a-z]{3,9}[.][a-z]{2,5}/g;
         const namePattern = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/g;
         const numberPattern = /^[0-9\b]+$/;
-        var validateErrors = errors
+        var validateErrors = errors;
 
         switch (inputName) {
             case 'name': {
@@ -155,10 +154,7 @@ function ContactForm() {
                 break;
             }
             case 'phone_number': {
-                if (
-                    !numberPattern.test(value) ||
-                    value.length < 10
-                ) {
+                if (!numberPattern.test(value) || value.length < 10) {
                     validateErrors = { ...errors, [inputName]: true };
                 } else {
                     validateErrors = { ...errors, [inputName]: false };
@@ -166,36 +162,67 @@ function ContactForm() {
                 break;
             }
             case 'email': {
-                inputEmailFetchCheck(value)
-                if ( !emailPattern.test(value) ) {
+                inputEmailFetchCheck(value);
+                if (!emailPattern.test(value)) {
                     validateErrors = { ...errors, [inputName]: true };
                 } else {
-                    validateErrors = { ...errors, [inputName]: false};
+                    validateErrors = { ...errors, [inputName]: false };
                 }
                 break;
             }
+            default:
+                return null;
         }
-        console.log(validateErrors)
+        console.log(validateErrors);
         return validateErrors;
     }
 
     async function inputEmailFetchCheck(email) {
-
-        const { data: emails, error: emailError } = await supabase.from('guest_contacts').select('email').eq('email', email)
-        emails && console.log('emails!', emails)
-        console.log(emails.length > 0)
-        setErrors({...errors, onProcess: emails.length > 0})
+        const { data: emails } = await supabase
+            .from('guest_contacts')
+            .select('email')
+            .eq('email', email);
+        emails && console.log('emails!', emails);
+        console.log(emails.length > 0);
+        setErrors({ ...errors, onProcess: emails.length > 0 });
     }
 
     function sendEmail() {
-
-        emailjs.send('service_wcpzjw7', 'template_r93a6bs', input, 'user_mgft1j53RDkaGc1EWyKNK')
-            .then((result) => {
-                console.log('resultado:', result.text);
-            }, (error) => {
-                console.log('error:', error.text);
-            });
+        emailjs
+            .send(
+                'service_wcpzjw7',
+                'template_r93a6bs',
+                input,
+                'user_mgft1j53RDkaGc1EWyKNK'
+            )
+            .then(
+                (result) => {
+                    console.log('resultado:', result.text);
+                },
+                (error) => {
+                    console.log('error:', error.text);
+                }
+            );
     }
+
+    function onClick(e) {
+        e.preventDefault();
+        window.grecaptcha.ready(function () {
+            window.grecaptcha
+                .execute(_reCAPTCHA_site_key_, { action: 'submit' })
+                .then(function (token) {
+                    console.log(token);
+                });
+        });
+    }
+
+    useEffect(() => {
+        // Add reCaptcha
+        const script = document.createElement('script');
+        script.src = `https://www.google.com/recaptcha/api.js?render=${_reCAPTCHA_site_key_}`;
+        script.addEventListener('load', onClick);
+        document.body.appendChild(script);
+    }, []);
 
     // const renderRedirect = () => {
     //     if (redirect) {
@@ -237,11 +264,11 @@ function ContactForm() {
                         {/* {renderRedirect()} */}
                     </div>
                 </div>
-            )
+            );
         } else {
-            return null
+            return null;
         }
-    }
+    };
 
     return (
         <div className={Styles.conteinerAll}>
@@ -374,10 +401,15 @@ function ContactForm() {
                             onClose={handleClose}
                         >
                             <Alert onClose={handleClose} severity='info'>
-                                {' '}
-                            Éste correo ya tiene una solicitud en proceso!
-                        </Alert>
+                                Éste correo ya tiene una solicitud en proceso!
+                            </Alert>
                         </Snackbar>
+                        <div
+                            className='g-recaptcha'
+                            data-sitekey={_reCAPTCHA_site_key_}
+                            data-size='explicit'
+                            data-callback='onClick'
+                        ></div>
                     </div>
                 </Card>
             </ThemeProvider>
