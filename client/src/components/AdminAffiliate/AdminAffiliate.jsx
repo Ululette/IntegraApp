@@ -486,7 +486,7 @@ function AdminAffiliate() {
                         <MenuItem value='age'>Edad</MenuItem>
                         <MenuItem value='contact'>Telefono</MenuItem>
                         <MenuItem value='email'>Email</MenuItem>
-                        <MenuItem value='familyBond'>Parentezco</MenuItem>
+                        <MenuItem value='familyBond'>Parentesco</MenuItem>
                         <MenuItem value='familyGroup'>Grupo Familiar</MenuItem>
                         <MenuItem value='gender'>Genero</MenuItem>
                         <MenuItem value='name'>Nombre/s</MenuItem>
@@ -784,7 +784,10 @@ function AdminAffiliate() {
                         </Select>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose} color='primary'>
+                        <Button
+                            onClick={() => handleClose('edit')}
+                            color='primary'
+                        >
                             Cancelar
                         </Button>
                         <Button onClick={handleUpdate} color='primary'>
