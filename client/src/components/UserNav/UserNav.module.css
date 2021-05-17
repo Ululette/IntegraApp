@@ -43,7 +43,9 @@
     margin: 0 10px;
     text-align: end;
 }
-
+.navLink {
+    color: #000;
+}
 .planName {
     text-transform: capitalize;
 }

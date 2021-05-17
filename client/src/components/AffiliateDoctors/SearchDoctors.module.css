@@ -1,0 +1,29 @@
+.paginationButtons li {
+    list-style: none;
+    background-color: black;
+}
+
+.previousLink {
+    list-style: none;
+    background-color: black;
+
+}
+
+.nextLink{
+    background-color: black;
+    list-style: none;
+}
+
+.paginationDisabled {
+    background-color: black;
+    list-style: none;
+}
+
+.paginationActive {
+    background-color: black;
+    list-style: none;
+}
+
+.pagination {
+    background-color: aqua;
+}

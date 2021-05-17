@@ -7,6 +7,7 @@ import InputBase from '@material-ui/core/InputBase';
 import supabase from '../../supabase.config';
 import ReactPaginate from 'react-paginate';
 import PopUp from './PopUp';
+import styles from './SearchDoctors.module.css';
 
 const BootstrapInput = withStyles((theme) => ({
     root: {
@@ -213,6 +214,7 @@ export default function SearchDoctors() {
                 nextLabel={'Next'}
                 pageCount={pageCount}
                 onPageChange={changePage}
+                className={styles.pagination}
                 containerClassName={'paginationButtons'}
                 previousLinkClassName={'previousLink'}
                 nextLinkClassName={'nextLink'}

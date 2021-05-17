@@ -198,7 +198,12 @@ function UserNav({ firebase }) {
                             onClose={handleClose}
                             className={styles.myOptions}
                         >
-                            <MenuItem onClick={handleClose}>Mi perfil</MenuItem>
+                            <NavLink
+                                to={`/${userData.dni}/affiliate/profile`}
+                                className={styles.navLink}
+                            >
+                                <MenuItem>Mi perfil</MenuItem>
+                            </NavLink>
                             <MenuItem onClick={logout}>Cerrar Sesion</MenuItem>
                             <Divider />
                             <List>
