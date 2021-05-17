@@ -1,0 +1,23 @@
+.form{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    /* margin:10px; */
+    /* align-items: center; */
+}
+
+.firstColumn{
+    display: flex;
+    flex-direction: column;
+}
+
+.secondColumn{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+}
+
+.input{
+    padding-top:10px;
+    padding-bottom: 10px;
+}
