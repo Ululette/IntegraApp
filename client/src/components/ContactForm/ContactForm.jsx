@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
+import { createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
 import { Redirect } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
 import Styles from './ContactForm.module.css';
+import emailjs from 'emailjs-com'
 import LogoNav from '../../assets/logo-integra.png';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { createMuiTheme } from '@material-ui/core/styles';
-import { ThemeProvider } from '@material-ui/styles';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import Card from '@material-ui/core/Card';
-import { makeStyles } from '@material-ui/core/styles';
 import supabase from '../../supabase.config';
 
 const theme = createMuiTheme({
@@ -50,45 +51,54 @@ function ContactForm() {
         age: '',
         dni: '',
         phone_number: '',
-        mail: '',
+        email: '',
     });
+
     const [errors, setErrors] = useState({
         name: false,
         age: false,
         dni: false,
         phone_number: false,
-        mail: false,
+        email: false,
+        onProcess: false
     });
     const [successRequest, setSuccessRequest] = useState(false);
     const [errorRequest, setErrorRequest] = useState(false);
     const [redirect, setRedirect] = useState(false);
 
-    const handleClickOpen = async () => {
+    const handleClickOpen = async (e) => {
+
         if (
             !errors.age &&
             !errors.dni &&
             !errors.phone_number &&
-            !errors.mail &&
-            !errors.name
+            !errors.email &&
+            !errors.name &&
+            !errors.onProcess
         ) {
+            console.log('No hay errores!', errors)
             setSuccessRequest(true);
-            const { data, error } = await supabase.from('request_form').insert([
+            const { data: contactFormResolve, error: insertError } = await supabase.from('guest_contacts').insert([
                 {
+                    dni: parseInt(input.dni),
                     name: input.name,
-                    age: input.age,
-                    dni: input.dni,
-                    phone_number: input.phone_number,
-                    mail: input.mail,
-                },
+                    age: parseInt(input.age),
+                    phone_number: parseInt(input.phone_number),
+                    email: input.email
+                }
             ]);
+
+            contactFormResolve && sendEmail()
+
             setInput({
                 name: '',
                 age: '',
                 dni: '',
                 phone_number: '',
-                mail: '',
+                email: '',
             });
         } else {
+            console.log('Hay errores!', errors)
             setErrorRequest(true);
         }
     };
@@ -99,6 +109,7 @@ function ContactForm() {
     };
     const handleBack = () => {
         setRedirect(true);
+        setSuccessRequest(false)
     };
 
     const handleInputChange = (e) => {
@@ -107,63 +118,94 @@ function ContactForm() {
             [e.target.name]: e.target.value,
         });
         setErrors(
-            validate({
-                ...input,
-                [e.target.name]: e.target.value,
-            })
+            validate(e.target.name, e.target.value)
         );
     };
 
-    function validate(input) {
-        const mailPattern =
+    function validate(inputName, value) {
+        const emailPattern =
             /[a-zA-Z0-9]+[.]?([a-zA-Z0-9]+)?[@][a-z]{3,9}[.][a-z]{2,5}/g;
         const namePattern = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/g;
         const numberPattern = /^[0-9\b]+$/;
-        let errors = {};
-        if (!namePattern.test(input.name)) {
-            errors.name = true;
-        } else {
-            errors.name = false;
-        }
+        var validateErrors = errors
 
-        if (!numberPattern.test(input.age)) {
-            errors.age = true;
-        } else {
-            errors.age = false;
+        switch (inputName) {
+            case 'name': {
+                if (!namePattern.test(value)) {
+                    validateErrors = { ...errors, [inputName]: true };
+                } else {
+                    validateErrors = { ...errors, [inputName]: false };
+                }
+                break;
+            }
+            case 'age': {
+                if (!numberPattern.test(value)) {
+                    validateErrors = { ...errors, [inputName]: true };
+                } else {
+                    validateErrors = { ...errors, [inputName]: false };
+                }
+                break;
+            }
+            case 'dni': {
+                if (!numberPattern.test(value) || value.length !== 8) {
+                    validateErrors = { ...errors, [inputName]: true };
+                } else {
+                    validateErrors = { ...errors, [inputName]: false };
+                }
+                break;
+            }
+            case 'phone_number': {
+                if (
+                    !numberPattern.test(value) ||
+                    value.length < 10
+                ) {
+                    validateErrors = { ...errors, [inputName]: true };
+                } else {
+                    validateErrors = { ...errors, [inputName]: false };
+                }
+                break;
+            }
+            case 'email': {
+                inputEmailFetchCheck(value)
+                if ( !emailPattern.test(value) ) {
+                    validateErrors = { ...errors, [inputName]: true };
+                } else {
+                    validateErrors = { ...errors, [inputName]: false};
+                }
+                break;
+            }
         }
-
-        if (!numberPattern.test(input.dni) || input.dni.length !== 8) {
-            errors.dni = true;
-        } else {
-            errors.dni = false;
-        }
-
-        if (
-            !numberPattern.test(input.phone_number) ||
-            input.phone_number.length < 10
-        ) {
-            errors.phone_number = true;
-        } else {
-            errors.phone_number = false;
-        }
-
-        if (!mailPattern.test(input.mail)) {
-            errors.mail = true;
-        } else {
-            errors.mail = false;
-        }
-        return errors;
+        console.log(validateErrors)
+        return validateErrors;
     }
 
-    const renderRedirect = () => {
-        if (redirect) {
-            return <Redirect to='/' />;
-        }
-    };
+    async function inputEmailFetchCheck(email) {
 
-    return (
-        <div className={Styles.conteinerAll}>
-            <ThemeProvider theme={theme}>
+        const { data: emails, error: emailError } = await supabase.from('guest_contacts').select('email').eq('email', email)
+        emails && console.log('emails!', emails)
+        console.log(emails.length > 0)
+        setErrors({...errors, onProcess: emails.length > 0})
+    }
+
+    function sendEmail() {
+
+        emailjs.send('service_wcpzjw7', 'template_r93a6bs', input, 'user_mgft1j53RDkaGc1EWyKNK')
+            .then((result) => {
+                console.log('resultado:', result.text);
+            }, (error) => {
+                console.log('error:', error.text);
+            });
+    }
+
+    // const renderRedirect = () => {
+    //     if (redirect) {
+    //         setSuccessRequest(false)
+    //     }
+    // };
+
+    const success = () => {
+        if (successRequest) {
+            return (
                 <div
                     className={Styles.successRequest}
                     style={!successRequest ? { display: 'none' } : {}}
@@ -192,9 +234,19 @@ function ContactForm() {
                         >
                             Volver
                         </Button>
-                        {renderRedirect()}
+                        {/* {renderRedirect()} */}
                     </div>
                 </div>
+            )
+        } else {
+            return null
+        }
+    }
+
+    return (
+        <div className={Styles.conteinerAll}>
+            <ThemeProvider theme={theme}>
+                {success()}
                 <Card className={classes.root}>
                     <Snackbar
                         open={errorRequest}
@@ -202,7 +254,7 @@ function ContactForm() {
                         onClose={handleClose}
                     >
                         <Alert onClose={handleClose} severity='error'>
-                            Error, verifique los datos.
+                            Error! Verifique sus datos
                         </Alert>
                     </Snackbar>
                     <div className={Styles.formConteiner}>
@@ -275,17 +327,17 @@ function ContactForm() {
                                 />
                             </div>
                             <div className={Styles.textField}>
-                                <label htmlFor=''>Mi mail es </label>
+                                <label htmlFor=''>Mi email es </label>
                                 <TextField
-                                    id='mail-input'
+                                    id='email-input'
                                     type='text'
-                                    name='mail'
+                                    name='email'
                                     autoComplete='off'
-                                    value={input.mail}
+                                    value={input.email}
                                     onChange={(e) => handleInputChange(e)}
-                                    {...(errors.mail && {
+                                    {...(errors.email && {
                                         error: true,
-                                        helperText: 'Mail invalido',
+                                        helperText: 'eMail invalido',
                                     })}
                                 />
                             </div>
@@ -300,7 +352,7 @@ function ContactForm() {
                                     !input.age ||
                                     !input.dni ||
                                     !input.phone_number ||
-                                    !input.mail ||
+                                    !input.email ||
                                     !input.name
                                 }
                             >
@@ -314,8 +366,18 @@ function ContactForm() {
                             >
                                 Volver
                             </Button>
-                            {renderRedirect()}
+                            {/* {renderRedirect()} */}
                         </div>
+                        <Snackbar
+                            open={errorRequest && errors.onProcess}
+                            autoHideDuration={4000}
+                            onClose={handleClose}
+                        >
+                            <Alert onClose={handleClose} severity='info'>
+                                {' '}
+                            Éste correo ya tiene una solicitud en proceso!
+                        </Alert>
+                        </Snackbar>
                     </div>
                 </Card>
             </ThemeProvider>
