@@ -39,8 +39,8 @@ const DatosRevision = () =>{
 				<div className={styles.datosEmpresa}>
 					<h2>Datos del Empresa</h2>
 
-					<h4>Razón Social:{datosEmpresa.bussiness_name}</h4>
-					<h4>Grupo empresarial:{datosEmpresa.bussiness_group}</h4>
+					<h4>Razón Social:{datosEmpresa.bussines_name}</h4>
+					<h4>Grupo empresarial:{datosEmpresa.bussines_group}</h4>
 					<h4>Nombre y apellido del Referente de RRHH:{datosEmpresa.rh_name}</h4>
 					<h4>Teléfono:{datosEmpresa.company_phone}</h4>
 					<h4>E-mail:{datosEmpresa.company_email}</h4>
