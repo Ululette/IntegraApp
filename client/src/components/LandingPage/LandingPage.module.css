@@ -162,7 +162,7 @@
   background-color: linear-gradient(90deg,
       rgba(166, 246, 241, 1) 0%,
       rgba(225, 232, 233, 1) 39%);
-  opacity: 80%;
+  /* opacity: 80%; */
   margin: 0px;
 }
 
@@ -231,7 +231,7 @@
   background-color: linear-gradient(90deg,
       rgba(166, 246, 241, 1) 0%,
       rgba(225, 232, 233, 1) 39%);
-  opacity: 80%;
+  /* opacity: 80%; */
 }
 
 .credential {
@@ -248,7 +248,6 @@
   width: 650px;
   text-align: justify;
   text-justify: auto;
-
 }
 
 #contact {
