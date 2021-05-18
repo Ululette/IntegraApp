@@ -1,1 +1,1 @@
-# Esto es el frontend.
+# Esto es el frontend de los frontends del mundo entero.
