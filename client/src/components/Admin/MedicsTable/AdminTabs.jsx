@@ -51,7 +51,7 @@ const useStyles = makeStyles(() => ({
         height: '100%',
         justifyContent: 'space-around',
         width: '100%',
-        zIndex: '0',
+        zIndex: '-1',
     },
     tab: {
         position: 'relative',
@@ -63,11 +63,11 @@ const useStyles = makeStyles(() => ({
         height: 'min-content',
         width: 'min-content',
         flexWrap: 'wrap',
+        zIndex: '0',
     },
 }));
 
 export default function AdminMedicTabs(props) {
-    const { listMedics } = props;
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 

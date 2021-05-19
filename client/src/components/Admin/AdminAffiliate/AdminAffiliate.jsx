@@ -31,6 +31,9 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import List from '@material-ui/core/List';
+import ListItemText from '@material-ui/core/ListItemText';
+
 import { statesAff } from '../../../functions/states';
 import { getAffiliates, getPlans } from '../../../actions/getter.action.js';
 import calculateAge from '../../../functions/calculateAge.js';
@@ -837,87 +840,44 @@ function AdminAffiliate() {
                         Eliminar socio
                     </DialogTitle>
                     <DialogContent>
-                        <TextField
-                            autoFocus
-                            margin='dense'
-                            label='DNI'
-                            type='number'
-                            value={input.dni}
-                            disabled
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            margin='dense'
-                            label='Apellido/s'
-                            type='text'
-                            name='lastname'
-                            value={input.lastname}
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            margin='dense'
-                            label='Nombre/s'
-                            type='text'
-                            name='name'
-                            value={input.name}
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            margin='dense'
-                            label='Email'
-                            type='email'
-                            value={input.email}
-                            name='email'
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            margin='dense'
-                            label='Telefono'
-                            type='text'
-                            value={input.contact}
-                            name='contact'
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            margin='dense'
-                            label='Genero'
-                            type='text'
-                            value={input.gender}
-                            name='gender'
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            margin='dense'
-                            label='Titular'
-                            type='text'
-                            name='titular'
-                            value={input.titular}
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            margin='dense'
-                            label='Plan'
-                            name='plan'
-                            type='text'
-                            value={input.plan}
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            margin='dense'
-                            label='Estado'
-                            value={input.state}
-                            type='text'
-                            name='state'
-                            fullWidth
-                        />
+                        <List>
+                            <ListItemText
+                                primary={`DNI: ${input.dni}`}
+                                fullWidth
+                            />
+                            <ListItemText
+                                primary={`Apellido: ${input.lastname}`}
+                                fullWidth
+                            />
+                            <ListItemText
+                                primary={`Nombre: ${input.name}`}
+                                fullWidth
+                            />
+                            <ListItemText
+                                primary={`Email: ${input.email}`}
+                                fullWidth
+                            />
+                            <ListItemText
+                                primary={`Telefono: ${input.contact}`}
+                                fullWidth
+                            />
+                            <ListItemText
+                                primary={`Genero: ${input.gender}`}
+                                fullWidth
+                            />
+                            <ListItemText
+                                primary={`Titular?: ${input.titular}`}
+                                fullWidth
+                            />
+                            <ListItemText
+                                primary={`Plan: ${input.plan}`}
+                                fullWidth
+                            />
+                            <ListItemText
+                                primary={`Estado: ${input.state}`}
+                                fullWidth
+                            />
+                        </List>
                     </DialogContent>
                     <DialogActions>
                         <Button

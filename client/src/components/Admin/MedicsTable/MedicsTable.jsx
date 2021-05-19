@@ -182,6 +182,9 @@ const useToolbarStyles = makeStyles((theme) => ({
     title: {
         flex: '1 1 100%',
     },
+    dialog: {
+        zIndex: '-6',
+    },
 }));
 
 const EnhancedTableToolbar = (props) => {
@@ -289,6 +292,7 @@ const EnhancedTableToolbar = (props) => {
                 disableEscapeKeyDown
                 open={open}
                 onClose={handleClose}
+                className={classes.dialog}
             >
                 <DialogTitle>Fill the form</DialogTitle>
                 <form className={classes.container} onSubmit={handleSubmit}>
@@ -415,6 +419,7 @@ export default function MedicsTable() {
     }, []);
 
     const handleEdit = (medicData) => {
+        console.log(medicData, 'medicData Tabs');
         setMedicData(medicData);
         setEditActive(true);
         if (editActive) setEditActive(false);
@@ -623,6 +628,7 @@ export default function MedicsTable() {
                     medicData={medicData}
                     medicSpecialities={medicSpecialities}
                     setEditActive={setEditActive}
+                    editActive={editActive}
                 />
             ) : null}
             <AdminMedicAdd medicSpecialities={medicSpecialities} />

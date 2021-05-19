@@ -1,4 +1,4 @@
-const statesMedic = ['active', 'down'];
+const statesMedic = ['activo', 'inactivo'];
 const statesAff = [
     'aceptado',
     'formulario pendiente',
