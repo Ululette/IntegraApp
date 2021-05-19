@@ -1,0 +1,9 @@
+.home{
+    display: flex;
+    flex-direction: column;
+}
+
+.asideContent{
+    display: flex;
+    flex-direction: row;
+}

@@ -222,7 +222,7 @@ function UserNav({ firebase }) {
                     </div>
                 </section>
             </nav>
-            <aside className={styles.aside}>
+            {/* <aside className={styles.aside}>
                 <ul className={styles.buttonsContainer}>
                     <NavLink
                         to={`/${userData.dni}/affiliate`}
@@ -276,7 +276,7 @@ function UserNav({ firebase }) {
                         <li>Contactanos</li>
                     </article>
                 </ul>
-            </aside>
+            </aside> */}
         </div>
     );
 }

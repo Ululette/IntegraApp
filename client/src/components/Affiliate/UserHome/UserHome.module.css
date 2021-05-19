@@ -1,0 +1,16 @@
+.home{
+    margin-left: 3%;
+}
+
+.avatar{
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+    margin-top: 2%;
+    font-size: 1.2rem;
+}
+
+.image{
+    margin-top:2%;
+    margin-bottom:2%
+}
