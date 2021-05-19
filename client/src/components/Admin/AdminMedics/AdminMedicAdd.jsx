@@ -10,6 +10,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import AddIcon from '@material-ui/icons/Add';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import supabase from '../../../supabase.config.js';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 const useStyles = makeStyles((theme) => ({
     fab: {
@@ -38,7 +40,7 @@ const resetInputs = {
 
 function AdminMedicAdd({ medicSpecialities }) {
     const classes = useStyles();
-
+    const MySwal = withReactContent(Swal);
     const [input, setInput] = useState(resetInputs);
     const [open, setOpen] = useState(false);
     // const [localities, setLocalities] = useState([]);
@@ -100,13 +102,19 @@ function AdminMedicAdd({ medicSpecialities }) {
             //         },
             //     ]);
             // }
-            alert('Se agrego al medico con exito.');
-            window.location.reload();
+            MySwal.fire({
+                title: 'Se agrego al medico con exito.',
+                icon: 'success',
+                timer: 2000,
+            }).then(() => window.location.reload());
         } catch (error) {
             console.log(error);
-            alert('Error. (ver en consola)');
+            MySwal.fire({
+                title: 'No se pudo agregar al medico.',
+                text: error,
+                icon: 'error',
+            });
         }
-        alert('Medico agregado con exito');
         setOpen(false);
     };
 

@@ -3,9 +3,11 @@ import { statesMedic } from '../../../functions/states.js';
 import styles from './AdminMedicEdit.module.css';
 import supabase from '../../../supabase.config.js';
 import CloseIcon from '@material-ui/icons/Close';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 function AdminMedicEdit({ medicData, medicSpecialities, setEditActive }) {
-    console.log(medicData);
+    const MySwal = withReactContent(Swal);
     let [input, setInput] = useState({
         name: medicData.name,
         lastname: medicData.lastname,
@@ -28,61 +30,70 @@ function AdminMedicEdit({ medicData, medicSpecialities, setEditActive }) {
         setInput({ ...input, [name]: value });
     };
 
-    console.log(input);
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (window.confirm('Esta seguro de actualizar estos campos?')) {
-            try {
-                await supabase
-                    .from('medics_medical_specialities')
-                    .update({
-                        medic_dni: medicData.dni,
-                        speciality_id: input.specialitiesA,
-                    })
-                    .eq('medic_dni', medicData.dni);
-                // if (input.specialitiesB) {
-                //     if (medicData.medical_specialities[1]) {
-                //         await supabase
-                //             .from('medics_medical_specialities')
-                //             .update({
-                //                 medic_dni: medicData.dni,
-                //                 speciality_id: input.specialitiesB,
-                //             })
-                //             .eq('medic_dni', medicData.dni);
-                //     } else {
-                //         await supabase
-                //             .from('medics_medical_specialities')
-                //             .insert([
-                //                 {
-                //                     medic_dni: medicData.dni,
-                //                     speciality_id: input.specialitiesB,
-                //                 },
-                //             ]);
-                //     }
-                // }
-            } catch (error) {
-                console.log(error);
+        MySwal.fire({
+            title: 'Esta seguro de actualizar estos campos?',
+            icon: 'question',
+            showCloseButton: true,
+            showCancelButton: true,
+        }).then(async (res) => {
+            if (res.isConfirmed) {
+                try {
+                    await supabase
+                        .from('medics_medical_specialities')
+                        .update({
+                            medic_dni: medicData.dni,
+                            speciality_id: input.specialitiesA,
+                        })
+                        .eq('medic_dni', medicData.dni);
+                    // if (input.specialitiesB) {
+                    //     if (medicData.medical_specialities[1]) {
+                    //         await supabase
+                    //             .from('medics_medical_specialities')
+                    //             .update({
+                    //                 medic_dni: medicData.dni,
+                    //                 speciality_id: input.specialitiesB,
+                    //             })
+                    //             .eq('medic_dni', medicData.dni);
+                    //     } else {
+                    //         await supabase
+                    //             .from('medics_medical_specialities')
+                    //             .insert([
+                    //                 {
+                    //                     medic_dni: medicData.dni,
+                    //                     speciality_id: input.specialitiesB,
+                    //                 },
+                    //             ]);
+                    //     }
+                    // }
+                } catch (error) {
+                    console.log(error);
+                }
+
+                try {
+                    await supabase
+                        .from('medics')
+                        .update([
+                            {
+                                name: input.name,
+                                lastname: input.lastname,
+                                email: input.email,
+                                phone_number: input.phoneNumber,
+                                state: input.state,
+                            },
+                        ])
+                        .eq('dni', medicData.dni);
+                } catch (error) {
+                    console.log(error);
+                }
+                MySwal.fire({
+                    title: 'Se edito al medico con exito!',
+                    icon: 'success',
+                    timer: 2000,
+                }).then(() => window.location.reload());
             }
-        }
-        try {
-            await supabase
-                .from('medics')
-                .update([
-                    {
-                        name: input.name,
-                        lastname: input.lastname,
-                        email: input.email,
-                        phone_number: input.phoneNumber,
-                        state: input.state,
-                    },
-                ])
-                .eq('dni', medicData.dni);
-        } catch (error) {
-            console.log(error);
-        }
-        alert('agregadas');
-        window.location.reload();
+        });
     };
 
     const handleClose = () => {

@@ -13,6 +13,8 @@ import Alert from '@material-ui/lab/Alert';
 import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/core/styles';
 import supabase from '../../../supabase.config';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import 'firebase/auth';
 const theme = createMuiTheme({
     palette: {
@@ -44,6 +46,7 @@ const useStyles = makeStyles({
     },
 });
 function AdminRegistration({ firebase }) {
+    const MySwal = withReactContent(Swal);
     const [input, setInput] = useState({
         name: '',
         lastname: '',
@@ -101,8 +104,11 @@ function AdminRegistration({ firebase }) {
             await firebase
                 .auth()
                 .createUserWithEmailAndPassword(input.mail, input.password);
-            alert('Usuario creado');
-
+            MySwal.fire({
+                title: 'Usuario admin creado con exito!',
+                text: 'Debera resetear su password al iniciar sesion.',
+                icon: 'success',
+            });
             setInput({
                 name: '',
                 lastname: '',

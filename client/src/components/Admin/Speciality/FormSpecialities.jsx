@@ -6,8 +6,9 @@ import TableSpecialities from './TableSpecialities.jsx';
 import {
     getMedicSpecialities,
     addSpeciality,
-    findSpeciality,
 } from '../../../actions/specialities.actions';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 const FormSpecialities = () => {
     //---STATES
@@ -17,6 +18,7 @@ const FormSpecialities = () => {
         (state) => state.specialities.medic_specialities
     );
     const dispatch = useDispatch();
+    const MySwal = withReactContent(Swal);
 
     useEffect(() => {
         dispatch(getMedicSpecialities());
@@ -35,8 +37,16 @@ const FormSpecialities = () => {
             dispatch(addSpeciality(inputValue));
             dispatch(getMedicSpecialities());
             setInputValue('');
-            alert(`La especialidad ${inputValue} se agrego con exito.`);
-        } else alert(`La especialidad ${inputValue} ya existe.`);
+            MySwal({
+                title: `La especialidad ${inputValue} se agrego con exito.`,
+                icon: 'success',
+                timer: 2000,
+            }).then(() => window.location.reload());
+        } else
+            MySwal.fire({
+                title: `La especialidad ${inputValue} ya existe.`,
+                icon: 'info',
+            });
     };
 
     return (

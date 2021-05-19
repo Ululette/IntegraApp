@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -209,6 +211,7 @@ function AdminAffiliate() {
         select: '',
         text: '',
     });
+    const MySwal = withReactContent(Swal);
     const [input, setInput] = React.useState({
         dni: '',
         lastname: '',
@@ -336,10 +339,18 @@ function AdminAffiliate() {
                 })
                 .eq('dni', input.dni);
             if (errorUpdateAff) return console.log(errorUpdateAff);
-            alert('Usuario actualizado.');
+            MySwal.fire({
+                title: 'Actualizar usuario',
+                text: 'Usuario actualizado con exito!',
+                icon: 'success',
+            });
             setOpen(false);
         } catch (error) {
-            alert('Error.');
+            MySwal.fire({
+                title: 'Actualizar usuario',
+                text: 'El usuario no fue actualizado! Contacte al administrador.',
+                icon: 'error',
+            });
             console.log(error);
         }
     };
@@ -368,12 +379,26 @@ function AdminAffiliate() {
                 .from('partners')
                 .delete()
                 .eq('dni', input.dni);
-            if (errorDeleteUser) return console.log(errorDeleteUser);
-            alert(
-                `Socio con DNI: ${input.dni} y apellido/nombre : ${input.lastname}, ${input.name} ha sido borrado con exito.`
-            );
+            if (errorDeleteUser) {
+                MySwal.fire({
+                    title: 'El usuario no ha sido eliminado! Problema con base de datos.',
+                    text: `Mensaje de error: ${errorDeleteUser}`,
+                    icon: 'error',
+                });
+                return console.log(errorDeleteUser);
+            }
+            MySwal.fire({
+                title: 'El usuario ha sido eliminado con exito!',
+                text: `Socio con DNI: ${input.dni} y apellido/nombre : ${input.lastname}, ${input.name} ha sido borrado con exito.`,
+                icon: 'success',
+                timer: 2000,
+            }).then(() => window.location.reload());
         } catch (error) {
-            alert('Error con el delete');
+            MySwal.fire({
+                title: 'El usuario no ha sido eliminado!',
+                text: `Socio con DNI: ${input.dni} y apellido/nombre : ${input.lastname}, ${input.name} no pudo ser eliminado.`,
+                icon: 'error',
+            });
             console.log(error);
         }
     };
@@ -428,12 +453,18 @@ function AdminAffiliate() {
                 },
             ]);
         if (errorAddAffiliate) {
-            alert(errorAddAffiliate.message);
+            MySwal.fire({
+                title: 'El usuario no pudo ser agregado!',
+                text: `${errorAddAffiliate.message}.`,
+                icon: 'error',
+            });
             return console.log(errorAddAffiliate);
         }
-        alert(
-            `Socio con DNI ${inputAdd.dni} y nombre/s apellido/s ${inputAdd.name} ${inputAdd.lastname} se inserto con exito en la db.`
-        );
+        MySwal.fire({
+            title: 'El usuario ha sido agregado!',
+            text: `Socio con DNI ${inputAdd.dni} y nombre/s apellido/s ${inputAdd.name} ${inputAdd.lastname} se agrego con exito.`,
+            icon: 'success',
+        });
         handleClose('add');
     };
 
@@ -897,13 +928,14 @@ function AdminAffiliate() {
                         </Button>
                         <Button
                             onClick={() => {
-                                if (
-                                    window.confirm(
-                                        'Esta seguro de borrar este socio? (ESTA ACCION NO ES REVERSIBLE)'
-                                    )
-                                ) {
-                                    handleDelete();
-                                }
+                                MySwal.fire({
+                                    title: 'Esta seguro de borrar este socio? (ESTA ACCION NO ES REVERSIBLE)',
+                                    icon: 'question',
+                                    showCloseButton: true,
+                                    showCancelButton: true,
+                                }).then((res) => {
+                                    if (res.isConfirmed) handleDelete();
+                                });
                                 handleClose('delete');
                             }}
                             color='primary'

@@ -14,6 +14,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import React, { useState } from 'react';
 import validator from '../../../functions/validator.js';
 import supabase from '../../../supabase.config.js';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -38,6 +40,7 @@ export default function AddFamilyMember() {
     const classes = useStyles();
     const affData = JSON.parse(localStorage.getItem('affiliatedata'));
     const [errors, setErrors] = useState({});
+    const MySwal = withReactContent(Swal);
 
     const [inputNumber, setInputsNumber] = useState({
         dni: '',
@@ -140,31 +143,46 @@ export default function AddFamilyMember() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let { error: errorFetchFamily } = await supabase
-            .from('partners')
-            .insert([
-                {
-                    name: inputsText.name,
-                    lastname: inputsText.lastName,
-                    birthdate: inputDate.birthdayDate,
-                    family_bond: familyBond,
-                    gender: gender.genderRad,
-                    dni: inputNumber.dni,
-                    email: inputEmail.email,
-                    phone_number: inputNumber.phoneNumber,
-                    family_group: affData.family_group,
-                    plan_id: affData.plan_id,
-                    titular: false,
-                    state: 'aceptado',
-                },
-            ]);
-        if (errorFetchFamily) {
-            console.log(errorFetchFamily);
-            alert('Error al agregar. Contacte al administrador.');
-            return null;
-        }
-        alert('Familiar agregado con exito.');
-        window.location.reload();
+        MySwal.fire({
+            title: `Esta seguro de agregar a ${inputsText.name} ${inputsText.lastName}, DNI: ${inputNumber.dni} al grupo familiar?`,
+            showCloseButton: true,
+            showCancelButton: true,
+            icon: 'question',
+        }).then(async (res) => {
+            if (res.isConfirmed) {
+                let { error: errorFetchFamily } = await supabase
+                    .from('partners')
+                    .insert([
+                        {
+                            name: inputsText.name,
+                            lastname: inputsText.lastName,
+                            birthdate: inputDate.birthdayDate,
+                            family_bond: familyBond,
+                            gender: gender.genderRad,
+                            dni: inputNumber.dni,
+                            email: inputEmail.email,
+                            phone_number: inputNumber.phoneNumber,
+                            family_group: affData.family_group,
+                            plan_id: affData.plan_id,
+                            titular: false,
+                            state: 'aceptado',
+                        },
+                    ]);
+                if (errorFetchFamily) {
+                    console.log(errorFetchFamily);
+                    MySwal.fire({
+                        title: 'Error al agregar. Contacte al administrador.',
+                        icon: 'error',
+                    });
+                    return null;
+                }
+                MySwal.fire({
+                    title: 'Se agrego al familiar con exito!',
+                    icon: 'success',
+                    timer: 2000,
+                }).then(() => window.location.reload());
+            }
+        });
     };
 
     return (

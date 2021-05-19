@@ -23,7 +23,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import 'firebase/auth';
 import AdminMedicAdd from '../AdminMedics/AdminMedicAdd';
 import AdminMedicEdit from '../AdminMedics/AdminMedicEdit';
-
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import {
     Avatar,
     Dialog,
@@ -388,6 +389,7 @@ export default function MedicsTable() {
     const [editActive, setEditActive] = React.useState(false);
     const [medicData, setMedicData] = React.useState(null);
     const [toShowRows, setToShowRows] = React.useState([]);
+    const MySwal = withReactContent(Swal);
 
     const fetchMedics = async () => {
         const { data: medics, error: errorFetchMedics } = await supabase
@@ -419,21 +421,28 @@ export default function MedicsTable() {
     };
 
     const handleDelete = async (medicData) => {
-        const confirm = window.confirm(
-            `Desea inhabilitar al medico ${medicData.name} ${medicData.lastname} de la obra social?`
-        );
-        if (confirm) {
-            try {
-                await supabase
-                    .from('medics')
-                    .update({ state: 'inhabilitado' })
-                    .eq('dni', medicData.dni);
-                alert('Se inhabilito al medico con exito.');
-                window.location.reload();
-            } catch (error) {
-                console.log(error);
+        MySwal.fire({
+            title: `Desea inhabilitar al medico ${medicData.name} ${medicData.lastname} de la obra social?`,
+            showCloseButton: true,
+            showCancelButton: true,
+            icon: 'question',
+        }).then(async (res) => {
+            if (res.isConfirmed) {
+                try {
+                    await supabase
+                        .from('medics')
+                        .update({ state: 'inhabilitado' })
+                        .eq('dni', medicData.dni);
+                    MySwal.fire({
+                        title: 'Se inhabilito al medico con exito!',
+                        icon: 'success',
+                        timer: 2000,
+                    }).then(() => window.location.reload());
+                } catch (error) {
+                    console.log(error);
+                }
             }
-        }
+        });
     };
 
     const handleRequestSort = (event, property) => {
