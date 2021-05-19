@@ -39,7 +39,6 @@ import { getAffiliates, getPlans } from '../../../actions/getter.action.js';
 import calculateAge from '../../../functions/calculateAge.js';
 import styles from './AdminAffiliate.module.css';
 import supabase from '../../../supabase.config';
-import AdminAside from '../AdminNav/AdminAside.jsx';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -178,9 +177,13 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        width: '100%',
+        width: '83%',
+        height: '90vh',
         position: 'relative',
+        marginLeft: '18rem',
         display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
     },
     paper: {
         width: '100%',
@@ -217,8 +220,6 @@ function AdminAffiliate({ firebase }) {
         select: '',
         text: '',
     });
-    let userData = localStorage.getItem('userdata');
-    userData = JSON.parse(userData);
     const MySwal = withReactContent(Swal);
     const [input, setInput] = React.useState({
         dni: '',

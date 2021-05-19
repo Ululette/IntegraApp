@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useUser } from 'reactfire';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 //Styles
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import styles from './AdminNav.module.css';
@@ -35,8 +35,10 @@ import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import HealingIcon from '@material-ui/icons/Healing';
 import MenuIcon from '@material-ui/icons/Menu';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
-const drawerWidth = 240;
+const drawerWidth = 260;
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
@@ -73,24 +75,28 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function AdminNav({ firebase, window }) {
+function AdminNav({ firebase, window: windowMui }) {
+    const userData = JSON.parse(localStorage.getItem('userdata'));
+    const adminData = JSON.parse(localStorage.getItem('admindata'));
+    const userDataFirebase = useUser();
+
+    if (!userDataFirebase.data && !adminData && !userData) {
+        this.window.location = '/login';
+    }
+
+    const MySwal = withReactContent(Swal);
     const classes = useStyles();
     const theme = useTheme();
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
-    const userDataFirebase = useUser();
-    let adminData = localStorage.getItem('admindata');
-    adminData = JSON.parse(adminData);
-    let userData = localStorage.getItem('userdata');
-    userData = JSON.parse(userData);
 
     const container =
-        window !== undefined ? () => window().document.body : undefined;
+        windowMui !== undefined ? () => windowMui().document.body : undefined;
 
     const drawer = (
         <div className={styles.asidebar}>
             <div className={classes.toolbar} />
-            <List>
+            <List className={styles.listitems}>
                 <NavLink to={`/${userData.dni}/admin/`} className={styles.link}>
                     <ListItem button>
                         <HomeIcon />
@@ -121,16 +127,17 @@ function AdminNav({ firebase, window }) {
                         <ListItemText primary='Planes' />
                     </ListItem>
                 </NavLink>
-                <Badge
-                    className={styles.notifications}
-                    color='secondary'
-                    badgeContent={2}
-                >
-                    <ListItem button>
+
+                <ListItem button>
+                    <Badge
+                        className={styles.notifications}
+                        color='secondary'
+                        badgeContent={2}
+                    >
                         <DoneAllIcon />
                         <ListItemText primary='Autorizaciones' />
-                    </ListItem>
-                </Badge>
+                    </Badge>
+                </ListItem>
                 <NavLink
                     to={`/${userData.dni}/admin/affiliates`}
                     className={styles.link}
@@ -151,26 +158,28 @@ function AdminNav({ firebase, window }) {
                         <ListItemText primary='Medicos' />
                     </ListItem>
                 </NavLink>
-                <Badge
-                    className={styles.notifications}
-                    color='secondary'
-                    badgeContent={2}
-                >
-                    <ListItem button>
+                <ListItem button>
+                    <Badge
+                        className={styles.notifications}
+                        color='secondary'
+                        badgeContent={2}
+                    >
                         <PhoneAndroidIcon />
                         <ListItemText primary='Consultas de socios' />
-                    </ListItem>
-                </Badge>
-                <Badge
-                    className={styles.notifications}
-                    color='secondary'
-                    badgeContent={2}
-                >
-                    <ListItem button>
+                    </Badge>
+                </ListItem>
+
+                <ListItem button>
+                    <Badge
+                        className={styles.notifications}
+                        color='secondary'
+                        badgeContent={2}
+                    >
                         <AssignmentIcon />
+
                         <ListItemText primary='Tickets' />
-                    </ListItem>
-                </Badge>
+                    </Badge>
+                </ListItem>
             </List>
         </div>
     );
@@ -196,12 +205,25 @@ function AdminNav({ firebase, window }) {
     };
 
     const logout = async () => {
-        if (window.confirm('¿Quiere cerrar sesión?')) {
-            await firebase.auth().signOut();
-            localStorage.removeItem('userdata');
-            localStorage.removeItem('admindata');
-            window.location = '/login';
-        }
+        setAnchorEl(null);
+        MySwal.fire({
+            title: '¿Quiere cerrar sesión?',
+            icon: 'question',
+            showConfirmButton: true,
+            showCloseButton: true,
+            showCancelButton: true,
+            focusConfirm: false,
+            reverseButtons: true,
+            confirmButtonText: 'Cerrar sesion',
+            cancelButtonText: 'Cancelar',
+        }).then(async (res) => {
+            if (res.isConfirmed) {
+                await firebase.auth().signOut();
+                localStorage.removeItem('userdata');
+                localStorage.removeItem('admindata');
+                window.location = '/login';
+            }
+        });
     };
 
     if (!userDataFirebase.data) return <CircularProgress />;
