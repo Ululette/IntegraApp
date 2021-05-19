@@ -573,16 +573,23 @@ export default function MedicsTable() {
 
                                             <TableCell>
                                                 <ul>
-                                                    {row.medical_specialities.map(
-                                                        (s) => (
-                                                            <li>
-                                                                {s.name
-                                                                    .charAt(0)
-                                                                    .toUpperCase() +
-                                                                    s.name.slice(
-                                                                        1
-                                                                    )}
-                                                            </li>
+                                                    {row.medical_specialities
+                                                        .length === 0 ? (
+                                                        <li>Clinica</li>
+                                                    ) : (
+                                                        row.medical_specialities.map(
+                                                            (s) => (
+                                                                <li>
+                                                                    {s.name
+                                                                        .charAt(
+                                                                            0
+                                                                        )
+                                                                        .toUpperCase() +
+                                                                        s.name.slice(
+                                                                            1
+                                                                        )}
+                                                                </li>
+                                                            )
                                                         )
                                                     )}
                                                 </ul>

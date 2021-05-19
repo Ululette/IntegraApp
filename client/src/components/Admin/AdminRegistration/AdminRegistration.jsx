@@ -54,8 +54,6 @@ function AdminRegistration({ firebase }) {
         mail: '',
         birthdate: '',
         root: '',
-        password: '',
-        confirmPassword: '',
     });
     const [errors, setErrors] = useState({
         name: false,
@@ -64,8 +62,6 @@ function AdminRegistration({ firebase }) {
         birthdate: false,
         root: false,
         mail: false,
-        password: false,
-        confirmPassword: false,
     });
 
     const [successRequest, setSuccessRequest] = useState(false);
@@ -77,8 +73,6 @@ function AdminRegistration({ firebase }) {
             !errors.lastname &&
             !errors.dni &&
             !errors.mail &&
-            !errors.password &&
-            !errors.confirmPassword &&
             !errors.birthdate &&
             !errors.root
         ) {
@@ -103,12 +97,23 @@ function AdminRegistration({ firebase }) {
 
             await firebase
                 .auth()
-                .createUserWithEmailAndPassword(input.mail, input.password);
+                .createUserWithEmailAndPassword(input.mail, input.dni);
+
+            try {
+                await firebase.auth().sendPasswordResetEmail(input.mail);
+            } catch (error) {
+                MySwal.fire({
+                    title: 'Usuario admin no pudo ser creado.',
+                    text: `Mensaje de error ${error}`,
+                    icon: 'error',
+                });
+            }
             MySwal.fire({
                 title: 'Usuario admin creado con exito!',
-                text: 'Debera resetear su password al iniciar sesion.',
+                text: 'Debera resetear su password. Le llegara el link por mail.',
                 icon: 'success',
             });
+
             setInput({
                 name: '',
                 lastname: '',
@@ -116,8 +121,6 @@ function AdminRegistration({ firebase }) {
                 mail: '',
                 birthdate: '',
                 root: '',
-                password: '',
-                confirmPassword: '',
             });
         } else {
             setErrorRequest(true);
@@ -301,10 +304,11 @@ function AdminRegistration({ firebase }) {
                         />
                     </div>
                     <div className={Styles.textField}>
+                        <label htmlFor='mail-input'>Root?</label>
                         <Select
                             label='Es root?'
                             variant='outlined'
-                            id='name-input'
+                            id='mail-input'
                             type='text'
                             name='root'
                             autoComplete='off'
@@ -334,7 +338,7 @@ function AdminRegistration({ firebase }) {
                             })}
                         />
                     </div>
-                    <div className={Styles.textField}>
+                    {/* <div className={Styles.textField}>
                         <TextField
                             id='outlined-search'
                             label='Contraseña'
@@ -369,7 +373,7 @@ function AdminRegistration({ firebase }) {
                                 helperText: 'Las contraseñas no son iguales',
                             })}
                         />
-                    </div>
+                    </div> */}
                 </div>
                 <div>
                     <Button

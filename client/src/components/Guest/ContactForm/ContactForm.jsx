@@ -10,8 +10,11 @@ import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import Card from '@material-ui/core/Card';
-import { _reCAPTCHA_site_key_ } from '../../../recaptcha.config.js';
+// import { _reCAPTCHA_site_key_ } from '../../../recaptcha.config.js';
 import supabase from '../../../supabase.config';
+import Recaptcha from 'react-recaptcha';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 const theme = createMuiTheme({
     palette: {
@@ -45,7 +48,7 @@ const useStyles = makeStyles({
 
 function ContactForm() {
     const classes = useStyles();
-
+    const MySwal = withReactContent(Swal);
     const [input, setInput] = useState({
         name: '',
         age: '',
@@ -64,17 +67,25 @@ function ContactForm() {
     });
     const [successRequest, setSuccessRequest] = useState(false);
     const [errorRequest, setErrorRequest] = useState(false);
+    const [captchaResolve, setCaptchaResolve] = useState(false);
 
-    const handleClickOpen = async (e) => {
+    const handleClickOpen = async () => {
+        if (!captchaResolve) {
+            MySwal.fire({
+                title: 'Completa el captcha para continuar!',
+                icon: 'info',
+                timer: 2500,
+            });
+        }
         if (
             !errors.age &&
             !errors.dni &&
             !errors.phone_number &&
             !errors.email &&
             !errors.name &&
-            !errors.onProcess
+            !errors.onProcess &&
+            captchaResolve
         ) {
-            console.log('No hay errores!', errors);
             setSuccessRequest(true);
             const { data: contactFormResolve } = await supabase
                 .from('guest_contacts')
@@ -203,30 +214,38 @@ function ContactForm() {
             );
     }
 
-    function onClick(e) {
-        e.preventDefault();
-        window.grecaptcha.ready(function () {
-            window.grecaptcha
-                .execute(_reCAPTCHA_site_key_, { action: 'submit' })
-                .then(function (token) {
-                    console.log(token);
-                });
-        });
+    function recaptchaLoaded() {
+        // window.grecaptcha.ready(function () {
+        //     window.grecaptcha
+        //         .execute(_reCAPTCHA_site_key_, { action: 'submit' })
+        //         .then(function (token) {
+        //             console.log(token, 'token');
+        //         });
+        // });
+        console.log('Recaptcha loaded');
     }
+
+    const verifyCaptcha = (response) => {
+        if (response) {
+            setCaptchaResolve(true);
+        } else {
+            setCaptchaResolve(false);
+        }
+    };
 
     useEffect(() => {
         // Add reCaptcha
-        const script = document.createElement('script');
-        script.src = `https://www.google.com/recaptcha/api.js?render=${_reCAPTCHA_site_key_}`;
-        script.addEventListener('load', onClick);
-        document.body.appendChild(script);
+        //     const script = document.createElement('script');
+        //     script.src = `https://www.google.com/recaptcha/api.js?render=${_reCAPTCHA_site_key_}`;
+        //     const root = document.getElementById('root');
+        //     root.appendChild(script);
+        //     script.addEventListener('click', onClick);
+        // }, []);
+        // const renderRedirect = () => {
+        //     if (redirect) {
+        //         setSuccessRequest(false)
+        //     }
     }, []);
-
-    // const renderRedirect = () => {
-    //     if (redirect) {
-    //         setSuccessRequest(false)
-    //     }
-    // };
 
     const success = () => {
         if (successRequest) {
@@ -250,7 +269,7 @@ function ContactForm() {
                                 para charlar sobre tu próximo plan.
                             </p>
                         </div>
-                        <Button
+                        {/* <Button
                             className={Styles.buttonVolverSuccess}
                             variant='contained'
                             color='secondary'
@@ -258,7 +277,7 @@ function ContactForm() {
                             style={{ borderRadius: 100 }}
                         >
                             Volver
-                        </Button>
+                        </Button> */}
                         {/* {renderRedirect()} */}
                     </div>
                 </div>
@@ -367,6 +386,12 @@ function ContactForm() {
                                 />
                             </div>
                         </div>
+                        <Recaptcha
+                            sitekey={process.env.REACT_APP_RECAPTCHA_KEY}
+                            render='explicit'
+                            onloadCallback={recaptchaLoaded}
+                            verifyCallback={verifyCaptcha}
+                        />
                         <div>
                             <Button
                                 variant='contained'
@@ -378,19 +403,20 @@ function ContactForm() {
                                     !input.dni ||
                                     !input.phone_number ||
                                     !input.email ||
-                                    !input.name
+                                    !input.name ||
+                                    !captchaResolve
                                 }
                             >
                                 Consultar
                             </Button>
-                            <Button
+                            {/* <Button
                                 variant='contained'
                                 color='secondary'
                                 onClick={handleBack}
                                 style={{ borderRadius: 100, margin: 10 }}
                             >
                                 Volver
-                            </Button>
+                            </Button> */}
                             {/* {renderRedirect()} */}
                         </div>
                         <Snackbar
@@ -402,12 +428,12 @@ function ContactForm() {
                                 Éste correo ya tiene una solicitud en proceso!
                             </Alert>
                         </Snackbar>
-                        <div
+                        {/* <div
                             className='g-recaptcha'
                             data-sitekey={_reCAPTCHA_site_key_}
                             data-size='explicit'
                             data-callback='onClick'
-                        ></div>
+                        ></div> */}
                     </div>
                 </Card>
             </ThemeProvider>

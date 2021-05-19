@@ -51,7 +51,7 @@ const useStyles = makeStyles(() => ({
         height: '100%',
         justifyContent: 'space-around',
         width: '100%',
-        flexGrow: -1,
+        zIndex: '0',
     },
     tab: {
         position: 'relative',
@@ -62,7 +62,6 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'space-betwen',
         height: 'min-content',
         width: 'min-content',
-        flexGrow: -1,
         flexWrap: 'wrap',
     },
 }));
