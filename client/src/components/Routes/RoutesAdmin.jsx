@@ -32,7 +32,7 @@ function RoutesAdmin() {
             <Route
                 exact
                 path='/:id/admin/affiliates'
-                component={AdminAffiliate}
+                render={() => <AdminAffiliate firebase={firebase} />}
             />
             <Route
                 exact

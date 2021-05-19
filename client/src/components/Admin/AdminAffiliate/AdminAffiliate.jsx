@@ -39,6 +39,7 @@ import { getAffiliates, getPlans } from '../../../actions/getter.action.js';
 import calculateAge from '../../../functions/calculateAge.js';
 import styles from './AdminAffiliate.module.css';
 import supabase from '../../../supabase.config';
+import AdminAside from '../AdminNav/AdminAside.jsx';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -178,13 +179,15 @@ const useToolbarStyles = makeStyles((theme) => ({
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
+        position: 'relative',
+        display: 'flex',
     },
     paper: {
         width: '100%',
         marginBottom: theme.spacing(2),
     },
     table: {
-        minWidth: 750,
+        width: '100%',
     },
     visuallyHidden: {
         border: 0,
@@ -198,7 +201,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function AdminAffiliate() {
+function AdminAffiliate({ firebase }) {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -214,6 +217,8 @@ function AdminAffiliate() {
         select: '',
         text: '',
     });
+    let userData = localStorage.getItem('userdata');
+    userData = JSON.parse(userData);
     const MySwal = withReactContent(Swal);
     const [input, setInput] = React.useState({
         dni: '',
@@ -492,6 +497,7 @@ function AdminAffiliate() {
 
     return (
         <div className={classes.root}>
+            <AdminAside firebase={firebase} userData={userData} />
             <Paper className={classes.paper}>
                 <Toolbar>
                     <Typography
