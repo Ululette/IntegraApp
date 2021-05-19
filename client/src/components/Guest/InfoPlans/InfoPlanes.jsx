@@ -4,6 +4,7 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import styles from './InfoPlans.module.css';
 import { useSelector, useDispatch } from 'react-redux';
+// import { getPlans } from '../../actions/getter.action.js';
 import { getPlans } from '../../../actions/getter.action';
 import { teal } from '@material-ui/core/colors';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -63,7 +64,7 @@ function InfoPlanes() {
                 <ArrowBackIosIcon style={{ color: teal[300] }} />
             </div>
             <div className={styles.card}>
-                <InfoCard
+                {/* <InfoCard
                     key={`${leftPlan.id}-12`}
                     className={styles.center}
                     plan={leftPlan}
@@ -77,7 +78,7 @@ function InfoPlanes() {
                     key={`${rightPlan.id}-12`}
                     className={styles.center}
                     plan={rightPlan}
-                />
+                /> */}
             </div>
             <div className={styles.right} onClick={forward}>
                 <ArrowForwardIosIcon style={{ color: teal[300] }} />
