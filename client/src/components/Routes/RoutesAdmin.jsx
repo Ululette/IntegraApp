@@ -5,7 +5,7 @@ import AdminHome from '../Admin/AdminHome/AdminHome.jsx';
 import AdminPlans from '../Admin/AdminPlans/AdminPlans.jsx';
 import NewPlanP from '../Admin/NewPlanP/NewPlanP.jsx';
 import AdminNav from '../Admin/AdminNav/AdminNav';
-import AdminMedicTabs from '../Admin/AdminMedics/AdminMedics.jsx';
+import AdminMedicTabs from '../Admin/MedicsTable/AdminTabs.jsx';
 import AdminAffiliate from '../Admin/AdminAffiliate/AdminAffiliate.jsx';
 import FormSpecialities from '../Admin/Speciality/FormSpecialities.jsx';
 import AdminRegistration from '../Admin/AdminRegistration/AdminRegistration.jsx';
