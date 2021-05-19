@@ -497,7 +497,6 @@ function AdminAffiliate({ firebase }) {
 
     return (
         <div className={classes.root}>
-            <AdminAside firebase={firebase} userData={userData} />
             <Paper className={classes.paper}>
                 <Toolbar>
                     <Typography
