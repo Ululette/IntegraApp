@@ -15,6 +15,7 @@ import PhoneAndroidIcon from '@material-ui/icons/PhoneAndroid';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import HealingIcon from '@material-ui/icons/Healing';
+import PersonPinIcon from '@material-ui/icons/PersonPin';
 
 function AdminAside() {
     const userData = JSON.parse(localStorage.getItem('userdata'));
@@ -73,6 +74,14 @@ function AdminAside() {
                 >
                     <HealingIcon />
                     <li>Medicos</li>
+                </NavLink>
+                <NavLink
+                    to={`/${userData.dni}/admin/users`}
+                    className={styles.link}
+                    activeClassName={styles.activeLink}
+                >
+                    <PersonPinIcon />
+                    <li>Usuarios</li>
                 </NavLink>
                 <article>
                     <Badge

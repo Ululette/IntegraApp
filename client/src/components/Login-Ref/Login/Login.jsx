@@ -13,6 +13,8 @@ import 'firebase/auth';
 import { useUser } from 'reactfire';
 import supabase from '../../../supabase.config.js';
 import styles from './Login.module.css';
+import Swal from 'sweetalert2';
+
 
 function Login({ firebase }) {
     const [role, setRole] = useState(10);
@@ -57,95 +59,136 @@ function Login({ firebase }) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        //buscar en la base si esta activo el user
+        //informar en caso de que este inactivo
+
         setInput({ doc: '', pass: '' });
         setLoading(true);
         try {
             let { data: users, error } = await supabase
                 .from('users')
-                .select('dni, email, role, avatar_url')
+                .select('dni, email, role, avatar_url,account')
                 .eq('dni', input.doc);
             if (error) return console.log(error);
-            const numRole =
+            if(users[0].account === 'inactive'){
+                Swal.fire({
+                    title: `Error!`,
+                    text: `Access denied! Your account is inactive. Contact the administrator`,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                })
+                setLoading(false);
+            }else{
+                const numRole =
                 users[0].role === 'affiliate'
                     ? 10
                     : users[0].role === 'medic'
                     ? 20
                     : 30;
-            if (numRole !== role) {
+                if (numRole !== role) {
+                    setLoading(false);
+                    return setErrors('Usuario y/o contraseña incorrecto.');
+                } else {
+                    setErrors(null);
+                }
+                if (users[0].role === 'affiliate') {
+                    let { data: userInfo, error: errorFetchUserInfo } =
+                        await supabase
+                            .from(`partners`)
+                            .select(
+                                'name, lastname, family_group, plans (id, name)'
+                            )
+                            .eq('dni', users[0].dni);
+
+                    if (errorFetchUserInfo) {
+                        console.log(errorFetchUserInfo);
+                        setLoading(false);
+                        return alert('Error en fetch user info.');
+                    }
+
+                    const affiliateData = {
+                        name: userInfo[0].name,
+                        lastname: userInfo[0].lastname,
+                        plan_id: userInfo[0].plans.id,
+                        plan_name: userInfo[0].plans.name,
+                        family_group: userInfo[0].family_group,
+                    };
+                    localStorage.setItem(
+                        'affiliatedata',
+                        JSON.stringify(affiliateData)
+                    );
+                }
+
+                if (users[0].role === 'admin') {
+                    let { data: userInfo, error: errorFetchUserInfo } =
+                        await supabase
+                            .from(`admins`)
+                            .select('name, lastname, root')
+                            .eq('dni', users[0].dni);
+
+                    if (errorFetchUserInfo) {
+                        console.log(errorFetchUserInfo);
+                        setLoading(false);
+                        return alert('Error en fetch user info.');
+                    }
+
+                    const adminData = {
+                        name: userInfo[0].name,
+                        lastname: userInfo[0].lastname,
+                        root: userInfo[0].root,
+                    };
+                    localStorage.setItem('admindata', JSON.stringify(adminData));
+                }
+
+                await firebase
+                    .auth()
+                    .signInWithEmailAndPassword(users[0].email, input.pass);
+
+                const dataUser = {
+                    dni: users[0].dni,
+                    email: users[0].email,
+                    role: users[0].role,
+                    avatar_url: users[0].avatar_url,
+                };
+
+                localStorage.setItem('userdata', JSON.stringify(dataUser));
                 setLoading(false);
-                return setErrors('Usuario y/o contraseña incorrecto.');
-            } else {
-                setErrors(null);
-            }
-
-            if (users[0].role === 'affiliate') {
-                let { data: userInfo, error: errorFetchUserInfo } =
-                    await supabase
-                        .from(`partners`)
-                        .select(
-                            'name, lastname, family_group, plans (id, name)'
-                        )
-                        .eq('dni', users[0].dni);
-
-                if (errorFetchUserInfo) {
-                    console.log(errorFetchUserInfo);
-                    setLoading(false);
-                    return alert('Error en fetch user info.');
                 }
-
-                const affiliateData = {
-                    name: userInfo[0].name,
-                    lastname: userInfo[0].lastname,
-                    plan_id: userInfo[0].plans.id,
-                    plan_name: userInfo[0].plans.name,
-                    family_group: userInfo[0].family_group,
-                };
-                localStorage.setItem(
-                    'affiliatedata',
-                    JSON.stringify(affiliateData)
-                );
-            }
-
-            if (users[0].role === 'admin') {
-                let { data: userInfo, error: errorFetchUserInfo } =
-                    await supabase
-                        .from(`admins`)
-                        .select('name, lastname, root')
-                        .eq('dni', users[0].dni);
-
-                if (errorFetchUserInfo) {
-                    console.log(errorFetchUserInfo);
-                    setLoading(false);
-                    return alert('Error en fetch user info.');
-                }
-
-                const adminData = {
-                    name: userInfo[0].name,
-                    lastname: userInfo[0].lastname,
-                    root: userInfo[0].root,
-                };
-                localStorage.setItem('admindata', JSON.stringify(adminData));
-            }
-
-            await firebase
-                .auth()
-                .signInWithEmailAndPassword(users[0].email, input.pass);
-
-            const dataUser = {
-                dni: users[0].dni,
-                email: users[0].email,
-                role: users[0].role,
-                avatar_url: users[0].avatar_url,
-            };
-
-            localStorage.setItem('userdata', JSON.stringify(dataUser));
-            setLoading(false);
+            
         } catch (error) {
             setErrors('Usuario y/o contraseña incorrecto.');
             setLoading(false);
         }
     };
 
+    const handleAlert = async ()=>{
+        const { value: email } = await Swal.fire({
+            title: 'Integra: Password Reset.',
+            input: 'email',
+            inputLabel: 'Your email address',
+            inputPlaceholder: 'Enter your email address',
+            showCancelButton: true
+        })
+        //buscar en la base el mail
+        firebase.auth().sendPasswordResetEmail(email).then(function() {
+            // Email sent.
+            Swal.fire({
+                title: `Success!`,
+                text: `Enviamos un link a ${email} para restablecer tu contraseña.`,
+                icon: 'success',
+                confirmButtonText: 'OK'
+              })
+        }).catch(function(error) {
+            // An error happened.
+            Swal.fire({
+                title: `Error!`,
+                text: `There is no user record corresponding to this email: ${email}.`,
+                icon: 'error',
+                confirmButtonText: 'OK'
+              })
+        });
+
+    }
     return (
         <div className={styles.container}>
             <aside className={styles.header}>
@@ -183,7 +226,6 @@ function Login({ firebase }) {
                         </MenuItem>
                     </Select>
                 </section>
-
                 <img
                     src='../../assets/images/logo.png'
                     alt='Logo Integra.'
@@ -231,7 +273,6 @@ function Login({ firebase }) {
                         Usuario y/o contraseña incorrecta
                     </p>
                 ) : null}
-
                 {loading ? (
                     <CircularProgress className={styles.progressLoad} />
                 ) : (
@@ -241,7 +282,10 @@ function Login({ firebase }) {
                         value='Ingresar'
                     />
                 )}
+            <a  href='#' className={styles.a} 
+                onClick={handleAlert}>¿Olvidaste tu contraseña?</a>
             </form>
+            
         </div>
     );
 }

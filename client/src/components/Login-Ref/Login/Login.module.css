@@ -4,6 +4,7 @@
     height: 100%;
 }
 
+
 /* BEGIN HEADER ASIDE */
 
 .header {
@@ -20,7 +21,7 @@
     justify-content: flex-end;
     align-items: flex-start;
     padding-bottom: 21rem;
-    padding-left: 2rem;
+    padding-left: 2rem; 
 }
 
 .header p {
@@ -116,7 +117,16 @@
     justify-content: space-around;
     align-items: center;
 }
+.formLogin a{
+    font-size: 20px;
+    text-decoration: none;
+    margin-top: 20px;
+    color: black;
+}
 
+.formLogin a.visited {
+    color:red;
+}
 .labelRole {
     font-size: 1.3rem;
 }
@@ -132,3 +142,4 @@
 .progressLoad {
     margin-top: 1.5rem;
 }
+
