@@ -41,6 +41,15 @@ function MedicPatients() {
     return (
         <div className={styles.container}>
             <h1>Mis pacientes</h1>
+            <ul>
+                {listPatients.map((el) =>
+                    el.map((pat, index) => (
+                        <li
+                            key={`patient-${index}`}
+                        >{`${pat.dni} ${pat.name} ${pat.lastname}`}</li>
+                    ))
+                )}
+            </ul>
         </div>
     );
 }
