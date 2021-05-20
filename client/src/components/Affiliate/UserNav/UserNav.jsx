@@ -195,14 +195,8 @@ function UserNav({ firebase, window: windowMui }) {
                     activeClassName={styles.activeLink}
                 >
                     <ListItem button>
-                        <Badge
-                            className={styles.notifications}
-                            color='secondary'
-                            badgeContent={2}
-                        >
-                            <FavoriteBorderIcon />
-                            <ListItemText primary='Mi carpeta medica' />
-                        </Badge>
+                        <FavoriteBorderIcon />
+                        <ListItemText primary='Mi carpeta medica' />
                     </ListItem>
                 </NavLink>
 
@@ -240,14 +234,8 @@ function UserNav({ firebase, window: windowMui }) {
                     <ListItemText primary='Pago online' />
                 </ListItem>
                 <ListItem button>
-                    <Badge
-                        className={styles.notifications}
-                        color='secondary'
-                        badgeContent={2}
-                    >
-                        <ForumIcon />
-                        <ListItemText primary='Contactanos' />
-                    </Badge>
+                    <ForumIcon />
+                    <ListItemText primary='Contactanos' />
                 </ListItem>
             </List>
         </div>

@@ -11,7 +11,19 @@
     padding: 0 10px;
     position: sticky;
     width: 100%;
-    z-index: 200;
+    z-index: 2;
+}
+
+.asidebar {
+    z-index: 0;
+    position: relative;
+}
+
+.listitems {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: left;
 }
 
 .ppLogo {
@@ -43,17 +55,12 @@
     margin: 0 10px;
     text-align: end;
 }
-.navLink {
-    color: #000;
-}
-.planName {
-    text-transform: capitalize;
-}
 
 .profilePic {
     color: #fff;
     height: 50px;
     width: 50px;
+    border-radius: 100%;
 }
 
 .expandMore {
@@ -69,9 +76,10 @@
     text-align: center;
 }
 
-.divider {
-    margin-left: 10px;
+.newAdmin {
+    color: #000;
 }
+
 
 /* NAVBAR */
 
@@ -79,11 +87,17 @@
 
 .aside {
     background-color: #e8ffff;
-    border-top: transparent;
-    box-shadow: 0px 1px 5px 0px rgb(0 0 0 / 10%), 0px 2px 2px 0px rgb(0 0 0 / 10%), 0px 3px 1px -2px rgb(0 0 0 / 10%);
     height: 100%;
-    position: sticky;
     width: fit-content;
+    box-shadow: 0px 1px 5px 0px rgb(0 0 0 / 10%), 0px 2px 2px 0px rgb(0 0 0 / 10%), 0px 3px 1px -2px rgb(0 0 0 / 10%);
+    border-top: transparent;
+    position: sticky;
+    top: 0;
+    left: 0;
+}
+
+.notifications {
+    padding-right: 10px;
 }
 
 .buttonsContainer {
@@ -91,50 +105,37 @@
     padding: 25px;
 }
 
-.buttonsContainer article {
+.iconAside {
+    color: #000;
+}
+
+.buttonsContainer article, .link {
     align-items: center;
     border-bottom: 1px solid transparent;
+    color: #000;
     cursor: pointer;
     display: flex;
     font-size: 1.2rem;
+    height: 50px;
     justify-content: flex-start;
-    margin: 1.4rem 0;
     width: 100%;
 }
 
-.buttonsContainer article:hover {
+/* .buttonsContainer article:hover, .link:hover {
     border-bottom: 1px solid #000;
-}
+} */
 
-.buttonsContainer article li {
+.buttonsContainer article li, .link li {
     margin-left: 10px;
+    color: #000;
 }
 
 .link {
-    align-items: center;
-    border-bottom: 1px solid transparent;
-    cursor: pointer;
-    display: flex;
-    font-size: 1.2rem;
-    justify-content: flex-start;
-    margin: 1.4rem 0;
-    width: 100%;
-}
-
-.link li {
     color: black;
 }
 
 .link svg {
     color: black;
-}
-
-.link:hover {
-    border-bottom: 1px solid #000;
-}
-
-.link li {
-    margin-left: 10px;
 }
 
 .activeLink li {
