@@ -11,45 +11,85 @@ import validator from "./Validator.js";
 import * as styles from './DatosEmpresa.module.css'
 
 const DatosEmpresa = () => {
-	const [inputsText, setInputsText] = useState({
+	const [textInputs, setTextInputs] = useState({
 		rh_name: "",
 	});
-	const [inputsNumber, setInputsNumber] = useState({
+	const [textInputsNum, setTextInputsNum] = useState({
 		company_phone: "",
 	});
-	const [inputsMix, setInputsMix] = useState({
+	const [textInputsMix, setTextInputsMix] = useState({
 		bussines_name: "",
 		bussines_group: "",
 	});
-	const [inputsEmail, setInputsEmail] = useState({
+	const [emailInputs, setEmailInputs] = useState({
 		company_email: "",
 	});
 	const [errors, setErrors] = useState({
 		textErrors:{
-			bussines_name: "",
-			bussines_group: "",
-			rh_name: "",
-			company_phone: "",
-			company_email: "",
+			rh_name:""
+		},
+		textNumErrors:{
+			company_phone: ""
+		},
+		textMixErrors:{
+				bussines_name: "",
+				bussines_group: ""
+			},
+		emailErrors:{
+			company_email: ""
 		}
 	});
 	
 	useEffect(() => {
 		let datosEmpresa=JSON.parse(localStorage.getItem('datosEmpresa')) 
 		if(datosEmpresa){
-			setInputsText({
+			setTextInputs({
 				rh_name:datosEmpresa.rh_name
 			})
-			setInputsNumber({
+			setTextInputsNum({
 				company_phone:datosEmpresa.company_phone
 			})
-			setInputsMix({
+			setTextInputsMix({
 				bussines_name: datosEmpresa.bussines_name,
 				bussines_group: datosEmpresa.bussines_group,
 			})
-			setInputsEmail({
+			setEmailInputs({
 				company_email: datosEmpresa.company_email
 			})
+		setErrors(errors=>({
+			...errors,
+			textErrors: validator(
+				{
+				rh_name:datosEmpresa.rh_name	
+				},"text"
+			)
+		}))
+		setErrors(errors=>({
+			...errors,
+			textNumErrors: validator(
+				{
+				company_phone:datosEmpresa.company_phone	
+				},"number"
+			)
+		}))
+		setErrors(errors=>({
+			...errors,
+			textMixErrors: validator(
+				{
+					bussines_name: datosEmpresa.bussines_name,
+					bussines_group: datosEmpresa.bussines_group,
+				},"mix"
+			)
+		}))
+		setErrors(errors=>({
+			...errors,
+			emailErrors: validator(
+				{
+					company_email: datosEmpresa.company_email
+				},"email"
+			)
+		}))
+		
 		}
     }, []);
 
@@ -57,52 +97,60 @@ const DatosEmpresa = () => {
 		localStorage
 		.setItem('datosEmpresa', 
 				JSON.stringify({
-					...inputsMix,
-					...inputsText,
-					...inputsNumber,
-					...inputsEmail
-		}))
+					...textInputs,
+					...textInputsNum,
+					...textInputsMix,
+					...emailInputs		
+				}))
+		localStorage.setItem("errorsEmpresa", JSON.stringify({ ...errors }));
 	}
 
 	const handleMixChange = (e) => {
-		setInputsMix((prevState) => {
+		setTextInputsMix((prevState) => {
 		  return {
 			...prevState,
 			[e.target.name]: e.target.value,
 		  };
 		});
-		setErrors({...errors,textErrors:validator({...inputsMix,[e.target.name]: e.target.value},"mix")})
-		saveInLocalStorage()
+		setErrors({
+			...errors,
+			textMixErrors:validator(
+				{...textInputsMix,[e.target.name]: e.target.value},"mix")})
 	};
 	const handleTextChange = (e) => {
-		setInputsText((prevState) => {
+		setTextInputs((prevState) => {
 		  return {
 			...prevState,
 			[e.target.name]: e.target.value,
 		  };
 		});
-		setErrors({...errors,textErrors:validator({...inputsText,[e.target.name]: e.target.value},"text")})
-		saveInLocalStorage()
+		setErrors({...errors,
+			textErrors:validator(
+				{...textInputs,[e.target.name]: e.target.value},"text")})
 	};
 	const handleNumberChange = (e) => {
-		setInputsNumber((prevState) => {
+		setTextInputsNum((prevState) => {
 		  return {
 			...prevState,
 			[e.target.name]: e.target.value,
 		  };
 		});
-		setErrors({...errors,textErrors:validator({...inputsNumber,[e.target.name]: e.target.value},"number")})
-		saveInLocalStorage()
+		setErrors({...errors,
+			textNumErrors:validator(
+				{...textInputsNum,[e.target.name]: e.target.value},"number")})
 	};
 	const handleEmailChange = (e) => {
-		setInputsEmail((prevState) => {
+		setEmailInputs((prevState) => {
 		  return {
 			...prevState,
 			[e.target.name]: e.target.value,
 		  };
 		});
-		setErrors({...errors,textErrors:validator({...inputsEmail,[e.target.name]: e.target.value},"email")})
-		saveInLocalStorage()
+		setErrors({
+			...errors,
+			emailErrors:validator(
+				{...emailInputs,[e.target.name]: e.target.value},"email")})
+	
 	};
 
 	// useEffect(() => {
@@ -123,16 +171,16 @@ const DatosEmpresa = () => {
 							name="bussines_name"
 							label="Razon Social"
 							variant="outlined"
-							value={inputsMix.bussines_name}
+							value={textInputsMix.bussines_name}
 							type='text'
 							onChange={(e) => handleMixChange(e)}
 							onBlur={saveInLocalStorage}
-							{...(errors.textErrors.bussines_name && {
-								error: !!errors.textErrors.bussines_name,
-								helperText: errors.textErrors.bussines_name,
+							{...(errors.textMixErrors.bussines_name && {
+								error: !!errors.textMixErrors.bussines_name,
+								helperText: errors.textMixErrors.bussines_name,
 							})}
 							
-							// error= {errors.textErrors.bussines_name && !!errors.textErrors.bussines_name}
+							error= {errors.textErrors.bussines_name && !!errors.textErrors.bussines_name}
 						/>
 					</div>
 					<div className={styles.input}>
@@ -140,12 +188,12 @@ const DatosEmpresa = () => {
 							name="bussines_group"
 							label="Grupo Empresarial"
 							variant="outlined"
-							value={inputsMix.bussines_group}
+							value={textInputsMix.bussines_group}
 							onChange={(e) => handleMixChange(e)}
 							onBlur={saveInLocalStorage}
-							{...(errors.textErrors.bussines_group && {
-								error: errors.textErrors.bussines_group,
-								// helperText: errors.textErrors.bussines_group,
+							{...(errors.textMixErrors.bussines_group && {
+								error: errors.textMixErrors.bussines_group,
+								helperText: errors.textMixErrors.bussines_group,
 							})}
 						/>
 					</div>
@@ -154,12 +202,12 @@ const DatosEmpresa = () => {
 							name="rh_name"
 							label="Nombre y Apellido de RRHH"
 							variant="outlined"
-							value={inputsText.rh_name}
+							value={textInputs.rh_name}
 							onChange={(e) => handleTextChange(e)}
 							onBlur={saveInLocalStorage}
 							{...(errors.textErrors.rh_name && {
 								error: errors.textErrors.rh_name,
-								// helperText: errors.textErrors.rh_name,
+								helperText: errors.textErrors.rh_name,
 							})}
 						/>
 					</div> 
@@ -170,12 +218,12 @@ const DatosEmpresa = () => {
 							name="company_phone"
 							label="Telefono"
 							variant="outlined"
-							value={inputsNumber.company_phone}
+							value={textInputsNum.company_phone}
 							onChange={(e) => handleNumberChange(e)}
 							onBlur={saveInLocalStorage}
-							{...(errors.textErrors.company_phone && {
-								error: errors.textErrors.company_phone,
-								// helperText: errors.textErrors.company_phone,
+							{...(errors.textNumErrors.company_phone && {
+								error: errors.textNumErrors.company_phone,
+								helperText: errors.textNumErrors.company_phone,
 							})}
 						/>
 					</div>
@@ -184,12 +232,12 @@ const DatosEmpresa = () => {
 							name="company_email"
 							label="E-mail"
 							variant="outlined"
-							value={inputsEmail.company_email}
+							value={emailInputs.company_email}
 							onChange={(e) => handleEmailChange(e)}
 							onBlur={saveInLocalStorage}
-							{...(errors.textErrors.company_email && {
-								error: errors.textErrors.company_email,
-								// helperText: errors.textErrors.company_email,
+							{...(errors.emailErrors.company_email && {
+								error: errors.emailErrors.company_email,
+								helperText: errors.emailErrors.company_email,
 							})}
 						/>
 					</div>
