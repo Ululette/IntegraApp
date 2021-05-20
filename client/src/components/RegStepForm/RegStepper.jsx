@@ -10,6 +10,7 @@ import DatosSalud from './DatosSalud';
 import DatosFamiliares from './DatosFamiliares';
 import DatosEmpresa from "./DatosEmpresa"
 import DatosRevision from './DatosRevision';
+import supabase from "../../supabase.config";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,6 +72,7 @@ return completeError}
 
   const handleReset = () => {
     setActiveStep(0);
+    localStorage.clear();
   };
 
   return (
@@ -100,7 +102,7 @@ return completeError}
                 Back
               </Button>
               <Button variant="contained" color="primary" onClick={handleNext} >
-                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                {activeStep === 2 ? 'Finish' : 'Next'}
               </Button>
             </div>
           </div>
