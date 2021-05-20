@@ -15,6 +15,12 @@ import {
     CircularProgress,
     Divider,
 } from '@material-ui/core';
+import Drawer from '@material-ui/core/Drawer';
+import Hidden from '@material-ui/core/Hidden';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+
 import 'firebase/auth';
 import supabase from '../../../supabase.config.js';
 import { useUser } from 'reactfire';
@@ -22,6 +28,9 @@ import { NavLink } from 'react-router-dom';
 
 //Styles
 import styles from './UserNav.module.css';
+
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 //Icons
 import MailIcon from '@material-ui/icons/Mail';
@@ -37,6 +46,8 @@ import PhoneAndroidIcon from '@material-ui/icons/PhoneAndroid';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import PaymentIcon from '@material-ui/icons/Payment';
 import ForumIcon from '@material-ui/icons/Forum';
+import MenuIcon from '@material-ui/icons/Menu';
+import GroupIcon from '@material-ui/icons/Group';
 
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import PhoneInTalkIcon from '@material-ui/icons/PhoneInTalk';
@@ -47,17 +58,61 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction='down' ref={ref} {...props} />;
 });
 
-function UserNav({ firebase }) {
+const drawerWidth = 260;
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        position: 'relative',
+    },
+    drawer: {
+        [theme.breakpoints.up('sm')]: {
+            width: drawerWidth,
+            flexShrink: 0,
+        },
+        zIndex: 0,
+    },
+    appBar: {
+        [theme.breakpoints.up('sm')]: {
+            width: `calc(100% - ${drawerWidth}px)`,
+            marginLeft: drawerWidth,
+        },
+    },
+    menuButton: {
+        marginRight: theme.spacing(2),
+        [theme.breakpoints.up('sm')]: {
+            display: 'none',
+        },
+    },
+    // necessary for content to be below app bar
+    toolbar: theme.mixins.toolbar,
+    drawerPaper: {
+        width: drawerWidth,
+        zIndex: 0,
+    },
+    content: {
+        flexGrow: 1,
+        padding: theme.spacing(3),
+    },
+}));
+
+function UserNav({ firebase, window: windowMui }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [open, setOpen] = useState(false);
     const [familyGroup, setFamilyGroup] = useState([]);
     const userData = JSON.parse(localStorage.getItem('userdata'));
     const affiliateData = JSON.parse(localStorage.getItem('affiliatedata'));
     const userFirebase = useUser();
+    const MySwal = withReactContent(Swal);
+    const classes = useStyles();
+    const theme = useTheme();
+    const [mobileOpen, setMobileOpen] = React.useState(false);
 
     if (!userFirebase.data && !affiliateData && !userData) {
         window.location = '/login';
     }
+
+    const container =
+        windowMui !== undefined ? () => windowMui().document.body : undefined;
 
     useEffect(() => {
         getFamilyGroup();
@@ -80,13 +135,123 @@ function UserNav({ firebase }) {
     };
 
     const logout = async () => {
-        if (window.confirm('¿Quiere cerrar sesión?')) {
-            await firebase.auth().signOut();
-            localStorage.removeItem('userdata');
-            localStorage.removeItem('affiliatedata');
-            window.location = '/login';
-        }
+        setAnchorEl(null);
+        MySwal.fire({
+            title: '¿Quiere cerrar sesión?',
+            icon: 'question',
+            showConfirmButton: true,
+            showCloseButton: true,
+            showCancelButton: true,
+            focusConfirm: false,
+            reverseButtons: true,
+            confirmButtonText: 'Cerrar sesion',
+            cancelButtonText: 'Cancelar',
+        }).then(async (res) => {
+            if (res.isConfirmed) {
+                await firebase.auth().signOut();
+                localStorage.removeItem('userdata');
+                localStorage.removeItem('affiliatedata');
+                window.location = '/login';
+            }
+        });
     };
+
+    const drawer = (
+        <div className={styles.asidebar}>
+            <div className={classes.toolbar} />
+            <List className={styles.listitems}>
+                <NavLink
+                    to={`/${userData.dni}/affiliate/`}
+                    className={styles.link}
+                >
+                    <ListItem button>
+                        <HomeIcon />
+                        <ListItemText primary='Inicio' />
+                    </ListItem>
+                </NavLink>
+                <NavLink
+                    to={`/${userData.dni}/affiliate/profile`}
+                    className={styles.link}
+                    activeClassName={styles.activeLink}
+                >
+                    <ListItem button>
+                        <FaceIcon />
+                        <ListItemText primary='Mi cuenta' />
+                    </ListItem>
+                </NavLink>
+                <NavLink
+                    to={`/${userData.dni}/affiliate/profile`}
+                    className={styles.link}
+                    activeClassName={styles.activeLink}
+                >
+                    <ListItem button>
+                        <GroupIcon />
+                        <ListItemText primary='Mi grupo familiar' />
+                    </ListItem>
+                </NavLink>
+                <NavLink
+                    to={`/${userData.dni}/affiliate/mymedicalrecords`}
+                    className={styles.link}
+                    activeClassName={styles.activeLink}
+                >
+                    <ListItem button>
+                        <Badge
+                            className={styles.notifications}
+                            color='secondary'
+                            badgeContent={2}
+                        >
+                            <FavoriteBorderIcon />
+                            <ListItemText primary='Mi carpeta medica' />
+                        </Badge>
+                    </ListItem>
+                </NavLink>
+
+                <ListItem button>
+                    <NoteIcon />
+                    <ListItemText primary='Mi plan' />
+                </ListItem>
+
+                <ListItem button>
+                    <DoneAllIcon />
+                    <ListItemText primary='Mis autorizaciones' />
+                </ListItem>
+                <NavLink
+                    to={`/${userData.dni}/affiliate/mymedicalrecords`}
+                    className={styles.link}
+                    activeClassName={styles.activeLink}
+                >
+                    <ListItem button>
+                        <PhoneAndroidIcon />
+                        <ListItemText primary='Mi credencial' />
+                    </ListItem>
+                </NavLink>
+                <NavLink
+                    to={`/${userData.dni}/affiliate/doctor`}
+                    className={styles.link}
+                    activeClassName={styles.activeLink}
+                >
+                    <ListItem button>
+                        <AssignmentIcon />
+                        <ListItemText primary='Cartilla medica' />
+                    </ListItem>
+                </NavLink>
+                <ListItem button>
+                    <PaymentIcon />
+                    <ListItemText primary='Pago online' />
+                </ListItem>
+                <ListItem button>
+                    <Badge
+                        className={styles.notifications}
+                        color='secondary'
+                        badgeContent={2}
+                    >
+                        <ForumIcon />
+                        <ListItemText primary='Contactanos' />
+                    </Badge>
+                </ListItem>
+            </List>
+        </div>
+    );
 
     const getFamilyGroup = async () => {
         let { data: familyGroup, error: fetchFamilyGroup } = await supabase
@@ -94,11 +259,18 @@ function UserNav({ firebase }) {
             .select('name, lastname')
             .eq('family_group', affiliateData.family_group);
         if (fetchFamilyGroup) {
-            console.log(fetchFamilyGroup);
-            alert(fetchFamilyGroup.message);
+            MySwal.fire({
+                title: 'Error con la base de datos!!',
+                text: `${fetchFamilyGroup.message}`,
+                icon: 'error',
+            });
             return 'Error en fetchFamilyGroup';
         }
         setFamilyGroup(familyGroup);
+    };
+
+    const handleDrawerToggle = () => {
+        setMobileOpen(!mobileOpen);
     };
 
     if (familyGroup.length === 0) return <CircularProgress />;
@@ -106,6 +278,17 @@ function UserNav({ firebase }) {
     return (
         <div className={styles.container}>
             <nav className={styles.navbar}>
+                <Toolbar>
+                    <IconButton
+                        color='inherit'
+                        aria-label='open drawer'
+                        edge='start'
+                        onClick={handleDrawerToggle}
+                        className={classes.menuButton}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                </Toolbar>
                 <section>
                     <img
                         src='../../assets/images/logo.png'
@@ -222,61 +405,34 @@ function UserNav({ firebase }) {
                     </div>
                 </section>
             </nav>
-            <aside className={styles.aside}>
-                <ul className={styles.buttonsContainer}>
-                    <NavLink
-                        to={`/${userData.dni}/affiliate`}
-                        className={styles.link}
-                    >
-                        <HomeIcon />
-                        <li>Inicio</li>
-                    </NavLink>
-                    <NavLink
-                        to={`/${userData.dni}/affiliate/familymembers`}
-                        className={styles.link}
-                        activeClassName={styles.activeLink}
-                    >
-                        <FaceIcon />
-                        <li>Mi cuenta</li>
-                    </NavLink>
-                    <NavLink
-                        to={`/${userData.dni}/affiliate/mymedicalrecords`}
-                        className={styles.link}
-                        activeClassName={styles.activeLink}
-                    >
-                        <FavoriteBorderIcon />
-                        <li>Mi carpeta medica</li>
-                    </NavLink>
-                    <article>
-                        <NoteIcon />
-                        <li>Mi plan</li>
-                    </article>
-                    <article>
-                        <DoneAllIcon />
-                        <li>Mis autorizaciones</li>
-                    </article>
-                    <article>
-                        <PhoneAndroidIcon />
-                        <li>Mi credencial</li>
-                    </article>
-                    <NavLink
-                        to={`/${userData.dni}/affiliate/doctor`}
-                        className={styles.link}
-                        activeClassName={styles.activeLink}
-                    >
-                        <AssignmentIcon />
-                        <li>Cartilla medica</li>
-                    </NavLink>
-                    <article>
-                        <PaymentIcon />
-                        <li>Pago online</li>
-                    </article>
-                    <article>
-                        <ForumIcon />
-                        <li>Contactanos</li>
-                    </article>
-                </ul>
-            </aside>
+            <Hidden smUp implementation='css'>
+                <Drawer
+                    container={container}
+                    variant='temporary'
+                    anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                    open={mobileOpen}
+                    onClose={handleDrawerToggle}
+                    classes={{
+                        paper: classes.drawerPaper,
+                    }}
+                    ModalProps={{
+                        keepMounted: true, // Better open performance on mobile.
+                    }}
+                >
+                    {drawer}
+                </Drawer>
+            </Hidden>
+            <Hidden xsDown implementation='css'>
+                <Drawer
+                    classes={{
+                        paper: classes.drawerPaper,
+                    }}
+                    variant='permanent'
+                    open
+                >
+                    {drawer}
+                </Drawer>
+            </Hidden>
         </div>
     );
 }

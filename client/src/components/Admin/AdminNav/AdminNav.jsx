@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useUser } from 'reactfire';
-import { NavLink, Redirect } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 //Styles
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import styles from './AdminNav.module.css';
@@ -35,6 +35,7 @@ import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import HealingIcon from '@material-ui/icons/Healing';
 import MenuIcon from '@material-ui/icons/Menu';
+
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
