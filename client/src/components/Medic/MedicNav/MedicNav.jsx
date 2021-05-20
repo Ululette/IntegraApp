@@ -3,7 +3,7 @@ import { useUser } from 'reactfire';
 import { NavLink } from 'react-router-dom';
 //Styles
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import styles from './Medic.module.css';
+import styles from './MedicNav.module.css';
 
 // Material-UI components
 import {
@@ -20,7 +20,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-
 //Icons
 import MailIcon from '@material-ui/icons/Mail';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -31,7 +30,6 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import MenuIcon from '@material-ui/icons/Menu';
-
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
