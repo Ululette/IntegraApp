@@ -3,12 +3,14 @@ import RoutesAffiliate from './Routes/RoutesAffiliate.jsx';
 import RoutesGuest from './Routes/RoutesGuest.jsx';
 import RoutesAdmin from './Routes/RoutesAdmin.jsx';
 import RoutesLogin from './Routes/RoutesLogin.jsx';
+import RoutesMedic from './Routes/RoutesMedics.jsx';
 
 function App() {
     return (
         <>
             <RoutesGuest />
             <RoutesAffiliate />
+            <RoutesMedic />
             <RoutesAdmin />
             <RoutesLogin />
         </>
