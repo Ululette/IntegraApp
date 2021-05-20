@@ -127,6 +127,27 @@ function Login({ firebase }) {
                 localStorage.setItem('admindata', JSON.stringify(adminData));
             }
 
+            if (users[0].role === 'admin') {
+                let { data: userInfo, error: errorFetchUserInfo } =
+                    await supabase
+                        .from(`admins`)
+                        .select('name, lastname, medic_license')
+                        .eq('dni', users[0].dni);
+
+                if (errorFetchUserInfo) {
+                    console.log(errorFetchUserInfo);
+                    setLoading(false);
+                    return alert('Error en fetch user info.');
+                }
+
+                const adminData = {
+                    name: userInfo[0].name,
+                    lastname: userInfo[0].lastname,
+                    medic_license: userInfo[0].medic_license,
+                };
+                localStorage.setItem('admindata', JSON.stringify(adminData));
+            }
+
             await firebase
                 .auth()
                 .signInWithEmailAndPassword(users[0].email, input.pass);
