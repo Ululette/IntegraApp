@@ -180,7 +180,7 @@ function UserNav({ firebase, window: windowMui }) {
                     </ListItem>
                 </NavLink>
                 <NavLink
-                    to={`/${userData.dni}/affiliate/profile`}
+                    to={`/${userData.dni}/affiliate/familymembers`}
                     className={styles.link}
                     activeClassName={styles.activeLink}
                 >
@@ -209,16 +209,11 @@ function UserNav({ firebase, window: windowMui }) {
                     <DoneAllIcon />
                     <ListItemText primary='Mis autorizaciones' />
                 </ListItem>
-                <NavLink
-                    to={`/${userData.dni}/affiliate/mymedicalrecords`}
-                    className={styles.link}
-                    activeClassName={styles.activeLink}
-                >
-                    <ListItem button>
-                        <PhoneAndroidIcon />
-                        <ListItemText primary='Mi credencial' />
-                    </ListItem>
-                </NavLink>
+
+                <ListItem button>
+                    <PhoneAndroidIcon />
+                    <ListItemText primary='Mi credencial' />
+                </ListItem>
                 <NavLink
                     to={`/${userData.dni}/affiliate/doctor`}
                     className={styles.link}
@@ -382,7 +377,7 @@ function UserNav({ firebase, window: windowMui }) {
                                     <strong>Grupo Familiar</strong>
                                 </p>
                                 {familyGroup.map((familiar, index) => (
-                                    <ListItem button key={`familiar-${index}`}>
+                                    <ListItem key={`familiar-${index}`}>
                                         <ListItemText
                                             primary={`${familiar.name} ${familiar.lastname}`}
                                         />

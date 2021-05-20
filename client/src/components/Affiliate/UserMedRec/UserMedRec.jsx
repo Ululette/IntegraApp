@@ -1,9 +1,10 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import styles from './UserMedRec.module.css';
 
 function UserMedRec() {
     return (
-        <div>
+        <div className={styles.container}>
             <a
                 href={`../mymedicalrecords/pdf`}
                 target='_blank'
