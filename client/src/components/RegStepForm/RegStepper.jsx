@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -50,35 +50,22 @@ export default function RegStepper() {
   const [activeStep, setActiveStep] = useState(0);
   const steps = getSteps();
 
-  const errorsT =  JSON.parse(localStorage.getItem('errorsTitular'));
-  // const algo = ()=>{
-
-  //   if(errorsT){
-      
-  //   }
-  // }
-  // algo();
+const alltrue= (obj) => {
+  let completeError = true;
+  for (let error in obj) {
+    completeError = completeError && Object.values(obj[error])[0]
+}
+return completeError}
 
   const handleNext = () => {
-    console.log('errorsT',!!errorsT)
-    console.log('step',!!activeStep)
-    // if(errorsT){
-    //   const {dateErrors,emailErrors,selectErrors,textErrors,textMixErrors,textNumErrors} = JSON.parse(localStorage.getItem('errorsTitular'))
-    //  if(dateErrors.dateComplete && emailErrors.emailComplete && 
-    //   selectErrors.radComplete && textErrors.textComplete &&
-    //   textMixErrors.textMixComplete && textNumErrors.textNumComplete 
-    //   && activeStep===0){
 
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    //   }
       
-    //   else alert('debe completar los datos.')
-    // }
-    
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+     
   };
 
   const handleBack = () => {
-    const {dateErrors,emailErrors,selectErrors,textErrors,textMixErrors,textNumErrors} = JSON.parse(localStorage.getItem('errorsTitular'))
+    
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 

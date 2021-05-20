@@ -32,7 +32,7 @@ export default function InfoCard({ plan }) {
                 image={logoNav}
                 title='Logo'
             />
-            <CardContent>
+            {/* <CardContent>
                 <Typography gutterBottom variant='h5'>
                     {plan.name}
                 </Typography>
@@ -64,7 +64,7 @@ export default function InfoCard({ plan }) {
                         }`}
                     />
                 </List>
-            </CardContent>
+            </CardContent> */}
             <CardActionArea>
                 <CardActions>
                     <a href='/plandetails'>
