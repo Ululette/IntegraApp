@@ -58,11 +58,49 @@ const alltrue= (obj) => {
 }
 return completeError}
 
-  const handleNext = () => {
-
+  const handleNext = async() => {
       
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
      
+    if(activeStep === steps.length - 1 ){
+      const datosTitular = JSON.parse(localStorage.getItem('datosTitular'));
+      const datosEmpresa = JSON.parse(localStorage.getItem('datosEmpresa'));
+      console.log(activeStep)
+      const { data:partner, error:errorPartner } = await supabase
+      .from('partners')
+      .insert([{ dni:datosTitular.dni,
+                name:datosTitular.first_name,
+                lastname:datosTitular.last_name,
+                birthdate:datosTitular.birth_date,
+                phone_number:datosTitular.phone_number,
+                titular:true,
+                family_bond:'titular',
+                family_group:0,
+                state:'revision pendiente',
+                email:datosTitular.email,
+                plan_id:8,
+                company_id:null,
+                medical_records_id:null,
+                gender:datosTitular.gender
+      }])
+      const { data:address, error:errorAddress } = await supabase
+      .from('address')
+      .insert([{  street:datosTitular.street_name,
+                  street_number:datosTitular.number,
+                  floor:1,
+                  medic_id:null,
+                  locality_id:datosTitular.locality.split('-')[0],
+                  partner_dni:datosTitular.dni,
+                  department:datosTitular.apartment
+      }])
+      const { data:companies, error:errorCompanies } = await supabase
+      .from('companies')
+      .insert([{  business_name:datosEmpresa.bussines_name,
+                  cuit:111111,
+                  phone_number:datosEmpresa.company_phone,
+                  email:datosEmpresa.company_email
+      }])
+    }
   };
 
   const handleBack = () => {
