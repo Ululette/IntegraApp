@@ -37,7 +37,7 @@ const drawerWidth = 260;
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
-        position: 'relative',
+        position: 'fixed',
     },
     drawer: {
         [theme.breakpoints.up('sm')]: {
@@ -63,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
     drawerPaper: {
         width: drawerWidth,
         zIndex: 0,
+        position: 'relative',
     },
     content: {
         flexGrow: 1,
@@ -72,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
 
 function MedicNav({ firebase, window: windowMui }) {
     const userData = JSON.parse(localStorage.getItem('userdata'));
-    const medicData = JSON.parse(localStorage.getItem('medicData'));
+    const medicData = JSON.parse(localStorage.getItem('medicdata'));
     const userDataFirebase = useUser();
 
     if (!userDataFirebase.data && !medicData && !userData) {
@@ -90,7 +91,6 @@ function MedicNav({ firebase, window: windowMui }) {
 
     const drawer = (
         <div className={styles.asidebar}>
-            <div className={classes.toolbar} />
             <List className={styles.listitems}>
                 <NavLink to={`/${userData.dni}/medic/`} className={styles.link}>
                     <ListItem button>
@@ -103,13 +103,13 @@ function MedicNav({ firebase, window: windowMui }) {
                     <ListItemText primary='Mi cuenta' />
                 </ListItem>
                 <NavLink
-                    to={`/${userData.dni}/medic/patiens`}
+                    to={`/${userData.dni}/medic/patients`}
                     className={styles.link}
                     activeClassName={styles.activeLink}
                 >
                     <ListItem button>
-                    <GroupAddIcon />
-                        <ListItemText primary='Pacientes' />
+                        <GroupAddIcon />
+                        <ListItemText primary='Mis pacientes' />
                     </ListItem>
                 </NavLink>
                 <NavLink
@@ -117,10 +117,10 @@ function MedicNav({ firebase, window: windowMui }) {
                     className={styles.link}
                     activeClassName={styles.activeLink}
                 >
-                <ListItem button>
+                    <ListItem button>
                         <AssignmentIcon />
-                        <ListItemText primary='Mis onsultas' />
-                </ListItem>
+                        <ListItemText primary='Mis consultas' />
+                    </ListItem>
                 </NavLink>
                 <NavLink
                     to={`/${userData.dni}/medic/prescriptions&orders`}
@@ -129,7 +129,7 @@ function MedicNav({ firebase, window: windowMui }) {
                 >
                     <ListItem button>
                         <GroupIcon />
-                        <ListItemText primary='Mis Recetas y Ordenes' />
+                        <ListItemText primary='Mis recetas y ordenes' />
                     </ListItem>
                 </NavLink>
             </List>
@@ -210,11 +210,7 @@ function MedicNav({ firebase, window: windowMui }) {
                         <MailIcon />
                     </Badge>
                     <article className={styles.namesContainer}>
-                        {/* <p>{`${medicData.name} ${medicData.lastname}`}</p> */}
-                        <p>
-                            Médico Ramon
-                            {/* {medicData.root ? 'root' : 'moderador'} */}
-                        </p>
+                        <p>{`${medicData.name} ${medicData.lastname}`}</p>
                     </article>
                     <div>
                         <Button onClick={handleClick}>
@@ -257,6 +253,7 @@ function MedicNav({ firebase, window: windowMui }) {
                     classes={{
                         paper: classes.drawerPaper,
                     }}
+                    className={styles.asideFlex}
                     ModalProps={{
                         keepMounted: true, // Better open performance on mobile.
                     }}

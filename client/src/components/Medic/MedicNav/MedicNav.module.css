@@ -1,5 +1,3 @@
-
-
 .navbar {
     align-items: center;
     background-color: #4ca1a3;
@@ -10,7 +8,6 @@
     justify-content: space-between;
     padding: 0 10px;
     position: sticky;
-    width: 100%;
     z-index: 2;
 }
 
@@ -84,7 +81,7 @@
 .aside {
     background-color: #e8ffff;
     height: 100%;
-    width: max-content;
+
     box-shadow: 0px 1px 5px 0px rgb(0 0 0 / 10%), 0px 2px 2px 0px rgb(0 0 0 / 10%), 0px 3px 1px -2px rgb(0 0 0 / 10%);
     border-top: transparent;
     position: sticky;
@@ -141,3 +138,9 @@
 .activeLink svg {
     color: #BF4E30;
 }
+
+/* .container div{
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+} */

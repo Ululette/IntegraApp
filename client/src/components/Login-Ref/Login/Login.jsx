@@ -127,11 +127,13 @@ function Login({ firebase }) {
                 localStorage.setItem('admindata', JSON.stringify(adminData));
             }
 
-            if (users[0].role === 'admin') {
+            if (users[0].role === 'medic') {
                 let { data: userInfo, error: errorFetchUserInfo } =
                     await supabase
-                        .from(`admins`)
-                        .select('name, lastname, medic_license')
+                        .from(`medics`)
+                        .select(
+                            'name, lastname, medic_license, email, phone_number, profilePic, birthdate,  medical_specialities (id, name), medics_partners(partner_dni)'
+                        )
                         .eq('dni', users[0].dni);
 
                 if (errorFetchUserInfo) {
@@ -139,13 +141,21 @@ function Login({ firebase }) {
                     setLoading(false);
                     return alert('Error en fetch user info.');
                 }
-
-                const adminData = {
+                console.log(userInfo);
+                const medicdata = {
                     name: userInfo[0].name,
                     lastname: userInfo[0].lastname,
                     medic_license: userInfo[0].medic_license,
+                    medical_specialities: userInfo[0].medical_specialities.map(
+                        (el) => el
+                    ),
+                    my_patients: userInfo[0].medics_partners.map((el) => el),
+                    email: userInfo[0].email,
+                    phone_number: userInfo[0].phone_number,
+                    profilePic: userInfo[0].profilePic,
+                    birthdate: userInfo[0].birthdate,
                 };
-                localStorage.setItem('admindata', JSON.stringify(adminData));
+                localStorage.setItem('medicdata', JSON.stringify(medicdata));
             }
 
             await firebase

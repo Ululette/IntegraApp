@@ -1,0 +1,6 @@
+.container{ 
+    width: calc(100% + 260px);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
