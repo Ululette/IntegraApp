@@ -215,13 +215,6 @@ function ContactForm() {
     }
 
     function recaptchaLoaded() {
-        // window.grecaptcha.ready(function () {
-        //     window.grecaptcha
-        //         .execute(_reCAPTCHA_site_key_, { action: 'submit' })
-        //         .then(function (token) {
-        //             console.log(token, 'token');
-        //         });
-        // });
         console.log('Recaptcha loaded');
     }
 
@@ -233,19 +226,6 @@ function ContactForm() {
         }
     };
 
-    useEffect(() => {
-        // Add reCaptcha
-        //     const script = document.createElement('script');
-        //     script.src = `https://www.google.com/recaptcha/api.js?render=${_reCAPTCHA_site_key_}`;
-        //     const root = document.getElementById('root');
-        //     root.appendChild(script);
-        //     script.addEventListener('click', onClick);
-        // }, []);
-        // const renderRedirect = () => {
-        //     if (redirect) {
-        //         setSuccessRequest(false)
-        //     }
-    }, []);
 
     const success = () => {
         if (successRequest) {
@@ -269,7 +249,7 @@ function ContactForm() {
                                 para charlar sobre tu próximo plan.
                             </p>
                         </div>
-                        {/* <Button
+                        <Button
                             className={Styles.buttonVolverSuccess}
                             variant='contained'
                             color='secondary'
@@ -277,7 +257,7 @@ function ContactForm() {
                             style={{ borderRadius: 100 }}
                         >
                             Volver
-                        </Button> */}
+                        </Button>
                         {/* {renderRedirect()} */}
                     </div>
                 </div>

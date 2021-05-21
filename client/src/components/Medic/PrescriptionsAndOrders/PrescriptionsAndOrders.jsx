@@ -1,36 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import supabase from '../../../supabase.config'
 import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import { FormControl, InputLabel, MenuItem, Select, TextField } from '@material-ui/core';
+import { FormControl, InputLabel, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@material-ui/core';
 import styles from './PrescriptionsAndOrder.module.css'
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    marginTop:10,
-    position: 'absolute',
-    display: 'flex',
-    left: '400px',
-    width: '100%',
-    maxWidth: 360,
-    backgroundColor: theme.palette.background.paper,
-    maxHeight: 300,
-  },
-  listSection: {
-    position: 'absolute',
-    display: 'flex',
-    // left: '400px',
-    backgroundColor: 'inherit',
-  },
-  ul: {
-    position:'relative',
-    backgroundColor: 'inherit',
-    padding: 0,
+  table: {
+    marginLeft: 500,
+    marginTop:400,
+    width:500,
   },
   formControl: {
+    marginTop:100,
     position: 'absolute',
     display: 'flex',
     left: '400px',
@@ -39,18 +20,22 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120,
   },
   selectEmpty: {
-    marginTop: theme.spacing(2),
+    position: 'relative',
+    display: 'flex',
+    top: '100px',
+    marginTop:100,
+    marginTop: theme.spacing(5),
   },
 }));
 
 async function getData(query) {
-  let {selection, param} = query
+  let { selection, param } = query
   let column = selection === 'orders' ? 'study_name' : 'drug_name'
   try {
     console.log('queryParams', selection, param)
     const { data: data, error: dataError } = await supabase
       .from(selection)
-      .select("*")
+      .select(`*, medical_consultations(partner:partner_dni(name))`)
       .ilike(`${column}`, `%${param}%`)
     data && console.log(data)
     dataError && console.log(dataError)
@@ -65,10 +50,10 @@ async function getData(query) {
 export default function PrescriptionsAndOrders() {
   const classes = useStyles();
   const [data, setData] = useState([])
-  const [query, setQuery] = useState({param:'', selection:''})
+  const [query, setQuery] = useState({ param: '', selection: '' })
 
   const handleChange = (event) => {
-    setQuery({...query, [event.target.name]:event.target.value})
+    setQuery({ ...query, [event.target.name]: event.target.value })
   };
 
   useEffect(() => {
@@ -77,37 +62,54 @@ export default function PrescriptionsAndOrders() {
 
   return (
     <>
-      <FormControl className={classes.formControl}>
-        <InputLabel id="demo-simple-select-label">Ver</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={query.selection}
-          onChange={handleChange}
-          name='selection'
-        >
-          <MenuItem value='selecionar' aria-label="None" />
-          <MenuItem value='orders'>Ordenes</MenuItem>
-          <MenuItem value='prescriptions'>Recetas</MenuItem>
-        </Select>
-        <TextField onChange={handleChange} name='param' id="outlined-basic" label="Nombre" variant="outlined" className={classes.root} />
-      </FormControl>
-      {data.length && <List className={classes.root} subheader={<li />}>
-        {data.map((order) => (
-          <li key={`section-${order.date}`} className={classes.listSection}>
-            Fecha: {Date(order.date)}
-            <ul className={classes.ul}>
-              <ListSubheader>{query.selection === 'orders'? `Estudio : ${order.study_name}` : `Medicamento : ${order.drug_name}` }</ListSubheader>
-                <ListItem key={`item-${order.medical_consultation_id}-${order.medical_consultation_id}`}>
-                  <ListItemText primary={`Nº de Consulta : ${order.medical_consultation_id}`} />
-                </ListItem>
-                <ListItem key={`item-${order.id}-${order.id}`}>
-                  <ListItemText primary={`Nº de orden : ${order.id}`} />
-                </ListItem>
-            </ul>
-          </li>
-        ))}
-      </List>}
+      <div style={{display:'flex'}}>
+        <FormControl className={classes.formControl}>
+          <InputLabel id="demo-simple-select-label">Ver</InputLabel>
+          <Select
+            className={classes.selectEmpty}
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={query.selection}
+            onChange={handleChange}
+            name='selection'
+          >
+            <MenuItem value='selecionar' aria-label="None" />
+            <MenuItem value='orders'>Ordenes</MenuItem>
+            <MenuItem value='prescriptions'>Recetas</MenuItem>
+          </Select>
+          <TextField onChange={handleChange} name='param' id="outlined-basic" label="Nombre" variant="outlined" className={classes.formControl} />
+        </FormControl>
+      </div>
+      <div style={{display:'flex'}}>
+      <TableContainer component={Paper}>
+      <Table className={classes.table} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>{query.selection === 'orders' ? 'Orden Nº' : 'Receta Nº'}</TableCell>
+            <TableCell align="right">Consulta</TableCell>
+            <TableCell align="right">Fecha</TableCell>
+            <TableCell align="right">{query.selection === 'orders' ? 'Estudio' : 'Medicamento'}</TableCell>
+            <TableCell align="right">Paciente</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data.map((row) => (
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row">
+                {row.id}
+              </TableCell>
+              <TableCell align="right">{row.medical_consultation_id}</TableCell>
+              <TableCell align="right">{row.date}</TableCell>
+              <TableCell align="right">{query.selection === 'orders' ? row.study_name : row.drug_name}</TableCell>
+              <TableCell align="right">{row.medical_consultations.partner.name}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+      </div>
     </>
   );
+
 }
+
