@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useUser } from 'reactfire';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 //Styles
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import styles from './MedicNav.module.css';
@@ -32,6 +32,9 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import MenuIcon from '@material-ui/icons/Menu';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+
+// Our components
+import MedicPatients from '../MedicPatients/MedicPatients.jsx';
 
 const drawerWidth = 260;
 const useStyles = makeStyles((theme) => ({
@@ -76,8 +79,10 @@ function MedicNav({ firebase, window: windowMui }) {
     const medicData = JSON.parse(localStorage.getItem('medicdata'));
     const userDataFirebase = useUser();
 
+    console.log(window.location);
+
     if (!userDataFirebase.data && !medicData && !userData) {
-        this.window.location = '/login';
+        window.location = '/login';
     }
 
     const MySwal = withReactContent(Swal);
@@ -243,35 +248,44 @@ function MedicNav({ firebase, window: windowMui }) {
                     </div>
                 </section>
             </nav>
-            <Hidden smUp implementation='css'>
-                <Drawer
-                    container={container}
-                    variant='temporary'
-                    anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-                    open={mobileOpen}
-                    onClose={handleDrawerToggle}
-                    classes={{
-                        paper: classes.drawerPaper,
-                    }}
-                    className={styles.asideFlex}
-                    ModalProps={{
-                        keepMounted: true, // Better open performance on mobile.
-                    }}
-                >
-                    {drawer}
-                </Drawer>
-            </Hidden>
-            <Hidden xsDown implementation='css'>
-                <Drawer
-                    classes={{
-                        paper: classes.drawerPaper,
-                    }}
-                    variant='permanent'
-                    open
-                >
-                    {drawer}
-                </Drawer>
-            </Hidden>
+            <main className={styles.main}>
+                <Hidden smUp implementation='css'>
+                    <Drawer
+                        container={container}
+                        variant='temporary'
+                        anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                        open={mobileOpen}
+                        onClose={handleDrawerToggle}
+                        classes={{
+                            paper: classes.drawerPaper,
+                        }}
+                        ModalProps={{
+                            keepMounted: true, // Better open performance on mobile.
+                        }}
+                    >
+                        {drawer}
+                    </Drawer>
+                </Hidden>
+                <Hidden xsDown implementation='css'>
+                    <Drawer
+                        classes={{
+                            paper: classes.drawerPaper,
+                        }}
+                        variant='permanent'
+                        open
+                    >
+                        {drawer}
+                    </Drawer>
+                </Hidden>
+                {/* ACA VAN NUESTROS COMPONENTES */}
+                {window.location.pathname ===
+                `/${userData.dni}/medic/patients` ? (
+                    <MedicPatients />
+                ) : null}
+                {/* // ) : window.location.pathname === `/${userData.dni}/medic/` ? null : (
+            //     <Redirect to='/notfound' />
+            // )} */}
+            </main>
         </div>
     );
 }

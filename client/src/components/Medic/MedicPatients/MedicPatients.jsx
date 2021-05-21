@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import supabase from '../../../supabase.config.js';
 import styles from './MedicPatients.module.css';
 import calculateAge from '../../../functions/calculateAge';
-import { NavLink } from 'react-router-dom';
 
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -56,6 +55,8 @@ function MedicPatients() {
     const [open, setOpen] = useState(false);
     const [currentPatient, setCurrentPatient] = useState('');
     const [searchDni, setSearchDni] = useState('');
+    const [listStudies, setListStudies] = useState([]);
+    const [listMedicsStudies, setListMedicsStudies] = useState([]);
 
     const medicData = JSON.parse(localStorage.getItem('medicdata'));
     const dniPatients = medicData.my_patients.map((el) => el.partner_dni);
@@ -63,12 +64,19 @@ function MedicPatients() {
 
     const fetchPatients = async () => {
         let hasError = false;
+        let messageError = '';
         const patients = [];
         for (let dni of dniPatients) {
             const { data: patientsData, error: errorFetchPatients } =
-                await supabase.from('partners').select('*').eq('dni', dni);
+                await supabase
+                    .from('partners')
+                    .select(
+                        '*, pathologies_partners(date_registered, pathologies(name)))'
+                    )
+                    .eq('dni', dni);
             if (errorFetchPatients) {
                 hasError = true;
+                messageError = errorFetchPatients.message;
                 break;
             }
             patients.push(patientsData[0]);
@@ -76,17 +84,56 @@ function MedicPatients() {
         if (hasError) {
             return MySwal.fire({
                 title: 'Error con el fetch de pacientes.',
+                text: `${messageError}`,
                 icon: 'error',
             });
         }
         setListPatients(patients);
     };
+
+    const fetchStudies = async (current) => {
+        const { data: studiesList, error: errorFetchStudies } = await supabase
+            .from('orders')
+            .select('study_name, date, medical_consultations(medic_dni)')
+            .eq('partner_dni', current.dni);
+        if (errorFetchStudies) {
+            return MySwal.fire({
+                title: 'Error con el fetch de estudios.',
+                text: `${errorFetchStudies.message}`,
+                icon: 'error',
+            });
+        }
+        setListStudies(studiesList);
+
+        const arrayAux = [];
+
+        for (let study of studiesList) {
+            const { data: medicsList, error: errorFetchMedicsStudies } =
+                await supabase
+                    .from('medics')
+                    .select('dni, name, lastname')
+                    .eq('dni', study.medical_consultations.medic_dni);
+            if (errorFetchMedicsStudies) {
+                return MySwal.fire({
+                    title: 'Error con el fetch de estudios.',
+                    text: `${errorFetchMedicsStudies.message}`,
+                    icon: 'error',
+                });
+            }
+            arrayAux.push(medicsList[0]);
+        }
+        setListMedicsStudies(arrayAux);
+    };
+
     useEffect(() => {
         fetchPatients();
+        if (currentPatient !== '') {
+            fetchStudies(currentPatient);
+        }
         // eslint-disable-next-line
-    }, []);
+    }, [currentPatient]);
 
-    if (!listPatients) return <h1>Cargando...</h1>;
+    // if (listPatients.length === 0) return <h1>Cargando...</h1>;
 
     const handleClickOpen = (indexPatient) => {
         setCurrentPatient(listPatients[indexPatient]);
@@ -100,13 +147,15 @@ function MedicPatients() {
     const handleChangeDni = (e) => {
         const value = e.target.value;
         const regexDni = /^[0-9\b]+$/;
-        if ((value === '' || regexDni.test(value)) && value.length <= 8) {
+        if (regexDni.test(value) || value === '') {
             setSearchDni(value);
+            if (value === '') {
+                fetchPatients();
+            }
             return setListPatients(
                 listPatients.filter((e) => String(e.dni).includes(value))
             );
         }
-        return fetchPatients();
     };
 
     return (
@@ -128,9 +177,9 @@ function MedicPatients() {
                 {listPatients.map((pat, idx) => (
                     <div key={`div-${idx}`} className={styles.eachPatient}>
                         <Button
-                            className={classes.buttonPatient}
                             variant='outlined'
                             color='primary'
+                            className={styles.buttonPatient}
                             key={`patient-${idx}`}
                             onClick={() => handleClickOpen(idx)}
                         >
@@ -208,16 +257,92 @@ function MedicPatients() {
                             <p className={styles.titleContact}>
                                 Datos de contacto:
                             </p>
-                            <ListItem>
+                            <ListItem className={styles.listContact}>
                                 <ListItemText
                                     primary={`Email: ${currentPatient.email}`}
                                 />
                             </ListItem>
-                            <ListItem className={styles.listItem}>
+                            <ListItem className={styles.listContact}>
                                 <ListItemText
                                     primary={`Telefono: ${currentPatient.phone_number}`}
                                 />
                             </ListItem>
+                        </section>
+                        <section className={styles.pathologies}>
+                            <p className={styles.titleContact}>
+                                Patologias existentes
+                            </p>
+                            {currentPatient &&
+                            currentPatient.pathologies_partners.length === 0 ? (
+                                <ListItem className={styles.listPathology}>
+                                    <ListItemText
+                                        primary={`Ninguna registrada hasta la fecha.`}
+                                    />
+                                </ListItem>
+                            ) : (
+                                currentPatient &&
+                                currentPatient.pathologies_partners.map(
+                                    (pathology) => (
+                                        <ListItem
+                                            className={styles.listPathology}
+                                        >
+                                            <ListItemText
+                                                primary={`${pathology.pathologies.name}`}
+                                                secondary={`Registrada desde ${pathology.date_registered}`}
+                                            />
+                                        </ListItem>
+                                    )
+                                )
+                            )}
+                        </section>
+                        <section className={styles.orders}>
+                            <p className={styles.titleContact}>
+                                Estudios recientes
+                            </p>
+                            {listStudies.length === 0 ? (
+                                <ListItem>
+                                    <ListItemText
+                                        className={styles.listColumn}
+                                        primary={`Ningun estudio hasta la fecha.`}
+                                    />
+                                </ListItem>
+                            ) : (
+                                listStudies.map((study, idx) => (
+                                    <article
+                                        key={`study-${idx}`}
+                                        className={styles.listStudies}
+                                    >
+                                        <ListItem className={styles.listColumn}>
+                                            <ListItemText primary={`Estudio`} />
+                                            <ListItemText
+                                                primary={`${study.study_name}`}
+                                            />
+                                        </ListItem>
+                                        <ListItem className={styles.listColumn}>
+                                            <ListItemText
+                                                primary={`Fecha del estudio`}
+                                            />
+                                            <ListItemText
+                                                primary={`${study.date}`}
+                                            />
+                                        </ListItem>
+                                        {/* <ListItem className={styles.listItem}>
+                                            <ListItemText primary={`Medico`} />
+                                            <ListItemText
+                                                primary={`${listMedicsStudies[idx].dni} ${listMedicsStudies[idx].name} ${listMedicsStudies[idx].lastname}`}
+                                            />
+                                        </ListItem> */}
+                                        <ListItem className={styles.listColumn}>
+                                            <a
+                                                href='#!'
+                                                className={styles.studyDetails}
+                                            >
+                                                Ver detalles del estudio
+                                            </a>
+                                        </ListItem>
+                                    </article>
+                                ))
+                            )}
                         </section>
                     </List>
                 </DialogContent>

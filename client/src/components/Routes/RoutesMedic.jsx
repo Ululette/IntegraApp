@@ -13,7 +13,7 @@ function RoutesMedic() {
                 path='/:id/medic'
                 render={() => <MedicNav firebase={firebase} />}
             />
-            <Route exact path='/:id/medic/patients' component={MedicPatients} />
+            {/* <Route exact path='/:id/medic/patients' component={MedicPatients} /> */}
             <Route
                 exact
                 path='/:id/medic/prescriptions&orders'

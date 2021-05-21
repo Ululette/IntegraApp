@@ -1,5 +1,5 @@
 .container{ 
-    align-items: flex-start;
+    align-items: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -48,6 +48,7 @@
 .completeList {
     display: flex;
     width: 100%;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: flex-start;
     padding: 0 20px;
@@ -57,11 +58,86 @@
     text-transform: capitalize;
 }
 
-.dataContact {
-
-}
-
 .titleContact {
     font-size: 1.5rem;
     font-weight: bold;
+}
+
+.buttonPatient {
+    width: 100%;
+}
+
+.buttonPatient span {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.orders {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 5rem;
+}
+
+.listStudies {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center !important;
+}
+
+.listColumn {
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+}
+
+.pathologies {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center !important;
+}
+
+.listPathology {
+    text-align: center !important;
+    width: 100%;
+}
+
+.dataPatient {
+    width: 50%;
+}
+
+.dataContact {
+    width: 50%;
+    text-align: right !important;
+}
+
+.studyDetails {
+    border: 1px solid black;
+    width: 300px;
+    text-align: center !important;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    background-color: #3F51B5;
+    font-size: 1.2rem;
+}
+
+.studyDetails:hover {
+    transition: all .5s ease-in-out;
+    background-color: #222e75;
+}
+
+.listContact {
+    text-align: right !important;
 }
