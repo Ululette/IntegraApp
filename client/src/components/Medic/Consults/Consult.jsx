@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, Redirect } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 import {
     Button,
     List,
@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import 'firebase/auth';
 import { makeStyles } from '@material-ui/core/styles';
-import supabase from '../../supabase.config.js';
+import supabase from '../../../supabase.config.js';
 import { useUser } from 'reactfire';
 import style from './Consult.module.css';
 // import { NavLink } from 'react-router-dom';
@@ -34,50 +34,10 @@ const useStyles = makeStyles((theme)=>({
 }));
 
 function Consult({ firebase }) {
-    const hardPatient = {
-        id:3,
-        dni:9800178,
-        name:'Stella',
-        lastname:'Jensen',
-        birthdate: "1988-09-12",
-        phone_number:'(0074)-651-7355',
-        email:'nec.mauris.blandit@faucibusut.ca',
-        gender:'mujer'
-    }
-    const hardMedic = {
-        address: "Inglaterra 234, England, England, England",
-        birthdate: "1975-09-12",
-        dni: 50607080,
-        email: "soyelmedicoramon@mail.com",
-        lastname: "El Medico",
-        medic_license: "MN5465321",
-        medical_specialities: [{id: 28, name: "farrukologia"}],
-        name: "Ramon",
-        phone_number: "1122334455667323",
-        profilePic: "https://img.freepik.com/vector-gratis/diseno-ilustracion-vector-personaje-avatar-hombre-joven_24877-18514.jpg?size=338&ext=jpg",
-        state: "activo",
-    }
-
     const [patient,setPatient] = useState({});
-    const [medic,setMedic] = useState({});
+    const [medic,setMedic] = useState(JSON.parse(localStorage.getItem('medicdata')));
     const [redirectNewOrder, setRedirectNewOrder] = useState(false);
     const [redirectNewPrescription, setRedirectNewPrescription] = useState(false);
-
-    let fetchMedicData = async (document) => {
-        try {
-            let { data: medicData} = await supabase
-                .from('medics')
-                .select(
-                    'dni, name, lastname, medic_license, phone_number, email, profilePic, medical_specialities(id,name))'
-                )
-                .eq('dni', document);
-            setMedic(medicData[0]);
-            console.log(medic);
-        } catch (err) {
-            console.error(err);
-        }
-        return;
-    };
     
     const classes = useStyles();
     const userFirebase = useUser();
@@ -93,29 +53,22 @@ function Consult({ firebase }) {
         observations:false
     });
 
+    const search = window.location.search;
+    const params = new URLSearchParams(search);
+    const patientData = {
+        dni: params.get('dni'),
+        name: params.get('name'),
+        lastname: params.get('lastname'),
+        birthdate: params.get('birthdate'),
+        gender: params.get('gender'),
+
+    }
+    
     useEffect(()=>{
-        let userDni = JSON.parse(localStorage.getItem('userdata')).dni;
-        console.log('DNI user:'+userDni);
-        fetchMedicData(userDni);
+        setPatient(patientData)
+        console.log(patient)
+        console.log(medic)
     },[])
-
-    
-    
-
-    // const patientUrl = useLocation().newconsultation;
-    
-    // useEffect(()=>{
-    //     let userDni = JSON.parse(localStorage.getItem('userdata')).dni;
-    //     console.log('DNI user:'+userDni);
-    //     fetchMedicData(userDni);
-    //     setPatient({
-    //         dni:new URLSearchParams(patientUrl).get('dni'),
-    //         name:new URLSearchParams(patientUrl).get('name'),
-    //         lastname:new URLSearchParams(patientUrl).get('lastname'),
-    //         birthdate:new URLSearchParams(patientUrl).get('birthdate'),
-    //         gender:new URLSearchParams(patientUrl).get('gender'),
-    //     })
-    // },[])
 
 
     
@@ -123,9 +76,9 @@ function Consult({ firebase }) {
     //     window.location = '/login';
     // }
 
-    const getAge = () => Math.floor((new Date() - new Date(hardPatient.birthdate).getTime()) / 3.15576e+10)
+    const getAge = () => Math.floor((new Date() - new Date(patient.birthdate).getTime()) / 3.15576e+10)
     var today = new Date();
-    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
     const handleSubmit = async() => {
         if( !errors.reason&&
@@ -134,9 +87,14 @@ function Consult({ firebase }) {
                 const { data, error } = await supabase
                 .from('medical_consultations')
                 .insert([
-                    {   reason: input.reason,
+                    {   
+                        partner_dni: patient.dni,
+                        medic_dni: medic.dni,
+                        reason: input.reason,
                         diagnosis: input.diagnosis,
-                        observations: input.observations},
+                        date: date,
+                        observations: input.observations,
+                    },
                 ])
             }
     }
@@ -156,24 +114,13 @@ function Consult({ firebase }) {
         setErrors(validate(e.target.name, e.target.value));
     };
 
-    const renderRedirectNewPrescription = () => {
-        if (redirectNewPrescription) {
-            return <Redirect to='/' />;
-        }
-    };
-    const renderRedirectNewOrder = () => {
-        if (redirectNewOrder) {
-            return <Redirect to='/' />;
-        }
-    };
-
     function validate(inputName, value) {
         const pattern = /^[A-Za-z0-9\s]+$/g;
         let errors = {};
 
         switch (inputName) {
             case 'reason': {
-                if (!pattern.test(value)) {
+                if (!pattern.test(value) && value.length>0) {
                     errors.reason = true;
                 } else {
                     errors.reason = false;
@@ -181,7 +128,7 @@ function Consult({ firebase }) {
                 break;
             }
             case 'diagnosis': {
-                if (!pattern.test(value)) {
+                if (!pattern.test(value) && value.length>0) {
                     errors.diagnosis = true;
                 } else {
                     errors.diagnosis = false;
@@ -209,13 +156,13 @@ function Consult({ firebase }) {
                     <div className={style.medicFirstColumn}>
                         <div>
                             <ListItem>
-                                <Avatar alt={hardMedic.name} src={hardMedic.profilePic} className={classes.largeAvatar} />   
+                                <Avatar alt={medic.name} src={medic.profilePic} className={classes.largeAvatar} />   
                             </ListItem>
                         </div>
                         <div>
                             <ListItem>
                                 <Typography gutterBottom variant="h5" component="h2">
-                                    {hardMedic.name} {hardMedic.lastname}
+                                    {medic.name} {medic.lastname}
                                 </Typography>
                             </ListItem>
                         </div>
@@ -224,14 +171,14 @@ function Consult({ firebase }) {
                         <div>
                             <ListItem>
                                 <Typography gutterBottom variant="subtitle1" component="h2">
-                                    {hardMedic.medic_license}
+                                    {medic.medic_license}
                                 </Typography>
                             </ListItem>
                         </div>
                         <div>
                             <ListItem>
                                 <Typography gutterBottom variant="subtitle1" component="h2">
-                                    {hardMedic.medical_specialities[0].name}
+                                    {medic.medical_specialities[0].name}
                                 </Typography>
                             </ListItem>
                         </div>  
@@ -250,7 +197,7 @@ function Consult({ firebase }) {
                         <div>
                             <ListItem>
                                 <Typography gutterBottom variant="h5" component="h2">
-                                    {hardPatient.name} {hardPatient.lastname}
+                                    {patient.name} {patient.lastname}
                                 </Typography>
                             </ListItem>
                         </div>
@@ -259,7 +206,7 @@ function Consult({ firebase }) {
                         <div>
                             <ListItem>
                                 <Typography gutterBottom variant="subtitle1" component="h2">
-                                    DNI: {hardPatient.dni}
+                                    DNI: {patient.dni}
                                 </Typography>
                             </ListItem>
                         </div>
@@ -273,7 +220,7 @@ function Consult({ firebase }) {
                         <div>
                             <ListItem>
                                 <Typography gutterBottom variant="subtitle1" component="h2">
-                                    Sexo: {hardPatient.gender}
+                                    Sexo: {patient.gender}
                                 </Typography>
                             </ListItem>
                         </div>
@@ -354,29 +301,3 @@ function Consult({ firebase }) {
 }
 
 export default Consult;
-
-{/* <CardMedia
-    className={classes.media}
-    image="/static/images/cards/contemplative-reptile.jpg"
-    title="Contemplative Reptile"
-/> */}
-
-// let fetchUserData = async (document) => {
-//     let { data: userInfo, error: errorFetchUser } = await supabase
-//         .from('medics')
-//         .select(
-//             // 'dni, name, lastname, medic_license, email, phone_number, state, profilePic, birthdate, address)'
-//             'dni, name, lastname, medic_license, email, phone_number, state, profilePic, birthdate, address, medical_specialities(id, name))'
-//         )
-//         .eq('dni', document);
-// };
-
-// useEffect(() => {
-//     let user = JSON.parse(localStorage.getItem('userdata'));
-//     console.log(user);
-//     fetchUserData(user.dni);
-// }, []);
-
-// if (!userFirebase.data && !userData) {
-//     window.location = '/login';
-// }
