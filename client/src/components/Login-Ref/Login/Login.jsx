@@ -127,6 +127,38 @@ function Login({ firebase }) {
                 localStorage.setItem('admindata', JSON.stringify(adminData));
             }
 
+            if (users[0].role === 'medic') {
+                let { data: userInfo, error: errorFetchUserInfo } =
+                    await supabase
+                        .from(`medics`)
+                        .select(
+                            'dni, name, lastname, medic_license, email, phone_number, profilePic, birthdate,  medical_specialities (id, name), medics_partners(partner_dni)'
+                        )
+                        .eq('dni', users[0].dni);
+
+                if (errorFetchUserInfo) {
+                    console.log(errorFetchUserInfo);
+                    setLoading(false);
+                    return alert('Error en fetch user info.');
+                }
+                console.log(userInfo);
+                const medicdata = {
+                    dni: userInfo[0].dni,
+                    name: userInfo[0].name,
+                    lastname: userInfo[0].lastname,
+                    medic_license: userInfo[0].medic_license,
+                    medical_specialities: userInfo[0].medical_specialities.map(
+                        (el) => el
+                    ),
+                    my_patients: userInfo[0].medics_partners.map((el) => el),
+                    email: userInfo[0].email,
+                    phone_number: userInfo[0].phone_number,
+                    profilePic: userInfo[0].profilePic,
+                    birthdate: userInfo[0].birthdate,
+                };
+                localStorage.setItem('medicdata', JSON.stringify(medicdata));
+            }
+
             await firebase
                 .auth()
                 .signInWithEmailAndPassword(users[0].email, input.pass);

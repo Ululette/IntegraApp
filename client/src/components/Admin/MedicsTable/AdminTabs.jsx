@@ -45,30 +45,28 @@ const useStyles = makeStyles(() => ({
     root: {
         marginTop: '0%',
         alignItems: 'center',
-        backgroundColor: '#a6f6f1',
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
         justifyContent: 'space-around',
         width: '100%',
-        flexGrow: -1,
+        zIndex: '-1',
     },
     tab: {
         position: 'relative',
-        alignItems: 'flex-start',
+        alignItems: 'center',
         backgroundColor: '#4ca1a3',
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-betwen',
-        height: 'min-content',
-        width: 'min-content',
-        flexGrow: -1,
+        justifyContent: 'center',
+        height: '100%',
+        width: '100%',
         flexWrap: 'wrap',
+        zIndex: '-1',
     },
 }));
 
 export default function AdminMedicTabs(props) {
-    const { listMedics } = props;
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 

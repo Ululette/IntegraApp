@@ -15,11 +15,14 @@ import {
     OutlinedInput,
 } from '@material-ui/core';
 import { green } from '@material-ui/core/colors';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 const useStyles = makeStyles({
     root: {
         //className={classes.root}
         maxWidth: 345,
+        marginLeft: '18rem',
     },
     media: {
         height: 140,
@@ -40,7 +43,7 @@ const useStyles = makeStyles({
 
 export default function UserProfile() {
     const classes = useStyles();
-
+    const MySwal = withReactContent(Swal);
     let [user, setUser] = useState([]);
 
     let fetchUserData = async (document) => {
@@ -70,7 +73,10 @@ export default function UserProfile() {
             // Cuando hace click en guardar (modificación)...
         } else {
             // Guardar datos en supabase
-            alert('Guardó');
+            MySwal.fire({
+                title: 'Se actualizaron los datos!',
+                icon: 'success',
+            });
             setModify(false);
             // limpia inputs de datos a modificar
             setmodInfo({

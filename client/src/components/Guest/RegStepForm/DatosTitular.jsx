@@ -96,6 +96,69 @@ const DatosTitular = () => {
                 locality: datosTitular.locality, //falta
                 state: datosTitular.state,
             });
+            setErrors((errors) => ({
+                ...errors,
+                textErrors: validator(
+                    {
+                        first_name: datosTitular.first_name,
+                        last_name: datosTitular.last_name,
+                        occupation: datosTitular.occupation,
+                    },
+                    'text'
+                ),
+            }));
+            setErrors((errors) => ({
+                ...errors,
+                textNumErrors: validator(
+                    {
+                        dni: datosTitular.dni,
+                        cuil: datosTitular.cuil,
+                        phone_number: datosTitular.phone_number,
+                        number: datosTitular.number,
+                    },
+                    'number'
+                ),
+            }));
+            setErrors((errors) => ({
+                ...errors,
+                textMixErrors: validator(
+                    {
+                        apartment: datosTitular.apartment,
+                        street_name: datosTitular.street_name,
+                    },
+                    'mix'
+                ),
+            }));
+            setErrors((errors) => ({
+                ...errors,
+                dateErrors: validator(
+                    {
+                        birth_date: datosTitular.birth_date,
+                    },
+                    'date'
+                ),
+            }));
+            setErrors((errors) => ({
+                ...errors,
+                emailErrors: validator(
+                    {
+                        email: datosTitular.email,
+                    },
+                    'email'
+                ),
+            }));
+            setErrors((errors) => ({
+                ...errors,
+                selectErrors: validator(
+                    {
+                        marital_status: datosTitular.marital_status,
+                        gender: datosTitular.gender,
+                        locality: datosTitular.locality, //falta
+                        state: datosTitular.state,
+                    },
+                    'radio'
+                ),
+            }));
         }
     }, []);
 

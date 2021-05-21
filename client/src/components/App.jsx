@@ -3,7 +3,7 @@ import RoutesAffiliate from './Routes/RoutesAffiliate.jsx';
 import RoutesGuest from './Routes/RoutesGuest.jsx';
 import RoutesAdmin from './Routes/RoutesAdmin.jsx';
 import RoutesLogin from './Routes/RoutesLogin.jsx';
-import RoutesMedic from './Routes/RoutesMedic';
+import RoutesMedic from './Routes/RoutesMedic.jsx';
 
 function App() {
     return (

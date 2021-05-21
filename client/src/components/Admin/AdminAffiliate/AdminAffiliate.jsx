@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -29,6 +31,9 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import List from '@material-ui/core/List';
+import ListItemText from '@material-ui/core/ListItemText';
+
 import { statesAff } from '../../../functions/states';
 import { getAffiliates, getPlans } from '../../../actions/getter.action.js';
 import calculateAge from '../../../functions/calculateAge.js';
@@ -172,14 +177,20 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        width: '100%',
+        width: '83%',
+        height: '90vh',
+        position: 'relative',
+        marginLeft: '18rem',
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
     },
     paper: {
         width: '100%',
         marginBottom: theme.spacing(2),
     },
     table: {
-        minWidth: 750,
+        width: '100%',
     },
     visuallyHidden: {
         border: 0,
@@ -193,7 +204,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function AdminAffiliate() {
+function AdminAffiliate({ firebase }) {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -209,6 +220,7 @@ function AdminAffiliate() {
         select: '',
         text: '',
     });
+    const MySwal = withReactContent(Swal);
     const [input, setInput] = React.useState({
         dni: '',
         lastname: '',
@@ -336,10 +348,18 @@ function AdminAffiliate() {
                 })
                 .eq('dni', input.dni);
             if (errorUpdateAff) return console.log(errorUpdateAff);
-            alert('Usuario actualizado.');
+            MySwal.fire({
+                title: 'Actualizar usuario',
+                text: 'Usuario actualizado con exito!',
+                icon: 'success',
+            });
             setOpen(false);
         } catch (error) {
-            alert('Error.');
+            MySwal.fire({
+                title: 'Actualizar usuario',
+                text: 'El usuario no fue actualizado! Contacte al administrador.',
+                icon: 'error',
+            });
             console.log(error);
         }
     };
@@ -368,12 +388,26 @@ function AdminAffiliate() {
                 .from('partners')
                 .delete()
                 .eq('dni', input.dni);
-            if (errorDeleteUser) return console.log(errorDeleteUser);
-            alert(
-                `Socio con DNI: ${input.dni} y apellido/nombre : ${input.lastname}, ${input.name} ha sido borrado con exito.`
-            );
+            if (errorDeleteUser) {
+                MySwal.fire({
+                    title: 'El usuario no ha sido eliminado! Problema con base de datos.',
+                    text: `Mensaje de error: ${errorDeleteUser}`,
+                    icon: 'error',
+                });
+                return console.log(errorDeleteUser);
+            }
+            MySwal.fire({
+                title: 'El usuario ha sido eliminado con exito!',
+                text: `Socio con DNI: ${input.dni} y apellido/nombre : ${input.lastname}, ${input.name} ha sido borrado con exito.`,
+                icon: 'success',
+                timer: 2000,
+            }).then(() => window.location.reload());
         } catch (error) {
-            alert('Error con el delete');
+            MySwal.fire({
+                title: 'El usuario no ha sido eliminado!',
+                text: `Socio con DNI: ${input.dni} y apellido/nombre : ${input.lastname}, ${input.name} no pudo ser eliminado.`,
+                icon: 'error',
+            });
             console.log(error);
         }
     };
@@ -428,12 +462,18 @@ function AdminAffiliate() {
                 },
             ]);
         if (errorAddAffiliate) {
-            alert(errorAddAffiliate.message);
+            MySwal.fire({
+                title: 'El usuario no pudo ser agregado!',
+                text: `${errorAddAffiliate.message}.`,
+                icon: 'error',
+            });
             return console.log(errorAddAffiliate);
         }
-        alert(
-            `Socio con DNI ${inputAdd.dni} y nombre/s apellido/s ${inputAdd.name} ${inputAdd.lastname} se inserto con exito en la db.`
-        );
+        MySwal.fire({
+            title: 'El usuario ha sido agregado!',
+            text: `Socio con DNI ${inputAdd.dni} y nombre/s apellido/s ${inputAdd.name} ${inputAdd.lastname} se agrego con exito.`,
+            icon: 'success',
+        });
         handleClose('add');
     };
 
@@ -806,87 +846,44 @@ function AdminAffiliate() {
                         Eliminar socio
                     </DialogTitle>
                     <DialogContent>
-                        <TextField
-                            autoFocus
-                            margin='dense'
-                            label='DNI'
-                            type='number'
-                            value={input.dni}
-                            disabled
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            margin='dense'
-                            label='Apellido/s'
-                            type='text'
-                            name='lastname'
-                            value={input.lastname}
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            margin='dense'
-                            label='Nombre/s'
-                            type='text'
-                            name='name'
-                            value={input.name}
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            margin='dense'
-                            label='Email'
-                            type='email'
-                            value={input.email}
-                            name='email'
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            margin='dense'
-                            label='Telefono'
-                            type='text'
-                            value={input.contact}
-                            name='contact'
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            margin='dense'
-                            label='Genero'
-                            type='text'
-                            value={input.gender}
-                            name='gender'
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            margin='dense'
-                            label='Titular'
-                            type='text'
-                            name='titular'
-                            value={input.titular}
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            margin='dense'
-                            label='Plan'
-                            name='plan'
-                            type='text'
-                            value={input.plan}
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            margin='dense'
-                            label='Estado'
-                            value={input.state}
-                            type='text'
-                            name='state'
-                            fullWidth
-                        />
+                        <List>
+                            <ListItemText
+                                primary={`DNI: ${input.dni}`}
+                                fullWidth
+                            />
+                            <ListItemText
+                                primary={`Apellido: ${input.lastname}`}
+                                fullWidth
+                            />
+                            <ListItemText
+                                primary={`Nombre: ${input.name}`}
+                                fullWidth
+                            />
+                            <ListItemText
+                                primary={`Email: ${input.email}`}
+                                fullWidth
+                            />
+                            <ListItemText
+                                primary={`Telefono: ${input.contact}`}
+                                fullWidth
+                            />
+                            <ListItemText
+                                primary={`Genero: ${input.gender}`}
+                                fullWidth
+                            />
+                            <ListItemText
+                                primary={`Titular?: ${input.titular}`}
+                                fullWidth
+                            />
+                            <ListItemText
+                                primary={`Plan: ${input.plan}`}
+                                fullWidth
+                            />
+                            <ListItemText
+                                primary={`Estado: ${input.state}`}
+                                fullWidth
+                            />
+                        </List>
                     </DialogContent>
                     <DialogActions>
                         <Button
@@ -897,13 +894,14 @@ function AdminAffiliate() {
                         </Button>
                         <Button
                             onClick={() => {
-                                if (
-                                    window.confirm(
-                                        'Esta seguro de borrar este socio? (ESTA ACCION NO ES REVERSIBLE)'
-                                    )
-                                ) {
-                                    handleDelete();
-                                }
+                                MySwal.fire({
+                                    title: 'Esta seguro de borrar este socio? (ESTA ACCION NO ES REVERSIBLE)',
+                                    icon: 'question',
+                                    showCloseButton: true,
+                                    showCancelButton: true,
+                                }).then((res) => {
+                                    if (res.isConfirmed) handleDelete();
+                                });
                                 handleClose('delete');
                             }}
                             color='primary'

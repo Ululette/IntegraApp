@@ -23,7 +23,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import 'firebase/auth';
 import AdminMedicAdd from '../AdminMedics/AdminMedicAdd';
 import AdminMedicEdit from '../AdminMedics/AdminMedicEdit';
-
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import {
     Avatar,
     Dialog,
@@ -181,6 +182,9 @@ const useToolbarStyles = makeStyles((theme) => ({
     title: {
         flex: '1 1 100%',
     },
+    dialog: {
+        zIndex: '-6',
+    },
 }));
 
 const EnhancedTableToolbar = (props) => {
@@ -288,6 +292,7 @@ const EnhancedTableToolbar = (props) => {
                 disableEscapeKeyDown
                 open={open}
                 onClose={handleClose}
+                className={classes.dialog}
             >
                 <DialogTitle>Fill the form</DialogTitle>
                 <form className={classes.container} onSubmit={handleSubmit}>
@@ -360,7 +365,8 @@ EnhancedTableToolbar.propTypes = {
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        width: '100%',
+        width: '83%',
+        marginLeft: '18rem',
     },
     paper: {
         width: '100%',
@@ -388,6 +394,7 @@ export default function MedicsTable() {
     const [editActive, setEditActive] = React.useState(false);
     const [medicData, setMedicData] = React.useState(null);
     const [toShowRows, setToShowRows] = React.useState([]);
+    const MySwal = withReactContent(Swal);
 
     const fetchMedics = async () => {
         const { data: medics, error: errorFetchMedics } = await supabase
@@ -413,27 +420,35 @@ export default function MedicsTable() {
     }, []);
 
     const handleEdit = (medicData) => {
+        console.log(medicData, 'medicData Tabs');
         setMedicData(medicData);
         setEditActive(true);
         if (editActive) setEditActive(false);
     };
 
     const handleDelete = async (medicData) => {
-        const confirm = window.confirm(
-            `Desea inhabilitar al medico ${medicData.name} ${medicData.lastname} de la obra social?`
-        );
-        if (confirm) {
-            try {
-                await supabase
-                    .from('medics')
-                    .update({ state: 'inhabilitado' })
-                    .eq('dni', medicData.dni);
-                alert('Se inhabilito al medico con exito.');
-                window.location.reload();
-            } catch (error) {
-                console.log(error);
+        MySwal.fire({
+            title: `Desea inhabilitar al medico ${medicData.name} ${medicData.lastname} de la obra social?`,
+            showCloseButton: true,
+            showCancelButton: true,
+            icon: 'question',
+        }).then(async (res) => {
+            if (res.isConfirmed) {
+                try {
+                    await supabase
+                        .from('medics')
+                        .update({ state: 'inhabilitado' })
+                        .eq('dni', medicData.dni);
+                    MySwal.fire({
+                        title: 'Se inhabilito al medico con exito!',
+                        icon: 'success',
+                        timer: 2000,
+                    }).then(() => window.location.reload());
+                } catch (error) {
+                    console.log(error);
+                }
             }
-        }
+        });
     };
 
     const handleRequestSort = (event, property) => {
@@ -564,16 +579,23 @@ export default function MedicsTable() {
 
                                             <TableCell>
                                                 <ul>
-                                                    {row.medical_specialities.map(
-                                                        (s) => (
-                                                            <li>
-                                                                {s.name
-                                                                    .charAt(0)
-                                                                    .toUpperCase() +
-                                                                    s.name.slice(
-                                                                        1
-                                                                    )}
-                                                            </li>
+                                                    {row.medical_specialities
+                                                        .length === 0 ? (
+                                                        <li>Clinica</li>
+                                                    ) : (
+                                                        row.medical_specialities.map(
+                                                            (s) => (
+                                                                <li>
+                                                                    {s.name
+                                                                        .charAt(
+                                                                            0
+                                                                        )
+                                                                        .toUpperCase() +
+                                                                        s.name.slice(
+                                                                            1
+                                                                        )}
+                                                                </li>
+                                                            )
                                                         )
                                                     )}
                                                 </ul>
@@ -607,6 +629,7 @@ export default function MedicsTable() {
                     medicData={medicData}
                     medicSpecialities={medicSpecialities}
                     setEditActive={setEditActive}
+                    editActive={editActive}
                 />
             ) : null}
             <AdminMedicAdd medicSpecialities={medicSpecialities} />

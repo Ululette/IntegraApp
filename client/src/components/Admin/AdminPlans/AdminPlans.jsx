@@ -4,6 +4,8 @@ import { getPlans, getBenefits } from '../../../actions/getter.action.js';
 import { CircularProgress } from '@material-ui/core';
 import 'firebase/auth';
 import styles from './AdminPlans.module.css';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 // Table
 
@@ -22,7 +24,7 @@ import DeletePlan from './DeletePlan';
 export default function AdminPlans({ firebase }) {
     const allPlans = useSelector((state) => state.plans.allPlans);
     const allBenefits = useSelector((state) => state.plans.allBenefits);
-
+    const MySwal = withReactContent(Swal);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -137,18 +139,33 @@ export default function AdminPlans({ firebase }) {
 
     const handleSubmitDelete = async (e, id) => {
         e.preventDefault();
-        try {
-            let userData = JSON.parse(localStorage.getItem('userdata'));
-            await firebase
-                .auth()
-                .signInWithEmailAndPassword(userData.email, e.target[0].value);
-            setPassword({ password: '', error: false });
-            handleCloseModalDelete();
-            alert('Se borro el plan');
-        } catch (error) {
-            setPassword({ password: '', error: true });
-            console.log(error);
-        }
+        MySwal.fire({
+            title: 'Desea eliminar el plan? Esta accion no es reversible.',
+            icon: 'question',
+            showCloseButton: true,
+            showCancelButton: true,
+        }).then(async (res) => {
+            if (res.isConfirmed) {
+                try {
+                    let userData = JSON.parse(localStorage.getItem('userdata'));
+                    await firebase
+                        .auth()
+                        .signInWithEmailAndPassword(
+                            userData.email,
+                            e.target[0].value
+                        );
+                    setPassword({ password: '', error: false });
+                    handleCloseModalDelete();
+                    MySwal.fire({
+                        title: 'Se elimino el plan con exito!.',
+                        icon: 'success',
+                    }).then(() => window.location.reload());
+                } catch (error) {
+                    setPassword({ password: '', error: true });
+                    console.log(error);
+                }
+            }
+        });
     };
 
     if (allPlans.length === 0) return <CircularProgress />;

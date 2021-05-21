@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useUser } from 'reactfire';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 //Styles
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import styles from './AdminNav.module.css';
+import styles from './MedicNav.module.css';
 
 // Material-UI components
 import {
@@ -20,30 +20,27 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-
 //Icons
 import MailIcon from '@material-ui/icons/Mail';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import HomeIcon from '@material-ui/icons/Home';
 import FaceIcon from '@material-ui/icons/Face';
 import GroupIcon from '@material-ui/icons/Group';
-import NoteIcon from '@material-ui/icons/Note';
-import DoneAllIcon from '@material-ui/icons/DoneAll';
-import PhoneAndroidIcon from '@material-ui/icons/PhoneAndroid';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import HealingIcon from '@material-ui/icons/Healing';
 import MenuIcon from '@material-ui/icons/Menu';
-
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+
+// Our components
+import MedicPatients from '../MedicPatients/MedicPatients.jsx';
 
 const drawerWidth = 260;
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
-        position: 'relative',
+        position: 'fixed',
     },
     drawer: {
         [theme.breakpoints.up('sm')]: {
@@ -69,6 +66,7 @@ const useStyles = makeStyles((theme) => ({
     drawerPaper: {
         width: drawerWidth,
         zIndex: 0,
+        position: 'relative',
     },
     content: {
         flexGrow: 1,
@@ -76,13 +74,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function AdminNav({ firebase, window: windowMui }) {
+function MedicNav({ firebase, window: windowMui }) {
     const userData = JSON.parse(localStorage.getItem('userdata'));
-    const adminData = JSON.parse(localStorage.getItem('admindata'));
+    const medicData = JSON.parse(localStorage.getItem('medicdata'));
     const userDataFirebase = useUser();
 
-    if (!userDataFirebase.data && !adminData && !userData) {
-        this.window.location = '/login';
+    console.log(window.location);
+
+    if (!userDataFirebase.data && !medicData && !userData) {
+        window.location = '/login';
     }
 
     const MySwal = withReactContent(Swal);
@@ -96,9 +96,8 @@ function AdminNav({ firebase, window: windowMui }) {
 
     const drawer = (
         <div className={styles.asidebar}>
-            <div className={classes.toolbar} />
             <List className={styles.listitems}>
-                <NavLink to={`/${userData.dni}/admin/`} className={styles.link}>
+                <NavLink to={`/${userData.dni}/medic/`} className={styles.link}>
                     <ListItem button>
                         <HomeIcon />
                         <ListItemText primary='Inicio' />
@@ -108,86 +107,43 @@ function AdminNav({ firebase, window: windowMui }) {
                     <FaceIcon />
                     <ListItemText primary='Mi cuenta' />
                 </ListItem>
-                <ListItem button>
-                    <Badge
-                        className={styles.notifications}
-                        color='secondary'
-                        badgeContent={2}
-                    >
-                        <GroupAddIcon />
-                        <ListItemText primary='Solicitudes de asociacion' />
-                    </Badge>
-                </ListItem>
                 <NavLink
-                    to={`/${userData.dni}/admin/plans`}
+                    to={`/${userData.dni}/medic/patients`}
                     className={styles.link}
                     activeClassName={styles.activeLink}
                 >
                     <ListItem button>
-                        <NoteIcon />
-                        <ListItemText primary='Planes' />
+                        <GroupAddIcon />
+                        <ListItemText primary='Mis pacientes' />
                     </ListItem>
                 </NavLink>
-
-                <ListItem button>
-                    <Badge
-                        className={styles.notifications}
-                        color='secondary'
-                        badgeContent={2}
-                    >
-                        <DoneAllIcon />
-                        <ListItemText primary='Autorizaciones' />
-                    </Badge>
-                </ListItem>
                 <NavLink
-                    to={`/${userData.dni}/admin/affiliates`}
+                    to={`/${userData.dni}/medic/consult`}
+                    className={styles.link}
+                    activeClassName={styles.activeLink}
+                >
+                    <ListItem button>
+                        <AssignmentIcon />
+                        <ListItemText primary='Mis consultas' />
+                    </ListItem>
+                </NavLink>
+                <NavLink
+                    to={`/${userData.dni}/medic/prescriptions&orders`}
                     className={styles.link}
                     activeClassName={styles.activeLink}
                 >
                     <ListItem button>
                         <GroupIcon />
-                        <ListItemText primary='Socios' />
+                        <ListItemText primary='Mis recetas y ordenes' />
                     </ListItem>
                 </NavLink>
-                <NavLink
-                    to={`/${userData.dni}/admin/medics`}
-                    className={styles.link}
-                    activeClassName={styles.activeLink}
-                >
-                    <ListItem button>
-                        <HealingIcon />
-                        <ListItemText primary='Medicos' />
-                    </ListItem>
-                </NavLink>
-                <ListItem button>
-                    <Badge
-                        className={styles.notifications}
-                        color='secondary'
-                        badgeContent={2}
-                    >
-                        <PhoneAndroidIcon />
-                        <ListItemText primary='Consultas de socios' />
-                    </Badge>
-                </ListItem>
-
-                <ListItem button>
-                    <Badge
-                        className={styles.notifications}
-                        color='secondary'
-                        badgeContent={2}
-                    >
-                        <AssignmentIcon />
-
-                        <ListItemText primary='Tickets' />
-                    </Badge>
-                </ListItem>
             </List>
         </div>
     );
 
     if (
         (!userDataFirebase || !userDataFirebase.data) &&
-        !adminData &&
+        !medicData &&
         !userData
     ) {
         window.location = '/login';
@@ -221,7 +177,7 @@ function AdminNav({ firebase, window: windowMui }) {
             if (res.isConfirmed) {
                 await firebase.auth().signOut();
                 localStorage.removeItem('userdata');
-                localStorage.removeItem('admindata');
+                localStorage.removeItem('medicData');
                 window.location = '/login';
             }
         });
@@ -243,7 +199,7 @@ function AdminNav({ firebase, window: windowMui }) {
                         <MenuIcon />
                     </IconButton>
                 </Toolbar>
-                <a href={`/${userDataFirebase.uid}/admin/`}>
+                <a href={`/${userDataFirebase.uid}/medic/`}>
                     <img
                         src='../../assets/images/logo.png'
                         alt='Integra icon.'
@@ -259,11 +215,7 @@ function AdminNav({ firebase, window: windowMui }) {
                         <MailIcon />
                     </Badge>
                     <article className={styles.namesContainer}>
-                        <p>{`${adminData.name} ${adminData.lastname}`}</p>
-                        <p>
-                            Administrador
-                            {adminData.root ? 'root' : 'moderador'}
-                        </p>
+                        <p>{`${medicData.name} ${medicData.lastname}`}</p>
                     </article>
                     <div>
                         <Button onClick={handleClick}>
@@ -291,50 +243,51 @@ function AdminNav({ firebase, window: windowMui }) {
                             onClose={handleClose}
                         >
                             <MenuItem onClick={handleClose}>Mi perfil</MenuItem>
-                            <NavLink
-                                to={`/${userData.dni}/admin/newadmin`}
-                                className={styles.newAdmin}
-                            >
-                                <MenuItem onClick={handleClose}>
-                                    Agregar Administrador
-                                </MenuItem>
-                            </NavLink>
-
                             <MenuItem onClick={logout}>Cerrar Sesion</MenuItem>
                         </Menu>
                     </div>
                 </section>
             </nav>
-            <Hidden smUp implementation='css'>
-                <Drawer
-                    container={container}
-                    variant='temporary'
-                    anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-                    open={mobileOpen}
-                    onClose={handleDrawerToggle}
-                    classes={{
-                        paper: classes.drawerPaper,
-                    }}
-                    ModalProps={{
-                        keepMounted: true, // Better open performance on mobile.
-                    }}
-                >
-                    {drawer}
-                </Drawer>
-            </Hidden>
-            <Hidden xsDown implementation='css'>
-                <Drawer
-                    classes={{
-                        paper: classes.drawerPaper,
-                    }}
-                    variant='permanent'
-                    open
-                >
-                    {drawer}
-                </Drawer>
-            </Hidden>
+            <main className={styles.main}>
+                <Hidden smUp implementation='css'>
+                    <Drawer
+                        container={container}
+                        variant='temporary'
+                        anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                        open={mobileOpen}
+                        onClose={handleDrawerToggle}
+                        classes={{
+                            paper: classes.drawerPaper,
+                        }}
+                        ModalProps={{
+                            keepMounted: true, // Better open performance on mobile.
+                        }}
+                    >
+                        {drawer}
+                    </Drawer>
+                </Hidden>
+                <Hidden xsDown implementation='css'>
+                    <Drawer
+                        classes={{
+                            paper: classes.drawerPaper,
+                        }}
+                        variant='permanent'
+                        open
+                    >
+                        {drawer}
+                    </Drawer>
+                </Hidden>
+                {/* ACA VAN NUESTROS COMPONENTES */}
+                {window.location.pathname ===
+                `/${userData.dni}/medic/patients` ? (
+                    <MedicPatients />
+                ) : null}
+                {/* // ) : window.location.pathname === `/${userData.dni}/medic/` ? null : (
+            //     <Redirect to='/notfound' />
+            // )} */}
+            </main>
         </div>
     );
 }
 
-export default AdminNav;
+export default MedicNav;

@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
@@ -15,14 +15,13 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 import PopUpEdit from '../Speciality/PopUpEdit';
 import supabase from '../../../supabase.config.js';
@@ -215,7 +214,7 @@ export default function EnhancedTable({ rows }) {
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [open, setOpen] = useState(false);
     const [nameSpeciality, setNameSpeciality] = useState('');
-
+    const MySwal = withReactContent(Swal);
     const dispatch = useDispatch();
 
     //---HANDLERS-----
@@ -264,9 +263,11 @@ export default function EnhancedTable({ rows }) {
                 .match({ id: id });
 
             if (!errorRelation && !errorSpeciality)
-                alert(
-                    `La espcialidad ${name.toUpperCase()} se ha eliminado con exito.`
-                );
+                MySwal.fire({
+                    title: `La espcialidad ${name.toUpperCase()} se ha eliminado con exito.`,
+                    icon: 'success',
+                    timer: 2000,
+                }).then(() => window.location.reload());
         }
         // deleteMedicsSpeciality(id);
         // deleteSpeciality (id);
@@ -277,8 +278,8 @@ export default function EnhancedTable({ rows }) {
     };
     const handleEdit = (e, name) => {
         e.preventDefault();
-        const updateSpeciality = async (name) => {
-            const { data, error } = await supabase
+        const updateSpeciality = async () => {
+            await supabase
                 .from('medical_specialities')
                 .update({ name: e.target[0].value })
                 .match({ name: nameSpeciality });

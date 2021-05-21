@@ -11,7 +11,19 @@
     padding: 0 10px;
     position: sticky;
     width: 100%;
-    z-index: 200;
+    z-index: 2;
+}
+
+.asidebar {
+    z-index: 0;
+    position: relative;
+}
+
+.listitems {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: left;
 }
 
 .ppLogo {
@@ -104,14 +116,14 @@
     cursor: pointer;
     display: flex;
     font-size: 1.2rem;
+    height: 50px;
     justify-content: flex-start;
-    margin: 1.4rem 0;
     width: 100%;
 }
 
-.buttonsContainer article:hover, .link:hover {
+/* .buttonsContainer article:hover, .link:hover {
     border-bottom: 1px solid #000;
-}
+} */
 
 .buttonsContainer article li, .link li {
     margin-left: 10px;
