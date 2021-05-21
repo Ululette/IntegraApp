@@ -1,6 +1,67 @@
 .container{ 
-    width: calc(100% + 260px);
-    display: flex;
-    justify-content: center;
     align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.searchbar {
+    align-items: center;
+    display: flex;
+    height: 50px;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+}
+
+.paper {
+    display: flex;
+    padding: 2px 4px;
+    align-items: center;
+    width: 200px;
+}
+
+.inputSearch {
+    flex: 1;
+    padding-left: 10px;
+}
+
+.iconButton {
+    padding: 10px;
+}
+
+.listPatients {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: left;
+    width: 100%;
+}
+
+.eachPatient {
+    margin: 10px;
+    width: 60%;
+}
+
+.completeList {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0 20px;
+}
+
+.listItem {
+    text-transform: capitalize;
+}
+
+.dataContact {
+
+}
+
+.titleContact {
+    font-size: 1.5rem;
+    font-weight: bold;
 }
