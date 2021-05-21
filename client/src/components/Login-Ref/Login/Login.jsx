@@ -132,7 +132,7 @@ function Login({ firebase }) {
                     await supabase
                         .from(`medics`)
                         .select(
-                            'name, lastname, medic_license, email, phone_number, profilePic, birthdate,  medical_specialities (id, name), medics_partners(partner_dni)'
+                            'dni, name, lastname, medic_license, email, phone_number, profilePic, birthdate,  medical_specialities (id, name), medics_partners(partner_dni)'
                         )
                         .eq('dni', users[0].dni);
 
@@ -143,6 +143,7 @@ function Login({ firebase }) {
                 }
                 console.log(userInfo);
                 const medicdata = {
+                    dni: userInfo[0].dni,
                     name: userInfo[0].name,
                     lastname: userInfo[0].lastname,
                     medic_license: userInfo[0].medic_license,

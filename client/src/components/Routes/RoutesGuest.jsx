@@ -7,6 +7,7 @@ import FaqsPage from '../Guest/Faqs/FaqsPage.jsx';
 import ContactForm from '../Guest/ContactForm/ContactForm.jsx';
 import ComparativaP from '../Guest/ComparativaP/ComparativaP.jsx';
 import RegStepper from '../Guest/RegStepForm/RegStepper';
+import NotFound from '../Status/NotFound.jsx';
 
 function RoutesGuest() {
     return (
@@ -17,6 +18,7 @@ function RoutesGuest() {
             <Route exact path='/faqs' component={FaqsPage} />
             <Route exact path='/asociate' component={ContactForm} />
             <Route exact path='/plandetails' component={ComparativaP} />
+            <Route exact path='/notfound' component={NotFound} />
             <Route exact path='/' component={Footer} />
         </>
     );
