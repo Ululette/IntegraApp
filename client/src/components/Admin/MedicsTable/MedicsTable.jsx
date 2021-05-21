@@ -336,7 +336,7 @@ const EnhancedTableToolbar = (props) => {
                                 <option value='medical_specialities'>
                                     Specialty
                                 </option>
-                                <option value='state'>Sate</option>
+                                <option value='state'>State</option>
                             </Select>
                         </FormControl>
                     </DialogContent>
