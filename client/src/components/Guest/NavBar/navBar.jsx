@@ -12,6 +12,9 @@ const NavBar = ({ history }) => {
                 <img className={styles.img} src={logoNav} alt='Logo.' />
             </NavLink>
             <div className={styles.buttonContainer}>
+                <NavLink to='/faqs'>
+                    <button className={styles.logB}>FAQS</button>
+                </NavLink>
                 <button className={styles.logB}>
                     <a href='#contact'>Asociate</a>
                 </button>
