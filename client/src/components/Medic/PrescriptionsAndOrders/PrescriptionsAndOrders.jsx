@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import supabase from '../../../supabase.config'
 import { makeStyles } from '@material-ui/core/styles';
-import { FormControl, InputLabel, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@material-ui/core';
+import { CircularProgress, FormControl, InputLabel, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@material-ui/core';
 import styles from './PrescriptionsAndOrder.module.css'
 
 const useStyles = makeStyles((theme) => ({
@@ -93,7 +93,7 @@ export default function PrescriptionsAndOrders() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row) => (
+          {data.length ? data.map((row) => (
             <TableRow key={row.name}>
               <TableCell component="th" scope="row">
                 {row.id}
@@ -103,7 +103,9 @@ export default function PrescriptionsAndOrders() {
               <TableCell align="right">{query.selection === 'orders' ? row.study_name : row.drug_name}</TableCell>
               <TableCell align="right">{row.medical_consultations.partner.name}</TableCell>
             </TableRow>
-          ))}
+          ))
+        :
+        <CircularProgress/>}
         </TableBody>
       </Table>
     </TableContainer>
