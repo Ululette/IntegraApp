@@ -4,6 +4,12 @@ import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+
 import Button from '@material-ui/core/Button';
 import styles from './InfoCard.module.css';
 import logoNav from '../../../assets/images/logo.png';
@@ -26,7 +32,7 @@ export default function InfoCard({ plan }) {
                 image={logoNav}
                 title='Logo'
             />
-            {/* <CardContent>
+            <CardContent>
                 <Typography gutterBottom variant='h5'>
                     {plan.name}
                 </Typography>
@@ -34,28 +40,27 @@ export default function InfoCard({ plan }) {
             <CardContent>
                 <Typography paragraph>Cobertura:</Typography>
                 <List>
-                    <ListItem button>
-                        <ListItemText
-                            primary={`-${
-                                plan.benefits[Math.floor(Math.random() * 8)]
-                                    .title
-                            }`}
-                        />
-                    </ListItem>
                     <ListItemText
                         primary={`-${
-                            plan.benefits[Math.floor(Math.random() * 8)].title
+                            plan.benefits[Math.floor(Math.random() * 8)]
+                                .description
+                        }`}
+                    />
+                    <ListItemText
+                        primary={`-${
+                            plan.benefits[Math.floor(Math.random() * 8)]
+                                .description
                         }`}
                     />
                     <ListItemText
                         primary={`-${
                             plan.benefits[
                                 Math.floor(Math.random() * (8 - 1) + 1)
-                            ].title
+                            ].description
                         }`}
                     />
                 </List>
-            </CardContent> */}
+            </CardContent>
             <CardActionArea>
                 <CardActions>
                     <a href='/plandetails'>
