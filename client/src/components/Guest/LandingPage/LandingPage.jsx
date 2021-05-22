@@ -105,8 +105,70 @@ export default function LandingPage() {
                     </h4>
                 </div>
             </section>
+
             <section data-aos='zoom-out-down' className={styles.carrouselNews}>
-                <h3 className={styles.nov}>Novedades</h3>
+                <video
+                    src='../../../assets/videos/newsVideo.mp4'
+                    muted
+                    autoPlay
+                    loop
+                    playsInline
+                ></video>
+                <div className={styles.infoAll}>
+                    <h2 className={styles.nov}>
+                        Informacion y numeros de contacto
+                    </h2>
+                    <div className={styles.icons}>
+                        <div
+                            data-aos='zoom-in'
+                            data-aos-duration='1000'
+                            className={styles.icon}
+                        >
+                            <img
+                                className={styles.each}
+                                src='https://image.flaticon.com/icons/png/128/3063/3063181.png'
+                                alt=''
+                            />
+                        </div>
+                        <div
+                            data-aos='zoom-in'
+                            data-aos-duration='1000'
+                            data-aos-delay='400'
+                            className={styles.icon}
+                        >
+                            <img
+                                className={styles.each}
+                                src='https://image.flaticon.com/icons/png/128/1067/1067566.png'
+                                alt=''
+                            />
+                        </div>
+
+                        <div
+                            data-aos='zoom-in'
+                            data-aos-duration='1000'
+                            data-aos-delay='800'
+                            className={styles.icon}
+                        >
+                            <a href='/faqs'>
+                                <img
+                                    className={styles.each}
+                                    src='https://image.flaticon.com/icons/png/128/2618/2618540.png'
+                                    alt=''
+                                />
+                            </a>
+                        </div>
+                    </div>
+                    <div className={styles.info}>
+                        <p className={styles.des}>
+                            Urgencias y emergencias - 0810-454-999
+                        </p>
+                        <p className={styles.des}>
+                            Orientación medica telefonica - 0810-963-952
+                        </p>
+                        <p className={styles.des}>Preguntas frecuentes</p>
+                    </div>
+                </div>
+                <h3 className={styles.nov}>Ultimas noticias</h3>
                 <article className={styles.news}>
                     <Carousel />
                 </article>

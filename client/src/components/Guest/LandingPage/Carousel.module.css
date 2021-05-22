@@ -4,7 +4,7 @@
     align-items: center;
     justify-content: center;
     height: 500px;
-    width: 57%;
+    width: 70%;
     z-index: 0;
 }
 
@@ -15,32 +15,3 @@
     justify-content: center;
     width: 100%;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* .left,
-.right {
-    align-items: center;
-    background-color: #a6f6f1;
-    border-radius: 100%;
-    cursor: pointer;
-    display: flex;
-    height: 50px;
-    justify-content: center;
-    width: 50px;
-} */
