@@ -22,6 +22,7 @@ function RenderPDF({ firebase }) {
             window.close();
         }
         handleRedirect();
+        //eslint-disable-next-line
     }, []);
 
     if (!urlFile)

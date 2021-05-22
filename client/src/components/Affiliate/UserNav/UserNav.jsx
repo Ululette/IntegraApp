@@ -116,6 +116,7 @@ function UserNav({ firebase, window: windowMui }) {
 
     useEffect(() => {
         getFamilyGroup();
+        //eslint-disable-next-line
     }, []);
 
     const handleClick = (event) => {

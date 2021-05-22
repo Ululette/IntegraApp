@@ -18,7 +18,7 @@ export default function AcccessibleTable({ plans }) {
     let [compBenef, setCompBenef] = useState([]);
 
     async function getBenefits() {
-        const { data: benefits, error } = await supabase
+        const { data: benefits } = await supabase
             .from('benefits')
             .select('id, title , description');
 

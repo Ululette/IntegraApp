@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import React from 'react';
 import styles from './LandingPage.module.css';
 import InfoPlanes from '../InfoPlans/InfoPlanes.jsx';
 import ContactForm from '../ContactForm/ContactForm.jsx';
 import Carousel from './Carousel.jsx';
-import anime from 'animejs/lib/anime.es.js';
+// import anime from 'animejs/lib/anime.es.js';
 
 export default function LandingPage() {
     // const path = anime.path('#svgLinear path');

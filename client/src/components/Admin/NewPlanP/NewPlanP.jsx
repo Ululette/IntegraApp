@@ -69,15 +69,13 @@ export default function NewPlanP() {
             async function postPlan(newplan) {
                 console.log(newplan); // <---
                 //----------------------------
-                let { data: plan, error: errorPlan } = await supabase
-                    .from('plans')
-                    .insert([
-                        {
-                            id_plan: 105,
-                            description: newplan.description,
-                            price: newplan.price,
-                        },
-                    ]);
+                let { data: plan } = await supabase.from('plans').insert([
+                    {
+                        id_plan: 105,
+                        description: newplan.description,
+                        price: newplan.price,
+                    },
+                ]);
                 //----------------------------
                 console.log(`este es el :`, plan);
 

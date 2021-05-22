@@ -4,7 +4,6 @@ import './ComparativaP.css';
 import family from '../../../assets/images/family.png';
 import fondo from '../../../assets/images/fondo1.png';
 import supabase from '../../../supabase.config';
-import ListItemLink from './ListItemLink';
 import AcccessibleTable from './AcccessibleTable';
 //path='/ComparativaP'
 
@@ -12,7 +11,7 @@ export default function ComparativaP() {
     let [plans, setPlans] = useState([]);
 
     async function getPlans() {
-        const { data: plans, error } = await supabase
+        const { data: plans } = await supabase
             .from('plans')
             .select('id, name, price, benefits (id,title)');
         setPlans(

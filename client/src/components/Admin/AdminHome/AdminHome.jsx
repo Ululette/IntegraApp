@@ -1,6 +1,6 @@
 import React from 'react';
 
-function AdminHome({ firebase }) {
+function AdminHome() {
     const userData = JSON.parse(localStorage.getItem('userdata'));
     if (!userData || userData.role !== 'admin') window.location = '/login';
 

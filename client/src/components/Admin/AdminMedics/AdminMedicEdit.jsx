@@ -13,7 +13,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { statesMedic } from '../../../functions/states.js';
-import styles from './AdminMedicEdit.module.css';
 import supabase from '../../../supabase.config.js';
 import CircularProgress from '@material-ui/core/CircularProgress';
 

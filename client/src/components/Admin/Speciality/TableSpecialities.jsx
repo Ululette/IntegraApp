@@ -1,6 +1,4 @@
-import { React, useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -64,15 +62,7 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-    const {
-        classes,
-        onSelectAllClick,
-        order,
-        orderBy,
-        numSelected,
-        rowCount,
-        onRequestSort,
-    } = props;
+    const { classes, order, orderBy, onRequestSort } = props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
@@ -209,28 +199,17 @@ export default function EnhancedTable({ rows }) {
     const classes = useStyles();
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('specialities');
-    const [selected, setSelected] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [open, setOpen] = useState(false);
     const [nameSpeciality, setNameSpeciality] = useState('');
     const MySwal = withReactContent(Swal);
-    const dispatch = useDispatch();
 
     //---HANDLERS-----
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
-    };
-
-    const handleSelectAllClick = (event) => {
-        if (event.target.checked) {
-            const newSelecteds = rows.map((n) => n.name);
-            setSelected(newSelecteds);
-            return;
-        }
-        setSelected([]);
     };
 
     const handleChangePage = (event, newPage) => {
@@ -242,8 +221,6 @@ export default function EnhancedTable({ rows }) {
         setPage(0);
     };
 
-    const isSelected = (name) => selected.indexOf(name) !== -1;
-
     const handleDelete = async (id, name) => {
         let res = window.confirm(
             `esta seguro que desea eliminar ${name.toUpperCase()}?`
@@ -251,13 +228,13 @@ export default function EnhancedTable({ rows }) {
         if (res) {
             ///const deleteMedicsSpeciality = (id)=>{
             //primero se elimina de tabla intermedia
-            const { data: relation, errorRelation } = await supabase
+            const { errorRelation } = await supabase
                 .from('medics_medical_specialities')
                 .delete()
                 .match({ speciality_id: id });
             //}
             ///const deleteSpeciality = async(id)=>{
-            const { data: speciality, errorSpeciality } = await supabase
+            const { errorSpeciality } = await supabase
                 .from('medical_specialities')
                 .delete()
                 .match({ id: id });
@@ -292,7 +269,7 @@ export default function EnhancedTable({ rows }) {
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
-                <EnhancedTableToolbar numSelected={selected.length} />
+                <EnhancedTableToolbar />
                 <TableContainer>
                     <Table
                         className={classes.table}
@@ -302,7 +279,6 @@ export default function EnhancedTable({ rows }) {
                     >
                         <EnhancedTableHead
                             classes={classes}
-                            numSelected={selected.length}
                             order={order}
                             orderBy={orderBy}
                             onRequestSort={handleRequestSort}
@@ -315,17 +291,14 @@ export default function EnhancedTable({ rows }) {
                                     page * rowsPerPage + rowsPerPage
                                 )
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
                                             hover
                                             role='checkbox'
-                                            aria-checked={isItemSelected}
                                             tabIndex={-1}
                                             key={row.name}
-                                            selected={isItemSelected}
                                         >
                                             <TableCell
                                                 component='th'

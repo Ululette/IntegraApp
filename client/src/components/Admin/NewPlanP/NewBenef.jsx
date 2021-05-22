@@ -17,7 +17,9 @@ export default function NewBenef() {
     useEffect(() => {
         if (sended) {
             dispatch(addNpBen(newbenefs));
+            //eslint-disable-next-line
             async function postNewBenef(newplan) {}
+            //eslint-disable-next-line
             newbenef.map((e) => {
                 //   //----------------------------
                 //   let { data: benefits, error: errorPlan } = await supabase
@@ -32,6 +34,7 @@ export default function NewBenef() {
                 // //----------------------------
             });
         }
+        //eslint-disable-next-line
     }, [sended, newbenefs, dispatch]);
 
     // Una vez que el store recibe los beneficios limpia el input y arreglo.

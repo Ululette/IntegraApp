@@ -23,6 +23,7 @@ const FormSpecialities = () => {
     useEffect(() => {
         dispatch(getMedicSpecialities());
         setRows(medic_specialities);
+        //eslint-disable-next-line
     }, [medic_specialities]);
 
     const handlerChangeInput = (event) => {

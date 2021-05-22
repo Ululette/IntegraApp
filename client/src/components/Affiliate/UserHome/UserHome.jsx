@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import supabase from '../../../supabase.config.js';
+import React from 'react';
 
 function UserHome() {
     const affiliateData = JSON.parse(localStorage.getItem('affiliatedata'));

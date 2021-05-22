@@ -45,8 +45,10 @@ export default function MultiSelectBenef() {
 
     // Quita un beneficio de la selección
     function removeItem(id) {
+        //eslint-disable-next-line
         let newIds = benefsSelectedId.filter((e) => e != id);
         setBenefsSelectedId(newIds);
+        //eslint-disable-next-line
         let newSelected = sbenef.filter((e) => e.id != id);
         setSbenef(newSelected);
         return;

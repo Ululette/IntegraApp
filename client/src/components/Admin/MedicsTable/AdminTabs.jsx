@@ -66,7 +66,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-export default function AdminMedicTabs(props) {
+export default function AdminMedicTabs() {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 

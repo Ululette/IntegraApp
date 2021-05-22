@@ -260,10 +260,12 @@ function AdminAffiliate({ firebase }) {
 
     useEffect(() => {
         dispatch(getPlans());
+        //eslint-disable-next-line
     }, []);
 
     useEffect(() => {
         dispatch(getAffiliates());
+        //eslint-disable-next-line
     }, [open, setOpen]);
 
     let rows = allAffiliates.map((el) => {

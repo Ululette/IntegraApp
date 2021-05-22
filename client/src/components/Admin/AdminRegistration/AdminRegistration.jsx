@@ -1,50 +1,17 @@
 import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
 import Styles from '../../Guest/ContactForm/ContactForm.module.css';
 import LogoNav from '../../../assets/logo-integra.png';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
-import { createMuiTheme } from '@material-ui/core/styles';
-import { ThemeProvider } from '@material-ui/styles';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
-import Card from '@material-ui/core/Card';
-import { makeStyles } from '@material-ui/core/styles';
 import supabase from '../../../supabase.config';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import 'firebase/auth';
-const theme = createMuiTheme({
-    palette: {
-        primary: {
-            main: '#41aea9',
-        },
-        secondary: {
-            main: '#e8ffff',
-        },
-    },
-});
 
-const useStyles = makeStyles({
-    root: {
-        width: '50%',
-        height: '70%',
-        background: '#e8ffff',
-    },
-    bullet: {
-        display: 'inline-block',
-        margin: '0 2px',
-        transform: 'scale(0.8)',
-    },
-    title: {
-        fontSize: 14,
-    },
-    pos: {
-        marginBottom: 12,
-    },
-});
 function AdminRegistration({ firebase }) {
     const MySwal = withReactContent(Swal);
     const [input, setInput] = useState({
@@ -64,7 +31,6 @@ function AdminRegistration({ firebase }) {
         mail: false,
     });
 
-    const [successRequest, setSuccessRequest] = useState(false);
     const [errorRequest, setErrorRequest] = useState(false);
 
     const handleClickOpen = async () => {
@@ -76,7 +42,6 @@ function AdminRegistration({ firebase }) {
             !errors.birthdate &&
             !errors.root
         ) {
-            setSuccessRequest(true);
             await supabase.from('users').insert([
                 {
                     dni: input.dni,
@@ -128,7 +93,6 @@ function AdminRegistration({ firebase }) {
     };
 
     const handleClose = () => {
-        setSuccessRequest(false);
         setErrorRequest(false);
     };
 
@@ -237,7 +201,6 @@ function AdminRegistration({ firebase }) {
                     </div>
                     <div className={Styles.textField}>
                         <TextField
-                            id='outlined-search'
                             label='Nombre'
                             variant='outlined'
                             id='name-input'
@@ -255,7 +218,6 @@ function AdminRegistration({ firebase }) {
                     </div>
                     <div className={Styles.textField}>
                         <TextField
-                            id='outlined-search'
                             label='Apellido'
                             variant='outlined'
                             id='lastname-input'
@@ -273,7 +235,6 @@ function AdminRegistration({ firebase }) {
                     </div>
                     <div className={Styles.textField}>
                         <TextField
-                            id='outlined-search'
                             label='DNI'
                             variant='outlined'
                             id='dni-input'
@@ -322,7 +283,6 @@ function AdminRegistration({ firebase }) {
                     </div>
                     <div className={Styles.textField}>
                         <TextField
-                            id='outlined-search'
                             label='E-mail'
                             variant='outlined'
                             id='mail-input'

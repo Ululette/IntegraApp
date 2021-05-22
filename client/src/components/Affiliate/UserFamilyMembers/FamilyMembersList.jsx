@@ -26,18 +26,17 @@ export default function FamilyMembersList() {
     useEffect(() => {
         async function getAffiliate() {
             try {
-                const { data: user, error: errorFetchUserData } = await supabase
+                const { data: user } = await supabase
                     .from('partners')
                     .select('*')
                     .eq('dni', JSON.parse(localStorage.getItem('userdata')).dni)
                     .eq('family_bond', 'titular');
 
-                const { data: family, error: errorFetchFamilyData } =
-                    await supabase
-                        .from('partners')
-                        .select('*')
-                        .eq('family_group', user[0].family_group)
-                        .neq('dni', user[0].dni);
+                const { data: family } = await supabase
+                    .from('partners')
+                    .select('*')
+                    .eq('family_group', user[0].family_group)
+                    .neq('dni', user[0].dni);
 
                 setFamilyGroup(family);
                 setTitular(true);

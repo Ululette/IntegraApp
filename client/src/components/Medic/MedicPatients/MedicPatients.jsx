@@ -56,7 +56,7 @@ function MedicPatients() {
     const [currentPatient, setCurrentPatient] = useState('');
     const [searchDni, setSearchDni] = useState('');
     const [listStudies, setListStudies] = useState([]);
-    const [listMedicsStudies, setListMedicsStudies] = useState([]);
+    // const [listMedicsStudies, setListMedicsStudies] = useState([]);
 
     const medicData = JSON.parse(localStorage.getItem('medicdata'));
     const dniPatients = medicData.my_patients.map((el) => el.partner_dni);
@@ -105,24 +105,24 @@ function MedicPatients() {
         }
         setListStudies(studiesList);
 
-        const arrayAux = [];
+        // const arrayAux = [];
 
-        for (let study of studiesList) {
-            const { data: medicsList, error: errorFetchMedicsStudies } =
-                await supabase
-                    .from('medics')
-                    .select('dni, name, lastname')
-                    .eq('dni', study.medical_consultations.medic_dni);
-            if (errorFetchMedicsStudies) {
-                return MySwal.fire({
-                    title: 'Error con el fetch de estudios.',
-                    text: `${errorFetchMedicsStudies.message}`,
-                    icon: 'error',
-                });
-            }
-            arrayAux.push(medicsList[0]);
-        }
-        setListMedicsStudies(arrayAux);
+        // for (let study of studiesList) {
+        //     const { data: medicsList, error: errorFetchMedicsStudies } =
+        //         await supabase
+        //             .from('medics')
+        //             .select('dni, name, lastname')
+        //             .eq('dni', study.medical_consultations.medic_dni);
+        //     if (errorFetchMedicsStudies) {
+        //         return MySwal.fire({
+        //             title: 'Error con el fetch de estudios.',
+        //             text: `${errorFetchMedicsStudies.message}`,
+        //             icon: 'error',
+        //         });
+        //     }
+        //     arrayAux.push(medicsList[0]);
+        // }
+        // setListMedicsStudies(arrayAux);
     };
 
     useEffect(() => {

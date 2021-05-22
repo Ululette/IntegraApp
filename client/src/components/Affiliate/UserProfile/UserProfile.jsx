@@ -1,20 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import supabase from '../../../supabase.config.js';
 import './UserProfile.css';
-import {
-    Button,
-    FormControl,
-    Input,
-    TextField,
-    FormHelperText,
-    InputLabel,
-    Select,
-    FilledInput,
-    OutlinedInput,
-} from '@material-ui/core';
-import { green } from '@material-ui/core/colors';
+import { Button, TextField } from '@material-ui/core';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
@@ -157,6 +145,7 @@ export default function UserProfile() {
                 postal_code: user.address[0].localities.postal_code,
             });
         }
+        //eslint-disable-next-line
     }, []);
 
     useEffect(() => {
@@ -166,34 +155,34 @@ export default function UserProfile() {
     }, [modInfo]);
 
     // let [textInputs, setTextInputs] = useState({})
-    let [errors, setErrors] = useState({
-        textErrors: {
-            first_name: '',
-            last_name: '',
-            dni: '',
-            cuil: '',
-            phone_number: '',
-            occupation: '',
-            street_name: '',
-            number: '',
-            apartment: '',
-        },
-    });
+    // let [errors, setErrors] = useState({
+    //     textErrors: {
+    //         first_name: '',
+    //         last_name: '',
+    //         dni: '',
+    //         cuil: '',
+    //         phone_number: '',
+    //         occupation: '',
+    //         street_name: '',
+    //         number: '',
+    //         apartment: '',
+    //     },
+    // });
 
     // let handleSelect = (e) => {
     //   setTextInputs({ ...textInputs, [e.target.name]: e.target.value })
     //   setErrors({ ...errors, })
     // }
 
-    let fetchbyPC = async (codigoPostal) => {
-        let { data: PCInfo, error: errorFetchPC } = await supabase
-            .from('localities')
-            .select('id,name,states(name)')
-            .eq('postal_code', codigoPostal);
-        console.log(PCInfo);
+    // let fetchbyPC = async (codigoPostal) => {
+    //     let { data: PCInfo, error: errorFetchPC } = await supabase
+    //         .from('localities')
+    //         .select('id,name,states(name)')
+    //         .eq('postal_code', codigoPostal);
+    //     console.log(PCInfo);
 
-        if (errorFetchPC) return console.log(errorFetchPC);
-    };
+    //     if (errorFetchPC) return console.log(errorFetchPC);
+    // };
 
     let handlechange = (e) => {
         console.log(e.target.name, e.target.value);

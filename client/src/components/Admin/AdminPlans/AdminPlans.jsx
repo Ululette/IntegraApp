@@ -30,6 +30,7 @@ export default function AdminPlans({ firebase }) {
     useEffect(() => {
         dispatch(getPlans());
         dispatch(getBenefits());
+        //eslint-disable-next-line
     }, []);
 
     const [openModify, setOpenModify] = useState(false);

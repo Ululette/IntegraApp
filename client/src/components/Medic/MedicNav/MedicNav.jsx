@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useUser } from 'reactfire';
-import { NavLink, Redirect } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 //Styles
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import styles from './MedicNav.module.css';

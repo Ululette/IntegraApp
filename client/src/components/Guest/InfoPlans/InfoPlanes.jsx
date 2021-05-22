@@ -20,6 +20,7 @@ function InfoPlanes() {
 
     useEffect(() => {
         dispatch(getPlans());
+        //eslint-disable-next-line
     }, []);
 
     const forward = () => {
