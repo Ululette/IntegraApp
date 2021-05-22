@@ -59,13 +59,17 @@ function getComparator(order, orderBy) {
 }
 
 function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
+    const stabilizedThis = array.map((el, index) => [el, index]);
+    if(array.length>1){
+        stabilizedThis.sort((a, b) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) return order;
+      return a[1] - b[1];
+    });
+    }
+  
   return stabilizedThis.map((el) => el[0]);
+
 }
 
 const headCells = [
@@ -158,38 +162,116 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
-  const { numSelected, handleBlock,rows } = props;
-  const [open, setOpen] = React.useState(false);
-  const [type,setType]= React.useState('');
-  const [optionSelected,setOptionSelected] = React.useState('');
-  const [selectedAccount, setSelectedAccount] = React.useState('active');
-  const [selectedRole, setSelectedRole] = React.useState('admin');
-  
-      const handleClickOpen = () => {
-        setOpen(true);
-    };
+  const { numSelected, handleBlock,list,sendFilter } = props;
 
-    const handleClose = () => {
-        setOpen(false);
-        //setToShowRows(rows);
-    };
+  const [open, setOpen] = React.useState(false);
+  const [input,setInput]= React.useState('');
+  const [optionSelected,setOptionSelected] = React.useState('');//que opcion elige de filtrado
+  const [selectedAccount, setSelectedAccount] = React.useState('');
+  const [selectedRole, setSelectedRole] = React.useState('');
+  const [listFilter,setListFilter]=React.useState([]);
+  
+  const handleClickOpen = () => {
+      setOpen(true);
+      setListFilter(list);
+      console.log(list)
+  };
+  const hanldeReset = ()=>{
+    sendFilter('reset');
+  }
+  const handleClose = () => {
+      setOpen(false);
+  };
+
   const handleChangeType = (e)=>{
     switch(e.target.value){
       case 'dni':
         setOptionSelected('dni');
+        setInput('');
         break;
       case 'email': 
         setOptionSelected('email'); 
+        setInput('');
         break;
       case 'role':
         setOptionSelected('role');
+        setSelectedRole('')
         break;
       case 'account':
           setOptionSelected('account');
+          setSelectedAccount('')
           break;  
       default: setOptionSelected('');
     }
   }
+
+  const handleChangeRole = (e)=>{
+    setSelectedRole(e.target.value);
+    
+  }
+
+  const handleChangeAccount = (e)=>{
+    setSelectedAccount(e.target.value);
+  }
+
+  const handleInput = (e)=>{
+    setInput(e.target.value)
+  }
+
+  const handleSubmit = (e)=>{
+    e.preventDefault();
+    if(optionSelected === 'dni' || optionSelected === 'email') filter(optionSelected, input);
+      else  if(optionSelected === 'role') filter(optionSelected, selectedRole);
+      else filter(optionSelected, selectedAccount);
+    }
+  
+
+  const filter = (option,value) => {
+    if(!value){
+      alert('Debe completar el campo de texto.')
+    }
+    else{
+        let res = [];
+      let wanted;
+      switch(option){
+        case 'dni':
+          wanted = listFilter.find(user => user.dni == value);
+          if(wanted){
+            res.push(wanted)
+            sendFilter(res);
+            setInput('');
+            setOpen(false);
+            setOptionSelected('')
+          }else alert(`no existe`);
+          break;
+        case 'email': 
+          wanted = listFilter.find(user => user.email == value);
+          if(wanted){
+            res.push(wanted)
+            sendFilter(res);
+            setInput('');
+            setOpen(false);
+            setOptionSelected('')
+          }else alert(`no existe`);
+          break;
+        case 'role':
+          res = listFilter.filter(user => user.role == value);
+          res.length > 0 ? sendFilter(res) : alert(`no se encontraron resultados`);
+          setSelectedRole('');
+          setOptionSelected('')
+          setOpen(false);
+          break;
+          default:
+          res = listFilter.filter(user => user.account == value);
+          res.length > 0 ? sendFilter(res) : alert(`no se encontraron resultados`);
+          setSelectedRole('');
+          setOptionSelected('')
+          setOpen(false);
+          break;  
+      }
+    } 
+  }
+
   return (
     <Toolbar
       className={clsx(classes.root, {
@@ -229,7 +311,7 @@ const EnhancedTableToolbar = (props) => {
               <FilterListIcon  />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Clear" onClick={handleClose} >
+          <Tooltip title="Clear Filter"  onClick={hanldeReset}>
             <IconButton aria-label="reset">
               <ClearAllIcon />
             </IconButton>
@@ -240,20 +322,25 @@ const EnhancedTableToolbar = (props) => {
                 open={open}
                 onClose={handleClose}
             >
-                <DialogTitle>Fill the form</DialogTitle>
-                <form /* className={classes.container} onSubmit={handleSubmit} */>
+                <DialogTitle>Filter By:</DialogTitle>
+                <form /* className={classes.container}>*/ onSubmit={handleSubmit}>
                     <DialogContent>
                         <FormControl /* className={classes.formControl} */>
-                            <InputLabel htmlFor='demo-dialog-native'>
+                            {/* <InputLabel htmlFor='demo-dialog-native'>
                                 Filter By
-                            </InputLabel>
+                            </InputLabel> */}
                             <Select
                                 inputProps={{
                                   style: { width: '177px' },
+                                  id: 'outlined-age-native-simple',
+                                  name: 'Filter',
+                                
                               }}
+                                variant='outlined'
                                 native
                                 value={optionSelected}
                                 onChange={(e)=>handleChangeType(e)} 
+                                
                             > 
                                 <option aria-label='None' value='' />
                                 <option value='dni'>DNI</option>
@@ -266,8 +353,10 @@ const EnhancedTableToolbar = (props) => {
                         { optionSelected === 'dni' || optionSelected === 'email'?
                           <TextField
                                     id='outlined-basic'
-                                    label='value'
+                                    label={optionSelected.toUpperCase()}
                                     variant='outlined'
+                                    value={input}
+                                    onChange={(e)=>handleInput(e)}
                           />
                           :optionSelected === 'role'?
                           <FormControl /* className={classes.formControl} */>
@@ -276,12 +365,14 @@ const EnhancedTableToolbar = (props) => {
                                   style: { width: '177px' },
                               }}
                                 native
-                                value={optionSelected}
-                                onChange={(e)=>handleChangeType(e)} 
+                                value={selectedRole}
+                                onChange={(e)=>handleChangeRole(e)} 
+                                variant='outlined'
+                                size='small'
                             > 
                                 <option aria-label='None' value='' />
                                 <option value='admin'>Admin</option>
-                                <option value='partner'>Partner</option>
+                                <option value='affiliate'>Afilliate</option>
                                 <option value='medic'>Medic</option>
                             </Select>
                           </FormControl>
@@ -292,8 +383,10 @@ const EnhancedTableToolbar = (props) => {
                                   style: { width: '177px' },
                               }}
                                 native
-                                value={optionSelected}
-                                onChange={(e)=>handleChangeType(e)} 
+                                value={selectedAccount}
+                                onChange={(e)=>handleChangeAccount(e)} 
+                                variant='outlined'
+                                size='small'
                             > 
                                 <option aria-label='None' value='' />
                                 <option value='active'>Active</option>
@@ -304,7 +397,7 @@ const EnhancedTableToolbar = (props) => {
                         }
                     </DialogContent>
                     <DialogActions>
-                        <Button /* onClick={handleClose} */ color='primary'>
+                        <Button onClick={handleClose} color='primary'>
                             Cancel
                         </Button>
                         <Button color='primary' type='submit'>
@@ -347,7 +440,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TableUsers({ rows }) {
+export default function TableUsers({ rows,handleFilter }) {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("account");
@@ -357,6 +450,10 @@ export default function TableUsers({ rows }) {
 
   const dispatch = useDispatch();
 
+  const sendFilter = (filterRows)=>{
+    handleFilter(filterRows);
+
+  }
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -495,6 +592,8 @@ export default function TableUsers({ rows }) {
         <EnhancedTableToolbar
           numSelected={selected.length}
           handleBlock={handleBlock}
+          list={rows}
+          sendFilter = {sendFilter}
         />
         <TableContainer>
           <Table
@@ -513,12 +612,12 @@ export default function TableUsers({ rows }) {
               rowCount={rows.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+            {
+              stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.dni);
                   const labelId = `enhanced-table-checkbox-${index}`;
-
                   return (
                     <TableRow
                       hover
@@ -541,7 +640,9 @@ export default function TableUsers({ rows }) {
                       <TableCell align="left">{row.account}</TableCell>
                     </TableRow>
                   );
-                })}
+                })
+              
+            }
               {emptyRows > 0 && (
                 <TableRow style={{ height: 33 * emptyRows }}>
                   <TableCell colSpan={6} />

@@ -219,9 +219,9 @@ const EnhancedTableToolbar = (props) => {
             value
                 ? setToShowRows(
                       toShowRows.filter((r) => {
-                          return r[option]
-                              .toLowerCase()
-                              .includes(value.toLowerCase());
+                        return r[option]
+                            .toLowerCase()
+                            .includes(value.toLowerCase());
                       })
                   )
                 : setToShowRows(rows);

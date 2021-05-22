@@ -9,20 +9,31 @@ const FormUsers = () => {
     
   //---STATES
     const [rows, setRows] = useState([]);
+    //const [filter,setFilter] = useState([]);
+
     const users = useSelector(
-        (state) => state.users.allUsers
+        state => state.users.allUsers
     );
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(getAllUsers());
-        console.log(rows)
     }, []);
 
     useEffect(() => {
       setRows(users);
-      console.log('pase por use effect ')
   }, [users]);
+
+//   useEffect(() => {
+//     setRows(filter);
+// }, [filter]);
+
+
+  const handleFilter = (filterList)=>{
+    console.log('pase por form user',filterList)
+    if(filterList === 'reset') setRows(users);
+    else setRows(filterList);
+  }
 
 //
     return ( 
@@ -31,7 +42,7 @@ const FormUsers = () => {
         {rows.length === 0 ? (
                 <CircularProgress/>
             ) : (
-                <TableUsers rows={rows} />
+                <TableUsers rows={rows} handleFilter={handleFilter}/>
             )}
       </div>
       
