@@ -16,7 +16,9 @@ const NavBar = ({ history }) => {
                     <button className={styles.logB}>FAQS</button>
                 </NavLink>
                 <button className={styles.logB}>
-                    <a href='#contact'>Asociate</a>
+                    <a className={styles.linkAsociate} href='#contact'>
+                        Asociate
+                    </a>
                 </button>
                 <NavLink to='/login' className={styles.navL}>
                     <button className={styles.login}>Entrar</button>

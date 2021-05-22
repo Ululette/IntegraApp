@@ -4,29 +4,15 @@ import InfoPlanes from '../InfoPlans/InfoPlanes.jsx';
 import ContactForm from '../ContactForm/ContactForm.jsx';
 import Carousel from './Carousel.jsx';
 import StarsBackground from './StarsBackground.jsx';
-// import anime from 'animejs/lib/anime.es.js';
 
 export default function LandingPage() {
-    // const path = anime.path('#svgLinear path');
-
-    // useEffect(() => {
-    //     anime({
-    //         targets: '#squareSvg',
-    //         translateX: path('x'),
-    //         translateY: path('y'),
-    //         rotate: path('angle'),
-    //         easing: 'linear',
-    //         duration: 2000,
-    //         loop: true,
-    //     });
-    // });
-
     return (
         <div className={styles.all}>
             <header className={styles.first}>
-                {/* <div className={styles.typewriter}>
-                    <h2 id={styles.welcome}>Bienvenido</h2>
-                </div> */}
+                <div className={styles.typewriter}>
+                    <h2 className={styles.welcome}>Bienvenido a</h2>
+                    <h2 className={styles.welcome2}>Integra Salud</h2>
+                </div>
                 <div className={styles.videoContainer}>
                     <video
                         src='../../../assets/videos/banner.webm'
@@ -52,11 +38,8 @@ export default function LandingPage() {
                         />
                         <h2 className={styles.subtitlePromotions}>
                             <div>
-                                Toda la informacion que necesitas{' '}
-                                <span className={styles.blueSpan}>
-                                    en un solo lugar
-                                </span>
-                                .
+                                Toda la informacion que necesitas en un solo
+                                lugar .
                             </div>
                             <div className={styles.subtitlePromotions2}>
                                 Usa la tecnologia a tu favor y lleva tu vida a
@@ -125,7 +108,11 @@ export default function LandingPage() {
             <section className={styles.ourPlans}>
                 <InfoPlanes id='infoPlans' />
             </section>
-            <section id='contact'>
+            <section className={styles.contactSection}>
+                <div className={styles.titlesContact}>
+                    <h1>Estas a un solo paso</h1>
+                    <h2>de ser parte de Integra Salud</h2>
+                </div>
                 <ContactForm />
             </section>
         </div>

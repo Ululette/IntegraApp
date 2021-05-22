@@ -282,9 +282,6 @@ function ContactForm() {
                     </Snackbar>
                     <div className={Styles.formConteiner}>
                         <div className={Styles.inputs}>
-                            <div className={Styles.imgConteiner}>
-                                <img src={LogoNav} alt='Logo' />
-                            </div>
                             <div className={Styles.textField}>
                                 <label htmlFor=''>Me llamo </label>
                                 <TextField

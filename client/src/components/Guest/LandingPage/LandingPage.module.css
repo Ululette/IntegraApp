@@ -10,9 +10,128 @@
     width: 100%;
 }
 
-.typewriter #welcome {
-    color: #41aea9;
-    font-size: 100px;
+.welcome,
+.welcome2 {
+    border-right: 0.15em solid rgb(42, 42, 42);
+    font-size: 5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: center;
+}
+.welcome {
+    width: 550px;
+    -webkit-animation: type 2s steps(40, end);
+    animation: type 2s steps(40, end);
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+    margin-top: 17rem;
+}
+
+.welcome2 {
+    width: 550px;
+    opacity: 0;
+    -webkit-animation: type2 2s steps(40, end);
+    animation: type2 2s steps(40, end);
+    -webkit-animation-delay: 2s;
+    animation-delay: 2s;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+}
+
+@keyframes type {
+    0% {
+        width: 0;
+    }
+    99.9% {
+        border-right: 0.15em solid rgb(42, 42, 42);
+    }
+    100% {
+        border: none;
+    }
+}
+
+@-webkit-keyframes type {
+    0% {
+        width: 0;
+    }
+    99.9% {
+        border-right: 0.15em solid rgb(42, 42, 42);
+    }
+    100% {
+        border: none;
+    }
+}
+
+@keyframes type2 {
+    0% {
+        width: 0;
+    }
+    1% {
+        opacity: 1;
+    }
+    99.9% {
+        border-right: 0.15em solid rgb(42, 42, 42);
+    }
+    100% {
+        opacity: 1;
+        border: none;
+    }
+}
+
+@-webkit-keyframes type2 {
+    0% {
+        width: 0;
+    }
+    1% {
+        opacity: 1;
+    }
+    99.9% {
+        border-right: 0.15em solid rgb(42, 42, 42);
+    }
+    100% {
+        opacity: 1;
+        border: none;
+    }
+}
+
+@keyframes type3 {
+    0% {
+        width: 0;
+    }
+    1% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes type3 {
+    0% {
+        width: 0;
+    }
+    1% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes blink {
+    50% {
+        border-color: transparent;
+    }
+}
+@-webkit-keyframes blink {
+    50% {
+        border-color: tranparent;
+    }
+}
+
+.typewriter {
+    color: #000;
+    position: absolute;
     padding: 30px;
     align-items: center;
     overflow: hidden;
@@ -23,7 +142,7 @@
     /* Gives that scrolling effect as the typing happens */
     letter-spacing: 0.15em;
     /* Adjust as needed */
-    animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+    animation: typing 2.5s steps(40, end), blink-caret 0.75s step-end infinite;
 }
 
 .videoContainer {
@@ -194,6 +313,26 @@
 .ourPlans {
     width: 100%;
     height: 110vh;
+}
+
+/* SEVENTH PAGE */
+
+.contactSection {
+    width: 100%;
+    height: 110vh;
+    background-color: #e8ffff;
+}
+
+.titlesContact {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5rem;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    margin-top: 3rem;
 }
 
 /* The typing effect */

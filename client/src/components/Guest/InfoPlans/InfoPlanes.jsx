@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import InfoCard from './InfoCard';
 import styles from './InfoPlans.module.css';
 import { useSelector, useDispatch } from 'react-redux';
@@ -17,11 +17,14 @@ function InfoPlanes() {
     if (plans.length === 0) return <CircularProgress />;
 
     return (
-        <div>
-            <h1>Nuestros Planes</h1>
-            <Flicking gap={10} circular={true}>
+        <div className={styles.carousel}>
+            <Flicking gap={10} circular={true} className={styles.cardContainer}>
                 {plans.map((el, idx) => (
-                    <InfoCard key={`plancito=${idx}`} plan={el} />
+                    <InfoCard
+                        key={`plancito=${idx}`}
+                        plan={el}
+                        className={styles.card}
+                    />
                 ))}
             </Flicking>
         </div>
