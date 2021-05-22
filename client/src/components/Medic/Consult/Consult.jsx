@@ -45,7 +45,8 @@ export default function Consult({ firebase }) {
     birthdate: "1988-09-12",
     phone_number: '(0074)-651-7355',
     email: 'nec.mauris.blandit@faucibusut.ca',
-    gender: 'mujer'
+    gender: 'mujer',
+    plan: 'Integra 410'
   }
   const hardMedic = {
     address: "Inglaterra 234, England, England, England",
@@ -188,7 +189,7 @@ export default function Consult({ firebase }) {
     date,
     doctor: { name: hardMedic.name, lastname: hardMedic.lastname, medical_specialities: hardMedic.medical_specialities, medic_license: hardMedic.medic_license },
     patient: { name: hardPatient.name, lastname: hardPatient.lastname, plan: hardPatient.plan, affiliate_number: hardPatient.dni },
-    diagnosis: input.diagnosis,
+    diagnosis: 'Hipertiroidismo',
   }
 
   return (
