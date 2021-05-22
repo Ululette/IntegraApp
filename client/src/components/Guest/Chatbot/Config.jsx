@@ -15,7 +15,7 @@ const Config = {
     },
   botName: "Integra Bot",
   initialMessages: [
-    createChatBotMessage("Hola, soy Inti 👋", {
+    createChatBotMessage("Hola, soy Inti 👋. Me  gusta hacer reir a la gente: Doctor, soy asmático, ¿es grave? - No amigo, es esdrújula🤣", {
     }),
   ],
 
