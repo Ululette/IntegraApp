@@ -1,60 +1,57 @@
-.div {
-  align-content: center;
-}
-
 .bar {
-  align-items: center;
-  background-color: #41aea9;
-  box-shadow: 0 5px 6px -6px black;
   display: flex;
   height: 75px;
   justify-content: space-between;
+  left: 0;
+  margin: 0 10px;
   position: sticky;
   top: 0;
-  width: 100%;
-  z-index: 1;
+  z-index: 100;
 }
 
-.logB {
-  -moz-box-shadow: 0 5px 6px -6px black;
-  -webkit-box-shadow: 0 5px 6px -6px black;
-  background-color: #a6f6f1;
-  border-radius: 10px;
-  border: 0;
-  box-shadow: 0 5px 6px -6px black;
-  color: black;
-  display: flex;
-  font-size: large;
-  height: fit-content;
-  margin-right: 10px;
-  outline: none;
-  padding: 10px;
+.logo {
+  height: 100%;
+  padding: 0;
+  width: fit-content;
 }
 
-.logB a {
-  color: #000;
-}
-
-.logB:hover {
-  opacity: 0.8;
-  cursor: pointer;
-}
-
-.img {
+.logo .img {
+  height: 60px;
   width: auto;
-  height: 75px;
-}
-
-.navL {
-  text-decoration: none;
 }
 
 .buttonContainer {
   display: flex;
-  width: 30%;
-  justify-content: flex-end;
+  justify-content: right;
+  align-items: flex-end;
+  margin-bottom: 5px;
 }
 
-.buttonContainer button a {
-  color: black
+.logB {
+  cursor: pointer;
+  margin: 0 10px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  width: 75px;
+  height: 30px;
 }
+
+.logB a {
+  color: black;
+  font-size: 1.1rem;
+}
+
+.login {
+  cursor: pointer;
+  margin: 0 10px;
+  border: none;
+  outline: none;
+  background-color: #5684e0;
+  color: white;
+  border-radius: 25px;
+  font-size: 1.2rem;
+  width: 75px;
+  height: 30px;
+}
+

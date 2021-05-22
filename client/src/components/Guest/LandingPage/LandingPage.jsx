@@ -8,58 +8,121 @@ import Carousel from './Carousel.jsx';
 export default function LandingPage() {
     return (
         <div className={styles.all}>
-            <div className={styles.first}>
-                <div className={styles.typewriter}>
-                    <h2 id = {styles.welcome}>Bienvenido</h2>
+            <header className={styles.first}>
+                {/* <div className={styles.typewriter}>
+                    <h2 id={styles.welcome}>Bienvenido</h2>
+                </div> */}
+                <div className={styles.videoContainer}>
+                    <video
+                        src='../../../assets/videos/banner.mp4'
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                    ></video>
                 </div>
-                <img
-                    id={styles.dr1}
-                    src='https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80'
-                    alt=''
-                />
-            </div>
-            <div className = {styles.infoAll}>
-            <div className={styles.icons}>
-                <div className={styles.icon}>
-                    <img
-                        className={styles.each}
-                        src='https://image.flaticon.com/icons/png/128/3063/3063181.png'
-                        alt=''
-                    />
+            </header>
+            <section className={styles.promotions}>
+                <div className={styles.iconsScreen2}>
+                    <div className={styles.icon1}>
+                        <img
+                            src='../../../assets/icons/phoneheart.gif'
+                            alt='Icon 1.'
+                        />
+                    </div>
+                    <div className={styles.icon2_3}>
+                        <img
+                            src='../../../assets/icons/medicphone.gif'
+                            alt='Icon 2.'
+                        />
+                        <h2 className={styles.subtitlePromotions}>
+                            <div>
+                                Toda la informacion que necesitas{' '}
+                                <span className={styles.blueSpan}>
+                                    en un solo lugar
+                                </span>
+                                .
+                            </div>
+                            <div className={styles.subtitlePromotions2}>
+                                Usa la tecnologia a tu favor y lleva tu vida a
+                                un mejor rumbo.
+                            </div>
+                        </h2>
+                        <img
+                            src='../../../assets/icons/medicrecords.gif'
+                            alt='Icon 3.'
+                        />
+                    </div>
                 </div>
-                <div className={styles.icon}>
-                    <img
-                        className={styles.each}
-                        src='https://image.flaticon.com/icons/png/128/1067/1067566.png'
-                        alt=''
-                    />
+                <h1 className={styles.bigTitlePromotions}>
+                    <div className={styles.title1}>Tu mejor opcion</div>
+                    <div className={styles.title2}>Tu Prepaga</div>
+                    <div className={styles.title3}>Integra Salud</div>
+                </h1>
+            </section>
+            <section className={styles.promotions2}>
+                <div className={styles.promotions2_titles}>
+                    <h3>Documentos virtuales</h3>
+                    <h3>Todo al alcance de tu mano</h3>
+                    <h3>La mas alta seguridad</h3>
                 </div>
-
-                <div className={styles.icon}>
-                    <NavLink to='/faqs'>
+                <div className={styles.promotions2_descriptions}>
+                    <h4 className={styles.promotions2_eachDescription}>
+                        Ten todas tus recetas, ordenes y estudios en tu celular,
+                        y descargalos apenas los necesites de manera inmediata.
+                    </h4>
+                    <h4 className={styles.promotions2_eachDescription}>
+                        Tendras todas las herramientas necesarias para consultar
+                        a tu medico en la palma de tu mano.
+                    </h4>
+                    <h4 className={styles.promotions2_eachDescription}>
+                        Guardamos tu informacion en Storages con cifrado de
+                        extremo a extremo.
+                    </h4>
+                </div>
+            </section>
+            {/* <section className={styles.infoAll}>
+                <div className={styles.icons}>
+                    <article className={styles.icon}>
                         <img
                             className={styles.each}
-                            src='https://image.flaticon.com/icons/png/128/2618/2618540.png'
+                            src='https://image.flaticon.com/icons/png/128/3063/3063181.png'
                             alt=''
                         />
-                    </NavLink>
+                    </article>
+                    <article className={styles.icon}>
+                        <img
+                            className={styles.each}
+                            src='https://image.flaticon.com/icons/png/128/1067/1067566.png'
+                            alt=''
+                        />
+                    </article>
+
+                    <article className={styles.icon}>
+                        <NavLink to='/faqs'>
+                            <img
+                                className={styles.each}
+                                src='https://image.flaticon.com/icons/png/128/2618/2618540.png'
+                                alt=''
+                            />
+                        </NavLink>
+                    </article>
                 </div>
-            </div>
-            <div className={styles.info}>
-                <p className={styles.des}>
-                    Urgencias y emergencias - 0810-454-999{' '}
-                </p>
-                <p className={styles.des}>
-                    Orientación medica telefonica - 0810-963-952{' '}
-                </p>
-                <p className={styles.des}>Preguntas frecuentes</p>
-            </div>
-        </div>
-            <div className={styles.app}>
+                <article className={styles.info}>
+                    <p className={styles.des}>
+                        Urgencias y emergencias - 0810-454-999
+                    </p>
+                    <p className={styles.des}>
+                        Orientación medica telefonica - 0810-963-952
+                    </p>
+                    <p className={styles.des}>Preguntas frecuentes</p>
+                </article>
+            </section> */}
+            {/* <section className={styles.app}>
                 <div id={styles.photo}></div>
                 <div className={styles.adjust}>
                     <div className={styles.mob}>
-                        <h2 className = {styles.h2h}>Integra mobile</h2>
+                        <h2 className={styles.h2h}>Integra mobile</h2>
                         <p className={styles.desM}>
                             Toda la información que necesitas en un solo lugar
                         </p>
@@ -82,15 +145,14 @@ export default function LandingPage() {
                         />
                     </div>
                 </div>
-            </div>
-
-            <div id={styles.nov}>
-                <h3>Novedades</h3>
-            </div>
-            <div className={styles.news}>
-                <Carousel />
-            </div>
-            <div className={styles.digital}>
+            </section> */}
+            <section className={styles.carrouselNews}>
+                <h3 id={styles.nov}>Novedades</h3>
+                <article className={styles.news}>
+                    <Carousel />
+                </article>
+            </section>
+            <section className={styles.digital}>
                 <div className={styles.doctor}></div>
                 <div className={styles.cd}>
                     <h2 className={styles.credential}>Credencial digital</h2>
@@ -103,17 +165,14 @@ export default function LandingPage() {
                         lugar
                     </p>
                 </div>
-            </div>
-
-            <div id={styles.nov}>
-                <h3>Nuestros planes</h3>
-            </div>
-            <div className={styles.plans}>
+            </section>
+            <h3 id={styles.nov}>Nuestros planes</h3>
+            <section className={styles.plans}>
                 <InfoPlanes id='infoPlans' />
-            </div>
-            <div id='contact'>
+            </section>
+            <section id='contact'>
                 <ContactForm />
-            </div>
+            </section>
         </div>
     );
 }
