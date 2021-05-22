@@ -1,11 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import styles from './LandingPage.module.css';
 import InfoPlanes from '../InfoPlans/InfoPlanes.jsx';
 import ContactForm from '../ContactForm/ContactForm.jsx';
 import Carousel from './Carousel.jsx';
+import anime from 'animejs/lib/anime.es.js';
 
 export default function LandingPage() {
+    // const path = anime.path('#svgLinear path');
+
+    // useEffect(() => {
+    //     anime({
+    //         targets: '#squareSvg',
+    //         translateX: path('x'),
+    //         translateY: path('y'),
+    //         rotate: path('angle'),
+    //         easing: 'linear',
+    //         duration: 2000,
+    //         loop: true,
+    //     });
+    // });
+
     return (
         <div className={styles.all}>
             <header className={styles.first}>
@@ -152,6 +167,7 @@ export default function LandingPage() {
                     <Carousel />
                 </article>
             </section>
+
             <section className={styles.digital}>
                 <div className={styles.doctor}></div>
                 <div className={styles.cd}>

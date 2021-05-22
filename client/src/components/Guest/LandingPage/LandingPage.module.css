@@ -37,7 +37,7 @@
 /* SECOND SCREEN */
 
 .promotions {
-  background-color: #151515;
+  background-color: #34a7a1;
   margin-top: 95.92vh;
   display: flex;
   flex-direction: column;
@@ -96,7 +96,7 @@
   align-items: center;
   justify-content: flex-start;
   height: 30vh;
-  background-color: #151515;
+  background-color: #34a7a1;
   color: white;
 }
 
@@ -135,7 +135,11 @@
 }
 
 /* FIFTH SCREEN */
-
+.squareSvg {
+  width: 50px;
+  height: 50px;
+  background-color: red;
+}
 
 
 /* The typing effect */
