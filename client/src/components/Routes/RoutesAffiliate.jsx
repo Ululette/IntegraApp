@@ -8,6 +8,7 @@ import UserMedRec from '../Affiliate/UserMedRec/UserMedRec.jsx';
 import RenderPDF from '../Affiliate/UserMedRec/RenderPDF';
 import MedicalDirectory from '../Affiliate/AffiliateDoctors/AffiliateDoctors';
 import UserProfile from '../Affiliate/UserProfile/UserProfile.jsx';
+import AffiliateOrdersAndPrescriptions from '../Affiliate/AffiliateOrdersAndPrescriptions/AffiliateOrdersAndPrescriptions.jsx';
 
 function RoutesAffiliate() {
     const firebase = useFirebaseApp();
@@ -46,6 +47,12 @@ function RoutesAffiliate() {
                 exact
                 path='/:id/affiliate/doctor'
                 component={MedicalDirectory}
+            />
+            {/* -------------Ordenes y Recetas--------------------------- */}
+            <Route
+                exact
+                path='/:id/affiliate/ordersandpresc'
+                render={() => <AffiliateOrdersAndPrescriptions firebase={firebase} />}
             />
         </>
     );
