@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useLocation, Redirect } from "react-router-dom";
 import NewPrescriptionDialog from './NewPrescriptionDialog/NewPrescriptionDialog.jsx';
 import NewOrderDialog from './NewOrderDialog/NewOrderDialog.jsx';
+import Medicines from './Medicines/Medicines.jsx';
 import {
   Button,
   List,
@@ -36,7 +38,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+//---------------------------------------------------------
 export default function Consult({ firebase }) {
+
   const hardPatient = {
     id: 3,
     dni: 9800178,
@@ -89,12 +93,14 @@ export default function Consult({ firebase }) {
   const [input, setInput] = useState({
     reason: '',
     diagnosis: '',
-    observations: ''
+    observations: '',
+    prescriptions: ''
   })
   const [errors, setErrors] = useState({
     reason: false,
     diagnosis: false,
-    observations: false
+    observations: false,
+    prescriptions: false
   });
 
   useEffect(() => {
@@ -111,14 +117,16 @@ export default function Consult({ firebase }) {
   const handleSubmit = async () => {
     if (!errors.reason &&
       !errors.diagnosis &&
-      !errors.observations) {
+      !errors.observations &&
+      !errors.prescriptions) {
       const { data, error } = await supabase
         .from('medical_consultations')
         .insert([
           {
             reason: input.reason,
             diagnosis: input.diagnosis,
-            observations: input.observations
+            observations: input.observations,
+            prescriptions: input.prescriptions
           },
         ])
     }
@@ -179,18 +187,39 @@ export default function Consult({ firebase }) {
         }
         break;
       }
+      case 'prescriptions': {
+        if (!pattern.test(value)) {
+          errors.prescriptions = true;
+        } else {
+          errors.prescriptions = false;
+        }
+        break;
+      }
       default:
         return null;
     }
     return errors;
   }
 
+
+  //-------------------------------------------------------------------
+  // OJO!!!! Cuando guarde la consulta hacer un dispatch al store para limpiar las medicinas:   
+  //  dispatch(setMedicines([]));
+  let medicines = JSON.parse(localStorage.getItem('medicines'));
+
   let infObj = {
     date,
     doctor: { name: hardMedic.name, lastname: hardMedic.lastname, medical_specialities: hardMedic.medical_specialities, medic_license: hardMedic.medic_license },
     patient: { name: hardPatient.name, lastname: hardPatient.lastname, plan: hardPatient.plan, affiliate_number: hardPatient.dni },
     diagnosis: 'Hipertiroidismo',
+    medicines
   }
+
+  useEffect(() => {
+    if(medicines){
+      console.log(medicines)
+    }
+  }, [medicines])
 
   return (
     <Card className={classes.card}>
@@ -319,14 +348,18 @@ export default function Consult({ firebase }) {
               })}
             />
           </div>
+          <div className={style.input}>
+          </div>
         </div>
+        <Divider component="li" />
+              <Medicines/>
         <Divider component="li" />
         <div className={style.buttons}>
           <div className={style.btn}>
-            <NewPrescriptionDialog info={infObj}/>
+            <NewPrescriptionDialog info={infObj} />
           </div>
           <div className={style.btn}>
-            <NewOrderDialog info={infObj}/>
+            <NewOrderDialog info={infObj} />
           </div>
           <div className={style.btn}>
             <Button variant="contained" size="large" color="primary">

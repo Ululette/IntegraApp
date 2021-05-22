@@ -5,7 +5,7 @@ import {
 
 export default function NewOrderDialog({info}) {
 
-  console.log(info)
+  // console.log(info)
   // console.log(date,doctor,patient,diagnosis);
 
   function handleClick() {
