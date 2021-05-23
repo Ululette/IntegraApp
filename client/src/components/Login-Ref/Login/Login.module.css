@@ -28,6 +28,15 @@
     margin-top: 2rem;
 }
 
+.goBack {
+    background-color: #fff;
+    margin-bottom: 20rem;
+}
+
+.goBack:hover {
+    background-color: rgb(192, 192, 192);
+}
+
 .buttonRegister {
     width: 200px;
     height: 50px;
@@ -103,6 +112,8 @@
     color: white;
     margin-top: 1.5rem;
     text-align: center;
+    outline: none;
+    user-select: none;
 }
 
 .buttonLogin:hover {
@@ -134,10 +145,35 @@
     margin-top: 1.5rem;
 }
 
-.loginUser {
+.loginUser,
+.loguedStyles {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100%;
+}
+
+.buttonLogout {
+    width: 200px;
+    height: 50px;
+    border: 3px solid red;
+    border-radius: 25px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    background-color: transparent;
+    color: #000;
+    margin-top: 1.5rem;
+    text-align: center;
+    user-select: none;
+    outline: none;
+}
+
+.buttonLogout:hover {
+    transition: 0.5s all ease-in-out;
+    background-color: #45b0a9;
+    color: #fff;
+}
+
+.userEmail {
+    font-size: 1.2rem;
 }

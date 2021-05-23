@@ -57,6 +57,11 @@ function Login({ firebase }) {
         }
     };
 
+    const handleLogout = async () => {
+        await firebase.auth().signOut();
+        localStorage.clear();
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         setInput({ doc: '', pass: '' });
@@ -173,6 +178,7 @@ function Login({ firebase }) {
             };
 
             localStorage.setItem('userdata', JSON.stringify(dataUser));
+            window.location = `/${userData.dni}/${userData.role}`;
             setLoading(false);
         } catch (error) {
             setErrors('Usuario y/o contraseña incorrecto.');
@@ -193,7 +199,11 @@ function Login({ firebase }) {
         <div className={styles.container}>
             <aside className={styles.header}>
                 <NavLink to='/'>
-                    <IconButton aria-label='Back button.' component='span'>
+                    <IconButton
+                        className={styles.goBack}
+                        aria-label='Back button.'
+                        component='span'
+                    >
                         <ArrowBackIcon />
                     </IconButton>
                 </NavLink>
@@ -238,7 +248,7 @@ function Login({ firebase }) {
                     className={styles.logo}
                 />
                 {userFire.data && userData ? (
-                    <div>
+                    <div className={styles.loguedStyles}>
                         {!userData.avatar_url ? (
                             <img
                                 src='https://picsum.photos/200'
@@ -252,12 +262,21 @@ function Login({ firebase }) {
                                 className={styles.logo}
                             />
                         )}
-                        <p>{userFire.data.email}</p>
-                        <input
+                        <p className={styles.userEmail}>
+                            {userFire.data.email}
+                        </p>
+                        <button
                             className={styles.buttonLogin}
                             onClick={handleUserLogued}
-                            value='Ingresar'
-                        />
+                        >
+                            Ingresar
+                        </button>
+                        <button
+                            className={styles.buttonLogout}
+                            onClick={handleLogout}
+                        >
+                            Cerrar sesion
+                        </button>
                     </div>
                 ) : (
                     <section className={styles.loginUser}>
