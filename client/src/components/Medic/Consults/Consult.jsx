@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 // import { useLocation } from "react-router-dom";
+import emailjs from 'emailjs-com'
 import {
     Button,
     List,
@@ -17,7 +18,7 @@ import { useUser } from 'reactfire';
 import style from './Consult.module.css';
 // import { NavLink } from 'react-router-dom';
 
-const useStyles = makeStyles((theme)=>({
+const useStyles = makeStyles((theme) => ({
     dividerFullWidth: {
         margin: `5px 0 0 ${theme.spacing(9)}px`,
     },
@@ -34,23 +35,23 @@ const useStyles = makeStyles((theme)=>({
 }));
 
 function Consult({ firebase }) {
-    const [patient,setPatient] = useState({});
-    const [medic,setMedic] = useState(JSON.parse(localStorage.getItem('medicdata')));
+    const [patient, setPatient] = useState({});
+    const [medic, setMedic] = useState(JSON.parse(localStorage.getItem('medicdata')));
     const [redirectNewOrder, setRedirectNewOrder] = useState(false);
     const [redirectNewPrescription, setRedirectNewPrescription] = useState(false);
-    
+
     const classes = useStyles();
     const userFirebase = useUser();
-    
-    const [input,setInput] = useState({
-        reason:'',
-        diagnosis:'',
-        observations:''
+
+    const [input, setInput] = useState({
+        reason: '',
+        diagnosis: '',
+        observations: ''
     })
     const [errors, setErrors] = useState({
-        reason:false,
-        diagnosis:false,
-        observations:false
+        reason: false,
+        diagnosis: false,
+        observations: false
     });
 
     const search = window.location.search;
@@ -61,33 +62,51 @@ function Consult({ firebase }) {
         lastname: params.get('lastname'),
         birthdate: params.get('birthdate'),
         gender: params.get('gender'),
-
+        gender: params.get('email'),
     }
-    
-    useEffect(()=>{
+
+    useEffect(() => {
         setPatient(patientData)
         console.log(patient)
         console.log(medic)
-    },[])
+    }, [])
 
 
-    
+
     // if (!userFirebase.data) {
     //     window.location = '/login';
     // }
 
     const getAge = () => Math.floor((new Date() - new Date(patient.birthdate).getTime()) / 3.15576e+10)
     var today = new Date();
-    const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 
-    const handleSubmit = async() => {
-        if( !errors.reason&&
-            !errors.diagnosis&&
-            !errors.observations){
-                const { data, error } = await supabase
+    function sendEmail(props) {
+        emailjs
+            .send(
+                'service_wcpzjw7',
+                'template_qkdom45',
+                props,
+                'user_mgft1j53RDkaGc1EWyKNK'
+            )
+            .then(
+                (result) => {
+                    console.log('resultado:', result.text);
+                },
+                (error) => {
+                    console.log('error:', error.text);
+                }
+            );
+    }
+
+    const handleSubmit = async () => {
+        if (!errors.reason &&
+            !errors.diagnosis &&
+            !errors.observations) {
+            const { data, error } = await supabase
                 .from('medical_consultations')
                 .insert([
-                    {   
+                    {
                         partner_dni: patient.dni,
                         medic_dni: medic.dni,
                         reason: input.reason,
@@ -95,8 +114,9 @@ function Consult({ firebase }) {
                         date: date,
                         observations: input.observations,
                     },
-                ])
-            }
+                ]);
+            sendEmail({dr:medic, patient: patientData, date:today, consult: input})
+        }
     }
 
     const handleBtnNewPrescription = () => {
@@ -120,7 +140,7 @@ function Consult({ firebase }) {
 
         switch (inputName) {
             case 'reason': {
-                if (!pattern.test(value) && value.length>0) {
+                if (!pattern.test(value) && value.length > 0) {
                     errors.reason = true;
                 } else {
                     errors.reason = false;
@@ -128,7 +148,7 @@ function Consult({ firebase }) {
                 break;
             }
             case 'diagnosis': {
-                if (!pattern.test(value) && value.length>0) {
+                if (!pattern.test(value) && value.length > 0) {
                     errors.diagnosis = true;
                 } else {
                     errors.diagnosis = false;
@@ -148,7 +168,7 @@ function Consult({ firebase }) {
         }
         return errors;
     }
-    
+
     return (
         <Card className={classes.card}>
             <List>
@@ -156,7 +176,7 @@ function Consult({ firebase }) {
                     <div className={style.medicFirstColumn}>
                         <div>
                             <ListItem>
-                                <Avatar alt={medic.name} src={medic.profilePic} className={classes.largeAvatar} />   
+                                <Avatar alt={medic.name} src={medic.profilePic} className={classes.largeAvatar} />
                             </ListItem>
                         </div>
                         <div>
@@ -181,7 +201,7 @@ function Consult({ firebase }) {
                                     {medic.medical_specialities[0].name}
                                 </Typography>
                             </ListItem>
-                        </div>  
+                        </div>
                     </div>
                 </div>
                 <Divider component="li" />
@@ -190,7 +210,7 @@ function Consult({ firebase }) {
                         <div>
                             <ListItem>
                                 <Typography gutterBottom variant="h6" component="h2">
-                                    Paciente: 
+                                    Paciente:
                                 </Typography>
                             </ListItem>
                         </div>

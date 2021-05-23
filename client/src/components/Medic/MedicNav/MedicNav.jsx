@@ -118,7 +118,7 @@ function MedicNav({ firebase, window: windowMui }) {
                     </ListItem>
                 </NavLink>
                 <NavLink
-                    to={`/${userData.dni}/medic/consult`}
+                    to={`/${userData.dni}/medic/consults`}
                     className={styles.link}
                     activeClassName={styles.activeLink}
                 >
