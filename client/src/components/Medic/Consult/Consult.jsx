@@ -167,8 +167,8 @@ export default function Consult({ firebase }) {
         ])
       sendEmailConsult({
         date,
-        doctor: { name: hardMedic.name, lastname: hardMedic.lastname, medical_specialities: hardMedic.medical_specialities, medic_license: hardMedic.medic_license },
-        patient: { name: hardPatient.name, lastname: hardPatient.lastname, plan: hardPatient.plan, affiliate_number: hardPatient.dni },
+        doctor: hardMedic,
+        patient: hardPatient,
         consult: newConsult ? newConsult : input
       }) 
     }
