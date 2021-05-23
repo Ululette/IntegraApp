@@ -198,23 +198,19 @@ function Login({ firebase }) {
     return (
         <div className={styles.container}>
             <aside className={styles.header}>
-                <NavLink to='/'>
-                    <IconButton
-                        className={styles.goBack}
-                        aria-label='Back button.'
-                        component='span'
-                    >
+                <a className={styles.goBack} href='/'>
+                    <IconButton aria-label='Back button.' component='span'>
                         <ArrowBackIcon />
                     </IconButton>
-                </NavLink>
+                </a>
                 <h2>¡Bienvenido a Mi Integra Salud!</h2>
                 <p>
                     Aqui podras administrar tu informacion, gestionar tramites,
                     recetas, estudios. Todo en un mismo lugar y mucho mas facil.
                 </p>
-                <NavLink to='/asociate'>
+                <a href='/#contact'>
                     <button className={styles.buttonRegister}>Asociate</button>
-                </NavLink>
+                </a>
             </aside>
             <form className={styles.formLogin} onSubmit={handleSubmit}>
                 <section>

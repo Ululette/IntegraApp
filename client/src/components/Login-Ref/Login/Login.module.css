@@ -29,12 +29,13 @@
 }
 
 .goBack {
-    background-color: #fff;
+    background-color: rgb(117, 117, 117);
     margin-bottom: 20rem;
+    border-radius: 50%;
 }
 
 .goBack:hover {
-    background-color: rgb(192, 192, 192);
+    background-color: rgb(226, 226, 226);
 }
 
 .buttonRegister {
