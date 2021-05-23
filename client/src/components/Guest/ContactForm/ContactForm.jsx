@@ -4,7 +4,6 @@ import { ThemeProvider } from '@material-ui/styles';
 import { makeStyles } from '@material-ui/core/styles';
 import Styles from './ContactForm.module.css';
 import emailjs from 'emailjs-com';
-import LogoNav from '../../../assets/logo-integra.png';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
