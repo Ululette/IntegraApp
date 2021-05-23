@@ -81,7 +81,7 @@ function Consult({ firebase }) {
     var today = new Date();
     const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 
-    function sendEmail(props) {
+    function sendEmailConsult(props) {
         emailjs
             .send(
                 'service_wcpzjw7',
@@ -115,7 +115,7 @@ function Consult({ firebase }) {
                         observations: input.observations,
                     },
                 ]);
-            sendEmail({dr:medic, patient: patientData, date:today, consult: input})
+            sendEmailConsult({dr:medic, patient: patientData, date:today, consult: input})
         }
     }
 
