@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles, StylesProvider, withStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import NativeSelect from '@material-ui/core/NativeSelect';
@@ -156,7 +156,8 @@ export default function SearchDoctors() {
         <div>
             <FormControl className={classes.margin}>
                 <InputLabel htmlFor='demo-customized-select-native'>
-                    Especialidad
+                Elegir especialidad
+
                 </InputLabel>
                 {/*      <NativeSelect
         onChange= {handleChangeState}>
@@ -178,7 +179,7 @@ export default function SearchDoctors() {
         </NativeSelect> */}
                 <NativeSelect name='select' onChange={handleChangeSpeciality}>
                     <option value='' className='labels'>
-                        Especialidad
+                        Elegir especialidad
                     </option>
                     {speciality.map((x) => (
                         <option value={x.name} key={x.id}>
@@ -186,12 +187,12 @@ export default function SearchDoctors() {
                         </option>
                     ))}
                 </NativeSelect>
-                <div>
+                <div className = {styles.drDisplay}>
                     {' '}
                     {doctors
                         .slice(pagesVisited, pagesVisited + docsPerPage)
                         .map((d) => (
-                            <button
+                            <button className={styles.drButton}
                                 key={d.id}
                                 onClick={() => togglePopup(d.dni)}
                             >
@@ -215,11 +216,11 @@ export default function SearchDoctors() {
                 pageCount={pageCount}
                 onPageChange={changePage}
                 className={styles.pagination}
-                containerClassName={'paginationButtons'}
-                previousLinkClassName={'previousLink'}
-                nextLinkClassName={'nextLink'}
-                disabledClassName={'paginationDisabled'}
-                activeClassName={'paginationActive'}
+                containerClassName={styles.paginationButtons}
+                previousLinkClassName={styles.previousLink}
+                nextLinkClassName={styles.nextLink}
+                disabledClassName={styles.paginationDisabled}
+                activeClassName={styles.paginationActive}
             />
         </div>
     );
