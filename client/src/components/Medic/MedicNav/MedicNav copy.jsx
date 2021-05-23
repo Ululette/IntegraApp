@@ -1,26 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useUser } from 'reactfire';
 import { NavLink } from 'react-router-dom';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
+//Styles
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import styles from './MedicNav.module.css';
 
-import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
+// Material-UI components
+import {
+    Button,
+    Menu,
+    MenuItem,
+    Badge,
+    CircularProgress,
+} from '@material-ui/core';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
-import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import { Button, CircularProgress } from '@material-ui/core';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-
+import IconButton from '@material-ui/core/IconButton';
 //Icons
+import MailIcon from '@material-ui/icons/Mail';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import HomeIcon from '@material-ui/icons/Home';
 import FaceIcon from '@material-ui/icons/Face';
@@ -28,38 +29,31 @@ import GroupIcon from '@material-ui/icons/Group';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import MenuIcon from '@material-ui/icons/Menu';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
-// OUR COMPONENTS
-import MedicHome from '../MedicHome/MedicHome.jsx';
+// Our components
 import MedicPatients from '../MedicPatients/MedicPatients.jsx';
-import PrescriptionsAndOrders from '../PrescriptionsAndOrders/PrescriptionsAndOrders.jsx';
-
-import styles from './MedicNav.module.css';
 
 const drawerWidth = 260;
-
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
+        position: 'fixed',
     },
     drawer: {
         [theme.breakpoints.up('sm')]: {
             width: drawerWidth,
             flexShrink: 0,
         },
+        zIndex: 0,
     },
     appBar: {
         [theme.breakpoints.up('sm')]: {
+            width: `calc(100% - ${drawerWidth}px)`,
             marginLeft: drawerWidth,
         },
-        display: 'flex',
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: '100%',
-        marginBottom: '10rem',
-        height: '75px',
-        backgroundColor: '#00897b',
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -72,6 +66,7 @@ const useStyles = makeStyles((theme) => ({
     drawerPaper: {
         width: drawerWidth,
         zIndex: 0,
+        position: 'relative',
     },
     content: {
         flexGrow: 1,
@@ -79,12 +74,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function AdminNav({ firebase, window: windowMui }) {
-    const classes = useStyles();
-    const theme = useTheme();
-    const [mobileOpen, setMobileOpen] = React.useState(false);
-    const [anchorEl, setAnchorEl] = React.useState(null);
-
+function MedicNav({ firebase, window: windowMui }) {
     const userData = JSON.parse(localStorage.getItem('userdata'));
     const medicData = JSON.parse(localStorage.getItem('medicdata'));
     const userDataFirebase = useUser();
@@ -94,48 +84,18 @@ function AdminNav({ firebase, window: windowMui }) {
     }
 
     const MySwal = withReactContent(Swal);
+    const classes = useStyles();
+    const theme = useTheme();
+    const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const handleDrawerToggle = () => {
-        setMobileOpen(!mobileOpen);
-    };
-
-    const logout = async () => {
-        setAnchorEl(null);
-        MySwal.fire({
-            title: '¿Quiere cerrar sesión?',
-            icon: 'question',
-            showConfirmButton: true,
-            showCloseButton: true,
-            showCancelButton: true,
-            focusConfirm: false,
-            reverseButtons: true,
-            confirmButtonText: 'Cerrar sesion',
-            cancelButtonText: 'Cancelar',
-        }).then(async (res) => {
-            if (res.isConfirmed) {
-                await firebase.auth().signOut();
-                localStorage.removeItem('userdata');
-                localStorage.removeItem('medicdata');
-                window.location = '/login';
-            }
-        });
-    };
-
-    if (!userDataFirebase.data) return <CircularProgress />;
+    const container =
+        windowMui !== undefined ? () => windowMui().document.body : undefined;
 
     const drawer = (
-        <div>
-            <div className={classes.toolbar} />
-            <List>
-                <NavLink to={`/${userData.dni}/medic`} className={styles.link}>
+        <div className={styles.asidebar}>
+            <List className={styles.listitems}>
+                <NavLink to={`/${userData.dni}/medic/`} className={styles.link}>
                     <ListItem button>
                         <HomeIcon />
                         <ListItemText primary='Inicio' />
@@ -165,7 +125,6 @@ function AdminNav({ firebase, window: windowMui }) {
                         <ListItemText primary='Mis consultas' />
                     </ListItem>
                 </NavLink>
-
                 <NavLink
                     to={`/${userData.dni}/medic/prescriptions&orders`}
                     className={styles.link}
@@ -180,13 +139,53 @@ function AdminNav({ firebase, window: windowMui }) {
         </div>
     );
 
-    const container =
-        windowMui !== undefined ? () => window().document.body : undefined;
+    if (
+        (!userDataFirebase || !userDataFirebase.data) &&
+        !medicData &&
+        !userData
+    ) {
+        window.location = '/login';
+    }
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleDrawerToggle = () => {
+        setMobileOpen(!mobileOpen);
+    };
+
+    const logout = async () => {
+        setAnchorEl(null);
+        MySwal.fire({
+            title: '¿Quiere cerrar sesión?',
+            icon: 'question',
+            showConfirmButton: true,
+            showCloseButton: true,
+            showCancelButton: true,
+            focusConfirm: false,
+            reverseButtons: true,
+            confirmButtonText: 'Cerrar sesion',
+            cancelButtonText: 'Cancelar',
+        }).then(async (res) => {
+            if (res.isConfirmed) {
+                await firebase.auth().signOut();
+                localStorage.removeItem('userdata');
+                localStorage.removeItem('medicData');
+                window.location = '/login';
+            }
+        });
+    };
+
+    if (!userDataFirebase.data) return <CircularProgress />;
 
     return (
-        <div className={classes.root}>
-            <CssBaseline />
-            <AppBar position='fixed' className={classes.appBar}>
+        <div className={styles.container}>
+            <nav className={styles.navbar}>
                 <Toolbar>
                     <IconButton
                         color='inherit'
@@ -198,7 +197,7 @@ function AdminNav({ firebase, window: windowMui }) {
                         <MenuIcon />
                     </IconButton>
                 </Toolbar>
-                <a href={`/${userDataFirebase.uid}/admin/`}>
+                <a href={`/${userDataFirebase.uid}/medic/`}>
                     <img
                         src='../../assets/images/logo.png'
                         alt='Integra icon.'
@@ -206,13 +205,15 @@ function AdminNav({ firebase, window: windowMui }) {
                     />
                 </a>
                 <section className={styles.userData}>
+                    <Badge
+                        badgeContent={2}
+                        color='secondary'
+                        className={styles.navIcon}
+                    >
+                        <MailIcon />
+                    </Badge>
                     <article className={styles.namesContainer}>
                         <p>{`${medicData.name} ${medicData.lastname}`}</p>
-                        <p>
-                            {`Mi especialidad: ${medicData.medical_specialities[0].name[0].toUpperCase()}${medicData.medical_specialities[0].name.substring(
-                                1
-                            )}`}
-                        </p>
                     </article>
                     <div>
                         <Button onClick={handleClick}>
@@ -244,9 +245,8 @@ function AdminNav({ firebase, window: windowMui }) {
                         </Menu>
                     </div>
                 </section>
-            </AppBar>
-            <nav className={classes.drawer} aria-label='mailbox folders'>
-                {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+            </nav>
+            <main className={styles.main}>
                 <Hidden smUp implementation='css'>
                     <Drawer
                         container={container}
@@ -275,29 +275,17 @@ function AdminNav({ firebase, window: windowMui }) {
                         {drawer}
                     </Drawer>
                 </Hidden>
-            </nav>
-            <main className={classes.content}>
-                <div className={classes.toolbar} />
-                {window.location.pathname === `/${userData.dni}/medic` ? (
-                    <MedicHome medicData={medicData} />
-                ) : window.location.pathname ===
-                  `/${userData.dni}/medic/patients` ? (
+                {/* ACA VAN NUESTROS COMPONENTES */}
+                {window.location.pathname ===
+                `/${userData.dni}/medic/patients` ? (
                     <MedicPatients />
-                ) : window.location.pathname ===
-                  `/${userData.dni}/medic/prescriptions&orders` ? (
-                    <PrescriptionsAndOrders />
                 ) : null}
+                {/* // ) : window.location.pathname === `/${userData.dni}/medic/` ? null : (
+            //     <Redirect to='/notfound' />
+            // )} */}
             </main>
         </div>
     );
 }
 
-AdminNav.propTypes = {
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
-    window: PropTypes.func,
-};
-
-export default AdminNav;
+export default MedicNav;

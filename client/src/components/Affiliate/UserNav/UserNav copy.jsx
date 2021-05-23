@@ -1,37 +1,39 @@
-import React from 'react';
-import { useUser } from 'reactfire';
-import { NavLink } from 'react-router-dom';
-import 'firebase/auth';
-import supabase from '../../../supabase.config.js';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
-
-import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
-import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuIcon from '@material-ui/icons/Menu';
-import Toolbar from '@material-ui/core/Toolbar';
-import Badge from '@material-ui/core/Badge';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import { CircularProgress, Button } from '@material-ui/core';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import React, { useState, useEffect } from 'react';
 import {
+    Button,
+    Menu,
+    MenuItem,
     Dialog,
+    List,
     DialogActions,
     DialogContent,
     DialogContentText,
+    Badge,
     Slide,
+    ListItem,
+    ListItemText,
+    CircularProgress,
     Divider,
 } from '@material-ui/core';
+import Drawer from '@material-ui/core/Drawer';
+import Hidden from '@material-ui/core/Hidden';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+
+import 'firebase/auth';
+import supabase from '../../../supabase.config.js';
+import { useUser } from 'reactfire';
+import { NavLink } from 'react-router-dom';
+
+//Styles
+import styles from './UserNav.module.css';
+
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 //Icons
+import MailIcon from '@material-ui/icons/Mail';
 import PhoneIcon from '@material-ui/icons/Phone';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -43,50 +45,37 @@ import DoneAllIcon from '@material-ui/icons/DoneAll';
 import PhoneAndroidIcon from '@material-ui/icons/PhoneAndroid';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import PaymentIcon from '@material-ui/icons/Payment';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+import ForumIcon from '@material-ui/icons/Forum';
+import MenuIcon from '@material-ui/icons/Menu';
 import GroupIcon from '@material-ui/icons/Group';
+
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import PhoneInTalkIcon from '@material-ui/icons/PhoneInTalk';
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-
-// OUR COMPONENTS
-import styles from './UserNav.module.css';
-import FamilyMembers from '../UserFamilyMembers/FamilyMembers.jsx';
-import UserHome from '../UserHome/UserHome.jsx';
-import UserMedRec from '../UserMedRec/UserMedRec.jsx';
-import RenderPDF from '../UserMedRec/RenderPDF';
-import MedicalDirectory from '../AffiliateDoctors/AffiliateDoctors';
-import UserProfile from '../UserProfile/UserProfile.jsx';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction='down' ref={ref} {...props} />;
 });
 
 const drawerWidth = 260;
-
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
+        position: 'relative',
     },
     drawer: {
         [theme.breakpoints.up('sm')]: {
             width: drawerWidth,
             flexShrink: 0,
         },
+        zIndex: 0,
     },
     appBar: {
         [theme.breakpoints.up('sm')]: {
+            width: `calc(100% - ${drawerWidth}px)`,
             marginLeft: drawerWidth,
         },
-        display: 'flex',
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: '100%',
-        marginBottom: '10rem',
-        height: '75px',
-        backgroundColor: '#00897b',
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -106,41 +95,26 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function AdminNav({ firebase, window: windowMui }) {
-    const classes = useStyles();
-    const theme = useTheme();
-    const MySwal = withReactContent(Swal);
-
+function UserNav({ firebase, window: windowMui }) {
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [open, setOpen] = useState(false);
+    const [familyGroup, setFamilyGroup] = useState([]);
     const userData = JSON.parse(localStorage.getItem('userdata'));
     const affiliateData = JSON.parse(localStorage.getItem('affiliatedata'));
-    const userDataFirebase = useUser();
+    const userFirebase = useUser();
+    const MySwal = withReactContent(Swal);
+    const classes = useStyles();
+    const theme = useTheme();
+    const [mobileOpen, setMobileOpen] = React.useState(false);
 
-    if (!userDataFirebase.data && !affiliateData && !userData) {
+    if (!userFirebase.data && !affiliateData && !userData) {
         window.location = '/login';
     }
 
-    const [mobileOpen, setMobileOpen] = React.useState(false);
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [familyGroup, setFamilyGroup] = React.useState([]);
-    const [open, setOpen] = React.useState(false);
+    const container =
+        windowMui !== undefined ? () => windowMui().document.body : undefined;
 
-    const getFamilyGroup = async () => {
-        let { data: familyGroup, error: fetchFamilyGroup } = await supabase
-            .from('partners')
-            .select('name, lastname')
-            .eq('family_group', affiliateData.family_group);
-        if (fetchFamilyGroup) {
-            MySwal.fire({
-                title: 'Error con la base de datos!!',
-                text: `${fetchFamilyGroup.message}`,
-                icon: 'error',
-            });
-            return 'Error en fetchFamilyGroup';
-        }
-        setFamilyGroup(familyGroup);
-    };
-
-    React.useEffect(() => {
+    useEffect(() => {
         getFamilyGroup();
         //eslint-disable-next-line
     }, []);
@@ -153,8 +127,12 @@ function AdminNav({ firebase, window: windowMui }) {
         setAnchorEl(null);
     };
 
-    const handleDrawerToggle = () => {
-        setMobileOpen(!mobileOpen);
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClickClose = () => {
+        setOpen(false);
     };
 
     const logout = async () => {
@@ -179,23 +157,12 @@ function AdminNav({ firebase, window: windowMui }) {
         });
     };
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClickClose = () => {
-        setOpen(false);
-    };
-
-    if (!userDataFirebase.data) return <CircularProgress />;
-    if (familyGroup.length === 0) return <CircularProgress />;
-
     const drawer = (
-        <div>
+        <div className={styles.asidebar}>
             <div className={classes.toolbar} />
             <List className={styles.listitems}>
                 <NavLink
-                    to={`/${userData.dni}/affiliate`}
+                    to={`/${userData.dni}/affiliate/`}
                     className={styles.link}
                 >
                     <ListItem button>
@@ -262,17 +229,39 @@ function AdminNav({ firebase, window: windowMui }) {
                     <PaymentIcon />
                     <ListItemText primary='Pago online' />
                 </ListItem>
+                <ListItem button>
+                    <ForumIcon />
+                    <ListItemText primary='Contactanos' />
+                </ListItem>
             </List>
         </div>
     );
 
-    const container =
-        windowMui !== undefined ? () => window().document.body : undefined;
+    const getFamilyGroup = async () => {
+        let { data: familyGroup, error: fetchFamilyGroup } = await supabase
+            .from('partners')
+            .select('name, lastname')
+            .eq('family_group', affiliateData.family_group);
+        if (fetchFamilyGroup) {
+            MySwal.fire({
+                title: 'Error con la base de datos!!',
+                text: `${fetchFamilyGroup.message}`,
+                icon: 'error',
+            });
+            return 'Error en fetchFamilyGroup';
+        }
+        setFamilyGroup(familyGroup);
+    };
+
+    const handleDrawerToggle = () => {
+        setMobileOpen(!mobileOpen);
+    };
+
+    if (familyGroup.length === 0) return <CircularProgress />;
 
     return (
-        <div className={classes.root}>
-            <CssBaseline />
-            <AppBar position='fixed' className={classes.appBar}>
+        <div className={styles.container}>
+            <nav className={styles.navbar}>
                 <Toolbar>
                     <IconButton
                         color='inherit'
@@ -284,20 +273,20 @@ function AdminNav({ firebase, window: windowMui }) {
                         <MenuIcon />
                     </IconButton>
                 </Toolbar>
-                <a href={`/${userDataFirebase.uid}/admin/`}>
+                <section>
                     <img
                         src='../../assets/images/logo.png'
                         alt='Integra icon.'
                         className={styles.ppLogo}
                     />
-                </a>
+                </section>
                 <section className={styles.userData}>
                     <Badge
                         badgeContent={2}
                         color='secondary'
                         className={styles.navIcon}
                     >
-                        <NotificationsIcon />
+                        <MailIcon />
                     </Badge>
                     <PhoneIcon
                         className={styles.navIcon}
@@ -378,11 +367,9 @@ function AdminNav({ firebase, window: windowMui }) {
                         >
                             <NavLink
                                 to={`/${userData.dni}/affiliate/profile`}
-                                className={styles.myProfile}
+                                className={styles.navLink}
                             >
-                                <MenuItem className={styles.myProfile}>
-                                    Mi perfil
-                                </MenuItem>
+                                <MenuItem>Mi perfil</MenuItem>
                             </NavLink>
                             <MenuItem onClick={logout}>Cerrar Sesion</MenuItem>
                             <Divider />
@@ -401,69 +388,37 @@ function AdminNav({ firebase, window: windowMui }) {
                         </Menu>
                     </div>
                 </section>
-            </AppBar>
-            <nav className={classes.drawer} aria-label='mailbox folders'>
-                {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-                <Hidden smUp implementation='css'>
-                    <Drawer
-                        container={container}
-                        variant='temporary'
-                        anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-                        open={mobileOpen}
-                        onClose={handleDrawerToggle}
-                        classes={{
-                            paper: classes.drawerPaper,
-                        }}
-                        ModalProps={{
-                            keepMounted: true, // Better open performance on mobile.
-                        }}
-                    >
-                        {drawer}
-                    </Drawer>
-                </Hidden>
-                <Hidden xsDown implementation='css'>
-                    <Drawer
-                        classes={{
-                            paper: classes.drawerPaper,
-                        }}
-                        variant='permanent'
-                        open
-                    >
-                        {drawer}
-                    </Drawer>
-                </Hidden>
             </nav>
-            <main className={classes.content}>
-                <div className={classes.toolbar} />
-                {window.location.pathname === `/${userData.dni}/affiliate` ? (
-                    <UserHome firebase={firebase} />
-                ) : window.location.pathname ===
-                  `/${userData.dni}/affiliate/familymembers` ? (
-                    <FamilyMembers />
-                ) : window.location.pathname ===
-                  `/${userData.dni}/affiliate/mymedicalrecords` ? (
-                    <UserMedRec />
-                ) : window.location.pathname ===
-                  `/${userData.dni}/mymedicalrecords/pdf` ? (
-                    <RenderPDF firebase={firebase} />
-                ) : window.location.pathname ===
-                  `/${userData.dni}/affiliate/profile` ? (
-                    <UserProfile firebase={firebase} />
-                ) : window.location.pathname ===
-                  `/${userData.dni}/affiliate/doctor` ? (
-                    <MedicalDirectory />
-                ) : null}
-            </main>
+            <Hidden smUp implementation='css'>
+                <Drawer
+                    container={container}
+                    variant='temporary'
+                    anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                    open={mobileOpen}
+                    onClose={handleDrawerToggle}
+                    classes={{
+                        paper: classes.drawerPaper,
+                    }}
+                    ModalProps={{
+                        keepMounted: true, // Better open performance on mobile.
+                    }}
+                >
+                    {drawer}
+                </Drawer>
+            </Hidden>
+            <Hidden xsDown implementation='css'>
+                <Drawer
+                    classes={{
+                        paper: classes.drawerPaper,
+                    }}
+                    variant='permanent'
+                    open
+                >
+                    {drawer}
+                </Drawer>
+            </Hidden>
         </div>
     );
 }
 
-AdminNav.propTypes = {
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
-    window: PropTypes.func,
-};
-
-export default AdminNav;
+export default UserNav;
