@@ -5,7 +5,9 @@ import {
     TextField,
     MenuItem,
     CircularProgress,
+    IconButton,
 } from '@material-ui/core';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import PersonIcon from '@material-ui/icons/Person';
 import HealingIcon from '@material-ui/icons/Healing';
 import SecurityIcon from '@material-ui/icons/Security';
@@ -23,14 +25,14 @@ function Login({ firebase }) {
     const userFire = useUser();
 
     const userData = JSON.parse(localStorage.getItem('userdata'));
-    if (userData && userData.role === 'admin' && userFire.data)
-        window.location = `/${userData.dni}/admin`;
+    // if (userData && userData.role === 'admin' && userFire.data)
+    //     window.location = `/${userData.dni}/admin`;
 
-    if (userData && userData.role === 'medic' && userFire.data)
-        window.location = `/${userData.dni}/medic`;
+    // if (userData && userData.role === 'medic' && userFire.data)
+    //     window.location = `/${userData.dni}/medic`;
 
-    if (userData && userData.role === 'affiliate' && userFire.data)
-        window.location = `/${userData.dni}/affiliate`;
+    // if (userData && userData.role === 'affiliate' && userFire.data)
+    //     window.location = `/${userData.dni}/affiliate`;
 
     const handleChange = (event) => {
         const value = event.target.value;
@@ -178,9 +180,23 @@ function Login({ firebase }) {
         }
     };
 
+    const handleUserLogued = () => {
+        if (userData.role === 'admin')
+            return (window.location = `/${userData.dni}/admin`);
+        if (userData.role === 'medic')
+            return (window.location = `/${userData.dni}/medic`);
+        if (userData.role === 'affiliate')
+            return (window.location = `/${userData.dni}/affiliate`);
+    };
+
     return (
         <div className={styles.container}>
             <aside className={styles.header}>
+                <NavLink to='/'>
+                    <IconButton aria-label='Back button.' component='span'>
+                        <ArrowBackIcon />
+                    </IconButton>
+                </NavLink>
                 <h2>¡Bienvenido a Mi Integra Salud!</h2>
                 <p>
                     Aqui podras administrar tu informacion, gestionar tramites,
@@ -221,57 +237,84 @@ function Login({ firebase }) {
                     alt='Logo Integra.'
                     className={styles.logo}
                 />
-                {userFire.data ? <p>{userFire.data.email}</p> : null}
-                <img
-                    src='https://picsum.photos/200'
-                    alt='Avatar icon.'
-                    className={styles.userPic}
-                />
-                {role === 20 ? (
-                    <p className={styles.matricula}>Bienvenido Doctor</p>
-                ) : role === 10 ? (
-                    <Select
-                        value={doc}
-                        className={styles.selectDoc}
-                        onChange={handleChange}
-                    >
-                        <MenuItem value={40}>DNI</MenuItem>
-                        <MenuItem value={50}>Pasaporte</MenuItem>
-                    </Select>
+                {userFire.data && userData ? (
+                    <div>
+                        {!userData.avatar_url ? (
+                            <img
+                                src='https://picsum.photos/200'
+                                alt='Avatar icon.'
+                                className={styles.userPic}
+                            />
+                        ) : (
+                            <img
+                                src={userData.avatar_url}
+                                alt='Avatar icon.'
+                                className={styles.logo}
+                            />
+                        )}
+                        <p>{userFire.data.email}</p>
+                        <input
+                            className={styles.buttonLogin}
+                            onClick={handleUserLogued}
+                            value='Ingresar'
+                        />
+                    </div>
                 ) : (
-                    <p className={styles.matricula}>Bienvenido Admin</p>
-                )}
-                <TextField
-                    className={styles.inputData}
-                    id='doc'
-                    label='Nº de documento'
-                    value={input.doc}
-                    onChange={handleInput}
-                    required
-                />
-                <TextField
-                    className={styles.inputData}
-                    id='pass'
-                    label='Contraseña'
-                    type='password'
-                    value={input.pass}
-                    onChange={handleInput}
-                    required
-                />
-                {errors ? (
-                    <p className={styles.warningLogin}>
-                        Usuario y/o contraseña incorrecta
-                    </p>
-                ) : null}
+                    <section className={styles.loginUser}>
+                        <img
+                            src='https://picsum.photos/200'
+                            alt='Avatar icon.'
+                            className={styles.userPic}
+                        />
+                        {role === 20 ? (
+                            <p className={styles.matricula}>
+                                Bienvenido Doctor
+                            </p>
+                        ) : role === 10 ? (
+                            <Select
+                                value={doc}
+                                className={styles.selectDoc}
+                                onChange={handleChange}
+                            >
+                                <MenuItem value={40}>DNI</MenuItem>
+                                <MenuItem value={50}>Pasaporte</MenuItem>
+                            </Select>
+                        ) : (
+                            <p className={styles.matricula}>Bienvenido Admin</p>
+                        )}
+                        <TextField
+                            className={styles.inputData}
+                            id='doc'
+                            label='Nº de documento'
+                            value={input.doc}
+                            onChange={handleInput}
+                            required
+                        />
+                        <TextField
+                            className={styles.inputData}
+                            id='pass'
+                            label='Contraseña'
+                            type='password'
+                            value={input.pass}
+                            onChange={handleInput}
+                            required
+                        />
+                        {errors ? (
+                            <p className={styles.warningLogin}>
+                                Usuario y/o contraseña incorrecta
+                            </p>
+                        ) : null}
 
-                {loading ? (
-                    <CircularProgress className={styles.progressLoad} />
-                ) : (
-                    <input
-                        className={styles.buttonLogin}
-                        type='submit'
-                        value='Ingresar'
-                    />
+                        {loading ? (
+                            <CircularProgress className={styles.progressLoad} />
+                        ) : (
+                            <input
+                                className={styles.buttonLogin}
+                                type='submit'
+                                value='Ingresar'
+                            />
+                        )}
+                    </section>
                 )}
             </form>
         </div>

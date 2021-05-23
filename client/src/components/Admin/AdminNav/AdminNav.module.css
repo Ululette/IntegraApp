@@ -38,7 +38,7 @@
 }
 
 .navIcon:hover {
-    transition: color .5s ease-in-out;
+    transition: color 0.5s ease-in-out;
     color: #213e3b;
 }
 
@@ -80,7 +80,6 @@
     color: #000;
 }
 
-
 /* NAVBAR */
 
 /* ASIDE */
@@ -89,7 +88,8 @@
     background-color: #e8ffff;
     height: 100%;
     width: fit-content;
-    box-shadow: 0px 1px 5px 0px rgb(0 0 0 / 10%), 0px 2px 2px 0px rgb(0 0 0 / 10%), 0px 3px 1px -2px rgb(0 0 0 / 10%);
+    box-shadow: 0px 1px 5px 0px rgb(0 0 0 / 10%),
+        0px 2px 2px 0px rgb(0 0 0 / 10%), 0px 3px 1px -2px rgb(0 0 0 / 10%);
     border-top: transparent;
     position: sticky;
     top: 0;
@@ -109,7 +109,8 @@
     color: #000;
 }
 
-.buttonsContainer article, .link {
+.buttonsContainer article,
+.link {
     align-items: center;
     border-bottom: 1px solid transparent;
     color: #000;
@@ -125,7 +126,8 @@
     border-bottom: 1px solid #000;
 } */
 
-.buttonsContainer article li, .link li {
+.buttonsContainer article li,
+.link li {
     margin-left: 10px;
     color: #000;
 }
@@ -139,9 +141,9 @@
 }
 
 .activeLink li {
-    color: #BF4E30;
+    color: #bf4e30;
 }
 
 .activeLink svg {
-    color: #BF4E30;
+    color: #bf4e30;
 }

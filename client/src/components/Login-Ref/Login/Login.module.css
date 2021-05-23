@@ -31,7 +31,7 @@
 .buttonRegister {
     width: 200px;
     height: 50px;
-    border: 3px solid #45B0A9;
+    border: 3px solid #45b0a9;
     border-radius: 25px;
     font-size: 1.2rem;
     cursor: pointer;
@@ -41,8 +41,8 @@
 }
 
 .buttonRegister:hover {
-    transition: .5s all ease-in-out;
-    background-color: #45B0A9;
+    transition: 0.5s all ease-in-out;
+    background-color: #45b0a9;
 }
 
 /* FINISH HEADER ASIDE  */
@@ -99,13 +99,14 @@
     border-radius: 25px;
     font-size: 1.2rem;
     cursor: pointer;
-    background-color: #45B0A9;
+    background-color: #45b0a9;
     color: white;
     margin-top: 1.5rem;
+    text-align: center;
 }
 
 .buttonLogin:hover {
-    transition: .5s ease-in-out;
+    transition: 0.5s ease-in-out;
     background-color: #79ded7;
 }
 
@@ -131,4 +132,12 @@
 
 .progressLoad {
     margin-top: 1.5rem;
+}
+
+.loginUser {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }

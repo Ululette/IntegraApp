@@ -18,7 +18,7 @@ function RoutesAdmin() {
                 path='/:id/admin'
                 render={() => <AdminNav firebase={firebase} />}
             />
-            <Route
+            {/* <Route
                 exact
                 path='/:id/admin'
                 render={() => <AdminHome firebase={firebase} />}
@@ -44,7 +44,7 @@ function RoutesAdmin() {
                 exact
                 path='/:id/admin/newadmin'
                 render={() => <AdminRegistration firebase={firebase} />}
-            />
+            /> */}
         </>
     );
 }
