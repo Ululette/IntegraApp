@@ -21,7 +21,7 @@ import ModifyPlan from './ModifyPlan.jsx';
 import PlanDetails from './PlanDetails.jsx';
 import DeletePlan from './DeletePlan';
 
-export default function AdminPlans({ firebase }) {
+function AdminPlans({ firebase }) {
     const allPlans = useSelector((state) => state.plans.allPlans);
     const allBenefits = useSelector((state) => state.plans.allBenefits);
     const MySwal = withReactContent(Swal);
@@ -209,3 +209,5 @@ export default function AdminPlans({ firebase }) {
         </div>
     );
 }
+
+export default AdminPlans;

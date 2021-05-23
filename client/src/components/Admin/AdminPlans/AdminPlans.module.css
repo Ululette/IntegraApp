@@ -1,123 +1,122 @@
 .container {
-  align-items: center;
-  background-color: #f3f5f7;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: flex-start;
-  width: 100%;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: flex-start;
+    width: 100%;
 }
 
 .container svg {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .semiNav {
-  align-items: center;
-  background-color: #313131;
-  color: white;
-  display: flex;
-  height: 75px;
-  justify-content: space-between;
-  padding: 0 1.5rem;
-  width: 100%;
+    align-items: center;
+    background-color: #313131;
+    color: white;
+    display: flex;
+    height: 75px;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    width: 100%;
 }
 
 .menuButton:hover {
-  background-color: #575757;
+    background-color: #575757;
 }
 
 .menuIcon {
-  color: white;
+    color: white;
 }
 
 .semiNav div {
-  align-items: center;
-  background-color: #fff;
-  border-radius: 100%;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  margin: 10px;
-  width: 60px;
-  height: 60px;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 100%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+    width: 60px;
+    height: 60px;
 }
 
 .editIcon {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  justify-content: space-between;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
 }
 
 .semiNav div button {
-  border: none;
-  color: white;
-  height: 55px;
-  outline: none;
-  width: 55px;
+    border: none;
+    color: white;
+    height: 55px;
+    outline: none;
+    width: 55px;
 }
 
 .plansContainer {
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  margin: 3rem;
-  width: 50%;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin: 3rem;
+    width: 50%;
 }
 
 .detailContainer {
-  align-items: center;
-  background-color: white;
-  border: 1px solid #000;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  height: 300px;
-  margin: 15px;
-  padding: 10px;
-  width: 250px;
+    align-items: center;
+    background-color: white;
+    border: 1px solid #000;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 300px;
+    margin: 15px;
+    padding: 10px;
+    width: 250px;
 }
 
 .deleteButton {
-  align-items: center;
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
 }
 
 .benefitContainer {
-  align-items: flex-start;
-  display: inherit;
-  flex-direction: inherit;
-  height: 100%;
-  justify-content: space-evenly;
-  line-height: 1.6rem;
-  margin-top: 20px;
+    align-items: flex-start;
+    display: inherit;
+    flex-direction: inherit;
+    height: 100%;
+    justify-content: space-evenly;
+    line-height: 1.6rem;
+    margin-top: 20px;
 }
 
 .addButton {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: flex-end;
-  bottom: 7%;
-  right: 3%;
-  position: fixed;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-end;
+    bottom: 7%;
+    right: 3%;
+    position: fixed;
 }
 
 @keyframes topDown {
-  0% {
-    transform: translateY(0px);
-  }
+    0% {
+        transform: translateY(0px);
+    }
 
-  50% {
-    transform: translateY(-20px);
-  }
+    50% {
+        transform: translateY(-20px);
+    }
 
-  100% {
-    transform: translateY(0px);
-  }
+    100% {
+        transform: translateY(0px);
+    }
 }

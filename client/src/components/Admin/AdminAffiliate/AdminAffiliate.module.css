@@ -1,3 +1,30 @@
 .toolbar {
     display: flex;
 }
+
+.addButton {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 10rem;
+}
+
+.filters {
+    display: flex;
+    width: 20%;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.filtersSelector {
+    width: 50%;
+    display: block;
+}
+
+.filtersSelect {
+    width: 100%;
+}
+
+.filtersinput {
+    margin-left: 10px;
+    width: 50%;
+}

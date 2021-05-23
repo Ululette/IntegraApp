@@ -177,13 +177,12 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        width: '83%',
-        height: '90vh',
-        position: 'relative',
-        marginLeft: '18rem',
+        width: '100%',
         display: 'flex',
         justifyContent: 'flex-end',
-        alignItems: 'center',
+        alignItems: 'flex-start',
+        marginTop: '2rem',
+        height: '80vh',
     },
     paper: {
         width: '100%',
@@ -510,40 +509,45 @@ function AdminAffiliate({ firebase }) {
                     >
                         Lista de socios
                     </Typography>
-                    <Fab
-                        onClick={handleOpenDialogAdd}
-                        color='primary'
-                        aria-label='add'
-                    >
-                        <AddIcon />
-                    </Fab>
-                    <InputLabel id='filter-select'>Filtro</InputLabel>
-                    <Select
-                        labelId='filter-select'
-                        name='select'
-                        onChange={handleChangeFilters}
-                        value={inputFilters.select}
-                    >
-                        <MenuItem value='dni'>DNI</MenuItem>
-                        <MenuItem value='age'>Edad</MenuItem>
-                        <MenuItem value='contact'>Telefono</MenuItem>
-                        <MenuItem value='email'>Email</MenuItem>
-                        <MenuItem value='familyBond'>Parentesco</MenuItem>
-                        <MenuItem value='familyGroup'>Grupo Familiar</MenuItem>
-                        <MenuItem value='gender'>Genero</MenuItem>
-                        <MenuItem value='name'>Nombre/s</MenuItem>
-                        <MenuItem value='lastname'>Apellido/s</MenuItem>
-                        <MenuItem value='plan'>Plan</MenuItem>
-                        <MenuItem value='state'>Estado</MenuItem>
-                        <MenuItem value='titular'>Titularidad</MenuItem>
-                    </Select>
-                    <TextField
-                        label='Filtro'
-                        type='text'
-                        name='text'
-                        value={inputFilters.text}
-                        onChange={handleChangeFilters}
-                    />
+                    <section className={styles.filters}>
+                        <div className={styles.filtersSelector}>
+                            <InputLabel id='filter-select'>
+                                Filtrar por
+                            </InputLabel>
+                            <Select
+                                className={styles.filtersSelect}
+                                labelId='filter-select'
+                                name='select'
+                                onChange={handleChangeFilters}
+                                value={inputFilters.select}
+                            >
+                                <MenuItem value='dni'>DNI</MenuItem>
+                                <MenuItem value='age'>Edad</MenuItem>
+                                <MenuItem value='contact'>Telefono</MenuItem>
+                                <MenuItem value='email'>Email</MenuItem>
+                                <MenuItem value='familyBond'>
+                                    Parentesco
+                                </MenuItem>
+                                <MenuItem value='familyGroup'>
+                                    Grupo Familiar
+                                </MenuItem>
+                                <MenuItem value='gender'>Genero</MenuItem>
+                                <MenuItem value='name'>Nombre/s</MenuItem>
+                                <MenuItem value='lastname'>Apellido/s</MenuItem>
+                                <MenuItem value='plan'>Plan</MenuItem>
+                                <MenuItem value='state'>Estado</MenuItem>
+                                <MenuItem value='titular'>Titularidad</MenuItem>
+                            </Select>
+                        </div>
+                        <TextField
+                            className={styles.filtersinput}
+                            label='Filtro'
+                            type='text'
+                            name='text'
+                            value={inputFilters.text}
+                            onChange={handleChangeFilters}
+                        />
+                    </section>
                 </Toolbar>
                 <TableContainer>
                     <Table
@@ -696,6 +700,14 @@ function AdminAffiliate({ firebase }) {
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                 />
             </Paper>
+            <Fab
+                onClick={handleOpenDialogAdd}
+                color='primary'
+                aria-label='add'
+                className={styles.addButton}
+            >
+                <AddIcon />
+            </Fab>
             <div>
                 <Dialog
                     open={open.edit}

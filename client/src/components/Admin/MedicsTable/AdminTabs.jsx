@@ -43,26 +43,17 @@ function a11yProps(index) {
 
 const useStyles = makeStyles(() => ({
     root: {
-        marginTop: '0%',
         alignItems: 'center',
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',
         justifyContent: 'space-around',
-        width: '100%',
-        zIndex: '-1',
     },
     tab: {
         position: 'relative',
         alignItems: 'center',
         backgroundColor: '#4ca1a3',
         display: 'flex',
-        flexDirection: 'row',
         justifyContent: 'center',
-        height: '100%',
-        width: '100%',
-        flexWrap: 'wrap',
-        zIndex: '-1',
     },
 }));
 

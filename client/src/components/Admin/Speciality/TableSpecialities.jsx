@@ -57,8 +57,8 @@ function stableSort(array, comparator) {
 
 const headCells = [
     { id: 'id', numeric: false, disablePadding: true, label: 'ID' },
-    { id: 'name', numeric: false, disablePadding: true, label: 'Speciality' },
-    { id: 'actions', numeric: false, disablePadding: true, label: 'Actions' },
+    { id: 'name', numeric: false, disablePadding: true, label: 'Especialidad' },
+    { id: 'actions', numeric: false, disablePadding: true, label: 'Acciones' },
 ];
 
 function EnhancedTableHead(props) {
@@ -154,15 +154,15 @@ const EnhancedTableToolbar = (props) => {
                     id='tableTitle'
                     component='div'
                 >
-                    Specialities List
+                    Lista de especialidades
                 </Typography>
             )}
 
-            <Tooltip title='Filter list'>
+            {/* <Tooltip title='Filter list'>
                 <IconButton aria-label='filter list'>
                     <FilterListIcon />
                 </IconButton>
-            </Tooltip>
+            </Tooltip> */}
         </Toolbar>
     );
 };
@@ -189,9 +189,6 @@ const useStyles = makeStyles((theme) => ({
         margin: -1,
         overflow: 'hidden',
         padding: 0,
-        position: 'absolute',
-        top: 20,
-        width: 1,
     },
 }));
 
@@ -222,32 +219,36 @@ export default function EnhancedTable({ rows }) {
     };
 
     const handleDelete = async (id, name) => {
-        let res = window.confirm(
-            `esta seguro que desea eliminar ${name.toUpperCase()}?`
-        );
-        if (res) {
-            ///const deleteMedicsSpeciality = (id)=>{
-            //primero se elimina de tabla intermedia
-            const { errorRelation } = await supabase
-                .from('medics_medical_specialities')
-                .delete()
-                .match({ speciality_id: id });
-            //}
-            ///const deleteSpeciality = async(id)=>{
-            const { errorSpeciality } = await supabase
-                .from('medical_specialities')
-                .delete()
-                .match({ id: id });
+        MySwal.fire({
+            title: `Esta seguro que desea eliminar ${name.toUpperCase()}?`,
+            showCloseButton: true,
+            showCancelButton: true,
+            icon: 'question',
+        }).then(async (res) => {
+            if (res.isConfirmed) {
+                ///const deleteMedicsSpeciality = (id)=>{
+                //primero se elimina de tabla intermedia
+                const { errorRelation } = await supabase
+                    .from('medics_medical_specialities')
+                    .delete()
+                    .match({ speciality_id: id });
+                //}
+                ///const deleteSpeciality = async(id)=>{
+                const { errorSpeciality } = await supabase
+                    .from('medical_specialities')
+                    .delete()
+                    .match({ id: id });
 
-            if (!errorRelation && !errorSpeciality)
-                MySwal.fire({
-                    title: `La espcialidad ${name.toUpperCase()} se ha eliminado con exito.`,
-                    icon: 'success',
-                    timer: 2000,
-                }).then(() => window.location.reload());
-        }
-        // deleteMedicsSpeciality(id);
-        // deleteSpeciality (id);
+                if (!errorRelation && !errorSpeciality)
+                    MySwal.fire({
+                        title: `La espcialidad ${name.toUpperCase()} se ha eliminado con exito.`,
+                        icon: 'success',
+                        timer: 2000,
+                    }).then(() => window.location.reload());
+            }
+            // deleteMedicsSpeciality(id);
+            // deleteSpeciality (id);
+        });
     };
 
     const handleClose = () => {

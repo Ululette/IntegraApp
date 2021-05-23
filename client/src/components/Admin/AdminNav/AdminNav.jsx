@@ -1,97 +1,50 @@
 import React from 'react';
+import { useUser } from 'reactfire';
+import { NavLink } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-
-import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import MoreIcon from '@material-ui/icons/MoreVert';
+import { CircularProgress, Button } from '@material-ui/core';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 
-import { makeStyles, useTheme, fade } from '@material-ui/core/styles';
+//Icons
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import HomeIcon from '@material-ui/icons/Home';
+import FaceIcon from '@material-ui/icons/Face';
+import GroupIcon from '@material-ui/icons/Group';
+import NoteIcon from '@material-ui/icons/Note';
+import DoneAllIcon from '@material-ui/icons/DoneAll';
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import HealingIcon from '@material-ui/icons/Healing';
 
-const navStyles = makeStyles((theme) => ({
-    grow: {
-        flexGrow: 1,
-    },
-    menuButton: {
-        marginRight: theme.spacing(2),
-    },
-    title: {
-        display: 'none',
-        [theme.breakpoints.up('sm')]: {
-            display: 'block',
-        },
-    },
-    search: {
-        position: 'relative',
-        borderRadius: theme.shape.borderRadius,
-        backgroundColor: fade(theme.palette.common.white, 0.15),
-        '&:hover': {
-            backgroundColor: fade(theme.palette.common.white, 0.25),
-        },
-        marginRight: theme.spacing(2),
-        marginLeft: 0,
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            marginLeft: theme.spacing(3),
-            width: 'auto',
-        },
-    },
-    searchIcon: {
-        padding: theme.spacing(0, 2),
-        height: '100%',
-        position: 'absolute',
-        pointerEvents: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    inputRoot: {
-        color: 'inherit',
-    },
-    inputInput: {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('md')]: {
-            width: '20ch',
-        },
-    },
-    sectionDesktop: {
-        display: 'none',
-        [theme.breakpoints.up('md')]: {
-            display: 'flex',
-        },
-    },
-    sectionMobile: {
-        display: 'flex',
-        [theme.breakpoints.up('md')]: {
-            display: 'none',
-        },
-    },
-}));
+// OUR COMPONENTS
+import AdminHome from '../AdminHome/AdminHome.jsx';
+import AdminPlans from '../AdminPlans/AdminPlans.jsx';
+// import NewPlanP from '../NewPlanP/NewPlanP.jsx';
+import AdminMedicTabs from '../MedicsTable/AdminTabs.jsx';
+import AdminAffiliate from '../AdminAffiliate/AdminAffiliate.jsx';
+import FormSpecialities from '../Speciality/FormSpecialities.jsx';
+import AdminRegistration from '../AdminRegistration/AdminRegistration.jsx';
 
-const drawerWidth = 240;
+import styles from './AdminNav.module.css';
+
+const drawerWidth = 260;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -105,9 +58,16 @@ const useStyles = makeStyles((theme) => ({
     },
     appBar: {
         [theme.breakpoints.up('sm')]: {
-            width: `calc(100% - ${drawerWidth}px)`,
             marginLeft: drawerWidth,
         },
+        display: 'flex',
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+        marginBottom: '10rem',
+        height: '75px',
+        backgroundColor: '#00897b',
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -119,6 +79,7 @@ const useStyles = makeStyles((theme) => ({
     toolbar: theme.mixins.toolbar,
     drawerPaper: {
         width: drawerWidth,
+        zIndex: 0,
     },
     content: {
         flexGrow: 1,
@@ -126,71 +87,130 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function ResponsiveDrawer(props) {
-    const { window } = props;
+function AdminNav({ firebase, window: windowMui }) {
     const classes = useStyles();
-    const navClass = navStyles();
     const theme = useTheme();
     const [mobileOpen, setMobileOpen] = React.useState(false);
+
+    const userData = JSON.parse(localStorage.getItem('userdata'));
+    const adminData = JSON.parse(localStorage.getItem('admindata'));
+    const userDataFirebase = useUser();
+
+    if (!userDataFirebase.data && !adminData && !userData) {
+        window.location = '/login';
+    }
+
+    const MySwal = withReactContent(Swal);
+
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
-    const isMenuOpen = Boolean(anchorEl);
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-    const handleProfileMenuOpen = (event) => {
+    const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
-    const handleMobileMenuClose = () => {
-        setMobileMoreAnchorEl(null);
-    };
-
-    const handleMenuClose = () => {
+    const handleClose = () => {
         setAnchorEl(null);
-        handleMobileMenuClose();
-    };
-
-    const handleMobileMenuOpen = (event) => {
-        setMobileMoreAnchorEl(event.currentTarget);
     };
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
 
+    const logout = async () => {
+        setAnchorEl(null);
+        MySwal.fire({
+            title: '¿Quiere cerrar sesión?',
+            icon: 'question',
+            showConfirmButton: true,
+            showCloseButton: true,
+            showCancelButton: true,
+            focusConfirm: false,
+            reverseButtons: true,
+            confirmButtonText: 'Cerrar sesion',
+            cancelButtonText: 'Cancelar',
+        }).then(async (res) => {
+            if (res.isConfirmed) {
+                await firebase.auth().signOut();
+                localStorage.removeItem('userdata');
+                localStorage.removeItem('admindata');
+                window.location = '/login';
+            }
+        });
+    };
+
+    if (!userDataFirebase.data) return <CircularProgress />;
+
     const drawer = (
         <div>
             <div className={classes.toolbar} />
-            <Divider />
             <List>
-                {['Inbox', 'Starred', 'Send email', 'Drafts'].map(
-                    (text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    )
-                )}
-            </List>
-            <Divider />
-            <List>
-                {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                    <ListItem button key={text}>
-                        <ListItemIcon>
-                            {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                        </ListItemIcon>
-                        <ListItemText primary={text} />
+                <NavLink to={`/${userData.dni}/admin`} className={styles.link}>
+                    <ListItem button>
+                        <HomeIcon />
+                        <ListItemText primary='Inicio' />
                     </ListItem>
-                ))}
+                </NavLink>
+                <ListItem button>
+                    <FaceIcon />
+                    <ListItemText primary='Mi cuenta' />
+                </ListItem>
+                <ListItem button>
+                    <Badge
+                        color='secondary'
+                        badgeContent={2}
+                        className={styles.notifications}
+                    >
+                        <GroupAddIcon />
+                        <ListItemText primary='Solicitudes de asociacion' />
+                    </Badge>
+                </ListItem>
+                <NavLink
+                    to={`/${userData.dni}/admin/plans`}
+                    className={styles.link}
+                    activeClassName={styles.activeLink}
+                >
+                    <ListItem button>
+                        <NoteIcon />
+                        <ListItemText primary='Planes' />
+                    </ListItem>
+                </NavLink>
+
+                <ListItem button>
+                    <Badge
+                        color='secondary'
+                        badgeContent={2}
+                        className={styles.notifications}
+                    >
+                        <DoneAllIcon />
+                        <ListItemText primary='Autorizaciones' />
+                    </Badge>
+                </ListItem>
+                <NavLink
+                    to={`/${userData.dni}/admin/affiliates`}
+                    className={styles.link}
+                    activeClassName={styles.activeLink}
+                >
+                    <ListItem button>
+                        <GroupIcon />
+                        <ListItemText primary='Socios' />
+                    </ListItem>
+                </NavLink>
+                <NavLink
+                    to={`/${userData.dni}/admin/medics`}
+                    className={styles.link}
+                    activeClassName={styles.activeLink}
+                >
+                    <ListItem button>
+                        <HealingIcon />
+                        <ListItemText primary='Medicos' />
+                    </ListItem>
+                </NavLink>
             </List>
         </div>
     );
 
     const container =
-        window !== undefined ? () => window().document.body : undefined;
+        windowMui !== undefined ? () => window().document.body : undefined;
 
     return (
         <div className={classes.root}>
@@ -206,10 +226,68 @@ function ResponsiveDrawer(props) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant='h6' noWrap>
-                        Responsive drawer
-                    </Typography>
                 </Toolbar>
+                <a href={`/${userDataFirebase.uid}/admin/`}>
+                    <img
+                        src='../../assets/images/logo.png'
+                        alt='Integra icon.'
+                        className={styles.ppLogo}
+                    />
+                </a>
+                <section className={styles.userData}>
+                    <Badge
+                        badgeContent={2}
+                        color='secondary'
+                        className={styles.navIcon}
+                    >
+                        <MailIcon />
+                    </Badge>
+                    <article className={styles.namesContainer}>
+                        <p>{`${adminData.name} ${adminData.lastname}`}</p>
+                        <p>
+                            Administrador
+                            {adminData.root ? ' root' : ' moderador'}
+                        </p>
+                    </article>
+                    <div>
+                        <Button onClick={handleClick}>
+                            {userData.avatar_url ? (
+                                <img
+                                    src={userData.avatar_url}
+                                    alt='User profile pic.'
+                                    width='45px'
+                                    height='45px'
+                                    className={styles.profilePic}
+                                />
+                            ) : (
+                                <AccountCircleIcon
+                                    className={styles.profilePic}
+                                    width='45px'
+                                    height='45px'
+                                />
+                            )}
+                            <ExpandMoreIcon className={styles.expandMore} />
+                        </Button>
+                        <Menu
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            onClose={handleClose}
+                        >
+                            <MenuItem onClick={handleClose}>Mi perfil</MenuItem>
+                            <NavLink
+                                to={`/${userData.dni}/admin/newadmin`}
+                                className={styles.newAdmin}
+                            >
+                                <MenuItem onClick={handleClose}>
+                                    Agregar Administrador
+                                </MenuItem>
+                            </NavLink>
+
+                            <MenuItem onClick={logout}>Cerrar Sesion</MenuItem>
+                        </Menu>
+                    </div>
+                </section>
             </AppBar>
             <nav className={classes.drawer} aria-label='mailbox folders'>
                 {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
@@ -244,45 +322,30 @@ function ResponsiveDrawer(props) {
             </nav>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-                <Typography paragraph>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Rhoncus dolor purus non enim praesent elementum
-                    facilisis leo vel. Risus at ultrices mi tempus imperdiet.
-                    Semper risus in hendrerit gravida rutrum quisque non tellus.
-                    Convallis convallis tellus id interdum velit laoreet id
-                    donec ultrices. Odio morbi quis commodo odio aenean sed
-                    adipiscing. Amet nisl suscipit adipiscing bibendum est
-                    ultricies integer quis. Cursus euismod quis viverra nibh
-                    cras. Metus vulputate eu scelerisque felis imperdiet proin
-                    fermentum leo. Mauris commodo quis imperdiet massa
-                    tincidunt. Cras tincidunt lobortis feugiat vivamus at augue.
-                    At augue eget arcu dictum varius duis at consectetur lorem.
-                    Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-                    sapien faucibus et molestie ac.
-                </Typography>
-                <Typography paragraph>
-                    Consequat mauris nunc congue nisi vitae suscipit. Fringilla
-                    est ullamcorper eget nulla facilisi etiam dignissim diam.
-                    Pulvinar elementum integer enim neque volutpat ac tincidunt.
-                    Ornare suspendisse sed nisi lacus sed viverra tellus. Purus
-                    sit amet volutpat consequat mauris. Elementum eu facilisis
-                    sed odio morbi. Euismod lacinia at quis risus sed vulputate
-                    odio. Morbi tincidunt ornare massa eget egestas purus
-                    viverra accumsan in. In hendrerit gravida rutrum quisque non
-                    tellus orci ac. Pellentesque nec nam aliquam sem et tortor.
-                    Habitant morbi tristique senectus et. Adipiscing elit duis
-                    tristique sollicitudin nibh sit. Ornare aenean euismod
-                    elementum nisi quis eleifend. Commodo viverra maecenas
-                    accumsan lacus vel facilisis. Nulla posuere sollicitudin
-                    aliquam ultrices sagittis orci a.
-                </Typography>
+                {window.location.pathname === `/${userData.dni}/admin` ? (
+                    <AdminHome firebase={firebase} />
+                ) : window.location.pathname ===
+                  `/${userData.dni}/admin/medics` ? (
+                    <AdminMedicTabs />
+                ) : window.location.pathname ===
+                  `/${userData.dni}/admin/specialities` ? (
+                    <FormSpecialities />
+                ) : window.location.pathname ===
+                  `/${userData.dni}/admin/affiliates` ? (
+                    <AdminAffiliate firebase={firebase} />
+                ) : window.location.pathname ===
+                  `/${userData.dni}/admin/plans` ? (
+                    <AdminPlans firebase={firebase} />
+                ) : window.location.pathname ===
+                  `/${userData.dni}/admin/newadmin` ? (
+                    <AdminRegistration firebase={firebase} />
+                ) : null}
             </main>
         </div>
     );
 }
 
-ResponsiveDrawer.propTypes = {
+AdminNav.propTypes = {
     /**
      * Injected by the documentation to work in an iframe.
      * You won't need it on your project.
@@ -290,4 +353,4 @@ ResponsiveDrawer.propTypes = {
     window: PropTypes.func,
 };
 
-export default ResponsiveDrawer;
+export default AdminNav;

@@ -3,12 +3,11 @@
 *,
 *::before,
 *::after {
-  font-family: 'Nunito', sans-serif;
-  margin: 0;
-  box-sizing: border-box;
+    font-family: 'Nunito', sans-serif;
+    margin: 0;
+    box-sizing: border-box;
 }
 
 html {
-  scroll-behavior: smooth;
-  overflow-x: hidden;
+    scroll-behavior: smooth;
 }

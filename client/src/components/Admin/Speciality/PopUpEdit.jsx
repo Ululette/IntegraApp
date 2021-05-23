@@ -16,11 +16,13 @@ export default function FormDialog({ open, handleClose, handleEdit }) {
                 aria-labelledby='form-dialog-title'
             >
                 <form onSubmit={(e) => handleEdit(e)}>
-                    <DialogTitle id='form-dialog-title'>Edit</DialogTitle>
+                    <DialogTitle id='form-dialog-title'>
+                        Editar especialidad
+                    </DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            {`Si desea modificar la especialidad X por favor ingrese el nuevo nombre en el campo de texto.
-            De lo constrario presione Cancelar.`}
+                            {`Si desea modificar esta especialidad por favor ingrese el nuevo nombre en el campo de texto.
+            De lo contrario presione cancelar.`}
                         </DialogContentText>
                         <TextField
                             autoFocus
@@ -33,10 +35,10 @@ export default function FormDialog({ open, handleClose, handleEdit }) {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose} color='primary'>
-                            Cancel
+                            Cancelar
                         </Button>
                         <Button type='submit' color='primary'>
-                            Edit
+                            Editar
                         </Button>
                     </DialogActions>
                 </form>
