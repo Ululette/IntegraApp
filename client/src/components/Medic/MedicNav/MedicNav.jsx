@@ -35,6 +35,7 @@ import MedicPatients from '../MedicPatients/MedicPatients.jsx';
 import PrescriptionsAndOrders from '../PrescriptionsAndOrders/PrescriptionsAndOrders.jsx';
 
 import styles from './MedicNav.module.css';
+import NotFound from '../../Status/NotFound.jsx';
 
 const drawerWidth = 260;
 
@@ -286,7 +287,9 @@ function AdminNav({ firebase, window: windowMui }) {
                 ) : window.location.pathname ===
                   `/${userData.dni}/medic/prescriptions&orders` ? (
                     <PrescriptionsAndOrders />
-                ) : null}
+                ) : (
+                    <NotFound />
+                )}
             </main>
         </div>
     );

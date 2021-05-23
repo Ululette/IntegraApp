@@ -41,6 +41,7 @@ import AdminMedicTabs from '../MedicsTable/AdminTabs.jsx';
 import AdminAffiliate from '../AdminAffiliate/AdminAffiliate.jsx';
 import FormSpecialities from '../Speciality/FormSpecialities.jsx';
 import AdminRegistration from '../AdminRegistration/AdminRegistration.jsx';
+import NotFound from '../../Status/NotFound.jsx';
 
 import styles from './AdminNav.module.css';
 
@@ -339,7 +340,9 @@ function AdminNav({ firebase, window: windowMui }) {
                 ) : window.location.pathname ===
                   `/${userData.dni}/admin/newadmin` ? (
                     <AdminRegistration firebase={firebase} />
-                ) : null}
+                ) : (
+                    <NotFound />
+                )}
             </main>
         </div>
     );

@@ -58,6 +58,7 @@ import UserMedRec from '../UserMedRec/UserMedRec.jsx';
 import RenderPDF from '../UserMedRec/RenderPDF';
 import MedicalDirectory from '../AffiliateDoctors/AffiliateDoctors';
 import UserProfile from '../UserProfile/UserProfile.jsx';
+import NotFound from '../../Status/NotFound.jsx';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction='down' ref={ref} {...props} />;
@@ -452,7 +453,9 @@ function AdminNav({ firebase, window: windowMui }) {
                 ) : window.location.pathname ===
                   `/${userData.dni}/affiliate/doctor` ? (
                     <MedicalDirectory />
-                ) : null}
+                ) : (
+                    <NotFound />
+                )}
             </main>
         </div>
     );
