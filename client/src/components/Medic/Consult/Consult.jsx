@@ -113,13 +113,49 @@ export default function Consult({ firebase }) {
   var today = new Date();
   var date = today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
 
+  function sendEmailConsult(props) {
+    emailjs
+      .send(
+        'service_wcpzjw7',
+        'template_qkdom45',
+        props,
+        'user_mgft1j53RDkaGc1EWyKNK'
+      )
+      .then(
+        (result) => {
+          console.log('resultado:', result.text);
+        },
+        (error) => {
+          console.log('error:', error.text);
+        }
+      );
+  }
+
+  function sendEmailConsult(props) {
+    emailjs
+      .send(
+        'service_wcpzjw7',
+        'template_qkdom45',
+        props,
+        'user_mgft1j53RDkaGc1EWyKNK'
+      )
+      .then(
+        (result) => {
+          console.log('resultado:', result.text);
+        },
+        (error) => {
+          console.log('error:', error.text);
+        }
+      );
+  }
+
 
   const handleSubmit = async () => {
     if (!errors.reason &&
       !errors.diagnosis &&
       !errors.observations &&
       !errors.prescriptions) {
-      const { data, error } = await supabase
+      const { data : newConsult, error } = await supabase
         .from('medical_consultations')
         .insert([
           {
@@ -129,6 +165,12 @@ export default function Consult({ firebase }) {
             prescriptions: input.prescriptions
           },
         ])
+      sendEmailConsult({
+        date,
+        doctor: { name: hardMedic.name, lastname: hardMedic.lastname, medical_specialities: hardMedic.medical_specialities, medic_license: hardMedic.medic_license },
+        patient: { name: hardPatient.name, lastname: hardPatient.lastname, plan: hardPatient.plan, affiliate_number: hardPatient.dni },
+        consult: newConsult ? newConsult : input
+      }) 
     }
   }
 
@@ -216,7 +258,7 @@ export default function Consult({ firebase }) {
   }
 
   useEffect(() => {
-    if(medicines){
+    if (medicines) {
       console.log(medicines)
     }
   }, [medicines])
@@ -352,7 +394,7 @@ export default function Consult({ firebase }) {
           </div>
         </div>
         <Divider component="li" />
-              <Medicines/>
+        <Medicines />
         <Divider component="li" />
         <div className={style.buttons}>
           <div className={style.btn}>
