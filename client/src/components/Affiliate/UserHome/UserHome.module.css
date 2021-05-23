@@ -1,0 +1,21 @@
+.name {
+    font-size: 2rem;
+    color: white;
+    text-align: center;
+}
+
+.quoteContainer {
+    font-size: 2rem;
+    color: white;
+    position: absolute;
+    padding: 4rem 10rem;
+    bottom: 0;
+}
+
+.quoteContainer q {
+    text-align: center;
+}
+
+.quoteContainer p {
+    text-align: right;
+}

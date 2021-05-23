@@ -351,7 +351,7 @@ function MedicPatients() {
                         Cerrar
                     </Button>
                     <a
-                        href={`/${medicData.dni}/medic/patients/${currentPatient.dni}/newconsultation?dni=${currentPatient.dni}&name=${currentPatient.name}&lastname=${currentPatient.lastname}&birthdate=${currentPatient.birthdate}&gender=${currentPatient.gender}`}
+                        href={`/${medicData.dni}/medic/patients/${currentPatient.dni}/newconsultation?dni=${currentPatient.dni}&name=${currentPatient.name}&lastname=${currentPatient.lastname}&birthdate=${currentPatient.birthdate}&gender=${currentPatient.gender}&email=${currentPatient.email}`}
                         target='_blank'
                         rel='noreferrer'
                     >
