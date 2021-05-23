@@ -345,7 +345,7 @@ function AdminNav({ firebase, window: windowMui }) {
                         <p>{`${affiliateData.name} ${affiliateData.lastname}`}</p>
                         <p
                             className={styles.planName}
-                        >{`${affiliateData.plan_name}`}</p>
+                        >{`Mi plan: ${affiliateData.plan_name}`}</p>
                     </article>
                     <div>
                         <Button
