@@ -11,6 +11,10 @@ import Paper from '@material-ui/core/Paper';
 import supabase from '../../../supabase.config';
 import { Button, CircularProgress } from '@material-ui/core';
 
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import { useFirestoreDocDataOnce } from 'reactfire';
+
 const useStyles = makeStyles({
     table: {
         minWidth: 650,
@@ -19,9 +23,11 @@ const useStyles = makeStyles({
 
 export default function FamilyMembersList() {
     const classes = useStyles();
+    const MySwal = withReactContent(Swal);
     const [familyGroup, setFamilyGroup] = useState([]);
     const [titular, setTitular] = useState(false);
     const [loading, setLoading] = useState(true);
+    const titularDni = JSON.parse(localStorage.getItem('userdata')).dni;
 
     useEffect(() => {
         async function getAffiliate() {
@@ -49,6 +55,77 @@ export default function FamilyMembersList() {
         getAffiliate();
     }, []);
 
+    const handleDownFamiliar = async (familiar) => {
+        const { value: formValues } = await MySwal.fire({
+            title: `Dar de baja a ${familiar.name} ${familiar.lastname}`,
+            text: `DNI: ${familiar.dni}`,
+            input: 'textarea',
+            inputPlaceholder: 'Motivo de la baja...',
+            inputAttributes: {
+                'aria-label': 'Motivo de la baja...',
+            },
+            showCancelButton: true,
+            showConfirmButton: true,
+            reverseButtons: true,
+            confirmButtonText: 'Enviar',
+            cancelButtonText: 'Cancelar',
+        });
+        if (formValues) {
+            MySwal.fire({
+                title: 'Esta seguro/a de solicitar la baja?',
+                text: `Familiar a dar de baja:\nDNI: ${familiar.dni}\nNombre: ${familiar.name}\nApellido: ${familiar.lastname}\nMotivo: ${formValues}`,
+                reverseButtons: true,
+                icon: 'question',
+                showCancelButton: true,
+                showConfirmButton: true,
+                confirmButtonText: 'Estoy seguro',
+                cancelButtonText: 'Cancelar',
+            }).then(async (res) => {
+                const { error: errorSendingRequest } = await supabase
+                    .from('familiar_downs_request')
+                    .insert([
+                        {
+                            titular_dni: titularDni,
+                            familiar_dni: familiar.dni,
+                            familiar_name: familiar.name,
+                            familiar_lastname: familiar.lastname,
+                            familiar_birthdate: familiar.birthdate,
+                            reason: formValues,
+                        },
+                    ]);
+                if (errorSendingRequest) {
+                    return MySwal.fire({
+                        title: 'Error al enviar la solicitud',
+                        icon: 'error',
+                        text: `${
+                            errorSendingRequest.message ===
+                            'duplicate key value violates unique constraint "familiar_downs_request_familiar_dni_key"'
+                                ? 'Ya se envio la solicitud para este socio'
+                                : errorSendingRequest.message
+                        }`,
+                        showConfirmButton: true,
+                        confirmButtonText: 'Salir',
+                    });
+                }
+                if (res.isConfirmed) {
+                    MySwal.fire({
+                        title: 'Se solicito la baja con exito, un administrador se comunicara con usted en los proximos dias.',
+                        icon: 'success',
+                        showConfirmButton: true,
+                        confirmButtonText: 'Perfecto!',
+                    });
+                } else {
+                    MySwal.fire({
+                        title: 'Solicitud cancelada',
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonText: 'Salir',
+                    });
+                }
+            });
+        }
+    };
+
     if (loading) return <CircularProgress />;
 
     if (!titular)
@@ -75,8 +152,8 @@ export default function FamilyMembersList() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {familyGroup.map((row) => (
-                        <TableRow key={row.name}>
+                    {familyGroup.map((row, idx) => (
+                        <TableRow key={`${row.name}-${idx}`}>
                             <TableCell component='th' scope='row'>
                                 {row.name}
                             </TableCell>
@@ -92,8 +169,12 @@ export default function FamilyMembersList() {
                                 {row.phone_number}
                             </TableCell>
                             <TableCell align='right'>
-                                <Button variant='outlined' size='small'>
-                                    Unsuscribe
+                                <Button
+                                    variant='outlined'
+                                    size='small'
+                                    onClick={() => handleDownFamiliar(row)}
+                                >
+                                    Dar de baja
                                 </Button>
                             </TableCell>
                         </TableRow>
