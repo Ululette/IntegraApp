@@ -187,3 +187,14 @@
 .userEmail {
     font-size: 1.2rem;
 }
+
+.a {
+    background-color: transparent;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+}
+
+.a:hover {
+    text-decoration: underline;
+}
