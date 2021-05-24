@@ -44,6 +44,7 @@ import AdminRegistration from '../AdminRegistration/AdminRegistration.jsx';
 import NotFound from '../../Status/NotFound.jsx';
 
 import styles from './AdminNav.module.css';
+import AdminOrders from '../AdminOrders/AdminOrders.jsx';
 
 const drawerWidth = 260;
 
@@ -175,17 +176,23 @@ function AdminNav({ firebase, window: windowMui }) {
                         <ListItemText primary='Planes' />
                     </ListItem>
                 </NavLink>
+                <NavLink
+                    to={`/${userData.dni}/admin/orders`}
+                    className={styles.link}
+                    activeClassName={styles.activeLink}
+                >
+                    <ListItem button>
+                        <Badge
+                            color='secondary'
+                            badgeContent={2}
+                            className={styles.notifications}
+                        >
+                            <DoneAllIcon />
+                            <ListItemText primary='Autorizaciones' />
+                        </Badge>
+                    </ListItem>
+                </NavLink>
 
-                <ListItem button>
-                    <Badge
-                        color='secondary'
-                        badgeContent={2}
-                        className={styles.notifications}
-                    >
-                        <DoneAllIcon />
-                        <ListItemText primary='Autorizaciones' />
-                    </Badge>
-                </ListItem>
                 <NavLink
                     to={`/${userData.dni}/admin/affiliates`}
                     className={styles.link}
@@ -340,6 +347,9 @@ function AdminNav({ firebase, window: windowMui }) {
                 ) : window.location.pathname ===
                   `/${userData.dni}/admin/newadmin` ? (
                     <AdminRegistration firebase={firebase} />
+                ) : window.location.pathname ===
+                  `/${userData.dni}/admin/orders` ? (
+                    <AdminOrders />
                 ) : (
                     <NotFound />
                 )}

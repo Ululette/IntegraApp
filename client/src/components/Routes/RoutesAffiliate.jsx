@@ -3,7 +3,6 @@ import { Route } from 'react-router-dom';
 import { useFirebaseApp } from 'reactfire';
 import RenderPDF from '../Affiliate/UserMedRec/RenderPDF.jsx';
 import UserNav from '../Affiliate/UserNav/UserNav.jsx';
-import AffiliateOrdersAndPrescriptions from '../Affiliate/AffiliateOrdersAndPrescriptions/AffiliateOrdersAndPrescriptions';
 
 function RoutesAffiliate() {
     const firebase = useFirebaseApp();
