@@ -7,7 +7,7 @@ import StarsBackground from './StarsBackground.jsx';
 import Aos from 'aos';
 import 'aos/dist/aos.css';
 import Chatbot from '../Chatbot/Chatbot.jsx';
-import AccessibleForwardIcon from '@material-ui/icons/AccessibleForward';
+import ChatIcon from '@material-ui/icons/Chat';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import { makeStyles } from '@material-ui/core/styles';
@@ -33,8 +33,8 @@ const useStyles = makeStyles((theme) => ({
     },
     icon: {
         color: '#fff',
-        width: '100%',
-        height: '100%',
+        width: '80%',
+        height: '80%',
     },
     chat: {},
 }));
@@ -276,7 +276,7 @@ export default function LandingPage() {
                     onClick={handleClick}
                     className={classes.icon}
                 >
-                    <AccessibleForwardIcon className={classes.icon} />
+                    <ChatIcon className={classes.icon} />
                 </Button>
                 <Menu
                     id='fade-menu'
