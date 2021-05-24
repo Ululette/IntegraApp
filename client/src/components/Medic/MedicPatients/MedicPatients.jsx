@@ -104,25 +104,6 @@ function MedicPatients() {
             });
         }
         setListStudies(studiesList);
-
-        // const arrayAux = [];
-
-        // for (let study of studiesList) {
-        //     const { data: medicsList, error: errorFetchMedicsStudies } =
-        //         await supabase
-        //             .from('medics')
-        //             .select('dni, name, lastname')
-        //             .eq('dni', study.medical_consultations.medic_dni);
-        //     if (errorFetchMedicsStudies) {
-        //         return MySwal.fire({
-        //             title: 'Error con el fetch de estudios.',
-        //             text: `${errorFetchMedicsStudies.message}`,
-        //             icon: 'error',
-        //         });
-        //     }
-        //     arrayAux.push(medicsList[0]);
-        // }
-        // setListMedicsStudies(arrayAux);
     };
 
     useEffect(() => {
@@ -326,12 +307,6 @@ function MedicPatients() {
                                                 primary={`${study.date}`}
                                             />
                                         </ListItem>
-                                        {/* <ListItem className={styles.listItem}>
-                                            <ListItemText primary={`Medico`} />
-                                            <ListItemText
-                                                primary={`${listMedicsStudies[idx].dni} ${listMedicsStudies[idx].name} ${listMedicsStudies[idx].lastname}`}
-                                            />
-                                        </ListItem> */}
                                         <ListItem className={styles.listColumn}>
                                             <a
                                                 href='#!'

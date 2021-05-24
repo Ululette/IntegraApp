@@ -17,6 +17,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import NewPrescriptionDialog from './NewPrescriptionDialog/NewPrescriptionDialog.jsx';
 import NewOrderDialog from './NewOrderDialog/NewOrderDialog.jsx';
 import Medicines from './Medicines/Medicines.jsx';
+import NewOrder from './NewOrderDialog/NewOrder';
 import supabase from '../../../supabase.config.js';
 import { useUser } from 'reactfire';
 import Swal from 'sweetalert2';
@@ -115,6 +116,7 @@ function Consult({ firebase }) {
 
     const handleSubmit = async () => {
         let medicines = JSON.parse(localStorage.getItem('medicines'));
+        let orders = JSON.parse(localStorage.getItem('orders'));
         console.log(typeof medic.dni);
         if (!errors.reason && !errors.diagnosis && !errors.observations) {
             const { data: newConsult } = await supabase
@@ -161,6 +163,18 @@ function Consult({ firebase }) {
                         date: date,
                         drug_name_2: medicines.length > 1 ? medicines[1] : '',
                         partner_dni: patient.dni,
+                    },
+                ]);
+            }
+            if (orders) {
+                await supabase.from('orders').insert([
+                    {
+                        medical_consultation_id: consultationId,
+                        study_name: orders[0],
+                        date: date,
+                        partner_dni: patient.dni,
+                        status: 'en espera de autorizacion',
+                        medic_dni: medic.dni,
                     },
                 ]);
             }
@@ -391,6 +405,7 @@ function Consult({ firebase }) {
                         <TextField
                             id='diagnosis-input'
                             name='diagnosis'
+                            className={classes.textField}
                             label='Diagnóstico'
                             variant='outlined'
                             onChange={handleInputChange}
@@ -461,6 +476,9 @@ function Consult({ firebase }) {
                         {renderNewPrescription && (
                             <NewPrescriptionDialog info={infObj} />
                         )}
+                    </div>
+                    <div className={style.btn}>
+                        {renderNewOrder && <NewOrder />}
                     </div>
                     <div className={style.btn}>
                         {renderNewOrder && <NewOrderDialog info={infObj} />}
