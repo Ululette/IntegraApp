@@ -312,9 +312,7 @@ const EnhancedTableToolbar = (props) => {
                                     >
                                         <option aria-label='None' value='' />
                                         <option value='activo'>Activo</option>
-                                        <option value='inhabilitado'>
-                                            Inhabilitado
-                                        </option>
+                                        <option value='inhabilitado'>Inhabilitado</option>
                                     </Select>
                                 </FormControl>
                             ) : (

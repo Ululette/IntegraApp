@@ -15,6 +15,8 @@ import {
     TableRow,
     TextField,
 } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
+import styles from './PrescriptionsAndOrder.module.css';
 
 const useStyles = makeStyles((theme) => ({
     table: {
