@@ -13,7 +13,6 @@ function RoutesLogin() {
                 path='/login'
                 render={() => <Login firebase={firebase} />}
             />
-            {/* <Route exact path='/animatejs' component={AnimateJs} /> */}
         </>
     );
 }

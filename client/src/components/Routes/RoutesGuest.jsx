@@ -6,7 +6,6 @@ import Footer from '../Guest/Footer/Footer.jsx';
 import FaqsPage from '../Guest/Faqs/FaqsPage.jsx';
 import ComparativaP from '../Guest/ComparativaP/ComparativaP.jsx';
 import RegStepper from '../Guest/RegStepForm/RegStepper';
-import Bot from '../Guest/Chatbot/Chatbot'
 
 function RoutesGuest() {
     return (
@@ -17,7 +16,6 @@ function RoutesGuest() {
             <Route exact path='/faqs' component={FaqsPage} />
             <Route exact path='/plandetails' component={ComparativaP} />
             <Route exact path='/' component={Footer} />
-            <Route exact path='/chatbot' component={Bot} />
         </>
     );
 }
