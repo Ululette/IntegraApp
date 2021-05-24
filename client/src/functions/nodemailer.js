@@ -14,15 +14,6 @@ export default function sendNodeMailer(to, subject, text, htmlBody) {
             }
         });
 
-        // send mail with defined transport object
-        let info = await transporter.sendMail({
-            from: EMAIL_USER, // sender address
-            to, // list of receivers
-            subject, // Subject line
-            text, // plain text body
-            html: htmlBody || null, // html body
-        });
-
         let callBack = (err, data) => {
             if (err) {
                 console.log("error occurs at send message: %s", info.messageId);
@@ -34,7 +25,15 @@ export default function sendNodeMailer(to, subject, text, htmlBody) {
             }
         }
 
-        transporter.sendMail(info, callBack);
+        // send mail with defined transport object
+        let info = await transporter.sendMail({
+            from: EMAIL_USER, // sender address
+            to, // list of receivers
+            subject, // Subject line
+            text, // plain text body
+            html: htmlBody || null, // html body
+        }, callBack);
+
     }
 
     main().catch(console.error);
