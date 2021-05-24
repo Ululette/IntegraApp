@@ -7,12 +7,12 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import styles from './DatosTitular.module.css';
 import validator from './Validator';
+import useQuery from '../../../hooks/query.js';
 
 const DatosTitular = () => {
     const allStates = useSelector((state) => state.plans.allStates);
     const allLocalities = useSelector((state) => state.plans.allLocalities);
     const dispatch = useDispatch();
-    //---CODIGO SEBA
     const [textInputs, setTextInputs] = useState({
         first_name: '',
         last_name: '',
@@ -25,7 +25,6 @@ const DatosTitular = () => {
         number: '',
     });
     const [textInputsMix, setInputsTextMix] = useState({
-        apartment: '',
         street_name: '',
     });
     const [dateInputs, setDateInputs] = useState({
@@ -38,13 +37,12 @@ const DatosTitular = () => {
         locality: '',
     });
     const [emailInputs, setEmailInputs] = useState({ email: '' });
+    const [apartmentInput, setApartmentInput] = useState({ apartment: '' });
     const [errors, setErrors] = useState({
         textErrors: {
             first_name: '',
             last_name: '',
             occupation: '',
-            street_name: '',
-            apartment: '',
         },
         textNumErrors: {
             dni: '',
@@ -53,7 +51,6 @@ const DatosTitular = () => {
             number: '',
         },
         textMixErrors: {
-            apartment: '',
             street_name: '',
         },
         dateErrors: { birth_date: '' },
@@ -65,9 +62,26 @@ const DatosTitular = () => {
         },
         emailErrors: { email: '' },
     });
-
+    let dataQuery = {
+        name: useQuery().get('first_name'),
+        email: useQuery().get('email'),
+        dni: useQuery().get('dni'),
+        phone: useQuery().get('phone_number'),
+    };
     useEffect(() => {
-        let datosTitular = JSON.parse(localStorage.getItem('datosTitular'));
+        const datosTitular = JSON.parse(localStorage.getItem('datosTitular'));
+
+        if (dataQuery) {
+            setTextInputs({ ...textInputs, first_name: dataQuery.name });
+            setInputsTextNum({
+                ...textInputsNum,
+                dni: dataQuery.dni,
+                phone_number: dataQuery.phone_number,
+            });
+            setEmailInputs({
+                email: dataQuery.email,
+            });
+        }
         if (datosTitular) {
             setTextInputs({
                 first_name: datosTitular.first_name,
@@ -81,7 +95,6 @@ const DatosTitular = () => {
                 number: datosTitular.number,
             });
             setInputsTextMix({
-                apartment: datosTitular.apartment,
                 street_name: datosTitular.street_name,
             });
             setEmailInputs({
@@ -96,6 +109,8 @@ const DatosTitular = () => {
                 locality: datosTitular.locality, //falta
                 state: datosTitular.state,
             });
+            setApartmentInput({ apartment: datosTitular.apartment });
+
             setErrors((errors) => ({
                 ...errors,
                 textErrors: validator(
@@ -123,7 +138,6 @@ const DatosTitular = () => {
                 ...errors,
                 textMixErrors: validator(
                     {
-                        apartment: datosTitular.apartment,
                         street_name: datosTitular.street_name,
                     },
                     'mix'
@@ -172,6 +186,7 @@ const DatosTitular = () => {
                 ...dateInputs,
                 ...emailInputs,
                 ...selectInputs,
+                ...apartmentInput,
             })
         );
         localStorage.setItem('errorsTitular', JSON.stringify({ ...errors }));
@@ -252,21 +267,18 @@ const DatosTitular = () => {
     useEffect(() => {
         dispatch(getStates());
         dispatch(getLocalities());
-        //eslint-disable-next-line
     }, []);
 
     useEffect(() => {
         //console.log('useEffect '+input.state)
         dispatch(getLocalities(selectInputs.state));
-        //eslint-disable-next-line
-    }, []);
+    }, [selectInputs.state]);
 
     const states = allStates.map((s) => {
         return <option value={`${s.id}-${s.name}`}>{s.name}</option>;
     });
     //1-buenos aires
     const localities = allLocalities
-        //eslint-disable-next-line
         .filter((l) => l.state_id == selectInputs.state.split('-')[0])
         .map((l) => {
             return <option value={`${l.id}-${l.name}`}>{l.name}</option>;
@@ -520,13 +532,13 @@ const DatosTitular = () => {
                         type='text'
                         name='apartment'
                         autoComplete='off'
-                        value={textInputsMix.apartment}
+                        value={apartmentInput.apartment}
                         variant='outlined'
-                        onChange={(e) => handleTextMixChange(e)}
-                        {...(errors.textMixErrors.apartment && {
-                            error: !!errors.textMixErrors.apartment,
-                            helperText: 'Piso/Depto invalido',
-                        })}
+                        onChange={(e) =>
+                            setApartmentInput({
+                                [e.target.name]: e.target.value,
+                            })
+                        }
                         onBlur={saveInLocalStorage}
                     />
                 </div>

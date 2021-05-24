@@ -156,16 +156,11 @@ function AdminNav({ firebase, window: windowMui }) {
                         <ListItemText primary='Mis pacientes' />
                     </ListItem>
                 </NavLink>
-                <NavLink
-                    to={`/${userData.dni}/medic/consults`}
-                    className={styles.link}
-                    activeClassName={styles.activeLink}
-                >
-                    <ListItem button>
-                        <AssignmentIcon />
-                        <ListItemText primary='Mis consultas' />
-                    </ListItem>
-                </NavLink>
+
+                <ListItem button>
+                    <AssignmentIcon />
+                    <ListItemText primary='Mis consultas' />
+                </ListItem>
 
                 <NavLink
                     to={`/${userData.dni}/medic/prescriptions&orders`}

@@ -55,7 +55,7 @@ export default function ListItemLink(props) {
             <ListItem button onClick={handleClick}>
                 <ListItemIcon>{/* <InboxIcon /> */}</ListItemIcon>
                 {/* Acá el título del desplegable */}
-                <ListItemText primary={props.title} />
+                <ListItemText primary={props.description} />
                 {open ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
             <Collapse in={open} timeout='auto' unmountOnExit>

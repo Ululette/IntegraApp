@@ -6,12 +6,12 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import DatosTitular from './DatosTitular';
-// import DatosSalud from './DatosSalud';
-// import DatosFamiliares from './DatosFamiliares';
+import DatosSalud from './DatosSalud';
 import DatosEmpresa from './DatosEmpresa';
 import DatosRevision from './DatosRevision';
 import supabase from '../../../supabase.config';
-
+import style from './RegStepper.module.css';
+import swal from 'sweetalert2';
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -26,7 +26,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-    return ['Datos del Titular', 'Datos de la Empresa', 'Resumen'];
+    return [
+        'Datos del Titular',
+        'Datos de la Empresa',
+        'Datos de Salud',
+        'Resumen',
+    ];
 }
 
 function getStepContent(stepIndex) {
@@ -35,11 +40,11 @@ function getStepContent(stepIndex) {
             return <DatosTitular />;
         case 1:
             return <DatosEmpresa />;
-        // case 2:
-        //   return <DatosSalud/>;
+        case 2:
+            return <DatosSalud />;
         // case 3:
         //   return <DatosFamiliares/>;
-        case 2:
+        case 3:
             return <DatosRevision />;
         default:
             return 'Unknown stepIndex';
@@ -51,16 +56,48 @@ export default function RegStepper() {
     const [activeStep, setActiveStep] = useState(0);
     const steps = getSteps();
 
-    // const alltrue = (obj) => {
-    //     let completeError = true;
-    //     for (let error in obj) {
-    //         completeError = completeError && Object.values(obj[error])[0];
-    //     }
-    //     return completeError;
-    // };
+    const alltrue = (obj) => {
+        let completeError = true;
+        for (let error in obj) {
+            completeError =
+                completeError &&
+                typeof Object.values(obj[error])[0] !== 'string';
+        }
+        return completeError;
+    };
 
     const handleNext = async () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        switch (activeStep.toString()) {
+            case '0':
+                const errorsTitular = JSON.parse(
+                    localStorage.getItem('errorsTitular')
+                );
+                alltrue(errorsTitular)
+                    ? setActiveStep((prevActiveStep) => prevActiveStep + 1)
+                    : new swal('Ups!', 'Debes completar todos los campos');
+                break;
+            case '1':
+                const errorsEmpresa = JSON.parse(
+                    localStorage.getItem('errorsEmpresa')
+                );
+                alltrue(errorsEmpresa)
+                    ? setActiveStep((prevActiveStep) => prevActiveStep + 1)
+                    : new swal('Ups!', 'Debes completar todos los campos');
+                break;
+            case '2':
+                const errorsSalud = JSON.parse(
+                    localStorage.getItem('errorsSalud')
+                );
+
+                alltrue(errorsSalud)
+                    ? setActiveStep((prevActiveStep) => prevActiveStep + 1)
+                    : new swal('Ups!', 'Debes completar todos los campos');
+                break;
+
+            default:
+                break;
+        }
+        // setActiveStep((prevActiveStep) => prevActiveStep + 1)
 
         if (activeStep === steps.length - 1) {
             const datosTitular = JSON.parse(
@@ -69,44 +106,52 @@ export default function RegStepper() {
             const datosEmpresa = JSON.parse(
                 localStorage.getItem('datosEmpresa')
             );
-            console.log(activeStep);
-            await supabase.from('partners').insert([
-                {
-                    dni: datosTitular.dni,
-                    name: datosTitular.first_name,
-                    lastname: datosTitular.last_name,
-                    birthdate: datosTitular.birth_date,
-                    phone_number: datosTitular.phone_number,
-                    titular: true,
-                    family_bond: 'titular',
-                    family_group: 0,
-                    state: 'revision pendiente',
-                    email: datosTitular.email,
-                    plan_id: 8,
-                    company_id: null,
-                    medical_records_id: null,
-                    gender: datosTitular.gender,
-                },
-            ]);
-            await supabase.from('address').insert([
-                {
-                    street: datosTitular.street_name,
-                    street_number: datosTitular.number,
-                    floor: 1,
-                    medic_id: null,
-                    locality_id: datosTitular.locality.split('-')[0],
-                    partner_dni: datosTitular.dni,
-                    department: datosTitular.apartment,
-                },
-            ]);
-            await supabase.from('companies').insert([
-                {
-                    business_name: datosEmpresa.bussines_name,
-                    cuit: 111111,
-                    phone_number: datosEmpresa.company_phone,
-                    email: datosEmpresa.company_email,
-                },
-            ]);
+
+            const { data: partner, error: errorPartner } = await supabase
+                .from('partners')
+                .insert([
+                    {
+                        dni: datosTitular.dni,
+                        name: datosTitular.first_name,
+                        lastname: datosTitular.last_name,
+                        birthdate: datosTitular.birth_date,
+                        phone_number: datosTitular.phone_number,
+                        titular: true,
+                        family_bond: 'titular',
+                        family_group: 0,
+                        state: 'revision pendiente',
+                        email: datosTitular.email,
+                        plan_id: 8,
+                        company_id: null,
+                        gender: datosTitular.gender,
+                    },
+                ]);
+            const { data: address, error: errorAddress } = await supabase
+                .from('address')
+                .insert([
+                    {
+                        street: datosTitular.street_name,
+                        street_number: datosTitular.number,
+                        floor: 1,
+                        medic_id: null,
+                        locality_id: datosTitular.locality.split('-')[0],
+                        partner_dni: datosTitular.dni,
+                        department: datosTitular.apartment,
+                    },
+                ]);
+
+            const { data: companies, error: errorCompanies } = await supabase
+                .from('companies')
+                .insert([
+                    {
+                        business_name: datosEmpresa.bussines_name,
+                        cuit: 111111,
+                        phone_number: datosEmpresa.company_phone,
+                        email: datosEmpresa.company_email,
+                    },
+                ]);
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+            console.log('selalastra', errorCompanies);
         }
     };
 
@@ -132,12 +177,12 @@ export default function RegStepper() {
                 {activeStep === steps.length ? (
                     <div>
                         <Typography className={classes.instructions}>
-                            All steps completed
+                            Tu Formulario ha sido enviado!
                         </Typography>
                         <Button onClick={handleReset}>Reset</Button>
                     </div>
                 ) : (
-                    <div>
+                    <div classname={style.btn}>
                         <Typography className={classes.instructions}>
                             {getStepContent(activeStep)}
                         </Typography>
@@ -154,7 +199,7 @@ export default function RegStepper() {
                                 color='primary'
                                 onClick={handleNext}
                             >
-                                {activeStep === 2 ? 'Finish' : 'Next'}
+                                {activeStep === 3 ? 'Finish' : 'Next'}
                             </Button>
                         </div>
                     </div>

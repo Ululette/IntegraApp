@@ -26,7 +26,7 @@
 // bloodTransDate:"",
 // treatmentDate:""
 
-// Estados input 
+// Estados input
 // completeName: ""
 // dni: ""
 // typeSurgery: ""
