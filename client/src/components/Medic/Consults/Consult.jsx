@@ -233,8 +233,7 @@ function Consult({ firebase }) {
 
     if (diagnoses.length === 0) return <CircularProgress />;
 
-    console.log(diagnoses);
-
+    console.log(input);
     return (
         <Card className={classes.card}>
             <List>
@@ -357,13 +356,14 @@ function Consult({ firebase }) {
                             label='Razón de consulta'
                             variant='outlined'
                             multiline
+                            value={input.reason}
                             rows={6}
                             className={classes.textField}
                             onChange={handleInputChange}
-                            {...(errors.reason && {
-                                error: true,
-                                helperText: 'Solo se permiten letras y numeros',
-                            })}
+                            // {...(errors.reason && {
+                            //     error: true,
+                            //     helperText: 'Solo se permiten letras y numeros',
+                            // })}
                         />
                     </div>
                     <div className={style.input}>
@@ -371,6 +371,7 @@ function Consult({ firebase }) {
                             id='diagnosis-input'
                             name='diagnosis'
                             label='Diagnóstico'
+                            value={input.diagnosis}
                             variant='outlined'
                             options={diagnoses}
                             getOptionLabel={(option) => option.name}
@@ -378,6 +379,7 @@ function Consult({ firebase }) {
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
+                                    name='diagnosis'
                                     label='Diagnostico'
                                     variant='outlined'
                                 />
@@ -394,14 +396,15 @@ function Consult({ firebase }) {
                             name='observations'
                             label='Observaciones'
                             variant='outlined'
+                            value={input.observations}
                             multiline
                             rows={6}
                             className={classes.textField}
                             onChange={handleInputChange}
-                            {...(errors.observations && {
-                                error: true,
-                                helperText: 'Solo se permiten letras y numeros',
-                            })}
+                            // {...(errors.observations && {
+                            //     error: true,
+                            //     helperText: 'Solo se permiten letras y numeros',
+                            // })}
                         />
                     </div>
                 </div>

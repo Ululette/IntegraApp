@@ -327,6 +327,7 @@ function Login({ firebase }) {
                             onChange={handleInput}
                             required
                         />
+
                         <TextField
                             className={styles.inputData}
                             id='pass'
@@ -336,9 +337,7 @@ function Login({ firebase }) {
                             onChange={handleInput}
                             required
                         />
-                        <button className={styles.a} onClick={handleAlert}>
-                            ¿Olvidaste tu contraseña?
-                        </button>
+
                         {errors ? (
                             <p className={styles.warningLogin}>
                                 Usuario y/o contraseña incorrecta
@@ -348,11 +347,19 @@ function Login({ firebase }) {
                         {loading ? (
                             <CircularProgress className={styles.progressLoad} />
                         ) : (
-                            <input
-                                className={styles.buttonLogin}
-                                type='submit'
-                                value='Ingresar'
-                            />
+                            <div className={styles.column}>
+                                <input
+                                    className={styles.buttonLogin}
+                                    type='submit'
+                                    value='Ingresar'
+                                />
+                                <button
+                                    className={styles.a}
+                                    onClick={handleAlert}
+                                >
+                                    ¿Olvidaste tu contraseña?
+                                </button>
+                            </div>
                         )}
                     </section>
                 )}

@@ -193,8 +193,16 @@
     font-size: 1rem;
     border: none;
     cursor: pointer;
+    margin-top: 15px;
 }
 
 .a:hover {
     text-decoration: underline;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
