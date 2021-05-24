@@ -30,6 +30,7 @@
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "react-to-pdf": "^0.0.14",
     "react-tsparticles": "^1.27.0",
     "reactfire": "3.0.0-rc.0",
     "redux-devtools-extension": "^2.13.9",

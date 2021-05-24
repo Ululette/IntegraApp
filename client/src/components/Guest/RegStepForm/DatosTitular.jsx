@@ -7,7 +7,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import styles from './DatosTitular.module.css';
 import validator from './Validator';
-import useQuery from '../../../hooks/querys';
+import useQuery from '../../../hooks/query.js';
 
 const DatosTitular = () => {
     const allStates = useSelector((state) => state.plans.allStates);

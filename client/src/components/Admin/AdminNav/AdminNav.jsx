@@ -42,6 +42,7 @@ import AdminAffiliate from '../AdminAffiliate/AdminAffiliate.jsx';
 import FormSpecialities from '../Speciality/FormSpecialities.jsx';
 import AdminRegistration from '../AdminRegistration/AdminRegistration.jsx';
 import NotFound from '../../Status/NotFound.jsx';
+import FormUsers from '../AdminsUsers/FormUsers.jsx';
 
 import styles from './AdminNav.module.css';
 import AdminOrders from '../AdminOrders/AdminOrders.jsx';
@@ -204,6 +205,16 @@ function AdminNav({ firebase, window: windowMui }) {
                     </ListItem>
                 </NavLink>
                 <NavLink
+                    to={`/${userData.dni}/admin/users`}
+                    className={styles.link}
+                    activeClassName={styles.activeLink}
+                >
+                    <ListItem button>
+                        <GroupIcon />
+                        <ListItemText primary='Usuarios' />
+                    </ListItem>
+                </NavLink>
+                <NavLink
                     to={`/${userData.dni}/admin/medics`}
                     className={styles.link}
                     activeClassName={styles.activeLink}
@@ -350,6 +361,9 @@ function AdminNav({ firebase, window: windowMui }) {
                 ) : window.location.pathname ===
                   `/${userData.dni}/admin/orders` ? (
                     <AdminOrders />
+                ) : window.location.pathname ===
+                  `/${userData.dni}/admin/users` ? (
+                    <FormUsers />
                 ) : (
                     <NotFound />
                 )}
