@@ -18,14 +18,6 @@ function RoutesAffiliate() {
                 path='/:id/mymedicalrecords/pdf'
                 render={() => <RenderPDF firebase={firebase} />}
             />
-            {/* -------------Ordenes y Recetas--------------------------- */}
-            <Route
-                exact
-                path='/:id/affiliate/ordersandpresc'
-                render={() => (
-                    <AffiliateOrdersAndPrescriptions firebase={firebase} />
-                )}
-            />
         </>
     );
 }

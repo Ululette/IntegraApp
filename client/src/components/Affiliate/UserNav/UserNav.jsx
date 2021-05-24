@@ -62,6 +62,7 @@ import UserProfile from '../UserProfile/UserProfile.jsx';
 import NotFound from '../../Status/NotFound.jsx';
 import MyPlan from '../MyPlan/MyPlan';
 import MyOrders from '../MyOrders/MyOrders';
+import AffiliateOrdersAndPrescriptions from '../AffiliateOrdersAndPrescriptions/AffiliateOrdersAndPrescriptions';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction='down' ref={ref} {...props} />;
@@ -256,6 +257,17 @@ function AdminNav({ firebase, window: windowMui }) {
                     <ListItem button>
                         <DoneAllIcon />
                         <ListItemText primary='Mis autorizaciones' />
+                    </ListItem>
+                </NavLink>
+
+                <NavLink
+                    to={`/${userData.dni}/affiliate/ordersandpresc`}
+                    className={styles.link}
+                    activeClassName={styles.activeLink}
+                >
+                    <ListItem button>
+                        <DoneAllIcon />
+                        <ListItemText primary='Mis recetas' />
                     </ListItem>
                 </NavLink>
                 <ListItem button>
@@ -481,6 +493,9 @@ function AdminNav({ firebase, window: windowMui }) {
                 ) : window.location.pathname ===
                   `/${userData.dni}/affiliate/myauthorizations` ? (
                     <MyOrders affiliateData={affiliateData} />
+                ) : window.location.pathname ===
+                  `/${userData.dni}/affiliate/ordersandpresc` ? (
+                    <AffiliateOrdersAndPrescriptions />
                 ) : (
                     <NotFound />
                 )}

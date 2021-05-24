@@ -2,12 +2,7 @@ import React, { useEffect, useState } from 'react';
 import supabase from '../../../supabase.config';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-    CircularProgress,
-    FormControl,
-    InputLabel,
-    MenuItem,
     Paper,
-    Select,
     Table,
     TableBody,
     TableCell,
@@ -18,17 +13,10 @@ import {
 
 const useStyles = makeStyles((theme) => ({
     table: {
-        paddingLeft: 400,
-        paddingRight: 400,
-        marginLeft: 500,
-        marginTop: 200,
-        width: 200,
+        width: '100%',
     },
     formControl: {
-        marginTop: 100,
-        position: 'absolute',
         display: 'flex',
-        left: '400px',
         margin: theme.spacing(5),
         marginLeft: theme.spacing(5),
         minWidth: 120,
@@ -45,7 +33,6 @@ export default function AffiliateOrdersAndPrescriptions() {
     const classes = useStyles();
     const [data, setData] = useState([]);
     const user = JSON.parse(localStorage.getItem('affiliatedata'));
-    const [query, setQuery] = useState({ user });
 
     async function getData() {
         try {
@@ -67,6 +54,7 @@ export default function AffiliateOrdersAndPrescriptions() {
 
     useEffect(() => {
         getData();
+        //eslint-disable-next-line
     }, []);
 
     return (
