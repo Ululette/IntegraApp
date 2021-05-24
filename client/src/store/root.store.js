@@ -11,7 +11,7 @@ const allReducer = combineReducers({
     plans: rootReducer,
     newPlans: planReducer,
     specialities: specialitiesReducer,
-    affiliates: affiliatesReducer,
+    affiliates: affiliatesReducer
 });
 const store = createStore(
     allReducer,
