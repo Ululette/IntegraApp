@@ -19,6 +19,7 @@ import Medicines from './Medicines/Medicines.jsx';
 import supabase from '../../../supabase.config.js';
 import { useUser } from 'reactfire';
 import style from './Consult.module.css';
+
 // import { NavLink } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
@@ -65,7 +66,7 @@ function Consult({ firebase }) {
         lastname: params.get('lastname'),
         birthdate: params.get('birthdate'),
         gender: params.get('gender'),
-        gender: params.get('email'),
+        email: params.get('email'),
     }
 
     useEffect(() => {
@@ -102,11 +103,14 @@ function Consult({ firebase }) {
             );
     }
 
+
+
+
     const handleSubmit = async () => {
         if (!errors.reason &&
             !errors.diagnosis &&
             !errors.observations) {
-            const { data, error } = await supabase
+            const { data: newConsult, error } = await supabase
                 .from('medical_consultations')
                 .insert([
                     {
@@ -118,7 +122,23 @@ function Consult({ firebase }) {
                         observations: input.observations,
                     },
                 ]);
-            sendEmailConsult({dr:medic, patient: patientData, date:today, consult: input})
+            if (newConsult) {
+                if (medicines.length) {
+                    sendEmailConsult({
+                        dr: medic,
+                        patient: patientData,
+                        date, consult: input,
+                        prescriptions: medicines.join(' ')
+                    })
+                } else {
+                    sendEmailConsult({
+                        dr: medic,
+                        patient: patientData,
+                        date, consult: input,
+                        prescriptions: 'nada'
+                    })
+                }
+            }
         }
     }
 
@@ -187,7 +207,8 @@ function Consult({ firebase }) {
 
     useEffect(() => {
         if (medicines) {
-            console.log(medicines)
+            console.log(medicines);
+            console.log('recetados:', medicines.join(', '))
         }
     }, [medicines])
 
@@ -322,9 +343,9 @@ function Consult({ firebase }) {
                 <Divider component="li" />
                 <div className={style.buttons}>
                     <div className={style.btn}>
-                        <Button 
-                            variant="outlined" 
-                            size="large" 
+                        <Button
+                            variant="outlined"
+                            size="large"
                             color="primary"
                             onClick={handleBtnNewPrescription}
                         >
@@ -332,9 +353,9 @@ function Consult({ firebase }) {
                         </Button>
                     </div>
                     <div className={style.btn}>
-                        <Button 
-                            variant="outlined" 
-                            size="large" 
+                        <Button
+                            variant="outlined"
+                            size="large"
                             color="primary"
                             onClick={handleBtnNewOrder}
                         >
@@ -342,7 +363,7 @@ function Consult({ firebase }) {
                         </Button>
                     </div>
                     <div className={style.btn}>
-                        <Button variant="contained" size="large" color="primary">
+                        <Button variant="contained" size="large" color="primary" onClick={handleSubmit}>
                             Subir consulta
                         </Button>
                     </div>
