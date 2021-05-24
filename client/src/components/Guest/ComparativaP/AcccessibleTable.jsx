@@ -71,7 +71,7 @@ export default function AcccessibleTable({ plans }) {
                                         component='th'
                                         scope='row'
                                     >
-                                        {benef.title}
+                                        {benef.description}
                                     </TableCell>
 
                                     {planNames.slice(1).map((plan, index2) => (

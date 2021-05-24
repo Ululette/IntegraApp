@@ -13,7 +13,7 @@ export default function ComparativaP() {
     async function getPlans() {
         const { data: plans } = await supabase
             .from('plans')
-            .select('id, name, price, benefits (id,title)');
+            .select('id, name, price, benefits (id,title, description)');
         setPlans(
             plans.sort(function (a, b) {
                 return a.id - b.id;
@@ -56,7 +56,7 @@ export default function ComparativaP() {
                             name={plans[0].name}
                             price={plans[0].price}
                             benefits={plans[0].benefits.map(
-                                (benefobj) => benefobj.title
+                                (benefobj) => benefobj.description
                             )}
                         />
                     )}
