@@ -13,6 +13,9 @@ import {
 } from '@material-ui/core';
 import 'firebase/auth';
 import { makeStyles } from '@material-ui/core/styles';
+import NewPrescriptionDialog from './NewPrescriptionDialog/NewPrescriptionDialog.jsx';
+import NewOrderDialog from './NewOrderDialog/NewOrderDialog.jsx';
+import Medicines from './Medicines/Medicines.jsx';
 import supabase from '../../../supabase.config.js';
 import { useUser } from 'reactfire';
 import style from './Consult.module.css';
@@ -37,8 +40,8 @@ const useStyles = makeStyles((theme) => ({
 function Consult({ firebase }) {
     const [patient, setPatient] = useState({});
     const [medic, setMedic] = useState(JSON.parse(localStorage.getItem('medicdata')));
-    const [redirectNewOrder, setRedirectNewOrder] = useState(false);
-    const [redirectNewPrescription, setRedirectNewPrescription] = useState(false);
+    const [renderNewOrder, setRenderNewOrder] = useState(false);
+    const [renderNewPrescription, setRenderNewPrescription] = useState(false);
 
     const classes = useStyles();
     const userFirebase = useUser();
@@ -120,10 +123,10 @@ function Consult({ firebase }) {
     }
 
     const handleBtnNewPrescription = () => {
-        setRedirectNewPrescription(true);
+        setRenderNewPrescription(true);
     };
     const handleBtnNewOrder = () => {
-        setRedirectNewOrder(true);
+        setRenderNewOrder(true);
     };
 
     const handleInputChange = (e) => {
@@ -168,6 +171,25 @@ function Consult({ firebase }) {
         }
         return errors;
     }
+
+    //-------------------------------------------------------------------
+    // OJO!!!! Cuando guarde la consulta hacer un dispatch al store para limpiar las medicinas:   
+    //  dispatch(setMedicines([]));
+    let medicines = JSON.parse(localStorage.getItem('medicines'));
+
+    let infObj = {
+        date,
+        doctor: { name: medic.name, lastname: medic.lastname, medical_specialities: medic.medical_specialities, medic_license: medic.medic_license },
+        patient: { name: patient.name, lastname: patient.lastname, plan: patient.plan, affiliate_number: patient.dni },
+        diagnosis: input.diagnosis,
+        medicines
+    }
+
+    useEffect(() => {
+        if (medicines) {
+            console.log(medicines)
+        }
+    }, [medicines])
 
     return (
         <Card className={classes.card}>
@@ -300,12 +322,22 @@ function Consult({ firebase }) {
                 <Divider component="li" />
                 <div className={style.buttons}>
                     <div className={style.btn}>
-                        <Button variant="outlined" size="large" color="primary">
+                        <Button 
+                            variant="outlined" 
+                            size="large" 
+                            color="primary"
+                            onClick={handleBtnNewPrescription}
+                        >
                             Nueva receta
                         </Button>
                     </div>
                     <div className={style.btn}>
-                        <Button variant="outlined" size="large" color="primary">
+                        <Button 
+                            variant="outlined" 
+                            size="large" 
+                            color="primary"
+                            onClick={handleBtnNewOrder}
+                        >
                             Nueva orden
                         </Button>
                     </div>
@@ -313,6 +345,18 @@ function Consult({ firebase }) {
                         <Button variant="contained" size="large" color="primary">
                             Subir consulta
                         </Button>
+                    </div>
+                </div>
+                <Divider component="li" />
+                <div className={style.buttons}>
+                    <div className={style.btn}>
+                        {renderNewPrescription && <Medicines />}
+                    </div>
+                    <div className={style.btn}>
+                        {renderNewPrescription && <NewPrescriptionDialog info={infObj} />}
+                    </div>
+                    <div className={style.btn}>
+                        {renderNewOrder && <NewOrderDialog info={infObj} />}
                     </div>
                 </div>
             </List>
