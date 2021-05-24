@@ -1,7 +1,7 @@
 import { React, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { TextField, Button } from '@material-ui/core';
+import { TextField, Button, CircularProgress } from '@material-ui/core';
 import TableSpecialities from './TableSpecialities.jsx';
 import {
     getMedicSpecialities,
@@ -69,7 +69,7 @@ const FormSpecialities = () => {
                 +
             </Button>
             {rows.length === 0 ? (
-                <h2>Loading...</h2>
+                <CircularProgress/>
             ) : (
                 <TableSpecialities rows={rows} />
             )}

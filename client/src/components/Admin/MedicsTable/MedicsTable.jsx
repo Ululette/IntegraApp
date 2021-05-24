@@ -223,9 +223,9 @@ const EnhancedTableToolbar = (props) => {
             value
                 ? setToShowRows(
                       toShowRows.filter((r) => {
-                          return r[option]
-                              .toLowerCase()
-                              .includes(value.toLowerCase());
+                        return r[option]
+                            .toLowerCase()
+                            .includes(value.toLowerCase());
                       })
                   )
                 : setToShowRows(rows);
@@ -341,7 +341,7 @@ const EnhancedTableToolbar = (props) => {
                                 <option value='medical_specialities'>
                                     Specialty
                                 </option>
-                                <option value='state'>Sate</option>
+                                <option value='state'>State</option>
                             </Select>
                         </FormControl>
                     </DialogContent>

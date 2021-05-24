@@ -14,6 +14,8 @@ const GET_AFFILIATES = 'GET_AFFILIATES';
 //------FORM REG 1
 const GET_STATES = 'GET_STATES';
 const GET_LOCALITIES = 'GET_LOCALITIES';
+//--------USERS------------------------
+const GET_USERS = 'GET_USERS';
 
 export {
     SET_NP_BEN_SEL,
@@ -26,5 +28,6 @@ export {
     DELETE_SPECIALITY,
     GET_AFFILIATES,
     GET_STATES,
-    GET_LOCALITIES
+    GET_LOCALITIES,
+    GET_USERS
 };
