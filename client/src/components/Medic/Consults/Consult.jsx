@@ -10,7 +10,6 @@ import {
     Avatar,
     TextField,
     Typography,
-    CircularProgress,
 } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import 'firebase/auth';
@@ -20,6 +19,7 @@ import NewOrderDialog from './NewOrderDialog/NewOrderDialog.jsx';
 import Medicines from './Medicines/Medicines.jsx';
 import supabase from '../../../supabase.config.js';
 import { useUser } from 'reactfire';
+import Swal from 'sweetalert2';
 import style from './Consult.module.css';
 
 // import { NavLink } from 'react-router-dom';
@@ -73,16 +73,14 @@ function Consult({ firebase }) {
         email: params.get('email'),
     };
 
-    const fetchDiagnoses = async () => {
-        const { data: fetchDiagnoses, error: errorFetchDiagnoses } =
-            await supabase.from('pathologies').select('name');
-        if (errorFetchDiagnoses) return alert(errorFetchDiagnoses.message);
-        setDiagnoses(fetchDiagnoses);
-    };
+    useEffect(() => {
+        setPatient(patientData);
+        console.log(patient);
+        console.log(medic);
+    }, []);
 
     useEffect(() => {
         setPatient(patientData);
-        fetchDiagnoses();
     }, []);
 
     const getAge = () =>
@@ -116,8 +114,10 @@ function Consult({ firebase }) {
     }
 
     const handleSubmit = async () => {
+        let medicines = JSON.parse(localStorage.getItem('medicines'));
+        console.log(typeof medic.dni);
         if (!errors.reason && !errors.diagnosis && !errors.observations) {
-            const { data: newConsult, error } = await supabase
+            const { data: newConsult } = await supabase
                 .from('medical_consultations')
                 .insert([
                     {
@@ -125,10 +125,15 @@ function Consult({ firebase }) {
                         medic_dni: medic.dni,
                         reason: input.reason,
                         diagnosis: input.diagnosis,
-                        date: date,
                         observations: input.observations,
                     },
                 ]);
+            Swal.fire(
+                'Hecho!',
+                'La consulta fué subida correctamente',
+                'success'
+            );
+            let consultationId = newConsult[0].id;
             if (newConsult) {
                 if (medicines.length) {
                     sendEmailConsult({
@@ -148,6 +153,24 @@ function Consult({ firebase }) {
                     });
                 }
             }
+            if (medicines) {
+                await supabase.from('prescriptions').insert([
+                    {
+                        medical_consultation_id: consultationId,
+                        drug_name: medicines[0],
+                        date: date,
+                        drug_name_2: medicines.length > 1 ? medicines[1] : '',
+                        partner_dni: patient.dni,
+                    },
+                ]);
+            }
+            // sendEmailConsult({dr:medic, patient: patientData, date:today, consult: input})
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Revisa los campos!',
+            });
         }
     };
 
@@ -204,7 +227,7 @@ function Consult({ firebase }) {
     //-------------------------------------------------------------------
     // OJO!!!! Cuando guarde la consulta hacer un dispatch al store para limpiar las medicinas:
     //  dispatch(setMedicines([]));
-    let medicines = JSON.parse(localStorage.getItem('medicines'));
+    // let medicines = JSON.parse(localStorage.getItem('medicines'));
 
     let infObj = {
         date,
@@ -221,17 +244,15 @@ function Consult({ firebase }) {
             affiliate_number: patient.dni,
         },
         diagnosis: input.diagnosis,
-        medicines,
+        // medicines
     };
 
-    useEffect(() => {
-        if (medicines) {
-            console.log(medicines);
-            console.log('recetados:', medicines.join(', '));
-        }
-    }, [medicines]);
-
-    if (diagnoses.length === 0) return <CircularProgress />;
+    // useEffect(() => {
+    //     if (medicines) {
+    //         console.log(medicines);
+    //         console.log('recetados:', medicines.join(', '))
+    //     }
+    // }, [medicines])
 
     console.log(input);
     return (
@@ -367,23 +388,13 @@ function Consult({ firebase }) {
                         />
                     </div>
                     <div className={style.input}>
-                        <Autocomplete
+                        <TextField
                             id='diagnosis-input'
                             name='diagnosis'
                             label='Diagnóstico'
-                            value={input.diagnosis}
                             variant='outlined'
-                            options={diagnoses}
-                            getOptionLabel={(option) => option.name}
                             onChange={handleInputChange}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    name='diagnosis'
-                                    label='Diagnostico'
-                                    variant='outlined'
-                                />
-                            )}
+
                             // {...(errors.diagnosis && {
                             //     error: true,
                             //     helperText: 'Solo se permiten letras y numeros',
