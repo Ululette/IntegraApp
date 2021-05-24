@@ -1,0 +1,59 @@
+.medicData{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    /* margin: 2%; */
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+.medicFirstColumn{
+    display: flex;
+    flex-direction: row;
+    /* justify-content: center; */
+    /* align-items: center; */
+}
+.medicSecondColumn{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+}
+.patientData{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 0.7%;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+.patientFirstColumn{
+    display:flex;
+    flex-direction: row;
+}
+.patientSecondColumn{
+    display:flex;
+    flex-direction: column;
+}
+
+.form{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+
+    margin-left: 8%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+.input{
+    margin:2%;
+}
+
+.buttons{
+    display: flex;
+    justify-content: center;
+}
+.btn{
+    margin: 2%;
+}
