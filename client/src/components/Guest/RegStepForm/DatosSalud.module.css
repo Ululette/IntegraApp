@@ -1,4 +1,6 @@
-.pocho{
-  display: flex;
-  
+.conteiner {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10%;
+    padding: 10px;
 }

@@ -1,33 +1,55 @@
-.form{
+.form {
     display: flex;
-    flex-direction:column;
-    margin:20px;
+    flex-direction: column;
+    margin: 20px;
     width: 80%;
     height: 470px;
 }
 
-.datos{
+.datos {
     display: flex;
-    flex-direction:row;
-    justify-content:space-around;
-    margin:20px;
+    flex-direction: row;
+    justify-content: space-around;
+    margin: 20px;
 }
 
-.title{
+.title {
     display: flex;
-    margin-left:13%;
+    margin-left: 13%;
+}
+.ajuste {
+    display: flex;
+    flex-wrap: wrap;
 }
 
-.datosTitular{
+.datosTitular {
     display: flex;
-    flex-direction:row;
+    flex-direction: column;
 }
-.firstColumn{
+.firstColumn {
+    padding: 5px;
     display: flex;
-    flex-direction:column;
+    flex-direction: column;
+    background: aliceblue;
+    height: fit-content;
 }
 
-.datosEmpresa{
+.datosEmpresa {
+    margin-left: 10px;
     display: flex;
-    flex-direction:column;
+    flex-direction: column;
+    padding: 5px;
+    background: aliceblue;
+    height: fit-content;
+}
+.salud {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    padding: 5px;
+    padding: 10px;
+}
+.segmentos {
+    margin-top: 5px;
+    margin-bottom: 5px;
 }

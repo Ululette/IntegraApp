@@ -1,4 +1,11 @@
-import { TextField } from '@material-ui/core';
+import {
+    Checkbox,
+    FormControl,
+    FormControlLabel,
+    FormLabel,
+    InputLabel,
+    TextField,
+} from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import validator from './Validator.js';
 import * as styles from './DatosEmpresa.module.css';

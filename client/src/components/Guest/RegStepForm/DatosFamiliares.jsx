@@ -1,10 +1,6 @@
-import React from "react"
+import React from 'react';
 
-
-const DatosFamiliares = () =>{
-
-  return (
-    <p>soy un no form familiares</p>
-  )
-}
-export default DatosFamiliares
+const DatosFamiliares = () => {
+    return <p>soy un no form familiares</p>;
+};
+export default DatosFamiliares;
