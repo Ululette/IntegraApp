@@ -1,54 +1,56 @@
-import React from 'react';
-import { Route } from 'react-router-dom';
-import { useFirebaseApp } from 'reactfire';
-import FamilyMembers from '../Affiliate/UserFamilyMembers/FamilyMembers.jsx';
-import UserNav from '../Affiliate/UserNav/UserNav.jsx';
-import UserHome from '../Affiliate/UserHome/UserHome.jsx';
-import UserMedRec from '../Affiliate/UserMedRec/UserMedRec.jsx';
-import RenderPDF from '../Affiliate/UserMedRec/RenderPDF';
-import MedicalDirectory from '../Affiliate/AffiliateDoctors/AffiliateDoctors';
-import UserProfile from '../Affiliate/UserProfile/UserProfile.jsx';
+import React from "react";
+import { Route } from "react-router-dom";
+import { useFirebaseApp } from "reactfire";
+import FamilyMembers from "../Affiliate/UserFamilyMembers/FamilyMembers.jsx";
+import UserNav from "../Affiliate/UserNav/UserNav.jsx";
+import UserHome from "../Affiliate/UserHome/UserHome.jsx";
+import UserMedRec from "../Affiliate/UserMedRec/UserMedRec.jsx";
+import RenderPDF from "../Affiliate/UserMedRec/RenderPDF";
+import MedicalDirectory from "../Affiliate/AffiliateDoctors/AffiliateDoctors";
+import UserProfile from "../Affiliate/UserProfile/UserProfile.jsx";
+
+import PlanPayment from "../Affiliate/Payment/PlanPayments.jsx";
+
+import PaymentStatus from "../Affiliate/Payment/PaymentStatus.jsx";
 
 function RoutesAffiliate() {
-    const firebase = useFirebaseApp();
-    return (
-        <>
-            <Route
-                path='/:id/affiliate'
-                render={() => <UserNav firebase={firebase} />}
-            />
-            <Route
-                exact
-                path='/:id/affiliate'
-                render={() => <UserHome firebase={firebase} />}
-            />
-            <Route
-                exact
-                path='/:id/affiliate/familymembers'
-                component={FamilyMembers}
-            />
-            <Route
-                exact
-                path='/:id/affiliate/mymedicalrecords'
-                component={UserMedRec}
-            />
-            <Route
-                exact
-                path='/:id/mymedicalrecords/pdf'
-                render={() => <RenderPDF firebase={firebase} />}
-            />
-            <Route
-                exact
-                path='/:id/affiliate/profile'
-                render={() => <UserProfile firebase={firebase} />}
-            />
-            <Route
-                exact
-                path='/:id/affiliate/doctor'
-                component={MedicalDirectory}
-            />
-        </>
-    );
+  const firebase = useFirebaseApp();
+  return (
+    <>
+      <Route
+        path="/:id/affiliate"
+        render={() => <UserNav firebase={firebase} />}
+      />
+      <Route
+        exact
+        path="/:id/affiliate"
+        render={() => <UserHome firebase={firebase} />}
+      />
+      <Route
+        exact
+        path="/:id/affiliate/familymembers"
+        component={FamilyMembers}
+      />
+      <Route
+        exact
+        path="/:id/affiliate/mymedicalrecords"
+        component={UserMedRec}
+      />
+      <Route
+        exact
+        path="/:id/mymedicalrecords/pdf"
+        render={() => <RenderPDF firebase={firebase} />}
+      />
+      <Route exact path="/:id/affiliate/payment" component={PlanPayment} />
+      <Route exact path="/success" component={PaymentStatus} />
+      <Route
+        exact
+        path="/:id/affiliate/profile"
+        render={() => <UserProfile firebase={firebase} />}
+      />
+      <Route exact path="/:id/affiliate/doctor" component={MedicalDirectory} />
+    </>
+  );
 }
 
 export default RoutesAffiliate;
