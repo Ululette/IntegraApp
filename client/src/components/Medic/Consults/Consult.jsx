@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 // import { useLocation } from "react-router-dom";
-import emailjs from 'emailjs-com'
+import emailjs from 'emailjs-com';
 import {
     Button,
     List,
@@ -9,8 +9,10 @@ import {
     Card,
     Avatar,
     TextField,
-    Typography
+    Typography,
+    CircularProgress,
 } from '@material-ui/core';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import 'firebase/auth';
 import { makeStyles } from '@material-ui/core/styles';
 import NewPrescriptionDialog from './NewPrescriptionDialog/NewPrescriptionDialog.jsx';
@@ -40,22 +42,24 @@ const useStyles = makeStyles((theme) => ({
 
 function Consult({ firebase }) {
     const [patient, setPatient] = useState({});
-    const [medic, setMedic] = useState(JSON.parse(localStorage.getItem('medicdata')));
+    const [medic, setMedic] = useState(
+        JSON.parse(localStorage.getItem('medicdata'))
+    );
     const [renderNewOrder, setRenderNewOrder] = useState(false);
     const [renderNewPrescription, setRenderNewPrescription] = useState(false);
+    const [diagnoses, setDiagnoses] = useState([]);
 
     const classes = useStyles();
-    const userFirebase = useUser();
 
     const [input, setInput] = useState({
         reason: '',
         diagnosis: '',
-        observations: ''
-    })
+        observations: '',
+    });
     const [errors, setErrors] = useState({
         reason: false,
         diagnosis: false,
-        observations: false
+        observations: false,
     });
 
     const search = window.location.search;
@@ -67,23 +71,31 @@ function Consult({ firebase }) {
         birthdate: params.get('birthdate'),
         gender: params.get('gender'),
         email: params.get('email'),
-    }
+    };
+
+    const fetchDiagnoses = async () => {
+        const { data: fetchDiagnoses, error: errorFetchDiagnoses } =
+            await supabase.from('pathologies').select('name');
+        if (errorFetchDiagnoses) return alert(errorFetchDiagnoses.message);
+        setDiagnoses(fetchDiagnoses);
+    };
 
     useEffect(() => {
-        setPatient(patientData)
-        console.log(patient)
-        console.log(medic)
-    }, [])
+        setPatient(patientData);
+        fetchDiagnoses();
+    }, []);
 
-
-
-    // if (!userFirebase.data) {
-    //     window.location = '/login';
-    // }
-
-    const getAge = () => Math.floor((new Date() - new Date(patient.birthdate).getTime()) / 3.15576e+10)
+    const getAge = () =>
+        Math.floor(
+            (new Date() - new Date(patient.birthdate).getTime()) / 3.15576e10
+        );
     var today = new Date();
-    const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    const date =
+        today.getFullYear() +
+        '-' +
+        (today.getMonth() + 1) +
+        '-' +
+        today.getDate();
 
     function sendEmailConsult(props) {
         emailjs
@@ -103,13 +115,8 @@ function Consult({ firebase }) {
             );
     }
 
-
-
-
     const handleSubmit = async () => {
-        if (!errors.reason &&
-            !errors.diagnosis &&
-            !errors.observations) {
+        if (!errors.reason && !errors.diagnosis && !errors.observations) {
             const { data: newConsult, error } = await supabase
                 .from('medical_consultations')
                 .insert([
@@ -127,20 +134,22 @@ function Consult({ firebase }) {
                     sendEmailConsult({
                         dr: medic,
                         patient: patientData,
-                        date, consult: input,
-                        prescriptions: medicines.join(' ')
-                    })
+                        date,
+                        consult: input,
+                        prescriptions: medicines.join(' '),
+                    });
                 } else {
                     sendEmailConsult({
                         dr: medic,
                         patient: patientData,
-                        date, consult: input,
-                        prescriptions: 'nada'
-                    })
+                        date,
+                        consult: input,
+                        prescriptions: 'nada',
+                    });
                 }
             }
         }
-    }
+    };
 
     const handleBtnNewPrescription = () => {
         setRenderNewPrescription(true);
@@ -193,24 +202,38 @@ function Consult({ firebase }) {
     }
 
     //-------------------------------------------------------------------
-    // OJO!!!! Cuando guarde la consulta hacer un dispatch al store para limpiar las medicinas:   
+    // OJO!!!! Cuando guarde la consulta hacer un dispatch al store para limpiar las medicinas:
     //  dispatch(setMedicines([]));
     let medicines = JSON.parse(localStorage.getItem('medicines'));
 
     let infObj = {
         date,
-        doctor: { name: medic.name, lastname: medic.lastname, medical_specialities: medic.medical_specialities, medic_license: medic.medic_license },
-        patient: { name: patient.name, lastname: patient.lastname, plan: patient.plan, affiliate_number: patient.dni },
+        doctor: {
+            name: medic.name,
+            lastname: medic.lastname,
+            medical_specialities: medic.medical_specialities,
+            medic_license: medic.medic_license,
+        },
+        patient: {
+            name: patient.name,
+            lastname: patient.lastname,
+            plan: patient.plan,
+            affiliate_number: patient.dni,
+        },
         diagnosis: input.diagnosis,
-        medicines
-    }
+        medicines,
+    };
 
     useEffect(() => {
         if (medicines) {
             console.log(medicines);
-            console.log('recetados:', medicines.join(', '))
+            console.log('recetados:', medicines.join(', '));
         }
-    }, [medicines])
+    }, [medicines]);
+
+    if (diagnoses.length === 0) return <CircularProgress />;
+
+    console.log(diagnoses);
 
     return (
         <Card className={classes.card}>
@@ -219,12 +242,20 @@ function Consult({ firebase }) {
                     <div className={style.medicFirstColumn}>
                         <div>
                             <ListItem>
-                                <Avatar alt={medic.name} src={medic.profilePic} className={classes.largeAvatar} />
+                                <Avatar
+                                    alt={medic.name}
+                                    src={medic.profilePic}
+                                    className={classes.largeAvatar}
+                                />
                             </ListItem>
                         </div>
                         <div>
                             <ListItem>
-                                <Typography gutterBottom variant="h5" component="h2">
+                                <Typography
+                                    gutterBottom
+                                    variant='h5'
+                                    component='h2'
+                                >
                                     {medic.name} {medic.lastname}
                                 </Typography>
                             </ListItem>
@@ -233,33 +264,49 @@ function Consult({ firebase }) {
                     <div className={style.medicSecondColumn}>
                         <div>
                             <ListItem>
-                                <Typography gutterBottom variant="subtitle1" component="h2">
+                                <Typography
+                                    gutterBottom
+                                    variant='subtitle1'
+                                    component='h2'
+                                >
                                     {medic.medic_license}
                                 </Typography>
                             </ListItem>
                         </div>
                         <div>
                             <ListItem>
-                                <Typography gutterBottom variant="subtitle1" component="h2">
+                                <Typography
+                                    gutterBottom
+                                    variant='subtitle1'
+                                    component='h2'
+                                >
                                     {medic.medical_specialities[0].name}
                                 </Typography>
                             </ListItem>
                         </div>
                     </div>
                 </div>
-                <Divider component="li" />
+                <Divider component='li' />
                 <div className={style.patientData}>
                     <div className={style.patientFirstColumn}>
                         <div>
                             <ListItem>
-                                <Typography gutterBottom variant="h6" component="h2">
+                                <Typography
+                                    gutterBottom
+                                    variant='h6'
+                                    component='h2'
+                                >
                                     Paciente:
                                 </Typography>
                             </ListItem>
                         </div>
                         <div>
                             <ListItem>
-                                <Typography gutterBottom variant="h5" component="h2">
+                                <Typography
+                                    gutterBottom
+                                    variant='h5'
+                                    component='h2'
+                                >
                                     {patient.name} {patient.lastname}
                                 </Typography>
                             </ListItem>
@@ -268,34 +315,46 @@ function Consult({ firebase }) {
                     <div className={style.patientSecondColumn}>
                         <div>
                             <ListItem>
-                                <Typography gutterBottom variant="subtitle1" component="h2">
+                                <Typography
+                                    gutterBottom
+                                    variant='subtitle1'
+                                    component='h2'
+                                >
                                     DNI: {patient.dni}
                                 </Typography>
                             </ListItem>
                         </div>
                         <div>
                             <ListItem>
-                                <Typography gutterBottom variant="subtitle1" component="h2">
+                                <Typography
+                                    gutterBottom
+                                    variant='subtitle1'
+                                    component='h2'
+                                >
                                     Edad: {getAge()}
                                 </Typography>
                             </ListItem>
                         </div>
                         <div>
                             <ListItem>
-                                <Typography gutterBottom variant="subtitle1" component="h2">
+                                <Typography
+                                    gutterBottom
+                                    variant='subtitle1'
+                                    component='h2'
+                                >
                                     Sexo: {patient.gender}
                                 </Typography>
                             </ListItem>
                         </div>
                     </div>
                 </div>
-                <Divider component="li" />
+                <Divider component='li' />
                 <div className={style.form}>
                     <div className={style.input}>
                         <TextField
-                            id="reason-input"
+                            id='reason-input'
                             name='reason'
-                            label="Razón de consulta"
+                            label='Razón de consulta'
                             variant='outlined'
                             multiline
                             rows={6}
@@ -308,26 +367,32 @@ function Consult({ firebase }) {
                         />
                     </div>
                     <div className={style.input}>
-                        <TextField
-                            id="diagnosis-input"
+                        <Autocomplete
+                            id='diagnosis-input'
                             name='diagnosis'
-                            label="Diagnóstico"
+                            label='Diagnóstico'
                             variant='outlined'
-                            multiline
-                            rows={6}
-                            className={classes.textField}
+                            options={diagnoses}
+                            getOptionLabel={(option) => option.name}
                             onChange={handleInputChange}
-                            {...(errors.diagnosis && {
-                                error: true,
-                                helperText: 'Solo se permiten letras y numeros',
-                            })}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label='Diagnostico'
+                                    variant='outlined'
+                                />
+                            )}
+                            // {...(errors.diagnosis && {
+                            //     error: true,
+                            //     helperText: 'Solo se permiten letras y numeros',
+                            // })}
                         />
                     </div>
                     <div className={style.input}>
                         <TextField
-                            id="ovservations-input"
+                            id='ovservations-input'
                             name='observations'
-                            label="Observaciones"
+                            label='Observaciones'
                             variant='outlined'
                             multiline
                             rows={6}
@@ -340,13 +405,13 @@ function Consult({ firebase }) {
                         />
                     </div>
                 </div>
-                <Divider component="li" />
+                <Divider component='li' />
                 <div className={style.buttons}>
                     <div className={style.btn}>
                         <Button
-                            variant="outlined"
-                            size="large"
-                            color="primary"
+                            variant='outlined'
+                            size='large'
+                            color='primary'
                             onClick={handleBtnNewPrescription}
                         >
                             Nueva receta
@@ -354,27 +419,34 @@ function Consult({ firebase }) {
                     </div>
                     <div className={style.btn}>
                         <Button
-                            variant="outlined"
-                            size="large"
-                            color="primary"
+                            variant='outlined'
+                            size='large'
+                            color='primary'
                             onClick={handleBtnNewOrder}
                         >
                             Nueva orden
                         </Button>
                     </div>
                     <div className={style.btn}>
-                        <Button variant="contained" size="large" color="primary" onClick={handleSubmit}>
+                        <Button
+                            variant='contained'
+                            size='large'
+                            color='primary'
+                            onClick={handleSubmit}
+                        >
                             Subir consulta
                         </Button>
                     </div>
                 </div>
-                <Divider component="li" />
+                <Divider component='li' />
                 <div className={style.buttons}>
                     <div className={style.btn}>
                         {renderNewPrescription && <Medicines />}
                     </div>
                     <div className={style.btn}>
-                        {renderNewPrescription && <NewPrescriptionDialog info={infObj} />}
+                        {renderNewPrescription && (
+                            <NewPrescriptionDialog info={infObj} />
+                        )}
                     </div>
                     <div className={style.btn}>
                         {renderNewOrder && <NewOrderDialog info={infObj} />}
