@@ -73,9 +73,7 @@ export default function AffiliateOrdersAndPrescriptions() {
                             <TableRow>
                                 <TableCell align='center'>Receta Nro</TableCell>
                                 <TableCell align='center'>Fecha</TableCell>
-                                <TableCell align='center'>
-                                    Medicamentos
-                                </TableCell>
+                                <TableCell align='center'>Medicamentos</TableCell>
                                 <TableCell align='center'>Familiar</TableCell>
                                 <TableCell align='center'>DNI</TableCell>
                             </TableRow>
