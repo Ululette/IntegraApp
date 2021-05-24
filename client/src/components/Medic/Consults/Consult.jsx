@@ -130,11 +130,7 @@ function Consult({ firebase }) {
                         observations: input.observations,
                     },
                 ]);
-            Swal.fire(
-                'Hecho!',
-                'La consulta fué subida correctamente',
-                'success'
-            );
+
             let consultationId = newConsult[0].id;
             if (newConsult) {
                 if (medicines.length) {
@@ -178,6 +174,21 @@ function Consult({ firebase }) {
                     },
                 ]);
             }
+            Swal.fire({
+                title: 'Hecho!',
+                text: 'La consulta fué subida correctamente',
+                icon: 'success',
+                showConfirmButton: true,
+                reverseButtons: true,
+            }).then((el) => {
+                if (el.isConfirmed) {
+                    localStorage.removeItem('medicines');
+                    localStorage.removeItem('orders');
+                    let new_window = window.open(window.location, '_self');
+                    new_window.close();
+                }
+            });
+
             // sendEmailConsult({dr:medic, patient: patientData, date:today, consult: input})
         } else {
             Swal.fire({
