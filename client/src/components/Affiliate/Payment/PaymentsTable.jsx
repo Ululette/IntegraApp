@@ -42,7 +42,17 @@ export default function PaymentsTable({ paymentStatus }) {
                     .eq('partner_dni', user[0].dni)
                     .eq('payed', paymentStatus);
 
-                setDebt(debts);
+                setDebt(
+                    debts.sort(function (a, b) {
+                        if (a.concept < b.concept) {
+                            return 1;
+                        }
+                        if (a.concept > b.concept) {
+                            return -1;
+                        }
+                        return 0;
+                    })
+                );
                 setTitular(true);
             } catch (err) {
                 console.log(err);
@@ -60,7 +70,6 @@ export default function PaymentsTable({ paymentStatus }) {
             return <p>Solo el titular puede visualizar pagos realizados.</p>;
         return <p>Solo el titular puede realizar pagos.</p>;
     }
-
     return (
         <TableContainer component={Paper}>
             <Table

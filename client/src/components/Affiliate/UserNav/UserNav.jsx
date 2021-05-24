@@ -60,6 +60,7 @@ import RenderPDF from '../UserMedRec/RenderPDF';
 import MedicalDirectory from '../AffiliateDoctors/AffiliateDoctors';
 import UserProfile from '../UserProfile/UserProfile.jsx';
 import NotFound from '../../Status/NotFound.jsx';
+import MyPlan from '../MyPlan/MyPlan';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction='down' ref={ref} {...props} />;
@@ -236,10 +237,16 @@ function AdminNav({ firebase, window: windowMui }) {
                     </ListItem>
                 </NavLink>
 
-                <ListItem button>
-                    <NoteIcon />
-                    <ListItemText primary='Mi plan' />
-                </ListItem>
+                <NavLink
+                    to={`/${userData.dni}/affiliate/myplan`}
+                    className={styles.link}
+                    activeClassName={styles.activeLink}
+                >
+                    <ListItem button>
+                        <NoteIcon />
+                        <ListItemText primary='Mi plan' />
+                    </ListItem>
+                </NavLink>
 
                 <ListItem button>
                     <DoneAllIcon />
@@ -463,6 +470,9 @@ function AdminNav({ firebase, window: windowMui }) {
                 ) : window.location.pathname ===
                   `/${userData.dni}/affiliate/payment` ? (
                     <PlanPayments />
+                ) : window.location.pathname ===
+                  `/${userData.dni}/affiliate/myplan` ? (
+                    <MyPlan affiliateData={affiliateData} />
                 ) : (
                     <NotFound />
                 )}

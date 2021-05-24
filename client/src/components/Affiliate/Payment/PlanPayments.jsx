@@ -65,8 +65,8 @@ export default function PlanPayments() {
                     onChange={handleChange}
                     aria-label='simple tabs example'
                 >
-                    <Tab label='Pending Payments' {...a11yProps(0)} />
-                    <Tab label='Payment History' {...a11yProps(1)} />
+                    <Tab label='Pagos pendientes' {...a11yProps(0)} />
+                    <Tab label='Historial de pagos' {...a11yProps(1)} />
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
