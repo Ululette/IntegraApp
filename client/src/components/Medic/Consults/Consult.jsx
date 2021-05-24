@@ -20,6 +20,7 @@ import supabase from '../../../supabase.config.js';
 import { useUser } from 'reactfire';
 import Swal from 'sweetalert2'
 import style from './Consult.module.css';
+
 // import { NavLink } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
@@ -66,7 +67,7 @@ function Consult({ firebase }) {
         lastname: params.get('lastname'),
         birthdate: params.get('birthdate'),
         gender: params.get('gender'),
-        gender: params.get('email'),
+        email: params.get('email'),
     }
 
     useEffect(() => {
@@ -103,14 +104,24 @@ function Consult({ firebase }) {
             );
     }
 
+<<<<<<< HEAD
     
+=======
+
+
+
+>>>>>>> 34cd686bf3ad1abb854ee06c87c4c0b786405525
     const handleSubmit = async () => {
         let medicines = JSON.parse(localStorage.getItem('medicines'));
         console.log(typeof(medic.dni))
         if (!errors.reason &&
             !errors.diagnosis &&
             !errors.observations) {
+<<<<<<< HEAD
                 const { data, error } = await supabase
+=======
+            const { data: newConsult, error } = await supabase
+>>>>>>> 34cd686bf3ad1abb854ee06c87c4c0b786405525
                 .from('medical_consultations')
                 .insert([
                     {
@@ -121,6 +132,7 @@ function Consult({ firebase }) {
                         observations: input.observations,
                     },
                 ]);
+<<<<<<< HEAD
                 Swal.fire(
                     'Hecho!',
                     'La consulta fué subida correctamente',
@@ -148,6 +160,25 @@ function Consult({ firebase }) {
                 title: 'Error',
                 text: 'Revisa los campos!',
             })
+=======
+            if (newConsult) {
+                if (medicines.length) {
+                    sendEmailConsult({
+                        dr: medic,
+                        patient: patientData,
+                        date, consult: input,
+                        prescriptions: medicines.join(' ')
+                    })
+                } else {
+                    sendEmailConsult({
+                        dr: medic,
+                        patient: patientData,
+                        date, consult: input,
+                        prescriptions: 'nada'
+                    })
+                }
+            }
+>>>>>>> 34cd686bf3ad1abb854ee06c87c4c0b786405525
         }
     }
 
@@ -215,6 +246,16 @@ function Consult({ firebase }) {
         // medicines
     }
 
+<<<<<<< HEAD
+=======
+    useEffect(() => {
+        if (medicines) {
+            console.log(medicines);
+            console.log('recetados:', medicines.join(', '))
+        }
+    }, [medicines])
+
+>>>>>>> 34cd686bf3ad1abb854ee06c87c4c0b786405525
     return (
         <Card className={classes.card}>
             <List>
@@ -346,9 +387,9 @@ function Consult({ firebase }) {
                 <Divider component="li" />
                 <div className={style.buttons}>
                     <div className={style.btn}>
-                        <Button 
-                            variant="outlined" 
-                            size="large" 
+                        <Button
+                            variant="outlined"
+                            size="large"
                             color="primary"
                             onClick={handleBtnNewPrescription}
                         >
@@ -356,9 +397,9 @@ function Consult({ firebase }) {
                         </Button>
                     </div>
                     <div className={style.btn}>
-                        <Button 
-                            variant="outlined" 
-                            size="large" 
+                        <Button
+                            variant="outlined"
+                            size="large"
                             color="primary"
                             onClick={handleBtnNewOrder}
                         >
@@ -366,12 +407,16 @@ function Consult({ firebase }) {
                         </Button>
                     </div>
                     <div className={style.btn}>
+<<<<<<< HEAD
                         <Button 
                             variant="contained" 
                             size="large" 
                             color="primary"
                             onClick={handleSubmit}
                         >
+=======
+                        <Button variant="contained" size="large" color="primary" onClick={handleSubmit}>
+>>>>>>> 34cd686bf3ad1abb854ee06c87c4c0b786405525
                             Subir consulta
                         </Button>
                     </div>
