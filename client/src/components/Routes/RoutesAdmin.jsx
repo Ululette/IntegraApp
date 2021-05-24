@@ -9,7 +9,7 @@ import AdminMedicTabs from '../Admin/MedicsTable/AdminTabs.jsx';
 import AdminAffiliate from '../Admin/AdminAffiliate/AdminAffiliate.jsx';
 import FormSpecialities from '../Admin/Speciality/FormSpecialities.jsx';
 import AdminRegistration from '../Admin/AdminRegistration/AdminRegistration.jsx';
-
+import AdminOrders from '../Admin/AdminOrders/AdminOrders.jsx'
 function RoutesAdmin() {
     const firebase = useFirebaseApp();
     return (
@@ -45,6 +45,7 @@ function RoutesAdmin() {
                 path='/:id/admin/newadmin'
                 render={() => <AdminRegistration firebase={firebase} />}
             />
+               <Route exact path='/:id/admin/orders' component={AdminOrders} />
         </>
     );
 }
