@@ -10,8 +10,8 @@ import Chatbot from '../Chatbot/Chatbot.jsx';
 import AccessibleForwardIcon from '@material-ui/icons/AccessibleForward';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
-import Fade from '@material-ui/core/Fade';
 import { makeStyles } from '@material-ui/core/styles';
+import Fab from '@material-ui/core/Fab';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
             margin: theme.spacing(1),
         },
         position: 'fixed',
-        backgroundColor: '#213e3b',
+        backgroundColor: '#3587f2',
         borderRadius: '50%',
         width: '75px',
         height: '75px',
@@ -269,7 +269,7 @@ export default function LandingPage() {
                 <ContactForm data-aos='zoom-in' />
             </section>
 
-            <div className={classes.root} data-aos='zoom-out'>
+            <Fab className={classes.root}>
                 <Button
                     aria-controls='fade-menu'
                     aria-haspopup='true'
@@ -284,12 +284,11 @@ export default function LandingPage() {
                     keepMounted
                     open={open}
                     onClose={handleClose}
-                    TransitionComponent={Fade}
                     className={classes.chat}
                 >
                     <Chatbot />
                 </Menu>
-            </div>
+            </Fab>
         </div>
     );
 }
