@@ -45,6 +45,8 @@ export default function AcccessibleTable({ plans }) {
         // }
     }, [compBenef]);
 
+    console.log(compBenef);
+
     return (
         <TableContainer style={{ background: '#f1f1f1' }} component={Paper}>
             {planNames.slice(1).length && (
@@ -85,7 +87,7 @@ export default function AcccessibleTable({ plans }) {
                                                 edge='start'
                                                 checked={
                                                     parseInt(
-                                                        benef.description.slice(
+                                                        benef.title.slice(
                                                             11,
                                                             14
                                                         )
