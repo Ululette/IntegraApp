@@ -48,6 +48,7 @@ const useStyles = makeStyles({
 function ContactForm() {
     const classes = useStyles();
     const MySwal = withReactContent(Swal);
+
     const [input, setInput] = useState({
         name: '',
         age: '',
@@ -239,11 +240,9 @@ function ContactForm() {
                         <div></div>
                         <div>
                             <p className={Styles.successRequestSubTitle}>
-                                {' '}
                                 Un asesor se comunicara con vos
                             </p>
                             <p className={Styles.successRequestSubTitle}>
-                                {' '}
                                 para charlar sobre tu próximo plan.
                             </p>
                         </div>
@@ -256,7 +255,6 @@ function ContactForm() {
                         >
                             Volver
                         </Button>
-                        {/* {renderRedirect()} */}
                     </div>
                 </div>
             );
@@ -384,15 +382,6 @@ function ContactForm() {
                             >
                                 Consultar
                             </Button>
-                            {/* <Button
-                                variant='contained'
-                                color='secondary'
-                                onClick={handleBack}
-                                style={{ borderRadius: 100, margin: 10 }}
-                            >
-                                Volver
-                            </Button> */}
-                            {/* {renderRedirect()} */}
                         </div>
                         <Snackbar
                             open={errorRequest && errors.onProcess}
@@ -403,12 +392,6 @@ function ContactForm() {
                                 Éste correo ya tiene una solicitud en proceso!
                             </Alert>
                         </Snackbar>
-                        {/* <div
-                            className='g-recaptcha'
-                            data-sitekey={_reCAPTCHA_site_key_}
-                            data-size='explicit'
-                            data-callback='onClick'
-                        ></div> */}
                     </div>
                 </Card>
             </ThemeProvider>

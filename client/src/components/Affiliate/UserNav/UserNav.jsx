@@ -2,6 +2,7 @@ import React from 'react';
 import { useUser } from 'reactfire';
 import { NavLink } from 'react-router-dom';
 import 'firebase/auth';
+import PlanPayments from '../Payment/PlanPayments';
 import supabase from '../../../supabase.config.js';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -259,10 +260,16 @@ function AdminNav({ firebase, window: windowMui }) {
                         <ListItemText primary='Cartilla medica' />
                     </ListItem>
                 </NavLink>
-                <ListItem button>
-                    <PaymentIcon />
-                    <ListItemText primary='Pago online' />
-                </ListItem>
+                <NavLink
+                    to={`/${userData.dni}/affiliate/payment`}
+                    className={styles.link}
+                    activeClassName={styles.activeLink}
+                >
+                    <ListItem button>
+                        <PaymentIcon />
+                        <ListItemText primary='Pago online' />
+                    </ListItem>
+                </NavLink>
             </List>
         </div>
     );
@@ -453,6 +460,9 @@ function AdminNav({ firebase, window: windowMui }) {
                 ) : window.location.pathname ===
                   `/${userData.dni}/affiliate/doctor` ? (
                     <MedicalDirectory />
+                ) : window.location.pathname ===
+                  `/${userData.dni}/affiliate/payment` ? (
+                    <PlanPayments />
                 ) : (
                     <NotFound />
                 )}

@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "integra-platform"
+    "default": "integra-platform",
+    "dev": "integra-platform"
   }
 }

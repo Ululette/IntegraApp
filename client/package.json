@@ -15,7 +15,6 @@
     "aos": "^2.3.4",
     "axios": "^0.21.1",
     "dom": "^0.0.3",
-    "dotenv": "^8.2.0",
     "emailjs-com": "^2.6.4",
     "enzyme": "^3.11.0",
     "firebase": "^8.5.0",
@@ -42,7 +41,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build:dev": "env-cmd -f .env npm run build && firebase deploy -P dev"
   },
   "eslintConfig": {
     "extends": [
@@ -61,5 +61,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "env-cmd": "^10.1.0"
   }
 }

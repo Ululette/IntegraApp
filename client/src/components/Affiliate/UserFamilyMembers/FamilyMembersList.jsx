@@ -13,7 +13,6 @@ import { Button, CircularProgress } from '@material-ui/core';
 
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { useFirestoreDocDataOnce } from 'reactfire';
 
 const useStyles = makeStyles({
     table: {
