@@ -14,7 +14,7 @@ function RoutesMedic() {
             />
             <Route
                 exact
-                path='/:id/medic/patients/:dnipatient/newconsultation'
+                path='/:id/patients/:dnipatient/newconsultation'
                 render={() => <Consult firebase={firebase} />}
             />
         </>
