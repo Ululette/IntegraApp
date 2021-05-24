@@ -13,12 +13,14 @@ import {
 import styles from './NewPrescriptionDialog.module.css';
 
 export default function NewPrescriptionDialog({ info }) {
-  let { date, patient, diagnosis, doctor, medicines } = info;
+  let { date, patient, diagnosis, doctor} = info;
+  let medicines = JSON.parse(localStorage.getItem('medicines'))
 
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
+    console.log('NewPrescriptionDialog: '+medicines)
   };
 
   const handleClose = () => {

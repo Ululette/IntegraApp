@@ -18,6 +18,7 @@ import NewOrderDialog from './NewOrderDialog/NewOrderDialog.jsx';
 import Medicines from './Medicines/Medicines.jsx';
 import supabase from '../../../supabase.config.js';
 import { useUser } from 'reactfire';
+import Swal from 'sweetalert2'
 import style from './Consult.module.css';
 // import { NavLink } from 'react-router-dom';
 
@@ -102,11 +103,14 @@ function Consult({ firebase }) {
             );
     }
 
+    
     const handleSubmit = async () => {
+        let medicines = JSON.parse(localStorage.getItem('medicines'));
+        console.log(typeof(medic.dni))
         if (!errors.reason &&
             !errors.diagnosis &&
             !errors.observations) {
-            const { data, error } = await supabase
+                const { data, error } = await supabase
                 .from('medical_consultations')
                 .insert([
                     {
@@ -114,13 +118,39 @@ function Consult({ firebase }) {
                         medic_dni: medic.dni,
                         reason: input.reason,
                         diagnosis: input.diagnosis,
-                        date: date,
                         observations: input.observations,
                     },
                 ]);
-            sendEmailConsult({dr:medic, patient: patientData, date:today, consult: input})
+                Swal.fire(
+                    'Hecho!',
+                    'La consulta fué subida correctamente',
+                    'success'
+                )
+                let consultationId = data.id;
+                if(medicines){
+                    const { data, error } = await supabase
+                    .from('prescriptions')
+                    .insert([
+                        {
+                            medical_consultation_id: consultationId,
+                            drug_name: medicines[0],
+                            date: date,
+                            drug_name_2: medicines.length>1?medicines[1]:'',
+                            partner_dni: patient.dni
+                        },
+                    ]);
+                }
+
+            // sendEmailConsult({dr:medic, patient: patientData, date:today, consult: input})
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Revisa los campos!',
+            })
         }
     }
+
 
     const handleBtnNewPrescription = () => {
         setRenderNewPrescription(true);
@@ -175,21 +205,15 @@ function Consult({ firebase }) {
     //-------------------------------------------------------------------
     // OJO!!!! Cuando guarde la consulta hacer un dispatch al store para limpiar las medicinas:   
     //  dispatch(setMedicines([]));
-    let medicines = JSON.parse(localStorage.getItem('medicines'));
+    // let medicines = JSON.parse(localStorage.getItem('medicines'));
 
     let infObj = {
         date,
         doctor: { name: medic.name, lastname: medic.lastname, medical_specialities: medic.medical_specialities, medic_license: medic.medic_license },
         patient: { name: patient.name, lastname: patient.lastname, plan: patient.plan, affiliate_number: patient.dni },
         diagnosis: input.diagnosis,
-        medicines
+        // medicines
     }
-
-    useEffect(() => {
-        if (medicines) {
-            console.log(medicines)
-        }
-    }, [medicines])
 
     return (
         <Card className={classes.card}>
@@ -342,7 +366,12 @@ function Consult({ firebase }) {
                         </Button>
                     </div>
                     <div className={style.btn}>
-                        <Button variant="contained" size="large" color="primary">
+                        <Button 
+                            variant="contained" 
+                            size="large" 
+                            color="primary"
+                            onClick={handleSubmit}
+                        >
                             Subir consulta
                         </Button>
                     </div>
