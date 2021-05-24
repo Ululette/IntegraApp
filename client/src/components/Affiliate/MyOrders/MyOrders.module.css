@@ -1,0 +1,17 @@
+.container {
+    width: 100%;
+    height: 100%;
+}
+
+.container h1 {
+    text-align: center;
+    margin: 3rem 0;
+}
+
+.datagrid {
+    width: 75%;
+    height: 400px;
+    margin: 0 auto;
+    text-transform: capitalize;
+    background-color: white;
+}
