@@ -191,8 +191,8 @@ function Login({ firebase }) {
         const { value: email } = await Swal.fire({
             title: 'Integra: Password Reset.',
             input: 'email',
-            inputLabel: 'Your email address',
-            inputPlaceholder: 'Enter your email address',
+            inputLabel: 'Ingresa tu direccion de email',
+            inputPlaceholder: 'Ingresa tu direccion de email',
             showCancelButton: true,
         });
         //buscar en la base el mail
@@ -212,7 +212,7 @@ function Login({ firebase }) {
                 // An error happened.
                 Swal.fire({
                     title: `Error!`,
-                    text: `There is no user record corresponding to this email: ${email}.`,
+                    text: `No existe usuario con este email: ${email}.`,
                     icon: 'error',
                     confirmButtonText: 'OK',
                 });

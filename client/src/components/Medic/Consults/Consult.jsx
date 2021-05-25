@@ -11,7 +11,7 @@ import {
     TextField,
     Typography,
 } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+// import Autocomplete from '@material-ui/lab/Autocomplete';
 import 'firebase/auth';
 import { makeStyles } from '@material-ui/core/styles';
 import NewPrescriptionDialog from './NewPrescriptionDialog/NewPrescriptionDialog.jsx';
@@ -19,7 +19,6 @@ import NewOrderDialog from './NewOrderDialog/NewOrderDialog.jsx';
 import Medicines from './Medicines/Medicines.jsx';
 import NewOrder from './NewOrderDialog/NewOrder';
 import supabase from '../../../supabase.config.js';
-import { useUser } from 'reactfire';
 import Swal from 'sweetalert2';
 import style from './Consult.module.css';
 
@@ -41,14 +40,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Consult({ firebase }) {
+function Consult() {
     const [patient, setPatient] = useState({});
+    //eslint-disable-next-line
     const [medic, setMedic] = useState(
         JSON.parse(localStorage.getItem('medicdata'))
     );
     const [renderNewOrder, setRenderNewOrder] = useState(false);
     const [renderNewPrescription, setRenderNewPrescription] = useState(false);
-    const [diagnoses, setDiagnoses] = useState([]);
+    // const [diagnoses, setDiagnoses] = useState([]);
 
     const classes = useStyles();
 
@@ -78,10 +78,12 @@ function Consult({ firebase }) {
         setPatient(patientData);
         console.log(patient);
         console.log(medic);
+        //eslint-disable-next-line
     }, []);
 
     useEffect(() => {
         setPatient(patientData);
+        //eslint-disable-next-line
     }, []);
 
     const getAge = () =>
