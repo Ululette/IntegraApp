@@ -174,6 +174,7 @@ const DatosTitular = () => {
                 ),
             }));
         }
+        //eslint-disable-next-line
     }, []);
 
     function saveInLocalStorage() {
@@ -267,11 +268,12 @@ const DatosTitular = () => {
     useEffect(() => {
         dispatch(getStates());
         dispatch(getLocalities());
+        //eslint-disable-next-line
     }, []);
 
     useEffect(() => {
-        //console.log('useEffect '+input.state)
         dispatch(getLocalities(selectInputs.state));
+        //eslint-disable-next-line
     }, [selectInputs.state]);
 
     const states = allStates.map((s) => {
@@ -279,6 +281,7 @@ const DatosTitular = () => {
     });
     //1-buenos aires
     const localities = allLocalities
+        //eslint-disable-next-line
         .filter((l) => l.state_id == selectInputs.state.split('-')[0])
         .map((l) => {
             return <option value={`${l.id}-${l.name}`}>{l.name}</option>;

@@ -14,8 +14,11 @@ export default function NewOrderDialog({ info }) {
     let { date, patient, diagnosis, doctor } = info;
     let orders = JSON.parse(localStorage.getItem('orders'));
 
+    //eslint-disable-next-line
     let [newOrder, setNewOrder] = useState('');
+    //eslint-disable-next-line
     let [order, setOrder] = useState([]);
+    //eslint-disable-next-line
     let [ok, setOk] = useState(false);
 
     const [open, setOpen] = React.useState(false);

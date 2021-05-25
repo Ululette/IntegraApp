@@ -383,6 +383,7 @@ const DatosSalud = () => {
             });
             setDateInputs({ ...dateInputs, dateSurgery: 'hide' });
         }
+        //eslint-disable-next-line
     }, [radioInputs.surgeryRad]);
 
     useEffect(() => {
@@ -390,6 +391,7 @@ const DatosSalud = () => {
             setTextInputs({ ...textInputs, typeProsthesis: 'hide' });
             setDateInputs({ ...dateInputs, prosthesisDate: 'hide' });
         }
+        //eslint-disable-next-line
     }, [radioInputs.prosthesisRad]);
 
     useEffect(() => {
@@ -402,6 +404,7 @@ const DatosSalud = () => {
             setInputsTextMix({ ...textInputsMix, psychMeds: 'hide' });
             setDateInputs({ ...dateInputs, psychhospitalizationDate: 'hide' });
         }
+        //eslint-disable-next-line
     }, [radioInputs.psychActuallyRad]);
 
     useEffect(() => {
@@ -409,6 +412,7 @@ const DatosSalud = () => {
             setTextInputs({ ...textInputs, hospitalizationReason: 'hide' });
             setDateInputs({ ...dateInputs, hospitalizationDate: 'hide' });
         }
+        //eslint-disable-next-line
     }, [radioInputs.hospitalizationRad]);
 
     useEffect(() => {
@@ -421,12 +425,14 @@ const DatosSalud = () => {
             });
             setInputsTextNum({ ...textInputsNum, otherTNumber: 'hide' });
         }
+        //eslint-disable-next-line
     }, [radioInputs.otherTreatmentsRad]);
 
     useEffect(() => {
         if (radioInputs.hereditaryDiseasesRad === 'No') {
             setTextInputs({ ...textInputs, hereditaryDiseases: 'hide' });
         }
+        //eslint-disable-next-line
     }, [radioInputs.hereditaryDiseasesRad]);
 
     useEffect(() => {
@@ -434,12 +440,14 @@ const DatosSalud = () => {
             setTextInputs({ ...textInputs, bloodTransReason: 'hide' });
             setDateInputs({ ...dateInputs, bloodTransDate: 'hide' });
         }
+        //eslint-disable-next-line
     }, [radioInputs.bloodTransRad]);
 
     useEffect(() => {
         if (radioInputs.studiesSixMonthsRad === 'No') {
             setTextInputs({ ...textInputs, studiesSixMonthsD: 'hide' });
         }
+        //eslint-disable-next-line
     }, [radioInputs.studiesSixMonthsRad]);
 
     useEffect(() => {
@@ -447,36 +455,42 @@ const DatosSalud = () => {
             setTextInputs({ ...textInputs, VHDetail: 'hide' });
             setInputsTextMix({ ...textInputsMix, VHDiagnostic: 'hide' });
         }
+        //eslint-disable-next-line
     }, [radioInputs.visionHearingRad]);
 
     useEffect(() => {
         if (radioInputs.adictionsRad === 'No') {
             setTextInputs({ ...textInputs, adictionsDetail: 'hide' });
         }
+        //eslint-disable-next-line
     }, [radioInputs.adictionsRad]);
 
     useEffect(() => {
         if (radioInputs.treatmentAdictionsRad === 'No') {
             setDateInputs({ ...dateInputs, treatmentDate: 'hide' });
         }
+        //eslint-disable-next-line
     }, [radioInputs.treatmentAdictionsRad]);
 
     useEffect(() => {
         if (radioInputs.adictionsRad === 'No') {
             setTextInputs({ ...textInputs, adictionsDetail: 'hide' });
         }
+        //eslint-disable-next-line
     }, [radioInputs.adictionsRad]);
 
     useEffect(() => {
         if (radioInputs.eatingDisordersRad === 'No') {
             setTextInputs({ ...textInputs, eatingDisordersD: 'hide' });
         }
+        //eslint-disable-next-line
     }, [radioInputs.eatingDisordersRad]);
 
     useEffect(() => {
         if (radioInputs.otherPatRad === 'No') {
             setTextInputs({ ...textInputs, otherPatD: 'hide' });
         }
+        //eslint-disable-next-line
     }, [radioInputs.otherPatRad]);
 
     return (
