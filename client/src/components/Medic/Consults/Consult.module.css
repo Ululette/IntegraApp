@@ -1,3 +1,21 @@
+/* card: {
+    maxWidth: 90%;
+  }
+
+  textField: {
+    width: 90%;
+  }
+
+dividerFullWidth: {
+    margin: `5px 0 0 ${theme.spacing(9)}px`;
+  }
+
+
+  largeAvatar: {
+    width: theme.spacing(7),
+    height: theme.spacing(7),
+  }, */
+
 .medicData{
     display: flex;
     flex-direction: row;
@@ -56,4 +74,95 @@
 }
 .btn{
     margin: 2%;
+}
+
+.medicines{
+    width: 100%;
+    margin: 25px 0 25px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+
+}
+
+.orders{
+    width: 100%;
+    margin: 25px 0 25px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+
+}
+
+.mydiv{
+    width: 79.2%;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    color:  rgb(104, 101, 101);;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    padding: 12px;
+    /* background-color: aquamarine; */
+    box-sizing: border-box ;
+    border: 1px solid rgb(202, 202, 202);
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+.mydiv:hover{
+    border: 1px solid black;
+}
+
+.mydivt{
+    margin-bottom: 5px;
+}
+
+.mydiv2{
+    width: 79.2%;
+    margin-top: 20px;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    color:  rgb(104, 101, 101);
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    padding: 12px;
+    /* background-color: aquamarine; */
+    box-sizing: border-box ;
+    border: 1px solid rgb(202, 202, 202);
+    border-radius: 4px;
+}
+.mydiv2:hover{
+    border: 1px solid black;
+}
+
+
+.onelinebtns{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.limed{
+    list-style-type: disc;
+}
+
+.posinput{
+    margin: 5px 0 15px 0;
+    padding: 10px;
+    border: 1px solid rgb(211, 210, 210);
+    border-radius: 3px;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-size: 15px;
+    color:  rgb(104, 101, 101);
+}
+
+.btnprint{
+    width: 80px;
+    height: 30px;
+    align-self: flex-end;
 }

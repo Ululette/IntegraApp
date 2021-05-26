@@ -1,505 +1,547 @@
 import React, { useState, useEffect } from 'react';
-// import { useLocation } from "react-router-dom";
 import emailjs from 'emailjs-com';
 import {
-    Button,
-    List,
-    ListItem,
-    Divider,
-    Card,
-    Avatar,
-    TextField,
-    Typography,
+  Button,
+  List,
+  ListItem,
+  Divider,
+  Card,
+  Avatar,
+  TextField,
+  Typography,
 } from '@material-ui/core';
-// import Autocomplete from '@material-ui/lab/Autocomplete';
+import { Autocomplete } from '@material-ui/lab';
 import 'firebase/auth';
 import { makeStyles } from '@material-ui/core/styles';
-import NewPrescriptionDialog from './NewPrescriptionDialog/NewPrescriptionDialog.jsx';
-import NewOrderDialog from './NewOrderDialog/NewOrderDialog.jsx';
 import Medicines from './Medicines/Medicines.jsx';
-import NewOrder from './NewOrderDialog/NewOrder';
+import PrintMeds from './PrintMeds/PrintMeds.jsx';
+import Orders from './Orders/Orders.jsx';
+import PrintOrders from './PrintOrders/PrintOrders.jsx';
+// import NewOrderDialog from './NewOrderDialog/NewOrderDialog.jsx';
+// import NewOrder from './NewOrderDialog/NewOrder';
 import supabase from '../../../supabase.config.js';
 import Swal from 'sweetalert2';
-import style from './Consult.module.css';
-
-// import { NavLink } from 'react-router-dom';
+import styles from './Consult.module.css';
 
 const useStyles = makeStyles((theme) => ({
-    dividerFullWidth: {
-        margin: `5px 0 0 ${theme.spacing(9)}px`,
-    },
-    card: {
-        maxWidth: '90%',
-    },
-    textField: {
-        width: '90%',
-    },
-    largeAvatar: {
-        width: theme.spacing(7),
-        height: theme.spacing(7),
-    },
+  dividerFullWidth: {
+    margin: `5px 0 0 ${theme.spacing(9)}px`,
+  },
+  card: {
+    maxWidth: '90%',
+  },
+  textField: {
+    width: '90%',
+  },
+  largeAvatar: {
+    width: theme.spacing(7),
+    height: theme.spacing(7),
+  },
 }));
 
-function Consult() {
-    const [patient, setPatient] = useState({});
-    //eslint-disable-next-line
-    const [medic, setMedic] = useState(
-        JSON.parse(localStorage.getItem('medicdata'))
-    );
-    const [renderNewOrder, setRenderNewOrder] = useState(false);
-    const [renderNewPrescription, setRenderNewPrescription] = useState(false);
-    // const [diagnoses, setDiagnoses] = useState([]);
+export default function Consult({ firebase }) {
+  let classes = useStyles();
 
-    const classes = useStyles();
+  // Inicialmente se trae los medicamentos del localstorage
+  let meds = JSON.parse(localStorage.getItem('medicines')) || [];
+  let [medicines, setMedicines] = useState(meds);
 
-    const [input, setInput] = useState({
-        reason: '',
-        diagnosis: '',
-        observations: '',
+  // Inicialmente se trae las ordenes del localstorage
+  let ords = JSON.parse(localStorage.getItem('orders')) || [];
+  let [orders, setOrders] = useState(ords);
+
+  var today = new Date();
+  let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+
+  // Se trae la info del doc del localstorage
+  let [medic, setMedic] = useState(
+    JSON.parse(localStorage.getItem('medicdata'))
+  );
+
+  // Estado local con los datos del paciente
+  let [patient, setPatient] = useState(null);
+
+  // Cuando recarga la página setea los datos del paciente
+  // que obtiene por query.
+  useEffect(() => {
+    // Se trae x query la info del paciente 
+    let search = window.location.search;
+    let params = new URLSearchParams(search);
+    setPatient({
+      dni: params.get('dni'),
+      name: params.get('name'),
+      lastname: params.get('lastname'),
+      birthdate: params.get('birthdate'),
+      gender: params.get('gender'),
+      email: params.get('email'),
     });
-    const [errors, setErrors] = useState({
-        reason: false,
-        diagnosis: false,
-        observations: false,
-    });
+  }, []);
 
-    const search = window.location.search;
-    const params = new URLSearchParams(search);
-    const patientData = {
-        dni: params.get('dni'),
-        name: params.get('name'),
-        lastname: params.get('lastname'),
-        birthdate: params.get('birthdate'),
-        gender: params.get('gender'),
-        email: params.get('email'),
-    };
+  // La información de la consulta se guarda en infObj
+  let infObj = {
+    date,
+    doctor: {
+      name: medic.name,
+      lastname: medic.lastname,
+      medical_specialities: medic.medical_specialities,
+      medic_license: medic.medic_license,
+    },
+    patient: null,
+    diagnosis: null,
+    medicines,
+    orders
+  };
 
-    useEffect(() => {
-        setPatient(patientData);
-        console.log(patient);
-        console.log(medic);
-        //eslint-disable-next-line
-    }, []);
-
-    useEffect(() => {
-        setPatient(patientData);
-        //eslint-disable-next-line
-    }, []);
-
-    const getAge = () =>
-        Math.floor(
-            (new Date() - new Date(patient.birthdate).getTime()) / 3.15576e10
-        );
-    var today = new Date();
-    const date =
-        today.getFullYear() +
-        '-' +
-        (today.getMonth() + 1) +
-        '-' +
-        today.getDate();
-
-    function sendEmailConsult(props) {
-        emailjs
-            .send(
-                'service_wcpzjw7',
-                'template_qkdom45',
-                props,
-                'user_mgft1j53RDkaGc1EWyKNK'
-            )
-            .then(
-                (result) => {
-                    console.log('resultado:', result.text);
-                },
-                (error) => {
-                    console.log('error:', error.text);
-                }
-            );
+  // Una vez seteados los datos del paciente los guarda 
+  // en la info a compartir.
+  useEffect(() => {
+    if (patient) {
+      infObj.patient = {
+        name: patient.name,
+        lastname: patient.lastname,
+        plan: patient.plan,
+        affiliate_number: patient.dni,
+      };
+      // console.log(patient);
     }
+  }, [patient]);
 
-    const handleSubmit = async () => {
-        let medicines = JSON.parse(localStorage.getItem('medicines'));
-        let orders = JSON.parse(localStorage.getItem('orders'));
-        console.log(typeof medic.dni);
-        if (!errors.reason && !errors.diagnosis && !errors.observations) {
-            const { data: newConsult } = await supabase
-                .from('medical_consultations')
-                .insert([
-                    {
-                        partner_dni: patient.dni,
-                        medic_dni: medic.dni,
-                        reason: input.reason,
-                        diagnosis: input.diagnosis,
-                        observations: input.observations,
-                    },
-                ]);
+  const getAge = () =>
+    Math.floor(
+      (new Date() - new Date(patient.birthdate).getTime()) / 3.15576e10
+    );
 
-            let consultationId = newConsult[0].id;
-            if (newConsult) {
-                if (medicines.length) {
-                    sendEmailConsult({
-                        dr: medic,
-                        patient: patientData,
-                        date,
-                        consult: input,
-                        prescriptions: medicines.join(' '),
-                    });
-                } else {
-                    sendEmailConsult({
-                        dr: medic,
-                        patient: patientData,
-                        date,
-                        consult: input,
-                        prescriptions: 'nada',
-                    });
-                }
-            }
-            if (medicines) {
-                await supabase.from('prescriptions').insert([
-                    {
-                        medical_consultation_id: consultationId,
-                        drug_name: medicines[0],
-                        date: date,
-                        drug_name_2: medicines.length > 1 ? medicines[1] : '',
-                        partner_dni: patient.dni,
-                    },
-                ]);
-            }
-            if (orders) {
-                await supabase.from('orders').insert([
-                    {
-                        medical_consultation_id: consultationId,
-                        study_name: orders[0],
-                        date: date,
-                        partner_dni: patient.dni,
-                        status: 'en espera de autorizacion',
-                        medic_dni: medic.dni,
-                    },
-                ]);
-            }
-            Swal.fire({
-                title: 'Hecho!',
-                text: 'La consulta fué subida correctamente',
-                icon: 'success',
-                showConfirmButton: true,
-                reverseButtons: true,
-            }).then((el) => {
-                if (el.isConfirmed) {
-                    localStorage.removeItem('medicines');
-                    localStorage.removeItem('orders');
-                    let new_window = window.open(window.location, '_self');
-                    new_window.close();
-                }
-            });
+  function sendEmailConsult(props) {
+    emailjs
+      .send(
+        'service_wcpzjw7',
+        'template_qkdom45',
+        props,
+        'user_mgft1j53RDkaGc1EWyKNK'
+      )
+      .then(
+        (result) => {
+          console.log('resultado:', result.text);
+        },
+        (error) => {
+          console.log('error:', error.text);
+        }
+      );
+  }
 
-            // sendEmailConsult({dr:medic, patient: patientData, date:today, consult: input})
+  // let [diagnoses, setDiagnoses] = useState([]);
+
+  let [input, setInput] = useState({
+    reason: '',
+    diagnosis: '',
+    observations: '',
+    posology: ''
+  });
+
+  let [errors, setErrors] = useState({
+    reason: false,
+    diagnosis: false,
+    observations: false,
+  });
+
+  function validate(inputName, value) {
+    const pattern = /^[A-Za-z0-9\s]+$/g;
+    let errors = {};
+
+    switch (inputName) {
+      case 'reason': {
+        if (!pattern.test(value) && value.length > 0) {
+          errors.reason = true;
         } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Revisa los campos!',
-            });
+          errors.reason = false;
         }
-    };
-
-    const handleBtnNewPrescription = () => {
-        setRenderNewPrescription(true);
-    };
-    const handleBtnNewOrder = () => {
-        setRenderNewOrder(true);
-    };
-
-    const handleInputChange = (e) => {
-        setInput({
-            ...input,
-            [e.target.name]: e.target.value,
-        });
-        setErrors(validate(e.target.name, e.target.value));
-    };
-
-    function validate(inputName, value) {
-        const pattern = /^[A-Za-z0-9\s]+$/g;
-        let errors = {};
-
-        switch (inputName) {
-            case 'reason': {
-                if (!pattern.test(value) && value.length > 0) {
-                    errors.reason = true;
-                } else {
-                    errors.reason = false;
-                }
-                break;
-            }
-            case 'diagnosis': {
-                if (!pattern.test(value) && value.length > 0) {
-                    errors.diagnosis = true;
-                } else {
-                    errors.diagnosis = false;
-                }
-                break;
-            }
-            case 'observations': {
-                if (!pattern.test(value)) {
-                    errors.observations = true;
-                } else {
-                    errors.observations = false;
-                }
-                break;
-            }
-            default:
-                return null;
+        break;
+      }
+      case 'diagnosis': {
+        if (!pattern.test(value) && value.length > 0) {
+          errors.diagnosis = true;
+        } else {
+          errors.diagnosis = false;
         }
-        return errors;
+        break;
+      }
+      case 'observations': {
+        if (!pattern.test(value)) {
+          errors.observations = true;
+        } else {
+          errors.observations = false;
+        }
+        break;
+      }
+      default:
+        return null;
     }
+    return errors;
+  }
 
-    //-------------------------------------------------------------------
-    // OJO!!!! Cuando guarde la consulta hacer un dispatch al store para limpiar las medicinas:
-    //  dispatch(setMedicines([]));
-    // let medicines = JSON.parse(localStorage.getItem('medicines'));
+  const handleInputChange = (e) => {
+    setErrors(validate(e.target.name, e.target.value));
+    setInput({
+      ...input,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-    let infObj = {
-        date,
-        doctor: {
-            name: medic.name,
-            lastname: medic.lastname,
-            medical_specialities: medic.medical_specialities,
-            medic_license: medic.medic_license,
-        },
-        patient: {
-            name: patient.name,
-            lastname: patient.lastname,
-            plan: patient.plan,
-            affiliate_number: patient.dni,
-        },
-        diagnosis: input.diagnosis,
-        // medicines
-    };
+  const handleSubmit = async () => {
+    let medicines = JSON.parse(localStorage.getItem('medicines'));
+    let orders = JSON.parse(localStorage.getItem('orders'));
+    console.log(typeof medic.dni);
+    if (!errors.reason && !errors.diagnosis && !errors.observations) {
+      const { data: newConsult } = await supabase
+        .from('medical_consultations')
+        .insert([
+          {
+            partner_dni: patient.dni,
+            medic_dni: medic.dni,
+            reason: input.reason,
+            diagnosis: input.diagnosis,
+            observations: input.observations,
+          },
+        ]);
 
-    // useEffect(() => {
-    //     if (medicines) {
-    //         console.log(medicines);
-    //         console.log('recetados:', medicines.join(', '))
-    //     }
-    // }, [medicines])
+      let consultationId = newConsult[0].id;
+      if (newConsult) {
+        if (medicines.length) {
+          sendEmailConsult({
+            dr: medic,
+            patient: patient,
+            date,
+            consult: input,
+            prescriptions: medicines.join(' '),
+          });
+        } else {
+          sendEmailConsult({
+            dr: medic,
+            patient: patient,
+            date,
+            consult: input,
+            prescriptions: 'nada',
+          });
+        }
+      }
+      if (medicines.length) {
+        await supabase.from('prescriptions').insert([
+          {
+            medical_consultation_id: consultationId,
+            drug_name: medicines[0],
+            date: date,
+            drug_name_2: medicines.length > 1 ? medicines[1] : '',
+            partner_dni: patient.dni,
+          },
+        ]);
+      }
+      if (orders) {
+        await supabase.from('orders').insert([
+          {
+            medical_consultation_id: consultationId,
+            study_name: orders[0],
+            date: date,
+            partner_dni: patient.dni,
+            status: 'en espera de autorizacion',
+            medic_dni: medic.dni,
+          },
+        ]);
+      }
+      Swal.fire({
+        title: 'Hecho!',
+        text: 'La consulta fué subida correctamente',
+        icon: 'success',
+        showConfirmButton: true,
+        reverseButtons: true,
+      }).then((el) => {
+        if (el.isConfirmed) {
+          localStorage.removeItem('medicines');
+          localStorage.removeItem('orders');
+          let new_window = window.open(window.location, '_self');
+          new_window.close();
+        }
+      });
 
-    console.log(input);
-    return (
-        <Card className={classes.card}>
-            <List>
-                <div className={style.medicData}>
-                    <div className={style.medicFirstColumn}>
-                        <div>
-                            <ListItem>
-                                <Avatar
-                                    alt={medic.name}
-                                    src={medic.profilePic}
-                                    className={classes.largeAvatar}
-                                />
-                            </ListItem>
-                        </div>
-                        <div>
-                            <ListItem>
-                                <Typography
-                                    gutterBottom
-                                    variant='h5'
-                                    component='h2'
-                                >
-                                    {medic.name} {medic.lastname}
-                                </Typography>
-                            </ListItem>
-                        </div>
-                    </div>
-                    <div className={style.medicSecondColumn}>
-                        <div>
-                            <ListItem>
-                                <Typography
-                                    gutterBottom
-                                    variant='subtitle1'
-                                    component='h2'
-                                >
-                                    {medic.medic_license}
-                                </Typography>
-                            </ListItem>
-                        </div>
-                        <div>
-                            <ListItem>
-                                <Typography
-                                    gutterBottom
-                                    variant='subtitle1'
-                                    component='h2'
-                                >
-                                    {medic.medical_specialities[0].name}
-                                </Typography>
-                            </ListItem>
-                        </div>
-                    </div>
-                </div>
-                <Divider component='li' />
-                <div className={style.patientData}>
-                    <div className={style.patientFirstColumn}>
-                        <div>
-                            <ListItem>
-                                <Typography
-                                    gutterBottom
-                                    variant='h6'
-                                    component='h2'
-                                >
-                                    Paciente:
-                                </Typography>
-                            </ListItem>
-                        </div>
-                        <div>
-                            <ListItem>
-                                <Typography
-                                    gutterBottom
-                                    variant='h5'
-                                    component='h2'
-                                >
-                                    {patient.name} {patient.lastname}
-                                </Typography>
-                            </ListItem>
-                        </div>
-                    </div>
-                    <div className={style.patientSecondColumn}>
-                        <div>
-                            <ListItem>
-                                <Typography
-                                    gutterBottom
-                                    variant='subtitle1'
-                                    component='h2'
-                                >
-                                    DNI: {patient.dni}
-                                </Typography>
-                            </ListItem>
-                        </div>
-                        <div>
-                            <ListItem>
-                                <Typography
-                                    gutterBottom
-                                    variant='subtitle1'
-                                    component='h2'
-                                >
-                                    Edad: {getAge()}
-                                </Typography>
-                            </ListItem>
-                        </div>
-                        <div>
-                            <ListItem>
-                                <Typography
-                                    gutterBottom
-                                    variant='subtitle1'
-                                    component='h2'
-                                >
-                                    Sexo: {patient.gender}
-                                </Typography>
-                            </ListItem>
-                        </div>
-                    </div>
-                </div>
-                <Divider component='li' />
-                <div className={style.form}>
-                    <div className={style.input}>
-                        <TextField
-                            id='reason-input'
-                            name='reason'
-                            label='Razón de consulta'
-                            variant='outlined'
-                            multiline
-                            value={input.reason}
-                            rows={6}
-                            className={classes.textField}
-                            onChange={handleInputChange}
-                            // {...(errors.reason && {
-                            //     error: true,
-                            //     helperText: 'Solo se permiten letras y numeros',
-                            // })}
-                        />
-                    </div>
-                    <div className={style.input}>
-                        <TextField
-                            id='diagnosis-input'
-                            name='diagnosis'
-                            className={classes.textField}
-                            label='Diagnóstico'
-                            variant='outlined'
-                            onChange={handleInputChange}
+      // sendEmailConsult({dr:medic, patient: patientData, date:today, consult: input})
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Revisa los campos!',
+      });
+    }
+  };
 
-                            // {...(errors.diagnosis && {
-                            //     error: true,
-                            //     helperText: 'Solo se permiten letras y numeros',
-                            // })}
-                        />
-                    </div>
-                    <div className={style.input}>
-                        <TextField
-                            id='ovservations-input'
-                            name='observations'
-                            label='Observaciones'
-                            variant='outlined'
-                            value={input.observations}
-                            multiline
-                            rows={6}
-                            className={classes.textField}
-                            onChange={handleInputChange}
-                            // {...(errors.observations && {
-                            //     error: true,
-                            //     helperText: 'Solo se permiten letras y numeros',
-                            // })}
-                        />
-                    </div>
-                </div>
-                <Divider component='li' />
-                <div className={style.buttons}>
-                    <div className={style.btn}>
-                        <Button
-                            variant='outlined'
-                            size='large'
-                            color='primary'
-                            onClick={handleBtnNewPrescription}
-                        >
-                            Nueva receta
+  // Al cambiar una medicina guarda 
+  // en la info a compartir a Medicines.jsx.
+  useEffect(() => {
+    if (medicines.length) {
+      infObj.medicines = medicines;
+      // console.log(infObj.medicines);
+    }
+  }, [medicines]);
+
+  // Función que obtiene las modificaciones de los medicamentos
+  // traidas del componente Medicines
+  function getterMed(arr) {
+    setMedicines(arr);
+    return;
+  }
+
+  // Una vez seteados los cambios de medicamentos los guarda 
+  // en la info a compartir.
+  useEffect(() => {
+    if (medicines.length) {
+      infObj.medicines = medicines;
+      // console.log(infObj.medicines);
+    }
+  }, [medicines]);
+
+  // Función que obtiene las modificaciones de las órdenes
+  // traidas del componente Medicines
+  function getterOrder(arr) {
+    setOrders(arr);
+    return;
+  }
+
+  // Una vez seteados los cambios de medicamentos los guarda 
+  // en la info a compartir.
+  useEffect(() => {
+    if (orders.length) {
+      infObj.orders = orders;
+      // console.log(infObj.orders);
+    }
+  }, [orders]);
+
+  return (
+    <Card className={classes.card}>
+      <List>
+        {medic && <div className={styles.medicData}>
+          <div className={styles.medicFirstColumn}>
+            <div>
+              <ListItem>
+                <Avatar
+                  alt={medic.name}
+                  src={medic.profilePic}
+                  className={classes.largeAvatar}
+                />
+              </ListItem>
+            </div>
+            <div>
+              <ListItem>
+                <Typography
+                  gutterBottom
+                  variant='h5'
+                  component='h2'
+                >
+                  {medic.name} {medic.lastname}
+                </Typography>
+              </ListItem>
+            </div>
+          </div>
+          <div className={styles.medicSecondColumn}>
+            <div>
+              <ListItem>
+                <Typography
+                  gutterBottom
+                  variant='subtitle1'
+                  component='h2'
+                >
+                  {medic.medic_license}
+                </Typography>
+              </ListItem>
+            </div>
+            <div>
+              <ListItem>
+                <Typography
+                  gutterBottom
+                  variant='subtitle1'
+                  component='h2'
+                >
+                  {medic.medical_specialities[0].name}
+                </Typography>
+              </ListItem>
+            </div>
+          </div>
+        </div>}
+        <Divider component='li' />
+        {patient && <div className={styles.patientData}>
+          <div className={styles.patientFirstColumn}>
+            <div>
+              <ListItem>
+                <Typography
+                  gutterBottom
+                  variant='h6'
+                  component='h2'
+                >
+                  Paciente:
+                                </Typography>
+              </ListItem>
+            </div>
+            <div>
+              <ListItem>
+                <Typography
+                  gutterBottom
+                  variant='h5'
+                  component='h2'
+                >
+                  {patient.name} {patient.lastname}
+                </Typography>
+              </ListItem>
+            </div>
+          </div>
+          <div className={styles.patientSecondColumn}>
+            <div>
+              <ListItem>
+                <Typography
+                  gutterBottom
+                  variant='subtitle1'
+                  component='h2'
+                >
+                  DNI: {patient.dni}
+                </Typography>
+              </ListItem>
+            </div>
+            <div>
+              <ListItem>
+                <Typography
+                  gutterBottom
+                  variant='subtitle1'
+                  component='h2'
+                >
+                  Edad: {getAge()}
+                </Typography>
+              </ListItem>
+            </div>
+            <div>
+              <ListItem>
+                <Typography
+                  gutterBottom
+                  variant='subtitle1'
+                  component='h2'
+                >
+                  Sexo: {patient.gender}
+                </Typography>
+              </ListItem>
+            </div>
+          </div>
+        </div>}
+        <Divider component='li' />
+        <div className={styles.form}>
+          <div className={styles.input}>
+            <TextField
+              id='reason-input'
+              name='reason'
+              label='Razón de consulta'
+              variant='outlined'
+              multiline
+              value={input.reason}
+              rows={6}
+              className={classes.textField}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className={styles.input}>
+            <TextField
+              id='diagnosis-input'
+              name='diagnosis'
+              className={classes.textField}
+              label='Diagnóstico'
+              variant='outlined'
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className={styles.input}>
+            <TextField
+              id='ovservations-input'
+              name='observations'
+              label='Observaciones'
+              variant='outlined'
+              value={input.observations}
+              multiline
+              rows={6}
+              className={classes.textField}
+              onChange={handleInputChange}
+            />
+          </div>
+        </div>
+        <Divider component='li' />
+        <div className={styles.medicines}>
+          <div className={styles.mydiv} autoFocus>
+            <p className={styles.mydivt} >Medicación indicada:</p>
+            {medicines &&
+              <div>
+                <ul>
+                  {!!medicines.length && medicines.map((med, index) => (
+                    <li className={styles.limed} key={index} >{med}</li>
+                  ))}
+                </ul>
+              </div>
+            }
+            <div className={styles.onelinebtns}>
+              <Medicines handleEvent={getterMed} />
+              {patient && <PrintMeds info={infObj} />}
+            </div>
+          </div>
+          <div className={styles.mydiv2} autoFocus>
+            <p className={styles.mydivt2} >Posología y administración:</p>
+            <input
+              id='posologia-input'
+              name='posology'
+              className={styles.posinput}
+              onChange={handleInputChange}
+            />
+            <Button name="guardar" className={styles.btnprint} size='small' variant='outlined' color="primary">
+              Imprimir
+          </Button>
+          </div>
+        </div>
+        <Divider component='li' />
+        <div className={styles.orders}>
+          <div className={styles.mydiv} autoFocus>
+            <p className={styles.mydivt} >Estudios solicitados:</p>
+            {orders &&
+              <div>
+                <ul>
+                  {!!orders.length && orders.map((med, index) => (
+                    <li className={styles.limed} key={index} >{med}</li>
+                  ))}
+                </ul>
+              </div>
+            }
+            <div className={styles.onelinebtns}>
+              <Orders handleEvent={getterOrder} />
+              {patient && <PrintOrders info={infObj} />}
+            </div>
+          </div>
+          <div className={styles.mydiv2} autoFocus>
+            <p className={styles.mydivt2} >Indicaciones para la realización de los estudios:</p>
+            <input
+              id='indicaciones-input'
+              name='instructions'
+              className={styles.posinput}
+              onChange={handleInputChange}
+            />
+            <Button name="guardar" className={styles.btnprint} size='small' variant='outlined' color="primary">
+              Imprimir
+          </Button>
+          </div>
+        </div>
+        <Divider component='li' />
+        <div className={styles.buttons}>
+          <div className={styles.btn}>
+            <Button
+              variant='contained'
+              size='large'
+              color='primary'
+              onClick={handleSubmit}
+            >
+              Subir consulta
                         </Button>
-                    </div>
-                    <div className={style.btn}>
-                        <Button
-                            variant='outlined'
-                            size='large'
-                            color='primary'
-                            onClick={handleBtnNewOrder}
-                        >
-                            Nueva orden
-                        </Button>
-                    </div>
-                    <div className={style.btn}>
-                        <Button
-                            variant='contained'
-                            size='large'
-                            color='primary'
-                            onClick={handleSubmit}
-                        >
-                            Subir consulta
-                        </Button>
-                    </div>
-                </div>
-                <Divider component='li' />
-                <div className={style.buttons}>
-                    <div className={style.btn}>
-                        {renderNewPrescription && <Medicines />}
-                    </div>
-                    <div className={style.btn}>
-                        {renderNewPrescription && (
-                            <NewPrescriptionDialog info={infObj} />
-                        )}
-                    </div>
-                    <div className={style.btn}>
-                        {renderNewOrder && <NewOrder />}
-                    </div>
-                    <div className={style.btn}>
-                        {renderNewOrder && <NewOrderDialog info={infObj} />}
-                    </div>
-                </div>
-            </List>
-        </Card>
-    );
+          </div>
+        </div>
+      </List>
+    </Card>
+  );
 }
 
-export default Consult;

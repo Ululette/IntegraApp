@@ -43,7 +43,7 @@
 }
 .date{
   font-size: 13px;
-  margin-top: 30px;
+  margin-top: 0px;
 }
 
 .p_left{
@@ -74,4 +74,10 @@
 
 .actions{
   margin-top: 0;
+}
+
+.addmed{
+  width: 80px;
+  /* height: 35px; */
+  font-size: 10px;
 }

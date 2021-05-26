@@ -14,7 +14,7 @@ import {
   DialogTitle
 } from '@material-ui/core';
 
-import styles from './Medicines.module.css';
+import styles from './Orders.module.css';
 // import { setMedicines } from '../../../../actions/consult.action';
 
 import CheckIcon from '@material-ui/icons/Check';
@@ -29,7 +29,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function Medicines({ handleEvent }) {
+export default function Orders({ handleEvent }) {
 
   let classes = useStyles();
 
@@ -41,70 +41,71 @@ export default function Medicines({ handleEvent }) {
     setOpen(true);
   };
 
-  let [newmed, setNewmed] = useState('');
+  let [neworder, setNeworder] = useState('');
 
   // Cuando abre el diálogo de mostrar medicamentos se fija si hay
   // algo cargado en el localstorage (por si anteriormente
   // lo había cargado y vuelto a cerrar)
-  let [medicines, setMedicines] = useState(JSON.parse(localStorage.getItem('medicines')) || []);
+  let [orders, setOrders] = useState(JSON.parse(localStorage.getItem('orders')) || []);
   let [ok, setOk] = useState(false);
   // let [mederror, setMederror] = useState('');
 
   let handleChange = (e) => {
     console.log(e.target.value);
     //no puede quedar vacío ni ser solo espacios
-    let med = e.target.value;
-    let medregex = /[0-9a-zA-ZÀ-ÿ\u00f1\u00d1]+[ ]?[0-9a-z A-ZÀ-ÿ\u00f1\u00d1]*$/;
-    if ((medregex).test(med)) { // si no está vacío
+    let ord = e.target.value;
+    let ordregex = /[0-9a-zA-ZÀ-ÿ\u00f1\u00d1]+[ ]?[0-9a-z A-ZÀ-ÿ\u00f1\u00d1]*$/;
+    if ((ordregex).test(ord)) { // si no está vacío
       setOk(true); // deja agregarlo
       // setMederror('');
     } else {
       // setMederror('No puede quedar incompleto o en blanco.');
       setOk(false);
     }
-    setNewmed(med);
+    setNeworder(ord);
   };
 
   useEffect(() => {
-    if (newmed) {
-      console.log(newmed);
+    if (neworder) {
+      console.log(neworder);
     }
-  }, [newmed]);
+  }, [neworder]);
 
   // Si hago click sobre el medicamento lo quita
   let handleItemRemove = (value) => {
 
     // console.log('clickeaste ',value);
-    let newmeds = medicines.filter(e => e !== value);
-    setMedicines(newmeds);
+    let newords = orders.filter(e => e !== value);
+    setOrders(newords);
     return;
   }
 
   let handlePlus = (e) => {
-    setMedicines([...medicines, newmed])
-    // console.log(medicines);
-    setNewmed('');
+    setOrders([...orders, neworder])
+    // console.log(orders);
+    setNeworder('');
     setOk(false);
     //limpie el imput
   };
+
   useEffect(() => {
-    if (medicines.length) {
-      // console.log(medicines);
+    if (orders.length) {
+      // console.log(orders);
     }
-  }, [medicines]);
+  }, [orders]);
 
   let handleClose = () => {
-    setNewmed('');
+    setNeworder('');
     setOk(false);
     setOpen(false);
   };
 
   let handleSave = () => {
-    console.log('en Meds: ', medicines)
-    handleEvent(medicines)
+    console.log('en Orders: ', orders)
+    handleEvent(orders)
     // console.log('acá:', medicines); <---
-    localStorage.setItem('medicines', JSON.stringify(medicines))
-    setNewmed('');
+    localStorage.setItem('orders', JSON.stringify(orders))
+    setNeworder('');
     setOk(false);
     setOpen(false);
   };
@@ -116,19 +117,19 @@ export default function Medicines({ handleEvent }) {
         Agregar
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Medicamentos</DialogTitle>
+        <DialogTitle id="form-dialog-title">Estudios complementarios</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Agregue a continuación los medicamentos indicados al paciente.
+          Agregue a continuación los estudios indicados al paciente.
           </DialogContentText>
           <List>
-            {medicines && medicines.map((med, index) => (
+            {orders && orders.map((ord, index) => (
               <ListItem
                 button
-                onClick={() => handleItemRemove(med)}
+                onClick={() => handleItemRemove(ord)}
                 key={index}
-                name={med}>
-                {med}
+                name={ord}>
+                {ord}
               </ListItem>
             ))}
             <ListItem autoFocus button >
@@ -136,11 +137,11 @@ export default function Medicines({ handleEvent }) {
                 autoFocus
                 margin="dense"
                 id="name"
-                label="nueva medicación"
+                label="nuevo estudio"
                 type="text"
                 fullWidth
                 onChange={handleChange}
-                value={newmed}
+                value={neworder}
               />
               {ok && <Avatar className={classes.avatar}>
                 <CheckIcon onClick={() => handlePlus()} />
@@ -152,7 +153,7 @@ export default function Medicines({ handleEvent }) {
           <Button onClick={handleClose} color="primary">
             Cancelar
           </Button>
-          {!!medicines.length && <Button onClick={handleSave} key={'savemed'}
+          {!!orders.length && <Button onClick={handleSave} key={'savemed'}
             color="primary">
             Guardar
           </Button>}
