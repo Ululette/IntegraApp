@@ -46,7 +46,11 @@ export default function InfoCard({ plan }) {
             </CardContent>
             <CardContent>
                 <a href='/plandetails'>
-                    <Button variant='outlined' color='secondary'>
+                    <Button
+                        variant='outlined'
+                        color='secondary'
+                        className={styles.buttonInfo}
+                    >
                         Mas informacion
                     </Button>
                 </a>

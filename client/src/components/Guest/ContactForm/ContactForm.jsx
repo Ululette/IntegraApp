@@ -29,8 +29,10 @@ const theme = createMuiTheme({
 const useStyles = makeStyles({
     root: {
         width: '50%',
-        height: '70%',
+        height: '100%',
         background: '#e8ffff',
+        border: 'none',
+        boxShadow: 'none',
     },
     bullet: {
         display: 'inline-block',

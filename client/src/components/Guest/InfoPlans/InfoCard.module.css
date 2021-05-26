@@ -28,3 +28,19 @@
 .list {
     font-size: 1rem;
 }
+
+.buttonInfo {
+    color: red;
+    border: 1px solid red;
+}
+
+.buttonInfo:hover {
+    transition: all ease 0.5s;
+    border: 1px solid rgb(211, 0, 0);
+}
+
+@media (max-width: 1366px) {
+    .media {
+        height: fit-content;
+    }
+}

@@ -85,3 +85,10 @@
     align-items: center;
     justify-content: center;
 }
+
+@media (max-width: 1366px) {
+    .formConteiner {
+        margin-top: 6rem;
+        font-size: 1.3rem;
+    }
+}

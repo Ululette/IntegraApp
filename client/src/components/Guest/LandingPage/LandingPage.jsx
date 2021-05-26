@@ -151,13 +151,10 @@ export default function LandingPage() {
             </section>
 
             <section data-aos='zoom-out-down' className={styles.carrouselNews}>
-                <video
-                    src='../../../assets/videos/newsVideo.mp4'
-                    muted
-                    autoPlay
-                    loop
-                    playsInline
-                ></video>
+                <img
+                    src='../../../assets/images/bg-news.jpg'
+                    alt='Background news.'
+                />
                 <div className={styles.infoAll}>
                     <h2 className={styles.nov}>
                         Informacion y numeros de contacto
