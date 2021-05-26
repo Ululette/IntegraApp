@@ -104,24 +104,13 @@ function Consult({ firebase }) {
             );
     }
 
-<<<<<<< HEAD
-    
-=======
-
-
-
->>>>>>> 34cd686bf3ad1abb854ee06c87c4c0b786405525
     const handleSubmit = async () => {
         let medicines = JSON.parse(localStorage.getItem('medicines'));
         console.log(typeof(medic.dni))
         if (!errors.reason &&
             !errors.diagnosis &&
             !errors.observations) {
-<<<<<<< HEAD
                 const { data, error } = await supabase
-=======
-            const { data: newConsult, error } = await supabase
->>>>>>> 34cd686bf3ad1abb854ee06c87c4c0b786405525
                 .from('medical_consultations')
                 .insert([
                     {
@@ -246,8 +235,7 @@ function Consult({ firebase }) {
         // medicines
     }
 
-<<<<<<< HEAD
-=======
+
     useEffect(() => {
         if (medicines) {
             console.log(medicines);
@@ -255,7 +243,6 @@ function Consult({ firebase }) {
         }
     }, [medicines])
 
->>>>>>> 34cd686bf3ad1abb854ee06c87c4c0b786405525
     return (
         <Card className={classes.card}>
             <List>
@@ -407,16 +394,12 @@ function Consult({ firebase }) {
                         </Button>
                     </div>
                     <div className={style.btn}>
-<<<<<<< HEAD
                         <Button 
                             variant="contained" 
                             size="large" 
                             color="primary"
                             onClick={handleSubmit}
                         >
-=======
-                        <Button variant="contained" size="large" color="primary" onClick={handleSubmit}>
->>>>>>> 34cd686bf3ad1abb854ee06c87c4c0b786405525
                             Subir consulta
                         </Button>
                     </div>
