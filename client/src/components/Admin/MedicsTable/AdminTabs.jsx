@@ -43,18 +43,29 @@ function a11yProps(index) {
 
 const useStyles = makeStyles(() => ({
     root: {
+        margin:'0px',
+        padding:'0px',
         alignItems: 'center',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-around',
     },
     tab: {
+        width:'100%',
+        margin:'-10px',
+        padding:'-10px',
+        color:'#212121',
         position: 'relative',
-        alignItems: 'center',
-        backgroundColor: '#4ca1a3',
+        alignItems: 'left',
+        backgroundColor: '#fafafa',
         display: 'flex',
         justifyContent: 'center',
     },
+    prueba:{
+        backgroundColor: '#bdbdbd',
+        margin:'0px',
+        padding:'0px',
+    }
 }));
 
 export default function AdminMedicTabs() {
@@ -68,12 +79,12 @@ export default function AdminMedicTabs() {
     return (
         <div className={classes.root}>
             <AppBar bgcolor='background.paper' className={classes.tab}>
-                <Tabs
+                <Tabs color='primary'
                     value={value}
                     onChange={handleChange}
                     aria-label='simple tabs example'
                 >
-                    <Tab label='Medicos' {...a11yProps(0)} />
+                    <Tab label='Medicos' {...a11yProps(0) } />
                     <Tab label='Especialidades' {...a11yProps(1)} />
                 </Tabs>
             </AppBar>

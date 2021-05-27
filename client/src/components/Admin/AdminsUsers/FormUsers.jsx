@@ -34,7 +34,6 @@ const FormUsers = () => {
     //
     return (
         <div>
-            <h2>Users</h2>
             {rows.length === 0 ? (
                 <CircularProgress />
             ) : (
