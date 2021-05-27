@@ -59,18 +59,17 @@ function Login({ firebase }) {
         setInput({ doc: '', pass: '' });
         setLoading(true);
         try {
-            let { data: users, error } = await supabase
+            let { data: users } = await supabase
                 .from('users')
                 .select('dni, email, role, avatar_url, account')
                 .eq('dni', input.doc);
-            if (error) return console.log(error);
             if (users[0].account === 'inactive') {
                 setLoading(false);
                 return Swal.fire({
                     title: `Error!`,
-                    text: `Access denied! Your account is inactive. Contact the administrator`,
+                    text: `Acceso denegado! Tu cuenta se encuentra inactiva. Contacte al administrador`,
                     icon: 'error',
-                    confirmButtonText: 'OK',
+                    confirmButtonText: 'Entendido!',
                 });
             }
             const numRole =
@@ -96,9 +95,12 @@ function Login({ firebase }) {
                         .eq('dni', users[0].dni);
 
                 if (errorFetchUserInfo) {
-                    console.log(errorFetchUserInfo);
                     setLoading(false);
-                    return alert('Error en fetch user info.');
+                    return Swal.fire({
+                        title: 'Error fetch user.',
+                        text: errorFetchUserInfo.message,
+                        icon: 'error',
+                    });
                 }
 
                 const affiliateData = {
@@ -122,9 +124,12 @@ function Login({ firebase }) {
                         .eq('dni', users[0].dni);
 
                 if (errorFetchUserInfo) {
-                    console.log(errorFetchUserInfo);
                     setLoading(false);
-                    return alert('Error en fetch user info.');
+                    return Swal.fire({
+                        title: 'Error fetch user.',
+                        text: errorFetchUserInfo.message,
+                        icon: 'error',
+                    });
                 }
 
                 const adminData = {
@@ -145,11 +150,13 @@ function Login({ firebase }) {
                         .eq('dni', users[0].dni);
 
                 if (errorFetchUserInfo) {
-                    console.log(errorFetchUserInfo);
                     setLoading(false);
-                    return alert('Error en fetch user info.');
+                    return Swal.fire({
+                        title: 'Error fetch user.',
+                        text: errorFetchUserInfo.message,
+                        icon: 'error',
+                    });
                 }
-                console.log(userInfo);
                 const medicdata = {
                     dni: userInfo[0].dni,
                     name: userInfo[0].name,
@@ -179,7 +186,6 @@ function Login({ firebase }) {
             };
 
             localStorage.setItem('userdata', JSON.stringify(dataUser));
-            window.location = `/${userData.dni}/${userData.role}`;
             setLoading(false);
         } catch (error) {
             setErrors('Usuario y/o contraseña incorrecto.');
