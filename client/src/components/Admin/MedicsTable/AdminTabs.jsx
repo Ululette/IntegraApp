@@ -8,7 +8,13 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import MedicsTable from './MedicsTable';
 import FormSpecialities from '../Speciality/FormSpecialities';
+//----FALTA CORREGIR
+/*
+1-ubicar tabla paralela linea tab izquierda
+2-cambiar de lugar boton agregar medico
+3-quitarle el fondo a las tab y resaltar las seleccionadas
 
+*/
 function TabPanel(props) {
     const { children, value, index } = props;
 
@@ -43,18 +49,31 @@ function a11yProps(index) {
 
 const useStyles = makeStyles(() => ({
     root: {
-        alignItems: 'center',
+        margin:'0px',
+        padding:'0px',
+        alignItems: 'left',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-around',
+        
     },
     tab: {
+        width:'100%',
+        margin:'-10px',
+        padding:'-10px',
+        color:'#212121',
         position: 'relative',
-        alignItems: 'center',
-        backgroundColor: '#4ca1a3',
+        alignItems: 'left',
+        backgroundColor: '#fafafa',
         display: 'flex',
         justifyContent: 'center',
+        overflow:'auto'
     },
+    prueba:{
+        backgroundColor: '#bdbdbd',
+        margin:'0px',
+        padding:'0px',
+    }
 }));
 
 export default function AdminMedicTabs() {
@@ -68,12 +87,12 @@ export default function AdminMedicTabs() {
     return (
         <div className={classes.root}>
             <AppBar bgcolor='background.paper' className={classes.tab}>
-                <Tabs
+                <Tabs 
                     value={value}
                     onChange={handleChange}
                     aria-label='simple tabs example'
                 >
-                    <Tab label='Medicos' {...a11yProps(0)} />
+                    <Tab label='Medicos' {...a11yProps(0) } />
                     <Tab label='Especialidades' {...a11yProps(1)} />
                 </Tabs>
             </AppBar>

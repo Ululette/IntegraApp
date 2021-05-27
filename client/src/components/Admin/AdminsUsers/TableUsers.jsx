@@ -20,6 +20,7 @@ import IconButton from '@material-ui/core/IconButton';
 import BlockIcon from '@material-ui/icons/Block';
 import ClearAllIcon from '@material-ui/icons/ClearAll';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import blue from '@material-ui/core/colors/blue';
 import Swal from 'sweetalert2';
 import supabase from '../../../supabase.config.js';
 import { getAllUsers } from '../../../actions/users.action.js';
@@ -70,6 +71,8 @@ const headCells = [
     { id: 'account', numeric: false, disablePadding: false, label: 'ACCOUNT' },
 ];
 
+
+
 function EnhancedTableHead(props) {
     const {
         classes,
@@ -85,10 +88,10 @@ function EnhancedTableHead(props) {
     };
 
     return (
-        <TableHead>
-            <TableRow>
-                <TableCell padding='checkbox'>
-                    <Checkbox
+        <TableHead className={classes.title}>
+            <TableRow >
+                <TableCell padding='checkbox' >
+                    <Checkbox defaultChecked color="primary"
                         indeterminate={
                             numSelected > 0 && numSelected < rowCount
                         }
@@ -105,6 +108,7 @@ function EnhancedTableHead(props) {
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
                         <TableSortLabel
+                            className={classes.title}
                             active={orderBy === headCell.id}
                             direction={orderBy === headCell.id ? order : 'asc'}
                             onClick={createSortHandler(headCell.id)}
@@ -134,25 +138,51 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired,
 };
-
+//------------------------makeStyle1---------------------------------------------------------------------------------------
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(1),
+        backgroundColor: lighten('#34a7a1', 0.3)
+        //color barra superior '
     },
     highlight:
         theme.palette.type === 'light'
             ? {
-                  color: theme.palette.secondary.main,
-                  backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-              }
+                color: '#fafafa',
+                backgroundColor: lighten(blue[500], 0.5),//color barra superior cuando selecciono item
+                fontWeight:'bold',
+                fontSize:'30px'
+            }
             : {
-                  color: theme.palette.text.primary,
-                  backgroundColor: theme.palette.secondary.dark,
-              },
+                color: theme.palette.text.primary,
+                backgroundColor: lighten('#34a7a1', 0.3),
+                
+            },
     title: {
         flex: '1 1 100%',
+        fontWeight:'bold',
+        fontSize:'1.4rem',
+        color: '#fafafa',
+        textAlign:'center'
     },
+    filters:{
+        display:'flex'
+    },
+    iconFilter:{
+        color:'#fafafa',
+        fontWeight:'bold',
+        '&:hover':{
+            backgroundColor: '#34a7a1',
+        }
+    },
+    iconBlock:{
+        color:'#fafafa',
+        fontWeight:'bold',
+        '&:hover':{
+            backgroundColor: blue[500],
+        }
+    }
 }));
 
 const EnhancedTableToolbar = (props) => {
@@ -297,28 +327,31 @@ const EnhancedTableToolbar = (props) => {
                     id='tableTitle'
                     component='div'
                 >
-                    Users
+                    USERS
                 </Typography>
             )}
 
             {numSelected > 0 ? (
-                <Tooltip title='Actions' onClick={handleBlock}>
-                    <IconButton aria-label='Edit'>
+                <Tooltip title='Active/Unactive Users' onClick={handleBlock}>
+                    <IconButton aria-label='Edit' className={classes.iconBlock}>
                         <BlockIcon />
                     </IconButton>
                 </Tooltip>
             ) : (
                 <div>
-                    <Tooltip title='Filter' onClick={handleClickOpen}>
-                        <IconButton aria-label='filter list'>
+                    <div className={classes.filters}>
+                        <Tooltip title='Filter' onClick={handleClickOpen} >
+                        <IconButton aria-label='filter list' className={classes.iconFilter}>
                             <FilterListIcon />
                         </IconButton>
-                    </Tooltip>
-                    <Tooltip title='Clear Filter' onClick={hanldeReset}>
-                        <IconButton aria-label='reset'>
-                            <ClearAllIcon />
-                        </IconButton>
-                    </Tooltip>
+                        </Tooltip>
+                        <Tooltip title='Clear Filter' onClick={hanldeReset}>
+                            <IconButton aria-label='reset' className={classes.iconFilter}>
+                                <ClearAllIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </div>
+                    
                     <Dialog
                         disableBackdropClick
                         disableEscapeKeyDown
@@ -440,6 +473,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
+//-------------------- EnhancedTableToolbar Style
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -450,6 +484,7 @@ const useStyles = makeStyles((theme) => ({
     },
     table: {
         minWidth: 750,
+        
     },
     visuallyHidden: {
         border: 0,
@@ -460,8 +495,19 @@ const useStyles = makeStyles((theme) => ({
         padding: 0,
         position: 'absolute',
         top: 20,
-        width: 1,
+        width: 1
     },
+    title:{
+        color:'#212121',
+        fontWeight: 'bold',
+        backgroundColor: lighten('#34a7a1', 0.6)
+    },
+    rowColor:{
+        backgroundColor: lighten('#e0e0e0', 0.3),
+        ':checked':{
+            color:blue[500]
+        }
+    }
 }));
 
 export default function TableUsers({ rows, handleFilter }) {
@@ -655,8 +701,9 @@ export default function TableUsers({ rows, handleFilter }) {
                                             key={row.dni}
                                             selected={isItemSelected}
                                         >
-                                            <TableCell padding='checkbox'>
-                                                <Checkbox
+                                            <TableCell padding='checkbox' className={index%2 ===1 ? classes.rowColor :null}>
+                                                <Checkbox defaultChecked color="primary"
+                                                className= {classes.rowColor}
                                                     checked={isItemSelected}
                                                     inputProps={{
                                                         'aria-labelledby':
@@ -664,16 +711,16 @@ export default function TableUsers({ rows, handleFilter }) {
                                                     }}
                                                 />
                                             </TableCell>
-                                            <TableCell align='left'>
+                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null} >
                                                 {row.dni}
                                             </TableCell>
-                                            <TableCell align='left'>
+                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
                                                 {row.email}
                                             </TableCell>
-                                            <TableCell align='left'>
+                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
                                                 {row.role}
                                             </TableCell>
-                                            <TableCell align='left'>
+                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
                                                 {row.account}
                                             </TableCell>
                                         </TableRow>
@@ -688,6 +735,7 @@ export default function TableUsers({ rows, handleFilter }) {
                     </Table>
                 </TableContainer>
                 <TablePagination
+                    className={classes.root}
                     rowsPerPageOptions={[5, 10, 25]}
                     component='div'
                     count={rows.length}

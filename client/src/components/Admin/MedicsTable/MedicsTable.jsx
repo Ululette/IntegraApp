@@ -20,6 +20,7 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ClearAllIcon from '@material-ui/icons/ClearAll';
 import EditIcon from '@material-ui/icons/Edit';
+import blue from '@material-ui/core/colors/blue'
 import 'firebase/auth';
 import AdminMedicAdd from '../AdminMedics/AdminMedicAdd';
 import AdminMedicEdit from '../AdminMedics/AdminMedicEdit';
@@ -72,49 +73,49 @@ const headCells = [
         id: 'actions',
         numeric: false,
         disablePadding: false,
-        label: 'Acciones',
+        label: 'ACCIONES',
     },
     {
         id: 'profilePic',
         numeric: false,
         disablePadding: false,
-        label: 'Foto',
+        label: 'FOTO',
     },
-    { id: 'name', numeric: false, disablePadding: true, label: 'Nombre' },
+    { id: 'name', numeric: false, disablePadding: true, label: 'NOMBRE' },
     {
         id: 'lastname',
         numeric: false,
         disablePadding: false,
-        label: 'Apellido',
+        label: 'APELLIDO',
     },
     {
         id: 'medic_license',
         numeric: false,
         disablePadding: false,
-        label: 'Matricula',
+        label: 'MATRICULA',
     },
     { id: 'dni', numeric: true, disablePadding: false, label: 'DNI' },
-    { id: 'email', numeric: false, disablePadding: false, label: 'E-Mail' },
+    { id: 'email', numeric: false, disablePadding: false, label: 'E-MAIL' },
     {
         id: 'phone_number',
         numeric: false,
         disablePadding: false,
-        label: 'Numero de telefono',
+        label: 'TELEFONO',
     },
     {
         id: 'birthdate',
         numeric: true,
         disablePadding: false,
-        label: 'Edad',
+        label: 'EDAD',
     },
 
     {
         id: 'specialties',
         numeric: false,
         disablePadding: false,
-        label: 'Especialidad',
+        label: 'ESPECIALIDAD',
     },
-    { id: 'state', numeric: false, disablePadding: false, label: 'Estado' },
+    { id: 'state', numeric: false, disablePadding: false, label: 'ESTADO' },
 ];
 
 function EnhancedTableHead(props) {
@@ -124,7 +125,7 @@ function EnhancedTableHead(props) {
     };
 
     return (
-        <TableHead>
+        <TableHead className={classes.title}>
             <TableRow>
                 {headCells.map((headCell, index) => (
                     <TableCell
@@ -134,6 +135,7 @@ function EnhancedTableHead(props) {
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
                         <TableSortLabel
+                            className={classes.title}
                             active={orderBy === headCell.id}
                             direction={orderBy === headCell.id ? order : 'asc'}
                             onClick={createSortHandler(headCell.id)}
@@ -164,41 +166,89 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
 };
 
+// const useToolbarStyles = makeStyles((theme) => ({
+//     root: {
+//         paddingLeft: theme.spacing(2),
+//         paddingRight: theme.spacing(1),
+//     },
+//     highlight:
+//         theme.palette.type === 'light'
+//             ? {
+//                   color: theme.palette.secondary.main,
+//                   backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+//               }
+//             : {
+//                   color: theme.palette.text.primary,
+//                   backgroundColor: theme.palette.secondary.dark,
+//               },
+//     title: {
+//         flex: '1 1 100%',
+//     },
+//     dialog: {
+//         zIndex: '-6',
+//     },
+// }));
+
+//------------------------makeStyle1---------------------------------------------------------------------------------------
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(1),
+        paddingLeft: theme.spacing(0),
+        paddingRight: theme.spacing(0),
+        backgroundColor: lighten('#34a7a1', 0.3), 
+        
+        //color barra superior '
     },
     highlight:
         theme.palette.type === 'light'
             ? {
-                  color: theme.palette.secondary.main,
-                  backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-              }
+                color: '#fafafa',
+                backgroundColor: lighten(blue[500], 0.5),//color barra superior cuando selecciono item
+                fontWeight:'bold',
+                fontSize:'30px'
+            }
             : {
-                  color: theme.palette.text.primary,
-                  backgroundColor: theme.palette.secondary.dark,
-              },
+                color: theme.palette.text.primary,
+                backgroundColor: lighten('#34a7a1', 0.3),
+                
+            },
     title: {
         flex: '1 1 100%',
+        fontWeight:'bold',
+        fontSize:'1.4rem',
+        color: '#fafafa',
+        textAlign:'center'
     },
-    dialog: {
-        zIndex: '-6',
+    filters:{
+        display:'flex'
     },
+    iconFilter:{
+        color:'#fafafa',
+        fontWeight:'bold',
+        '&:hover':{
+            backgroundColor: '#34a7a1',
+        }
+    },
+    iconBlock:{
+        color:'#fafafa',
+        fontWeight:'bold',
+        '&:hover':{
+            backgroundColor: lighten('#34a7a1', 0.8),
+        }
+    }
 }));
 
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
-    const { numSelected, setToShowRows, toShowRows, rows } = props;
+    const { numSelected, setToShowRows, toShowRows, rows,medicSpecialities } = props;
     const [open, setOpen] = React.useState(false);
     const [selectedOption, setSelectedOption] = React.useState('');
     const [selectedState, setSelectedState] = React.useState('activo');
 
     const handleChange = (event) => {
         event.target.name === 'state'
-            ? setSelectedState(event.target.value) &&
-              setSelectedOption(event.target.value)
-            : setSelectedOption(event.target.value);
+            ?   setSelectedState(event.target.value) &&
+                setSelectedOption(event.target.value)
+            :   setSelectedOption(event.target.value);
     };
 
     const handleClickOpen = () => {
@@ -269,21 +319,24 @@ const EnhancedTableToolbar = (props) => {
                 [classes.highlight]: numSelected > 0,
             })}
         >
+            <AdminMedicAdd medicSpecialities={medicSpecialities} />
             <Typography
                 className={classes.title}
                 variant='h6'
                 id='tableTitle'
                 component='div'
             >
-                Doctors
+                MEDICOS
             </Typography>
-            <Tooltip title='Clear' onClick={handleClose}>
+            <Tooltip title='Clear' 
+                onClick={handleClose} className={classes.iconFilter}>
                 <IconButton aria-label='reset'>
                     <ClearAllIcon />
                 </IconButton>
             </Tooltip>
-            <Tooltip title='Filter list' onClick={handleClickOpen}>
-                <IconButton aria-label='filter list'>
+            <Tooltip title='Filter list' 
+                onClick={handleClickOpen} className={classes.iconFilter}>
+                <IconButton aria-label='filter'>
                     <FilterListIcon />
                 </IconButton>
             </Tooltip>
@@ -361,6 +414,25 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
+// const useStyles = makeStyles((theme) => ({
+//     root: {
+//         width: '100%',
+//     },
+//     paper: {
+//         width: '100%',
+//         marginBottom: theme.spacing(2),
+//     },
+//     table: {
+//         minWidth: 750,
+//     },
+//     visuallyHidden: {
+//         clip: 'rect(0 0 0 0)',
+//         overflow: 'hidden',
+//         padding: 0,
+//     },
+// }));
+
+//-------------------- EnhancedTableToolbar Style
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -371,12 +443,37 @@ const useStyles = makeStyles((theme) => ({
     },
     table: {
         minWidth: 750,
+        
     },
     visuallyHidden: {
+        border: 0,
         clip: 'rect(0 0 0 0)',
+        height: 1,
+        margin: -1,
         overflow: 'hidden',
         padding: 0,
+        position: 'absolute',
+        top: 20,
+        width: 1
     },
+    title:{
+        color:'#212121',
+        fontWeight: 'bold',
+        backgroundColor: lighten('#34a7a1', 0.6)
+    },
+    rowColor:{
+        backgroundColor: lighten('#e0e0e0', 0.3),
+        ':checked':{
+            color:blue[500]
+        }
+    },
+    iconFilter:{
+        color:'rgba(0, 0, 0, 0.47)',
+        fontWeight:'bold',
+        '&:hover':{
+            backgroundColor: lighten('#34a7a1', 0.8),
+        }
+    }
 }));
 
 export default function MedicsTable() {
@@ -489,6 +586,7 @@ export default function MedicsTable() {
                     setToShowRows={setToShowRows}
                     toShowRows={toShowRows}
                     rows={rows}
+                    medicSpecialities={medicSpecialities}
                 />
                 <TableContainer>
                     <Table
@@ -529,25 +627,34 @@ export default function MedicsTable() {
                                             key={row.name}
                                             selected={isItemSelected}
                                         >
-                                            <TableCell align='center'>
-                                                <EditIcon
-                                                    onClick={() =>
-                                                        handleEdit(row)
-                                                    }
-                                                />
-                                                <DeleteIcon
-                                                    onClick={() =>
-                                                        handleDelete(row)
-                                                    }
-                                                />
+                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
+                                                <Tooltip title='Delete' className={classes.iconFilter}>
+                                                    <IconButton aria-label='Edit' >
+                                                        <EditIcon
+                                                            onClick={() =>
+                                                                handleEdit(row)
+                                                            }
+                                                        />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title='Delete' className={classes.iconFilter}>
+                                                    <IconButton aria-label='Delete' >
+                                                        <DeleteIcon
+                                                            onClick={() =>
+                                                                handleDelete(row)
+                                                            }
+                                                        />
+                                                   </IconButton>
+                                                </Tooltip>
                                             </TableCell>
-                                            <TableCell align='center'>
+                                            <TableCell align='center' className={index%2 ===1 ? classes.rowColor :null}>
                                                 <Avatar
                                                     alt='Profile Picture'
                                                     src={row.profilePic}
                                                 />
                                             </TableCell>
                                             <TableCell
+                                                className={index%2 ===1 ? classes.rowColor :null}
                                                 component='th'
                                                 id={labelId}
                                                 scope='row'
@@ -555,26 +662,26 @@ export default function MedicsTable() {
                                             >
                                                 {row.name}
                                             </TableCell>
-                                            <TableCell align='right'>
+                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
                                                 {row.lastname}
                                             </TableCell>
-                                            <TableCell align='right'>
+                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
                                                 {row.medic_license}
                                             </TableCell>
-                                            <TableCell align='right'>
+                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
                                                 {row.dni}
                                             </TableCell>
-                                            <TableCell align='right'>
+                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
                                                 {row.email}
                                             </TableCell>
-                                            <TableCell align='right'>
+                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
                                                 {row.phone_number}
                                             </TableCell>
-                                            <TableCell align='right'>
+                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
                                                 {calculateAge(row.birthdate)}
                                             </TableCell>
 
-                                            <TableCell>
+                                            <TableCell className={index%2 ===1 ? classes.rowColor :null}>
                                                 <ul>
                                                     {row.medical_specialities
                                                         .length === 0 ? (
@@ -597,7 +704,7 @@ export default function MedicsTable() {
                                                     )}
                                                 </ul>
                                             </TableCell>
-                                            <TableCell align='right'>
+                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
                                                 {row.state}
                                             </TableCell>
                                         </TableRow>
@@ -612,7 +719,8 @@ export default function MedicsTable() {
                     </Table>
                 </TableContainer>
                 <TablePagination
-                    rowsPerPageOptions={[1, 5, 10, 15, 20]}
+                    className={classes.root}
+                    rowsPerPageOptions={[5, 10, 15, 20]}
                     component='div'
                     count={toShowRows.length}
                     rowsPerPage={rowsPerPage}
@@ -629,7 +737,7 @@ export default function MedicsTable() {
                     editActive={editActive}
                 />
             ) : null}
-            <AdminMedicAdd medicSpecialities={medicSpecialities} />
+            {/* <AdminMedicAdd medicSpecialities={medicSpecialities} /> */}
         </div>
     );
 }
