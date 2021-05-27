@@ -59,6 +59,27 @@ export default function LandingPage() {
                     <h2 className={styles.welcome}>Bienvenido a</h2>
                     <h2 className={styles.welcome2}>Integra Salud</h2>
                 </div>
+                <div className={styles.gifContainer}>
+                    <img
+                        src='../../../assets/images/banner-bg.gif'
+                        alt='Banner gif.'
+                        className={styles.bannerGif}
+                    />
+                    <h2
+                        data-aos='fade-right'
+                        data-aos-delay='1000'
+                        className={styles.firstTitles}
+                    >
+                        Tu solucion
+                    </h2>
+                    <h2
+                        data-aos='fade-left'
+                        data-aos-delay='2000'
+                        className={styles.firstTitles}
+                    >
+                        Tu hogar
+                    </h2>
+                </div>
                 <div className={styles.videoContainer}>
                     <video
                         src='../../../assets/videos/banner.webm'
@@ -81,6 +102,7 @@ export default function LandingPage() {
                         <img
                             src='../../../assets/icons/medicphonee.png'
                             alt='Icon 2.'
+                            className={styles.iconMedicPhone}
                         />
                         <h2 className={styles.subtitlePromotions}>
                             <div>
@@ -93,6 +115,7 @@ export default function LandingPage() {
                             </div>
                         </h2>
                         <img
+                            className={styles.iconMedicRecord}
                             src='../../../assets/icons/medicrecordd.png'
                             alt='Icon 3.'
                         />
@@ -150,6 +173,7 @@ export default function LandingPage() {
                 <img
                     src='../../../assets/images/bg-news.jpg'
                     alt='Background news.'
+                    className={styles.backgroundNews}
                 />
                 <div className={styles.infoAll}>
                     <h2 className={styles.nov}>
@@ -162,7 +186,7 @@ export default function LandingPage() {
                             className={styles.icon}
                         >
                             <img
-                                className={styles.each}
+                                className={styles.each1}
                                 src='https://image.flaticon.com/icons/png/128/3063/3063181.png'
                                 alt=''
                             />
@@ -174,7 +198,7 @@ export default function LandingPage() {
                             className={styles.icon}
                         >
                             <img
-                                className={styles.each}
+                                className={styles.each2}
                                 src='https://image.flaticon.com/icons/png/128/1067/1067566.png'
                                 alt=''
                             />
@@ -188,7 +212,7 @@ export default function LandingPage() {
                         >
                             <a href='/faqs'>
                                 <img
-                                    className={styles.each}
+                                    className={styles.each3}
                                     src='https://image.flaticon.com/icons/png/128/2618/2618540.png'
                                     alt=''
                                 />
@@ -196,13 +220,15 @@ export default function LandingPage() {
                         </div>
                     </div>
                     <div className={styles.info}>
-                        <p className={styles.des}>
+                        <p className={`${styles.des} ${styles.des1}`}>
                             Urgencias y emergencias - 0810-454-999
                         </p>
-                        <p className={styles.des}>
+                        <p className={`${styles.des} ${styles.des2}`}>
                             Orientación medica telefonica - 0810-963-952
                         </p>
-                        <p className={styles.des}>Preguntas frecuentes</p>
+                        <p className={`${styles.des} ${styles.des3}`}>
+                            Preguntas frecuentes
+                        </p>
                     </div>
                 </div>
                 <h3 className={styles.nov}>Ultimas noticias</h3>
@@ -258,7 +284,7 @@ export default function LandingPage() {
                 <ContactForm data-aos='zoom-in' />
             </section>
 
-            <Fab className={classes.root}>
+            <Fab className={`${classes.root} ${styles.chatbot}`}>
                 <Button
                     aria-controls='fade-menu'
                     aria-haspopup='true'

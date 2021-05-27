@@ -20,11 +20,7 @@ function InfoPlanes() {
         <div className={styles.carousel}>
             <Flicking gap={10} circular={true} className={styles.cardContainer}>
                 {plans.map((el, idx) => (
-                    <InfoCard
-                        key={`plancito=${idx}`}
-                        plan={el}
-                        className={styles.card}
-                    />
+                    <InfoCard key={`plancito=${idx}`} plan={el} />
                 ))}
             </Flicking>
         </div>

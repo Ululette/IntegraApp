@@ -21,7 +21,9 @@ export default function InfoCard({ plan }) {
                 <h2>{plan.name}</h2>
             </div>
             <CardContent>
-                <Typography paragraph>Cobertura:</Typography>
+                <Typography className={styles.cobertura} paragraph>
+                    Cobertura:
+                </Typography>
                 <List>
                     <ListItemText
                         primary={`✔${

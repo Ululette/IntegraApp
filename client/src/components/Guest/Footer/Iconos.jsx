@@ -7,8 +7,8 @@ import Logoenv from '../../../assets/icons/envelope.png';
 
 export default function Iconos() {
     return (
-        <div>
-            <div className={styles.ft_followup}>¡Seguinos!</div>
+        <div className={styles.container}>
+            <h4 className={styles.ft_followup}>¡Seguinos!</h4>
             <div className={styles.ft_iconos}>
                 {/* <a href="https://www.facebook.com/IntegraSalud/" target="_blank"> */}
                 <img

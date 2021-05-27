@@ -53,3 +53,17 @@
     width: 75px;
     height: 30px;
 }
+
+@media (max-width: 400px) {
+    .bar {
+        width: 100%;
+        flex-wrap: wrap;
+        z-index: 100000;
+        align-items: center;
+        padding: 0 10px;
+    }
+
+    .logB {
+        display: none;
+    }
+}

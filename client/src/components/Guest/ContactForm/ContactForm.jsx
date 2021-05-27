@@ -28,11 +28,12 @@ const theme = createMuiTheme({
 
 const useStyles = makeStyles({
     root: {
-        width: '50%',
+        width: '90%',
         height: '100%',
         background: '#e8ffff',
         border: 'none',
         boxShadow: 'none',
+        margin: '0 auto',
     },
     bullet: {
         display: 'inline-block',

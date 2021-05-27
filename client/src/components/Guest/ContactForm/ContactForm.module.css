@@ -92,3 +92,15 @@
         font-size: 1.3rem;
     }
 }
+
+@media (max-width: 400px) {
+    .formConteiner {
+        margin-top: 10rem;
+        font-size: 1.3rem;
+        width: 100%;
+    }
+
+    .inputs {
+        width: 100%;
+    }
+}

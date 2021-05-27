@@ -2,7 +2,6 @@
 .all {
     width: 100%;
     height: 100%;
-    overflow-x: hidden;
 }
 .first {
     position: absolute;
@@ -11,13 +10,17 @@
     width: 100%;
 }
 
+.gifContainer {
+    display: none;
+}
+
 .welcome,
 .welcome2 {
     border-right: 0.15em solid rgb(42, 42, 42);
     font-size: 5rem;
     white-space: nowrap;
-    overflow: hidden;
     text-align: center;
+    overflow: hidden;
 }
 .welcome {
     width: 550px;
@@ -455,9 +458,9 @@
     font-size: 70px;
 }
 
-@media (max-width: 1370px) {
+@media (max-width: 1440px) {
     .promotions {
-        margin-top: 90vh;
+        margin-top: 48%;
         background-color: #34a7a1;
         height: 100vh;
         width: 100%;
@@ -492,5 +495,204 @@
 
     .titlesContact {
         margin-top: 1rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .first {
+        width: 100%;
+        height: 100vh;
+    }
+
+    .promotions {
+        margin-top: 90vh;
+    }
+}
+
+@media (max-width: 400px) {
+    .all {
+        overflow-x: hidden;
+    }
+
+    .first {
+        background: #fff;
+        background-position: center;
+        background-size: cover;
+        height: 110vh;
+    }
+
+    .gifContainer {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    .gifContainer img {
+        width: 100%;
+    }
+
+    .typewriter {
+        width: 100%;
+        margin-top: 4rem;
+    }
+
+    .welcome,
+    .welcome2 {
+        font-size: 3rem;
+        width: 100%;
+        text-align: center;
+        padding: 0;
+        margin: 0;
+    }
+
+    .firstTitles {
+        font-size: 2.5rem;
+        position: relative !important;
+        text-align: center;
+    }
+
+    .videoContainer {
+        width: 100%;
+        height: 100vh;
+        display: none;
+    }
+
+    .videoContainer video {
+        max-width: 100%;
+        height: 100%;
+    }
+
+    .iconMedicRecord {
+        display: none;
+    }
+
+    .iconMedicPhone {
+        display: none;
+    }
+
+    .icon1 {
+        position: absolute;
+        top: 0;
+    }
+
+    .bigTitlePromotions {
+        font-size: 3rem;
+        margin-bottom: 2rem;
+    }
+
+    .subtitlePromotions,
+    .subtitlePromotions2 {
+        font-size: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .promotions2 {
+        height: 70vh;
+    }
+
+    .promotions2,
+    .promotions2_titles,
+    .promotions2_descriptions {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .promotions2_titles,
+    .promotions2_descriptions {
+        margin: 1rem auto;
+    }
+
+    .promotions2_eachDescription {
+        width: 100%;
+    }
+
+    .carrouselNews {
+        background-image: url('../../../assets/images/bg-news.jpg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .carrouselNews .backgroundNews {
+        display: none;
+    }
+
+    .infoAll {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .nov {
+        font-size: 2rem;
+        margin: 2rem 1rem;
+        order: 0;
+    }
+
+    .icons {
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
+    }
+
+    .each1,
+    .each2,
+    .each3,
+    .icon {
+        width: 75px;
+        height: 75px;
+        border-radius: 10px;
+    }
+
+    .news {
+        width: 100%;
+    }
+
+    .digital {
+        margin-top: -0.5rem;
+    }
+
+    .digitalTitle {
+        font-size: 3.5rem;
+    }
+
+    .digitalSubtitle {
+        font-size: 2rem;
+    }
+
+    .digitalDescriptions {
+        font-size: 1.3rem;
+        width: 100%;
+    }
+
+    .digitalDescription1,
+    .digitalDescription2 {
+        width: 50%;
+        margin: 0 10px;
+    }
+
+    .ourPlans {
+        height: fit-content;
+    }
+
+    .contactSection {
+        width: 100%;
+    }
+
+    .titlesContact {
+        font-size: 1.3rem;
+        margin-top: 5rem;
+    }
+
+    .chatbot {
+        width: 60px;
+        height: 60px;
+        bottom: 50px !important;
+        right: 40px !important;
     }
 }
