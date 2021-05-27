@@ -15,9 +15,6 @@ import Fab from '@material-ui/core/Fab';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        '& > *': {
-            margin: theme.spacing(1),
-        },
         position: 'fixed',
         backgroundColor: '#3587f2',
         borderRadius: '50%',
@@ -36,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
         width: '80%',
         height: '80%',
     },
-    chat: {},
 }));
 
 export default function LandingPage() {
@@ -254,12 +250,8 @@ export default function LandingPage() {
             <section data-aos='slide-left' className={styles.ourPlans}>
                 <InfoPlanes id='infoPlans' />
             </section>
-            <section
-                id='contact'
-                data-aos='zoom-out-up'
-                className={styles.contactSection}
-            >
-                <div className={styles.titlesContact}>
+            <section data-aos='zoom-out-up' className={styles.contactSection}>
+                <div id='contact' className={styles.titlesContact}>
                     <h1 data-aos='flip-down'>Estas a un solo paso</h1>
                     <h2 data-aos='flip-down'>de ser parte de Integra Salud</h2>
                 </div>
