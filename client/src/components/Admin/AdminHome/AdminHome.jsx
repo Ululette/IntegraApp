@@ -15,8 +15,8 @@ function AdminHome() {
     const [bestPlans, setBestPlans] = useState('');
     const [contactForm, setContactForm] = useState('');
     const [planInfo, setPlanInfo] = useState('');
+    const [admins, setAdmins] = useState('');
     const [authorizations, setAuthorizations] = useState('');
-    const [earnings, setEarnings] = useState('');
 
     const fetchingData = async () => {
         const { data: numberAffiliates } = await supabase
@@ -32,6 +32,12 @@ function AdminHome() {
             .eq('state', 'revision pendiente');
 
         setAffiliatesToRevision(numberAffiliatesToRevision.length);
+
+        const { data: numberAdmins } = await supabase
+            .from('admins')
+            .select('id');
+
+        setAdmins(numberAdmins.length);
 
         const { data: numberDownRequests } = await supabase
             .from('familiar_downs_request')
@@ -123,6 +129,10 @@ function AdminHome() {
                 <article>
                     <h3>Medicos activos</h3>
                     <CountUp end={medics} duration={5} />
+                </article>
+                <article>
+                    <h3>Administradores</h3>
+                    <CountUp end={admins} duration={5} />
                 </article>
                 <Chart
                     width={'500px'}
