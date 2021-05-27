@@ -1,4 +1,29 @@
-.drButton {
+.container {
+    width: 100%;
+    /* height: 100%; */
+    height: 400px;
+}
+
+.container h1 {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.datagrid {
+    /* width: 75%; */
+    /* height: 380px; */
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    text-transform: capitalize;
+    background-color: white;
+}
+
+.btnFav{
+    margin: 1%;
+}
+
+/* .drButton {
     border: 0px;
     background-color: white;
     cursor: pointer;
@@ -31,4 +56,4 @@
 }
 .paginationActive a{
     background-color: #a6f6f1;
-}
+} */
