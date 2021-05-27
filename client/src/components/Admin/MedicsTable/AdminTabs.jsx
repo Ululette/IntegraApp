@@ -8,7 +8,13 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import MedicsTable from './MedicsTable';
 import FormSpecialities from '../Speciality/FormSpecialities';
+//----FALTA CORREGIR
+/*
+1-ubicar tabla paralela linea tab izquierda
+2-cambiar de lugar boton agregar medico
+3-quitarle el fondo a las tab y resaltar las seleccionadas
 
+*/
 function TabPanel(props) {
     const { children, value, index } = props;
 
@@ -45,10 +51,11 @@ const useStyles = makeStyles(() => ({
     root: {
         margin:'0px',
         padding:'0px',
-        alignItems: 'center',
+        alignItems: 'left',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-around',
+        
     },
     tab: {
         width:'100%',
@@ -60,6 +67,7 @@ const useStyles = makeStyles(() => ({
         backgroundColor: '#fafafa',
         display: 'flex',
         justifyContent: 'center',
+        overflow:'auto'
     },
     prueba:{
         backgroundColor: '#bdbdbd',
@@ -79,7 +87,7 @@ export default function AdminMedicTabs() {
     return (
         <div className={classes.root}>
             <AppBar bgcolor='background.paper' className={classes.tab}>
-                <Tabs color='primary'
+                <Tabs 
                     value={value}
                     onChange={handleChange}
                     aria-label='simple tabs example'

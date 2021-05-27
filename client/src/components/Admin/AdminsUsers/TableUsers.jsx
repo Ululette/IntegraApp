@@ -20,7 +20,7 @@ import IconButton from '@material-ui/core/IconButton';
 import BlockIcon from '@material-ui/icons/Block';
 import ClearAllIcon from '@material-ui/icons/ClearAll';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import blue from '@material-ui/core/colors/blue'
+import blue from '@material-ui/core/colors/blue';
 import Swal from 'sweetalert2';
 import supabase from '../../../supabase.config.js';
 import { getAllUsers } from '../../../actions/users.action.js';

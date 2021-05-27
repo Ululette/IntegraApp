@@ -73,49 +73,49 @@ const headCells = [
         id: 'actions',
         numeric: false,
         disablePadding: false,
-        label: 'Acciones',
+        label: 'ACCIONES',
     },
     {
         id: 'profilePic',
         numeric: false,
         disablePadding: false,
-        label: 'Foto',
+        label: 'FOTO',
     },
-    { id: 'name', numeric: false, disablePadding: true, label: 'Nombre' },
+    { id: 'name', numeric: false, disablePadding: true, label: 'NOMBRE' },
     {
         id: 'lastname',
         numeric: false,
         disablePadding: false,
-        label: 'Apellido',
+        label: 'APELLIDO',
     },
     {
         id: 'medic_license',
         numeric: false,
         disablePadding: false,
-        label: 'Matricula',
+        label: 'MATRICULA',
     },
     { id: 'dni', numeric: true, disablePadding: false, label: 'DNI' },
-    { id: 'email', numeric: false, disablePadding: false, label: 'E-Mail' },
+    { id: 'email', numeric: false, disablePadding: false, label: 'E-MAIL' },
     {
         id: 'phone_number',
         numeric: false,
         disablePadding: false,
-        label: 'Numero de telefono',
+        label: 'TELEFONO',
     },
     {
         id: 'birthdate',
         numeric: true,
         disablePadding: false,
-        label: 'Edad',
+        label: 'EDAD',
     },
 
     {
         id: 'specialties',
         numeric: false,
         disablePadding: false,
-        label: 'Especialidad',
+        label: 'ESPECIALIDAD',
     },
-    { id: 'state', numeric: false, disablePadding: false, label: 'Estado' },
+    { id: 'state', numeric: false, disablePadding: false, label: 'ESTADO' },
 ];
 
 function EnhancedTableHead(props) {
@@ -192,10 +192,10 @@ EnhancedTableHead.propTypes = {
 //------------------------makeStyle1---------------------------------------------------------------------------------------
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(1),
+        paddingLeft: theme.spacing(0),
+        paddingRight: theme.spacing(0),
         backgroundColor: lighten('#34a7a1', 0.3), 
-        width:'100%'
+        
         //color barra superior '
     },
     highlight:
@@ -232,14 +232,14 @@ const useToolbarStyles = makeStyles((theme) => ({
         color:'#fafafa',
         fontWeight:'bold',
         '&:hover':{
-            backgroundColor: blue[500],
+            backgroundColor: lighten('#34a7a1', 0.8),
         }
     }
 }));
 
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
-    const { numSelected, setToShowRows, toShowRows, rows } = props;
+    const { numSelected, setToShowRows, toShowRows, rows,medicSpecialities } = props;
     const [open, setOpen] = React.useState(false);
     const [selectedOption, setSelectedOption] = React.useState('');
     const [selectedState, setSelectedState] = React.useState('activo');
@@ -319,13 +319,14 @@ const EnhancedTableToolbar = (props) => {
                 [classes.highlight]: numSelected > 0,
             })}
         >
+            <AdminMedicAdd medicSpecialities={medicSpecialities} />
             <Typography
                 className={classes.title}
                 variant='h6'
                 id='tableTitle'
                 component='div'
             >
-                DOCTORS
+                MEDICOS
             </Typography>
             <Tooltip title='Clear' 
                 onClick={handleClose} className={classes.iconFilter}>
@@ -335,7 +336,7 @@ const EnhancedTableToolbar = (props) => {
             </Tooltip>
             <Tooltip title='Filter list' 
                 onClick={handleClickOpen} className={classes.iconFilter}>
-                <IconButton aria-label='filter list'>
+                <IconButton aria-label='filter'>
                     <FilterListIcon />
                 </IconButton>
             </Tooltip>
@@ -465,6 +466,13 @@ const useStyles = makeStyles((theme) => ({
         ':checked':{
             color:blue[500]
         }
+    },
+    iconFilter:{
+        color:'rgba(0, 0, 0, 0.47)',
+        fontWeight:'bold',
+        '&:hover':{
+            backgroundColor: lighten('#34a7a1', 0.8),
+        }
     }
 }));
 
@@ -578,6 +586,7 @@ export default function MedicsTable() {
                     setToShowRows={setToShowRows}
                     toShowRows={toShowRows}
                     rows={rows}
+                    medicSpecialities={medicSpecialities}
                 />
                 <TableContainer>
                     <Table
@@ -618,17 +627,25 @@ export default function MedicsTable() {
                                             key={row.name}
                                             selected={isItemSelected}
                                         >
-                                            <TableCell align='center' className={index%2 ===1 ? classes.rowColor :null}>
-                                                <EditIcon
-                                                    onClick={() =>
-                                                        handleEdit(row)
-                                                    }
-                                                />
-                                                <DeleteIcon
-                                                    onClick={() =>
-                                                        handleDelete(row)
-                                                    }
-                                                />
+                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
+                                                <Tooltip title='Delete' className={classes.iconFilter}>
+                                                    <IconButton aria-label='Edit' >
+                                                        <EditIcon
+                                                            onClick={() =>
+                                                                handleEdit(row)
+                                                            }
+                                                        />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title='Delete' className={classes.iconFilter}>
+                                                    <IconButton aria-label='Delete' >
+                                                        <DeleteIcon
+                                                            onClick={() =>
+                                                                handleDelete(row)
+                                                            }
+                                                        />
+                                                   </IconButton>
+                                                </Tooltip>
                                             </TableCell>
                                             <TableCell align='center' className={index%2 ===1 ? classes.rowColor :null}>
                                                 <Avatar
@@ -720,7 +737,7 @@ export default function MedicsTable() {
                     editActive={editActive}
                 />
             ) : null}
-            <AdminMedicAdd medicSpecialities={medicSpecialities} />
+            {/* <AdminMedicAdd medicSpecialities={medicSpecialities} /> */}
         </div>
     );
 }
