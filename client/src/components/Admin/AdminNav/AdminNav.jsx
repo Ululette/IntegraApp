@@ -36,6 +36,7 @@ import HealingIcon from '@material-ui/icons/Healing';
 // OUR COMPONENTS
 import AdminHome from '../AdminHome/AdminHome.jsx';
 import AdminPlans from '../AdminPlans/AdminPlans.jsx';
+import AdminProfile from '../AdminProfile/AdminProfile.jsx';
 // import NewPlanP from '../NewPlanP/NewPlanP.jsx';
 import AdminMedicTabs from '../MedicsTable/AdminTabs.jsx';
 import AdminAffiliate from '../AdminAffiliate/AdminAffiliate.jsx';
@@ -50,334 +51,345 @@ import AdminOrders from '../AdminOrders/AdminOrders.jsx';
 const drawerWidth = 260;
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        display: 'flex',
+  root: {
+    display: 'flex',
+  },
+  drawer: {
+    [theme.breakpoints.up('sm')]: {
+      width: drawerWidth,
+      flexShrink: 0,
     },
-    drawer: {
-        [theme.breakpoints.up('sm')]: {
-            width: drawerWidth,
-            flexShrink: 0,
-        },
+  },
+  appBar: {
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: drawerWidth,
     },
-    appBar: {
-        [theme.breakpoints.up('sm')]: {
-            marginLeft: drawerWidth,
-        },
-        display: 'flex',
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: '100%',
-        marginBottom: '10rem',
-        height: '75px',
-        backgroundColor: '#00897b',
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: '10rem',
+    height: '75px',
+    backgroundColor: '#00897b',
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
     },
-    menuButton: {
-        marginRight: theme.spacing(2),
-        [theme.breakpoints.up('sm')]: {
-            display: 'none',
-        },
-    },
-    // necessary for content to be below app bar
-    toolbar: theme.mixins.toolbar,
-    drawerPaper: {
-        width: drawerWidth,
-        zIndex: 0,
-    },
-    content: {
-        flexGrow: 1,
-        padding: theme.spacing(3),
-    },
+  },
+  // necessary for content to be below app bar
+  toolbar: theme.mixins.toolbar,
+  drawerPaper: {
+    width: drawerWidth,
+    zIndex: 0,
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+  },
 }));
 
 function AdminNav({ firebase, window: windowMui }) {
-    const classes = useStyles();
-    const theme = useTheme();
-    const [mobileOpen, setMobileOpen] = React.useState(false);
+  const classes = useStyles();
+  const theme = useTheme();
+  const [mobileOpen, setMobileOpen] = React.useState(false);
 
-    const userData = JSON.parse(localStorage.getItem('userdata'));
-    const adminData = JSON.parse(localStorage.getItem('admindata'));
-    const userDataFirebase = useUser();
+  const userData = JSON.parse(localStorage.getItem('userdata'));
+  const adminData = JSON.parse(localStorage.getItem('admindata'));
+  const userDataFirebase = useUser();
 
-    if (!userDataFirebase.data && !adminData && !userData) {
+  if (!userDataFirebase.data && !adminData && !userData) {
+    window.location = '/login';
+  }
+
+  const MySwal = withReactContent(Swal);
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const logout = async () => {
+    setAnchorEl(null);
+    MySwal.fire({
+      title: '¿Quiere cerrar sesión?',
+      icon: 'question',
+      showConfirmButton: true,
+      showCloseButton: true,
+      showCancelButton: true,
+      focusConfirm: false,
+      reverseButtons: true,
+      confirmButtonText: 'Cerrar sesion',
+      cancelButtonText: 'Cancelar',
+    }).then(async (res) => {
+      if (res.isConfirmed) {
+        await firebase.auth().signOut();
+        localStorage.removeItem('userdata');
+        localStorage.removeItem('admindata');
         window.location = '/login';
-    }
+      }
+    });
+  };
 
-    const MySwal = withReactContent(Swal);
+  if (!userDataFirebase.data) return <CircularProgress />;
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
+  const drawer = (
+    <div>
+      <div className={classes.toolbar} />
+      <List>
+        <NavLink to={`/${userData.dni}/admin`} className={styles.link}>
+          <ListItem button>
+            <HomeIcon />
+            <ListItemText primary='Inicio' />
+          </ListItem>
+        </NavLink>
+        <ListItem button>
+          <FaceIcon />
+          <ListItemText primary='Mi cuenta' />
+        </ListItem>
+        <ListItem button>
+          <Badge
+            color='secondary'
+            badgeContent={2}
+            className={styles.notifications}
+          >
+            <GroupAddIcon />
+            <ListItemText primary='Solicitudes de asociacion' />
+          </Badge>
+        </ListItem>
+        <NavLink
+          to={`/${userData.dni}/admin/plans`}
+          className={styles.link}
+          activeClassName={styles.activeLink}
+        >
+          <ListItem button>
+            <NoteIcon />
+            <ListItemText primary='Planes' />
+          </ListItem>
+        </NavLink>
+        <NavLink
+          to={`/${userData.dni}/admin/orders`}
+          className={styles.link}
+          activeClassName={styles.activeLink}
+        >
+          <ListItem button>
+            <Badge
+              color='secondary'
+              badgeContent={2}
+              className={styles.notifications}
+            >
+              <DoneAllIcon />
+              <ListItemText primary='Autorizaciones' />
+            </Badge>
+          </ListItem>
+        </NavLink>
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+        <NavLink
+          to={`/${userData.dni}/admin/affiliates`}
+          className={styles.link}
+          activeClassName={styles.activeLink}
+        >
+          <ListItem button>
+            <GroupIcon />
+            <ListItemText primary='Socios' />
+          </ListItem>
+        </NavLink>
+        <NavLink
+          to={`/${userData.dni}/admin/users`}
+          className={styles.link}
+          activeClassName={styles.activeLink}
+        >
+          <ListItem button>
+            <GroupIcon />
+            <ListItemText primary='Usuarios' />
+          </ListItem>
+        </NavLink>
+        <NavLink
+          to={`/${userData.dni}/admin/medics`}
+          className={styles.link}
+          activeClassName={styles.activeLink}
+        >
+          <ListItem button>
+            <HealingIcon />
+            <ListItemText primary='Medicos' />
+          </ListItem>
+        </NavLink>
+      </List>
+    </div>
+  );
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+  const container =
+    windowMui !== undefined ? () => window().document.body : undefined;
 
-    const handleDrawerToggle = () => {
-        setMobileOpen(!mobileOpen);
-    };
-
-    const logout = async () => {
-        setAnchorEl(null);
-        MySwal.fire({
-            title: '¿Quiere cerrar sesión?',
-            icon: 'question',
-            showConfirmButton: true,
-            showCloseButton: true,
-            showCancelButton: true,
-            focusConfirm: false,
-            reverseButtons: true,
-            confirmButtonText: 'Cerrar sesion',
-            cancelButtonText: 'Cancelar',
-        }).then(async (res) => {
-            if (res.isConfirmed) {
-                await firebase.auth().signOut();
-                localStorage.removeItem('userdata');
-                localStorage.removeItem('admindata');
-                window.location = '/login';
-            }
-        });
-    };
-
-    if (!userDataFirebase.data) return <CircularProgress />;
-
-    const drawer = (
-        <div>
-            <div className={classes.toolbar} />
-            <List>
-                <NavLink to={`/${userData.dni}/admin`} className={styles.link}>
-                    <ListItem button>
-                        <HomeIcon />
-                        <ListItemText primary='Inicio' />
-                    </ListItem>
-                </NavLink>
-                <ListItem button>
-                    <FaceIcon />
-                    <ListItemText primary='Mi cuenta' />
-                </ListItem>
-                <ListItem button>
-                    <Badge
-                        color='secondary'
-                        badgeContent={2}
-                        className={styles.notifications}
-                    >
-                        <GroupAddIcon />
-                        <ListItemText primary='Solicitudes de asociacion' />
-                    </Badge>
-                </ListItem>
-                <NavLink
-                    to={`/${userData.dni}/admin/plans`}
-                    className={styles.link}
-                    activeClassName={styles.activeLink}
-                >
-                    <ListItem button>
-                        <NoteIcon />
-                        <ListItemText primary='Planes' />
-                    </ListItem>
-                </NavLink>
-                <NavLink
-                    to={`/${userData.dni}/admin/orders`}
-                    className={styles.link}
-                    activeClassName={styles.activeLink}
-                >
-                    <ListItem button>
-                        <Badge
-                            color='secondary'
-                            badgeContent={2}
-                            className={styles.notifications}
-                        >
-                            <DoneAllIcon />
-                            <ListItemText primary='Autorizaciones' />
-                        </Badge>
-                    </ListItem>
-                </NavLink>
-
-                <NavLink
-                    to={`/${userData.dni}/admin/affiliates`}
-                    className={styles.link}
-                    activeClassName={styles.activeLink}
-                >
-                    <ListItem button>
-                        <GroupIcon />
-                        <ListItemText primary='Socios' />
-                    </ListItem>
-                </NavLink>
-                <NavLink
-                    to={`/${userData.dni}/admin/users`}
-                    className={styles.link}
-                    activeClassName={styles.activeLink}
-                >
-                    <ListItem button>
-                        <GroupIcon />
-                        <ListItemText primary='Usuarios' />
-                    </ListItem>
-                </NavLink>
-                <NavLink
-                    to={`/${userData.dni}/admin/medics`}
-                    className={styles.link}
-                    activeClassName={styles.activeLink}
-                >
-                    <ListItem button>
-                        <HealingIcon />
-                        <ListItemText primary='Medicos' />
-                    </ListItem>
-                </NavLink>
-            </List>
-        </div>
-    );
-
-    const container =
-        windowMui !== undefined ? () => window().document.body : undefined;
-
-    return (
-        <div className={classes.root}>
-            <CssBaseline />
-            <AppBar position='fixed' className={classes.appBar}>
-                <Toolbar>
-                    <IconButton
-                        color='inherit'
-                        aria-label='open drawer'
-                        edge='start'
-                        onClick={handleDrawerToggle}
-                        className={classes.menuButton}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                </Toolbar>
-                <a href={`/${userDataFirebase.uid}/admin/`}>
-                    <img
-                        src='../../assets/images/logo.png'
-                        alt='Integra icon.'
-                        className={styles.ppLogo}
-                    />
-                </a>
-                <section className={styles.userData}>
-                    <Badge
-                        badgeContent={2}
-                        color='secondary'
-                        className={styles.navIcon}
-                    >
-                        <MailIcon />
-                    </Badge>
-                    <article className={styles.namesContainer}>
-                        <p>{`${adminData.name} ${adminData.lastname}`}</p>
-                        <p>
-                            Administrador
+  return (
+    <div className={classes.root}>
+      <CssBaseline />
+      <AppBar position='fixed' className={classes.appBar}>
+        <Toolbar>
+          <IconButton
+            color='inherit'
+            aria-label='open drawer'
+            edge='start'
+            onClick={handleDrawerToggle}
+            className={classes.menuButton}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Toolbar>
+        <a href={`/${userDataFirebase.uid}/admin/`}>
+          <img
+            src='../../assets/images/logo.png'
+            alt='Integra icon.'
+            className={styles.ppLogo}
+          />
+        </a>
+        <section className={styles.userData}>
+          <Badge
+            badgeContent={2}
+            color='secondary'
+            className={styles.navIcon}
+          >
+            <MailIcon />
+          </Badge>
+          <article className={styles.namesContainer}>
+            <p>{`${adminData.name} ${adminData.lastname}`}</p>
+            <p>
+              Administrador
                             {adminData.root ? ' root' : ' moderador'}
-                        </p>
-                    </article>
-                    <div>
-                        <Button onClick={handleClick}>
-                            {userData.avatar_url ? (
-                                <img
-                                    src={userData.avatar_url}
-                                    alt='User profile pic.'
-                                    width='45px'
-                                    height='45px'
-                                    className={styles.profilePic}
-                                />
-                            ) : (
-                                <AccountCircleIcon
-                                    className={styles.profilePic}
-                                    width='45px'
-                                    height='45px'
-                                />
-                            )}
-                            <ExpandMoreIcon className={styles.expandMore} />
-                        </Button>
-                        <Menu
-                            anchorEl={anchorEl}
-                            keepMounted
-                            open={Boolean(anchorEl)}
-                            onClose={handleClose}
-                        >
-                            <MenuItem onClick={handleClose}>Mi perfil</MenuItem>
-                            <NavLink
-                                to={`/${userData.dni}/admin/newadmin`}
-                                className={styles.newAdmin}
-                            >
-                                <MenuItem onClick={handleClose}>
-                                    Agregar Administrador
+            </p>
+          </article>
+          <div>
+            <Button onClick={handleClick}>
+              {userData.avatar_url ? (
+                <img
+                  src={userData.avatar_url}
+                  alt='User profile pic.'
+                  width='45px'
+                  height='45px'
+                  className={styles.profilePic}
+                />
+              ) : (
+                <AccountCircleIcon
+                  className={styles.profilePic}
+                  width='45px'
+                  height='45px'
+                />
+              )}
+              <ExpandMoreIcon className={styles.expandMore} />
+            </Button>
+            <Menu
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <NavLink
+                to={`/${userData.dni}/admin/profile`}
+                className={styles.myProfile}
+              >
+                {/* <MenuItem className={styles.myProfile}>
+                  Mi perfil
+                                </MenuItem> */}
+                <MenuItem onClick={handleClose}>Mi perfil</MenuItem>
+              </NavLink>
+              <NavLink
+                to={`/${userData.dni}/admin/newadmin`}
+                className={styles.newAdmin}
+              >
+                <MenuItem onClick={handleClose}>
+                  Agregar Administrador
                                 </MenuItem>
-                            </NavLink>
+              </NavLink>
 
-                            <MenuItem onClick={logout}>Cerrar Sesion</MenuItem>
-                        </Menu>
-                    </div>
-                </section>
-            </AppBar>
-            <nav className={classes.drawer} aria-label='mailbox folders'>
-                {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-                <Hidden smUp implementation='css'>
-                    <Drawer
-                        container={container}
-                        variant='temporary'
-                        anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-                        open={mobileOpen}
-                        onClose={handleDrawerToggle}
-                        classes={{
-                            paper: classes.drawerPaper,
-                        }}
-                        ModalProps={{
-                            keepMounted: true, // Better open performance on mobile.
-                        }}
-                    >
-                        {drawer}
-                    </Drawer>
-                </Hidden>
-                <Hidden xsDown implementation='css'>
-                    <Drawer
-                        classes={{
-                            paper: classes.drawerPaper,
-                        }}
-                        variant='permanent'
-                        open
-                    >
-                        {drawer}
-                    </Drawer>
-                </Hidden>
-            </nav>
-            <main className={classes.content}>
-                <div className={classes.toolbar} />
-                {window.location.pathname === `/${userData.dni}/admin` ? (
-                    <AdminHome firebase={firebase} />
-                ) : window.location.pathname ===
-                  `/${userData.dni}/admin/medics` ? (
-                    <AdminMedicTabs />
-                ) : window.location.pathname ===
-                  `/${userData.dni}/admin/specialities` ? (
-                    <FormSpecialities />
-                ) : window.location.pathname ===
-                  `/${userData.dni}/admin/affiliates` ? (
-                    <AdminAffiliate firebase={firebase} />
-                ) : window.location.pathname ===
-                  `/${userData.dni}/admin/plans` ? (
-                    <AdminPlans firebase={firebase} />
-                ) : window.location.pathname ===
-                  `/${userData.dni}/admin/newadmin` ? (
-                    <AdminRegistration firebase={firebase} />
-                ) : window.location.pathname ===
-                  `/${userData.dni}/admin/orders` ? (
-                    <AdminOrders />
-                ) : window.location.pathname ===
-                  `/${userData.dni}/admin/users` ? (
-                    <FormUsers />
-                ) : (
-                    <NotFound />
-                )}
-            </main>
-        </div>
-    );
+              <MenuItem onClick={logout}>Cerrar Sesion</MenuItem>
+            </Menu>
+          </div>
+        </section>
+      </AppBar>
+      <nav className={classes.drawer} aria-label='mailbox folders'>
+        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+        <Hidden smUp implementation='css'>
+          <Drawer
+            container={container}
+            variant='temporary'
+            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+          >
+            {drawer}
+          </Drawer>
+        </Hidden>
+        <Hidden xsDown implementation='css'>
+          <Drawer
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+            variant='permanent'
+            open
+          >
+            {drawer}
+          </Drawer>
+        </Hidden>
+      </nav>
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+        {window.location.pathname === `/${userData.dni}/admin` ? (
+          <AdminHome firebase={firebase} />
+        ) : window.location.pathname ===
+          `/${userData.dni}/admin/medics` ? (
+          <AdminMedicTabs />
+        ) : window.location.pathname ===
+          `/${userData.dni}/admin/specialities` ? (
+          <FormSpecialities />
+        ) : window.location.pathname ===
+          `/${userData.dni}/admin/affiliates` ? (
+          <AdminAffiliate firebase={firebase} />
+        ) : window.location.pathname ===
+          `/${userData.dni}/admin/plans` ? (
+          <AdminPlans firebase={firebase} />
+        ) : window.location.pathname ===
+          `/${userData.dni}/admin/newadmin` ? (
+          <AdminRegistration firebase={firebase} />
+        ) : window.location.pathname ===
+          `/${userData.dni}/admin/orders` ? (
+          <AdminOrders />
+        ) : window.location.pathname ===
+          `/${userData.dni}/admin/profile` ? (
+          <AdminProfile firebase={firebase} />
+        ) : window.location.pathname ===
+          `/${userData.dni}/admin/users` ? (
+          <FormUsers />
+        ) : (
+          <NotFound />
+        )}
+      </main>
+    </div>
+  );
 }
 
 AdminNav.propTypes = {
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
-    window: PropTypes.func,
+  /**
+   * Injected by the documentation to work in an iframe.
+   * You won't need it on your project.
+   */
+  window: PropTypes.func,
 };
 
 export default AdminNav;

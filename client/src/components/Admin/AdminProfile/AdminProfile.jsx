@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import supabase from '../../../supabase.config';
-import './UserProfile.css';
+import './AdminProfile.css';
 import Swal from 'sweetalert2';
 import { Autocomplete } from '@material-ui/lab';
 import { Button, TextField } from '@material-ui/core';
@@ -40,7 +40,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function UserProfile() {
+export default function AdminProfile() {
   // Estilos para MUI.
   let classes = useStyles();
 
@@ -52,16 +52,15 @@ export default function UserProfile() {
   // de la base de datos.
   let fetchUserData = async (document) => {
     let { data: userInfo, error: errorFetchUser } = await supabase
-      .from('partners')
+      .from('admins')
       .select(
-        'dni, name, lastname, birthdate, phone_number, email,  plans (id, name),gender, address (locality_id,street, street_number, floor, department, localities (name, postal_code, states (id,name)))'
+        'dni, name, lastname, phone_number, birthdate, email, address (id,street, street_number,floor, department,localities (id,name, postal_code, states (id,name)))'
       )
       .eq('dni', document);
-    // console.log(userInfo);
+    // console.log(userInfo[0]);
 
     setUser({
       dni: userInfo[0].dni,
-      plan: userInfo[0].plans.name,
       name: userInfo[0].name,
       lastname: userInfo[0].lastname,
       birthdate: userInfo[0].birthdate,
@@ -171,7 +170,7 @@ export default function UserProfile() {
         state_id: user.state_id,
         postal_code: user.postal_code,
       });
-      // console.log('cargué modInfo');
+      console.log('cargué modInfo');
     }
   }, [user, modify]);
 
@@ -199,7 +198,7 @@ export default function UserProfile() {
       case 'street': // Que no esté vacío ni espacios
         // ^[a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[a-zA-ZÀ-ÿ\u00f1\u00d1]+$
         let streetreg =
-          /[0-9a-zA-ZÀ-ÿ\u00f1\u00d1]+[ ]?[0-9a-z A-ZÀ-ÿ\u00f1\u00d1]*$/;
+          /[0-9a-zA-ZÀ-ÿ\u00f1\u00d1\.]+[ ]?[0-9a-z A-ZÀ-ÿ\u00f1\u00d1]*$/;
 
         setError((error) => ({
           ...error,
@@ -250,7 +249,7 @@ export default function UserProfile() {
       case 'state':
         // Si cambio la provincia tengo que sacar el código postal
         // id de provincia y la localidad que estaba por defecto.
-        // console.log('modificaste a', e.target.value);
+        console.log('modificaste a', e.target.value);
         function findStateId(provincia, allstates) {
           let idfound = allstates.filter(
             (state) => state.state_name === provincia
@@ -283,7 +282,7 @@ export default function UserProfile() {
   // Cuando cambio una localidad setea el error, modifica
   // el estado (modInfo) en donde se guarda y el código postal.
   let handlechange2 = (e, value) => {
-    // console.log('seleccionaste', value, modInfo);
+    console.log('seleccionaste', value, modInfo);
 
     // Que no sea string vacío
     let cityregex = /[\S]/;
@@ -303,7 +302,7 @@ export default function UserProfile() {
           .eq('state_id', modInfo.state_id)
           .eq('name', city);
 
-        // console.log(infolocality[0]);
+        console.log(infolocality[0]);
 
         setModInfo({
           ...modInfo,
@@ -327,8 +326,9 @@ export default function UserProfile() {
 
   // Cada vez que se modifica modInfo renderiza.
   useEffect(() => {
+
     if (modInfo) {
-      // console.log(modInfo);
+      console.log(modInfo);
     }
   }, [modInfo, error]);
 
@@ -341,7 +341,7 @@ export default function UserProfile() {
     try {
       let { data: infolocality } = await supabase
         .from('localities')
-        .select('id_locality,name,postal_code')
+        .select('id,name,postal_code')
         .eq('state_id', idprovincia);
 
       // console.log(infolocality);
@@ -357,9 +357,8 @@ export default function UserProfile() {
   useEffect(() => {
     if (modInfo) {
       getCities(modInfo.state_id);
-      // console.log('toy acá', modInfo);
     }
-  }, [modInfo]);
+  }, [modInfo]); 
 
   useEffect(() => {
     if (showCities) {
@@ -372,17 +371,17 @@ export default function UserProfile() {
     // Guardar datos en supabase !!!!!
 
     if (validate()) {
-      //Update partners table (si modifico email o teléfono)
-      let modifyPartnersT = async (user, modInfo) => {
+      //Update admins table (si modifico email o teléfono)
+      let modifyAdminsT = async (user, modInfo) => {
         await supabase
-          .from('partners')
+          .from('admins')
           .update({
             phone_number: modInfo.phone,
             email: modInfo.email,
           })
           .eq('dni', user.dni);
       };
-      modifyPartnersT(user, modInfo);
+      modifyAdminsT(user, modInfo);
 
       //Update address table (si modifico dirección o localidad)
       let modifyAddressT = async (user, modInfo) => {
@@ -391,15 +390,15 @@ export default function UserProfile() {
           .update({
             street: modInfo.street,
             street_number: modInfo.street_number,
-            floor: modInfo.floor,
-            department: modInfo.department,
+            floor: modInfo.floor||'',
+            department: modInfo.department||'',
             locality_id: modInfo.locality_id,
           })
-          .eq('partner_dni', user.dni);
+          .eq('admin_dni', user.dni);
         if (error) console.log(error);
       };
-
       modifyAddressT(user, modInfo);
+
       // console.log('Guardó', modInfo);
       setModify(false);
       setModInfo(null);
@@ -426,12 +425,7 @@ export default function UserProfile() {
             // Si no modifica usa los datos de user.
             <div className='input_info'>
               <h1 className='title'>Mi Perfil</h1>
-              <div className='on_line_cont'>
-                <div className='one_info_cont'>
-                  <p className='profile_title'>Plan:</p>
-                  <p className='profile_info'>{user.plan}</p>
-                </div>
-              </div>
+
               <div className='on_line_cont'>
                 <div className='one_info_cont'>
                   <p className='profile_title'>Nombre:</p>
@@ -477,28 +471,26 @@ export default function UserProfile() {
                     {' '}
                     {user.street}
                   </p>
-                </div>
-                <div className='one_info_cont'>
                   <p className='profile_title'>Número:</p>
                   <p className='profile_info'>
                     {' '}
                     {user.street_number}
                   </p>
                 </div>
-                <div className='one_info_cont'>
+                {user.floor && <div className='one_info_cont'>
                   <p className='profile_title'>Piso:</p>
                   <p className='profile_info'>
                     {' '}
                     {user.floor}
                   </p>
-                </div>
-                <div className='one_info_cont'>
+                </div>}
+                {user.department && <div className='one_info_cont'>
                   <p className='profile_title'>Dto:</p>
                   <p className='profile_info'>
                     {' '}
                     {user.department}
                   </p>
-                </div>
+                </div>}
               </div>
               <div className='on_line_cont'>
                 <div className='one_info_cont'>
@@ -689,17 +681,6 @@ export default function UserProfile() {
                         error={error.postal_code}
                         helperText={error.postal_code}
                       />
-
-                      {/* {modify && <Button
-                  id="backbtn"
-                  variant="contained"
-                  className={classes.modButton}
-                  onClick={handleback}
-                >
-                  Volver
-                </Button>} 
-                O VOLVER ????
-                */}
                       <Button
                         id='savebtn'
                         disabled={!validate()}
