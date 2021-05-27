@@ -35,7 +35,8 @@ import HealingIcon from '@material-ui/icons/Healing';
 
 // OUR COMPONENTS
 import AdminHome from '../AdminHome/AdminHome.jsx';
-import AdminPlans from '../AdminPlans/AdminPlans.jsx';
+// import AdminPlans from '../AdminPlans/AdminPlans.jsx';
+import AdminPlansManage from '../AdminPlansManage/AdminPlansManage.jsx';
 import AdminProfile from '../AdminProfile/AdminProfile.jsx';
 // import NewPlanP from '../NewPlanP/NewPlanP.jsx';
 import AdminMedicTabs from '../MedicsTable/AdminTabs.jsx';
@@ -363,7 +364,7 @@ function AdminNav({ firebase, window: windowMui }) {
           <AdminAffiliate firebase={firebase} />
         ) : window.location.pathname ===
           `/${userData.dni}/admin/plans` ? (
-          <AdminPlans firebase={firebase} />
+          <AdminPlansManage firebase={firebase} />
         ) : window.location.pathname ===
           `/${userData.dni}/admin/newadmin` ? (
           <AdminRegistration firebase={firebase} />
