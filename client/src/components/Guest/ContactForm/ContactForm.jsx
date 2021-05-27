@@ -30,10 +30,13 @@ const useStyles = makeStyles({
     root: {
         width: '90%',
         height: '100%',
-        background: '#e8ffff',
+        background: '#1c8383',
         border: 'none',
         boxShadow: 'none',
-        margin: '0 auto',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: '#fff',
     },
     bullet: {
         display: 'inline-block',
@@ -45,6 +48,9 @@ const useStyles = makeStyles({
     },
     pos: {
         marginBottom: 12,
+    },
+    textField: {
+        width: '200px',
     },
 });
 
@@ -287,6 +293,7 @@ function ContactForm() {
                                 <TextField
                                     id='name-input'
                                     type='text'
+                                    className={classes.textField}
                                     name='name'
                                     autoComplete='off'
                                     value={input.name}
@@ -303,6 +310,7 @@ function ContactForm() {
                                     id='age-input'
                                     type='tel'
                                     name='age'
+                                    className={classes.textField}
                                     autoComplete='off'
                                     value={input.age}
                                     onChange={(e) => handleInputChange(e)}
@@ -319,6 +327,7 @@ function ContactForm() {
                                 <TextField
                                     id='dni-input'
                                     type='tel'
+                                    className={classes.textField}
                                     name='dni'
                                     autoComplete='off'
                                     value={input.dni}
@@ -335,6 +344,7 @@ function ContactForm() {
                                 <TextField
                                     id='phone-input'
                                     type='tel'
+                                    className={classes.textField}
                                     name='phone_number'
                                     autoComplete='off'
                                     value={input.phone_number}
@@ -351,6 +361,7 @@ function ContactForm() {
                                 <TextField
                                     id='email-input'
                                     type='text'
+                                    className={classes.textField}
                                     name='email'
                                     autoComplete='off'
                                     value={input.email}

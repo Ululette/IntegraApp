@@ -280,7 +280,7 @@
 
 /* FIFTH SCREEN */
 .digital {
-    height: 110vh;
+    height: 100vh;
     width: 100%;
     color: #0059fd;
     display: flex;
@@ -337,8 +337,9 @@
 
 .contactSection {
     width: 100%;
-    height: 110vh;
-    background-color: #e8ffff;
+    height: 90vh;
+    background-color: #1c8383;
+    color: white;
 }
 
 .titlesContact {

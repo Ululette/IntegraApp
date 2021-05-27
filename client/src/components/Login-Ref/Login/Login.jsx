@@ -223,7 +223,7 @@ function Login({ firebase }) {
                     confirmButtonText: 'OK',
                 });
             })
-            .catch(function (error) {
+            .catch(function () {
                 // An error happened.
                 Swal.fire({
                     title: `Error!`,
