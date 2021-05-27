@@ -61,9 +61,18 @@ function Login({ firebase }) {
         try {
             let { data: users, error } = await supabase
                 .from('users')
-                .select('dni, email, role, avatar_url')
+                .select('dni, email, role, avatar_url, account')
                 .eq('dni', input.doc);
             if (error) return console.log(error);
+            if (users[0].account === 'inactive') {
+                setLoading(false);
+                return Swal.fire({
+                    title: `Error!`,
+                    text: `Access denied! Your account is inactive. Contact the administrator`,
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                });
+            }
             const numRole =
                 users[0].role === 'affiliate'
                     ? 10
