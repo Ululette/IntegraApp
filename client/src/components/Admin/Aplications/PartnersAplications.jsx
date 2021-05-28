@@ -15,7 +15,8 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import SaveIcon from '@material-ui/icons/Delete';
+import SaveIcon from '@material-ui/icons/Save';
+import EditIcon from '@material-ui/icons/Edit';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ClearAllIcon from '@material-ui/icons/ClearAll';
@@ -35,9 +36,6 @@ import { Button } from '@material-ui/core';
 import calculateAge from '../../../functions/calculateAge';
 import supabase from '../../../supabase.config';
 import getSome from '../../../actions/elgetter'
-
-
-const status = ['aceptada, rechazada', 'pendiente']
 
 
 function descendingComparator(a, b, orderBy) {
@@ -165,6 +163,7 @@ const EnhancedTableToolbar = (props) => {
     const { numSelected, setToShowRows, toShowRows, rows } = props;
     const [open, setOpen] = React.useState(false);
     const [selectedState, setSelectedState] = React.useState('');
+    const MySwal = withReactContent(Swal);
 
     const handleChange = (event) => {
         setSelectedState(event.target.value)
@@ -184,17 +183,22 @@ const EnhancedTableToolbar = (props) => {
         filter(e.target[0].value);
     };
 
-    const filter = (value) => {
+    const filter = async (value) => {
         setToShowRows(rows);
-        value ?
-            setToShowRows(
-                toShowRows.filter((r) => {
-                    return r.status
-                        .toLowerCase()
-                        .includes(value.toLowerCase());
-                })
-            )
-            : setToShowRows(rows);
+        let res = []
+        if (value) {
+            res = toShowRows.filter((r) => r.status.toLowerCase() == value.toLowerCase());
+            if (res.length > 0) setToShowRows(res);
+            else {
+                setToShowRows(rows);
+                MySwal.fire({
+                    title: `No hay solicitudes ${value}s`,
+                    icon: 'info',
+                    timer: 1500,
+                });
+            }
+        } else setToShowRows(rows);
+        setSelectedState('')
         setOpen(false);
     };
 
@@ -210,7 +214,7 @@ const EnhancedTableToolbar = (props) => {
                 id='tableTitle'
                 component='div'
             >
-                Doctors
+                Solicitudes
             </Typography>
             <Tooltip title='Todo' onClick={handleClose}>
                 <IconButton aria-label='reset'>
@@ -233,23 +237,21 @@ const EnhancedTableToolbar = (props) => {
                 <form className={classes.container} onSubmit={handleSubmit}>
                     <DialogContent>
                         <FormControl className={classes.formControl}>
-                            <FormControl className={classes.formControl}>
-                                <Select
-                                    native
-                                    value={selectedState}
-                                    onChange={handleChange}
-                                    input={
-                                        <Input id='demo-dialog-native' />
-                                    }
-                                    name='status'
-                                    label='value'
-                                >
-                                    <option aria-label='None' value='' />
-                                    <option value='aceptada'>Aceptada</option>
-                                    <option value='rechazada'>Rechazada</option>
-                                    <option value='pendiente'>Pendiente</option>
-                                </Select>
-                            </FormControl>
+                            <Select
+                                native
+                                value={selectedState}
+                                onChange={handleChange}
+                                input={
+                                    <Input id='demo-dialog-native' />
+                                }
+                                name='status'
+                                label='value'
+                            >
+                                <option aria-label='None' value='' />
+                                <option value='aceptada'>Aceptada</option>
+                                <option value='rechazada'>Rechazada</option>
+                                <option value='pendiente'>Pendiente</option>
+                            </Select>
                         </FormControl>
                     </DialogContent>
                     <DialogActions>
@@ -269,6 +271,8 @@ const EnhancedTableToolbar = (props) => {
 EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
+
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -291,31 +295,91 @@ const useStyles = makeStyles((theme) => ({
 export default function MedicsTable() {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('calories');
+    const [orderBy, setOrderBy] = React.useState('familiar_name');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(1);
-    const [listMedics, setListMedics] = React.useState([]);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [listRequests, setListRequests] = React.useState([]);
     const [toShowRows, setToShowRows] = React.useState([]);
-    const rows = listMedics;
+    const rows = listRequests;
     const MySwal = withReactContent(Swal);
-    const [status, setStatus ] = React.useState(Array(rows.length))
+    const [newStatus, setNewSatus] = React.useState('')
+    const [indexOnChange, setIndexOnChange] = React.useState([])
+    const [selector, setSelector] = React.useState(false)
+    const [current, setCurrent] = React.useState(null)
 
 
-    const fetchMedics = () => {
+    const StatusSelector = ({ setNewSatus, index, setIndexOnChange, indexOnChange }) => {
+
+        const classes = useToolbarStyles();
+
+        const [status, setStatus] = React.useState(current)
+
+        const handleChange = (e) => {
+            e.preventDefault();
+            setStatus(e.target.value)
+        }
+
+        React.useEffect(() => {
+            if (status == current) {
+                setIndexOnChange(indexOnChange.filter(e => e != index))
+            } else {
+                setIndexOnChange([...indexOnChange, index])
+                setNewSatus(status)
+            }
+        }, [status])
+
+        return (
+            <form onSubmit={()=>setSelector(true)}>
+            <FormControl className={classes.formControl}>
+                <Select
+                    native
+                    value={status}
+                    onChange={handleChange}
+                    input={
+                        <Input id='demo-dialog-native-2' />
+                    }
+                    name='status2'
+                    label='value2'
+                >
+                    <option aria-label='None' value='' />
+                    <option value='aceptada'>Aceptada</option>
+                    <option value='rechazada'>Rechazada</option>
+                    <option value='pendiente'>Pendiente</option>
+                </Select>
+            </FormControl>
+            <input type='submit' value='Guardar'/>
+            </form>
+        )
+
+    }
+
+    const handleEdit = (current) => {
+        setCurrent(current)
+        setSelector(true);
+        if (selector) setSelector(false);
+    };
+
+
+    const fetchRequests = () => {
         getSome('familiar_downs_request')
-            .then(r => { setListMedics(r); setToShowRows(r) }, err => console.error(err.message))
+            .then(r => { setListRequests(r); setToShowRows(r) }, err => console.error(err.message))
     }
 
 
     React.useEffect(() => {
-        fetchMedics();
+        fetchRequests();
     }, []);
 
 
-    const handleSave = async (request, index) => {
+    const handleSave = async (request) => {
+        const statusState = {
+            aceptada: 'dado de baja',
+            pendiente: 'revision pendiente',
+            rechazada: 'aceptado'
+        };
         MySwal.fire({
-            title: `Desea guardar el nuevo estado de la solucitud de baja de ${request.familiar_name} de la obra social?`,
+            title: `Desea guardar la solucitud de baja de ${request.familiar_name} de la obra social, como ${newStatus}?`,
             showCloseButton: true,
             showCancelButton: true,
             icon: 'question',
@@ -324,15 +388,25 @@ export default function MedicsTable() {
                 try {
                     await supabase
                         .from('familiar_downs_request')
-                        .update({ status : status[index] })
+                        .update({ status: newStatus })
                         .eq('familiar_dni', request.familiar_dni);
-                    MySwal.fire({
-                        title: 'La solicitud ha sido actualizada!',
-                        icon: 'success',
-                        timer: 2000,
-                    }).then(() => window.location.reload());
                 } catch (error) {
                     console.log(error);
+                } finally {
+                    await supabase
+                        .from('partners')
+                        .update({ state: statusState[newStatus] })
+                        .eq('dni', parseInt(request.familiar_dni))
+                        .then((r) => {
+                            if (r.body[0].state === statusState[newStatus]) {
+                                MySwal.fire({
+                                    title: `El socio ${request.familiar_name} ${request.familiar_lastname} ahora está ${statusState[newStatus]}.
+                                        La solicitud ha sido actualizada!`,
+                                    icon: 'success',
+                                    timer: 2000,
+                                }).then(() => window.location.reload())
+                            };
+                        })
                 }
             }
         });
@@ -411,7 +485,7 @@ export default function MedicsTable() {
                                     const isItemSelected = isSelected(row.name);
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     return (
-                                        
+
                                         <TableRow
                                             hover
                                             role='checkbox'
@@ -421,11 +495,18 @@ export default function MedicsTable() {
                                             selected={isItemSelected}
                                         >
                                             <TableCell align='center'>
-                                                <SaveIcon
-                                                    onClick={() =>
-                                                        handleSave(row, index)
-                                                    }
+                                            <EditIcon
+                                                    onClick={handleEdit(row.status)}
                                                 />
+                                                <Tooltip
+                                                    title='Guardar'
+                                                    onClick={() => handleSave(row, index)}
+                                                    disabled={!indexOnChange.includes(index)}
+                                                >
+                                                    <IconButton aria-label='save' >
+                                                        <SaveIcon color={!indexOnChange.includes(index) ? 'disabled' : 'primary'} />
+                                                    </IconButton>
+                                                </Tooltip>
                                             </TableCell>
                                             <TableCell
                                                 component='th'
@@ -451,21 +532,7 @@ export default function MedicsTable() {
                                                 {calculateAge(row.familiar_birthdate)}
                                             </TableCell>
                                             <TableCell align='center'>
-                                                <Select
-                                                    native
-                                                    value={status[index] ? status[index] : row.status}
-                                                    onChange={(e)=> setStatus([...status, status[index]=e.target.value])}
-                                                    input={
-                                                        <Input id='demo-dialog-native' />
-                                                    }
-                                                    name='status'
-                                                    label='value'
-                                                >
-                                                    <option aria-label='None' value='' />
-                                                    <option value='aceptada'>Aceptada</option>
-                                                    <option value='rechazada'>Rechazada</option>
-                                                    <option value='pendiente'>Pendiente</option>
-                                                </Select>
+                                                {row.status}
                                             </TableCell>
                                         </TableRow>
                                     );
@@ -488,6 +555,15 @@ export default function MedicsTable() {
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                 />
             </Paper>
+            {selector ? <StatusSelector
+                current={row.status}
+                setNewSatus={setNewSatus}
+                index={row.familiar_dni}
+                indexOnChange={indexOnChange}
+                setIndexOnChange={setIndexOnChange}
+            />
+        :
+        null}
         </div>
     );
 }
