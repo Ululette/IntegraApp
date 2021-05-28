@@ -9,7 +9,6 @@ import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import Card from '@material-ui/core/Card';
-// import { _reCAPTCHA_site_key_ } from '../../../recaptcha.config.js';
 import supabase from '../../../supabase.config';
 import Recaptcha from 'react-recaptcha';
 import Swal from 'sweetalert2';
