@@ -201,7 +201,7 @@ export default function GuestsAplications() {
     const [orderBy, setOrderBy] = React.useState('lastname');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [request, setRequest] = React.useState([]);
     const MySwal = withReactContent(Swal);
 
@@ -312,7 +312,6 @@ export default function GuestsAplications() {
                                     return (
                                         <TableRow
                                             hover
-                                            // onClick={(event) => handleClick(event, row.name)}
                                             role='checkbox'
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
@@ -351,14 +350,14 @@ export default function GuestsAplications() {
                                 })}
                             {emptyRows > 0 && (
                                 <TableRow style={{ height: 33 * emptyRows }}>
-                                    <TableCell colSpan={10} />
+                                    <TableCell colSpan={6} />
                                 </TableRow>
                             )}
                         </TableBody>
                     </Table>
                 </TableContainer>
                 <TablePagination
-                    rowsPerPageOptions={[1, 10, 15, 20]}
+                    rowsPerPageOptions={[1, 5, 10]}
                     component='div'
                     count={rows.length}
                     rowsPerPage={rowsPerPage}

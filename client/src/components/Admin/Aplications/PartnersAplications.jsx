@@ -106,7 +106,7 @@ function EnhancedTableHead() {
                         align='left'
                         padding='default'
                     >
-                            {headCell.label}
+                        {headCell.label}
                     </TableCell>
                 ))}
             </TableRow>
@@ -151,7 +151,7 @@ const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
     const { numSelected } = props;
 
-   
+
 
     return (
         <Toolbar
@@ -196,23 +196,23 @@ const StatusSelector = ({ current, setNewSatus, index, setIndexOnChange, indexOn
     }, [status])
 
     return (
-            <FormControl className={classes.formControl}>
-                <Select
-                    native
-                    value={status}
-                    onChange={handleChange}
-                    input={
-                        <Input id='demo-dialog-native-2' />
-                    }
-                    name='status2'
-                    label='value2'
-                >
-                    <option aria-label='None' value='' />
-                    <option value='aceptada'>Aceptada</option>
-                    <option value='rechazada'>Rechazada</option>
-                    <option value='pendiente'>Pendiente</option>
-                </Select>
-            </FormControl>
+        <FormControl className={classes.formControl}>
+            <Select
+                native
+                value={status}
+                onChange={handleChange}
+                input={
+                    <Input id='demo-dialog-native-2' />
+                }
+                name='status2'
+                label='value2'
+            >
+                <option aria-label='None' value='' />
+                <option value='aceptada'>Aceptada</option>
+                <option value='rechazada'>Rechazada</option>
+                <option value='pendiente'>Pendiente</option>
+            </Select>
+        </FormControl>
     )
 
 }
@@ -264,11 +264,13 @@ export default function MedicsTable() {
 
 
     const handleSave = async (request) => {
+
         const statusState = {
             aceptada: 'dado de baja',
             pendiente: 'revision pendiente',
             rechazada: 'aceptado'
         };
+
         MySwal.fire({
             title: `Desea guardar como ${newStatus} la solucitud de baja de ${request.familiar_name} de la obra social?`,
             showCloseButton: true,
@@ -291,10 +293,11 @@ export default function MedicsTable() {
                         .then((r) => {
                             if (r.body[0].state === statusState[newStatus]) {
                                 MySwal.fire({
-                                    title: `El socio ${request.familiar_name} ${request.familiar_lastname} ahora está ${statusState[newStatus]}.
+                                    title: `El socio ${request.familiar_name} ${request.familiar_lastname}
+                                    ahora está ${statusState[newStatus]}.
                                         La solicitud ha sido actualizada!`,
                                     icon: 'success',
-                                    timer: 2000,
+                                    timer: 3000,
                                 }).then(() => window.location.reload())
                             };
                         })
@@ -433,7 +436,7 @@ export default function MedicsTable() {
                                 })}
                             {emptyRows > 0 && (
                                 <TableRow style={{ height: 33 * emptyRows }}>
-                                    <TableCell colSpan={10} />
+                                    <TableCell colSpan={8} />
                                 </TableRow>
                             )}
                         </TableBody>

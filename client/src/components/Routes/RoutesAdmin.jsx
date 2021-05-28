@@ -11,10 +11,6 @@ function RoutesAdmin() {
                 path='/:id/admin'
                 render={() => <AdminNav firebase={firebase} />}
             />
-            <Route
-                path='/:id/admin/aplications'
-                render={() => <AplicationsTabs firebase={firebase} />}
-            />
         </>
     );
 }
