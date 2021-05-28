@@ -104,35 +104,43 @@ function AdminHome() {
         countPlans.push({ name: key, count: counts[key] });
     }
 
-    console.log(planInfo);
-
     return (
         <div className={styles.container}>
             <h1>Hola {adminData.name}</h1>
             <div className={styles.dataContainer}>
                 <article>
-                    <h3>Afiliados activos</h3>
-                    <CountUp end={activeAffiliates} duration={5} />
+                    <h3>
+                        Afiliados activos{' '}
+                        <CountUp end={activeAffiliates} duration={5} />
+                    </h3>
                 </article>
                 <article>
-                    <h3>Interesados a revisar</h3>
-                    <CountUp end={affiliatesToRevision} duration={5} />
+                    <h3>
+                        Interesados a revisar{' '}
+                        <CountUp end={affiliatesToRevision} duration={5} />
+                    </h3>
                 </article>
                 <article>
-                    <h3>Formularios pendientes</h3>
-                    <CountUp end={contactForm} duration={5} />
+                    <h3>
+                        Formularios pendientes{' '}
+                        <CountUp end={contactForm} duration={5} />
+                    </h3>
                 </article>
                 <article>
-                    <h3>Pedidos de bajas</h3>
-                    <CountUp end={downRequests} duration={5} />
+                    <h3>
+                        Pedidos de bajas{' '}
+                        <CountUp end={downRequests} duration={5} />
+                    </h3>
                 </article>
                 <article>
-                    <h3>Medicos activos</h3>
-                    <CountUp end={medics} duration={5} />
+                    <h3>
+                        Medicos activos <CountUp end={medics} duration={5} />
+                    </h3>
                 </article>
                 <article>
-                    <h3>Administradores</h3>
-                    <CountUp end={admins} duration={5} />
+                    <h3>
+                        Administradores <CountUp end={admins} duration={5} />
+                    </h3>
                 </article>
                 <Chart
                     width={'500px'}
@@ -145,8 +153,10 @@ function AdminHome() {
                     options={{ title: 'Planes mas consumidos' }}
                 />
                 <article>
-                    <h3>Ganancias mensuales</h3>
-                    $<CountUp end={planInfo} duration={10} />
+                    <h3>
+                        Ganancias mensuales $
+                        <CountUp end={planInfo} duration={10} />
+                    </h3>
                 </article>
             </div>
         </div>

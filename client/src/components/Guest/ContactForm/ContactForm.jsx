@@ -156,7 +156,7 @@ function ContactForm() {
                 break;
             }
             case 'age': {
-                if (!numberPattern.test(value)) {
+                if (!numberPattern.test(value) || value < 18) {
                     validateErrors = { ...errors, [inputName]: true };
                 } else {
                     validateErrors = { ...errors, [inputName]: false };
