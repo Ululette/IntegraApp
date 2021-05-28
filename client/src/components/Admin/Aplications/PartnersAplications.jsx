@@ -95,11 +95,7 @@ const headCells = [
     { id: 'status', numeric: false, disablePadding: false, label: 'Estado' },
 ];
 
-function EnhancedTableHead(props) {
-    const { classes, order, orderBy, onRequestSort } = props;
-    const createSortHandler = (property) => (event) => {
-        onRequestSort(event, property);
-    };
+function EnhancedTableHead() {
 
     return (
         <TableHead>
@@ -109,15 +105,8 @@ function EnhancedTableHead(props) {
                         key={`${headCell.id}-${index}`}
                         align='left'
                         padding='default'
-                        sortDirection={orderBy === headCell.id ? order : false}
                     >
-                        <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={createSortHandler(headCell.id)}
-                        >
                             {headCell.label}
-                        </TableSortLabel>
                     </TableCell>
                 ))}
             </TableRow>
@@ -160,47 +149,9 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
-    const { numSelected, setToShowRows, toShowRows, rows } = props;
-    const [open, setOpen] = React.useState(false);
-    const [selectedState, setSelectedState] = React.useState('');
-    const MySwal = withReactContent(Swal);
+    const { numSelected } = props;
 
-    const handleChange = (event) => {
-        setSelectedState(event.target.value)
-    };
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-        setToShowRows(rows);
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        filter(e.target[0].value);
-    };
-
-    const filter = async (value) => {
-        setToShowRows(rows);
-        let res = []
-        if (value) {
-            res = toShowRows.filter((r) => r.status.toLowerCase() == value.toLowerCase());
-            if (res.length > 0) setToShowRows(res);
-            else {
-                setToShowRows(rows);
-                MySwal.fire({
-                    title: `No hay solicitudes ${value}s`,
-                    icon: 'info',
-                    timer: 1500,
-                });
-            }
-        } else setToShowRows(rows);
-        setSelectedState('')
-        setOpen(false);
-    };
+   
 
     return (
         <Toolbar
@@ -216,54 +167,6 @@ const EnhancedTableToolbar = (props) => {
             >
                 Solicitudes
             </Typography>
-            <Tooltip title='Todo' onClick={handleClose}>
-                <IconButton aria-label='reset'>
-                    <ClearAllIcon />
-                </IconButton>
-            </Tooltip>
-            <Tooltip title='Filtrar' onClick={handleClickOpen}>
-                <IconButton aria-label='filter list'>
-                    <FilterListIcon />
-                </IconButton>
-            </Tooltip>
-            <Dialog
-                disableBackdropClick
-                disableEscapeKeyDown
-                open={open}
-                onClose={handleClose}
-                className={classes.dialog}
-            >
-                <DialogTitle>Filtrar por...</DialogTitle>
-                <form className={classes.container} onSubmit={handleSubmit}>
-                    <DialogContent>
-                        <FormControl className={classes.formControl}>
-                            <Select
-                                native
-                                value={selectedState}
-                                onChange={handleChange}
-                                input={
-                                    <Input id='demo-dialog-native' />
-                                }
-                                name='status'
-                                label='value'
-                            >
-                                <option aria-label='None' value='' />
-                                <option value='aceptada'>Aceptada</option>
-                                <option value='rechazada'>Rechazada</option>
-                                <option value='pendiente'>Pendiente</option>
-                            </Select>
-                        </FormControl>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose} color='primary'>
-                            Cancel
-                        </Button>
-                        <Button color='primary' type='submit'>
-                            Ok
-                        </Button>
-                    </DialogActions>
-                </form>
-            </Dialog>
         </Toolbar>
     );
 };
@@ -272,6 +175,47 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
+const StatusSelector = ({ current, setNewSatus, index, setIndexOnChange, indexOnChange }) => {
+
+    const classes = useToolbarStyles();
+
+    const [status, setStatus] = React.useState(current)
+
+    const handleChange = (e) => {
+        e.preventDefault();
+        setStatus(e.target.value)
+    }
+
+    React.useEffect(() => {
+        if (status == current) {
+            setIndexOnChange(indexOnChange.filter(e => e != index))
+        } else {
+            setIndexOnChange([...indexOnChange, index])
+            setNewSatus(status)
+        }
+    }, [status])
+
+    return (
+            <FormControl className={classes.formControl}>
+                <Select
+                    native
+                    value={status}
+                    onChange={handleChange}
+                    input={
+                        <Input id='demo-dialog-native-2' />
+                    }
+                    name='status2'
+                    label='value2'
+                >
+                    <option aria-label='None' value='' />
+                    <option value='aceptada'>Aceptada</option>
+                    <option value='rechazada'>Rechazada</option>
+                    <option value='pendiente'>Pendiente</option>
+                </Select>
+            </FormControl>
+    )
+
+}
 
 
 const useStyles = makeStyles((theme) => ({
@@ -305,60 +249,7 @@ export default function MedicsTable() {
     const MySwal = withReactContent(Swal);
     const [newStatus, setNewSatus] = React.useState('')
     const [indexOnChange, setIndexOnChange] = React.useState([])
-    const [selector, setSelector] = React.useState(false)
-    const [current, setCurrent] = React.useState(null)
 
-
-    const StatusSelector = ({ setNewSatus, index, setIndexOnChange, indexOnChange }) => {
-
-        const classes = useToolbarStyles();
-
-        const [status, setStatus] = React.useState(current)
-
-        const handleChange = (e) => {
-            e.preventDefault();
-            setStatus(e.target.value)
-        }
-
-        React.useEffect(() => {
-            if (status == current) {
-                setIndexOnChange(indexOnChange.filter(e => e != index))
-            } else {
-                setIndexOnChange([...indexOnChange, index])
-                setNewSatus(status)
-            }
-        }, [status])
-
-        return (
-            <form onSubmit={()=>setSelector(true)}>
-            <FormControl className={classes.formControl}>
-                <Select
-                    native
-                    value={status}
-                    onChange={handleChange}
-                    input={
-                        <Input id='demo-dialog-native-2' />
-                    }
-                    name='status2'
-                    label='value2'
-                >
-                    <option aria-label='None' value='' />
-                    <option value='aceptada'>Aceptada</option>
-                    <option value='rechazada'>Rechazada</option>
-                    <option value='pendiente'>Pendiente</option>
-                </Select>
-            </FormControl>
-            <input type='submit' value='Guardar'/>
-            </form>
-        )
-
-    }
-
-    const handleEdit = (current) => {
-        setCurrent(current)
-        setSelector(true);
-        if (selector) setSelector(false);
-    };
 
 
     const fetchRequests = () => {
@@ -379,7 +270,7 @@ export default function MedicsTable() {
             rechazada: 'aceptado'
         };
         MySwal.fire({
-            title: `Desea guardar la solucitud de baja de ${request.familiar_name} de la obra social, como ${newStatus}?`,
+            title: `Desea guardar como ${newStatus} la solucitud de baja de ${request.familiar_name} de la obra social?`,
             showCloseButton: true,
             showCancelButton: true,
             icon: 'question',
@@ -495,9 +386,6 @@ export default function MedicsTable() {
                                             selected={isItemSelected}
                                         >
                                             <TableCell align='center'>
-                                            <EditIcon
-                                                    onClick={handleEdit(row.status)}
-                                                />
                                                 <Tooltip
                                                     title='Guardar'
                                                     onClick={() => handleSave(row, index)}
@@ -532,7 +420,13 @@ export default function MedicsTable() {
                                                 {calculateAge(row.familiar_birthdate)}
                                             </TableCell>
                                             <TableCell align='center'>
-                                                {row.status}
+                                                <StatusSelector
+                                                    current={row.status}
+                                                    setNewSatus={setNewSatus}
+                                                    index={index}
+                                                    indexOnChange={indexOnChange}
+                                                    setIndexOnChange={setIndexOnChange}
+                                                />
                                             </TableCell>
                                         </TableRow>
                                     );
@@ -555,15 +449,6 @@ export default function MedicsTable() {
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                 />
             </Paper>
-            {selector ? <StatusSelector
-                current={row.status}
-                setNewSatus={setNewSatus}
-                index={row.familiar_dni}
-                indexOnChange={indexOnChange}
-                setIndexOnChange={setIndexOnChange}
-            />
-        :
-        null}
         </div>
     );
 }
