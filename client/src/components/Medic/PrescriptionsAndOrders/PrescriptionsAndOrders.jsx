@@ -117,7 +117,7 @@ export default function PrescriptionsAndOrders() {
                                         ? 'Estudio'
                                         : 'Medicamento'}
                                 </TableCell>
-                                <TableCell align='right'>Estado</TableCell>
+                                {query.selection === 'orders' ? <TableCell align='right'>Estado</TableCell> : null}
                                 <TableCell align='right'>Paciente</TableCell>
                             </TableRow>
                         </TableHead>
@@ -138,9 +138,9 @@ export default function PrescriptionsAndOrders() {
                                             ? row.study_name
                                             : row.drug_name}
                                     </TableCell>
-                                    <TableCell align='right'>
+                                    {query.selection === 'orders' ? <TableCell align='right'>
                                         {row.status}
-                                    </TableCell>
+                                    </TableCell> : null}
                                     <TableCell align='right'>
                                         {row.medical_consultations.partner.name}
                                     </TableCell>
