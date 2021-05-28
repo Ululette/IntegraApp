@@ -11,8 +11,6 @@ function RoutesAdmin() {
                 path='/:id/admin'
                 render={() => <AdminNav firebase={firebase} />}
             />
-            <Route exact path='/aplications' component={AplicationsTabs} />
-
         </>
     );
 }
