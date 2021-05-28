@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import MedicsTable from './MedicsTable';
 import FormSpecialities from '../Speciality/FormSpecialities';
+
 //----FALTA CORREGIR
 /*
 1-ubicar tabla paralela linea tab izquierda

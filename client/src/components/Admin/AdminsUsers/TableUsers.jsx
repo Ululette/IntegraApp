@@ -197,9 +197,10 @@ const EnhancedTableToolbar = (props) => {
     const [listFilter, setListFilter] = React.useState([]);
 
     const handleClickOpen = () => {
+        sendFilter('reset');
         setOpen(true);
         setListFilter(list);
-        console.log(list);
+
     };
     const hanldeReset = () => {
         sendFilter('reset');
@@ -260,7 +261,6 @@ const EnhancedTableToolbar = (props) => {
             let wanted;
             switch (option) {
                 case 'dni':
-                    //eslint-disable-next-line
                     wanted = listFilter.find((user) => user.dni == value);
                     if (wanted) {
                         res.push(wanted);
@@ -271,7 +271,6 @@ const EnhancedTableToolbar = (props) => {
                     } else alert(`no existe`);
                     break;
                 case 'email':
-                    //eslint-disable-next-line
                     wanted = listFilter.find((user) => user.email == value);
                     if (wanted) {
                         res.push(wanted);
@@ -282,17 +281,19 @@ const EnhancedTableToolbar = (props) => {
                     } else alert(`no existe`);
                     break;
                 case 'role':
-                    //eslint-disable-next-line
+                    console.log(listFilter)
                     res = listFilter.filter((user) => user.role == value);
-                    res.length > 0
-                        ? sendFilter(res)
-                        : alert(`no se encontraron resultados`);
+                    
+                    if(res.length > 0) sendFilter(res)
+                    else{
+                        sendFilter('reset');
+                        alert(`no se encontraron resultados`);
+                    }    
                     setSelectedRole('');
                     setOptionSelected('');
                     setOpen(false);
                     break;
                 default:
-                    //eslint-disable-next-line
                     res = listFilter.filter((user) => user.account == value);
                     res.length > 0
                         ? sendFilter(res)
@@ -510,7 +511,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function TableUsers({ rows, handleFilter }) {
+export default function TableUsers({ rows, handleFilter,allUsers }) {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('account');
@@ -661,7 +662,7 @@ export default function TableUsers({ rows, handleFilter }) {
                 <EnhancedTableToolbar
                     numSelected={selected.length}
                     handleBlock={handleBlock}
-                    list={rows}
+                    list={allUsers}
                     sendFilter={sendFilter}
                 />
                 <TableContainer>
