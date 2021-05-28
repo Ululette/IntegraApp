@@ -121,7 +121,7 @@ export default function PrescriptionsAndOrders() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.map((row) => (
+                            {data.length > 0 ? data.map((row) => (
                                 <TableRow key={row.name}>
                                     <TableCell component='th' scope='row'>
                                         {row.id}
@@ -141,7 +141,7 @@ export default function PrescriptionsAndOrders() {
                                         {row.medical_consultations.partner.name}
                                     </TableCell>
                                 </TableRow>
-                            ))}
+                            )): null}
                         </TableBody>
                     </Table>
                 </TableContainer>
