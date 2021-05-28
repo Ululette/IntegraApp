@@ -145,29 +145,6 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
 };
 
-// const useToolbarStyles = makeStyles((theme) => ({
-//     root: {
-//         paddingLeft: theme.spacing(2),
-//         paddingRight: theme.spacing(1),
-//     },
-//     highlight:
-//         theme.palette.type === 'light'
-//             ? {
-//                   color: theme.palette.secondary.main,
-//                   backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-//               }
-//             : {
-//                   color: theme.palette.text.primary,
-//                   backgroundColor: theme.palette.secondary.dark,
-//               },
-//     title: {
-//         flex: '1 1 100%',
-//     },
-//     dialog: {
-//         zIndex: '-6',
-//     },
-// }));
-
 //------------------------makeStyle1---------------------------------------------------------------------------------------
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
@@ -220,18 +197,18 @@ const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
     const { numSelected, setToShowRows, toShowRows, rows,medicSpecialities } = props;
     const [open, setOpen] = React.useState(false);
-    const [selectedOption, setSelectedOption] = React.useState('');
-    const [selectedState, setSelectedState] = React.useState('');
+    const [selectedState, setSelectedState] = React.useState(6);
     const [states, setStates] = React.useState();
-    const [selectedLocality, setSelectedLocality] = React.useState('');
+    const [selectedLocality, setSelectedLocality] = React.useState(4742);
     const [localities, setLocalities] = React.useState();
+    const [medicsToShow, setMedicsToShow] = React.useState([]);
+
 
     useEffect(async()=>{
         try {
             let { data: states } = await supabase
                 .from('states')
                 .select('id,name')
-            console.log(states);
             setStates(states);
         } catch (err) {
             console.error(err);
@@ -243,23 +220,36 @@ const EnhancedTableToolbar = (props) => {
                 .from('localities')
                 .select('id_locality,name,postal_code,state_id')
                 .eq('state_id',idState)
-            console.log(localities);
             setLocalities(localities);
         } catch (err) {
             console.error(err);
         }
     }
+    const getMedics=async(idLocality)=>{
+        try {
+            let { data: medics, error: errorFetchMedics } = await supabase
+            .from('address')
+            .select('street,medics(name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name))))')
+            .eq('locality_id',idLocality)
+            console.log(medics);
+            let array=[];
+            for(let ad of medics){
+                array.push(ad.medics);
+            }
+            console.log(array);
+            setMedicsToShow(array);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     useEffect(()=>{
         getLocalities(selectedState)
     },[selectedState]);
-
-    const handleChange = (event) => {
-        // event.target.name === 'state'
-        //     ?   setSelectedState(event.target.value) &&
-        //         setSelectedOption(event.target.value)
-        //     :   setSelectedOption(event.target.value);
-    };
-
+    useEffect(()=>{
+        getMedics(selectedLocality)
+    },[selectedLocality]);
+    
     const handleStateOption = (e) => {
         setSelectedState(e.target.value);
     }
@@ -270,44 +260,19 @@ const EnhancedTableToolbar = (props) => {
     const handleClickOpen = () => {
         setOpen(true);
     };
-
-    const handleClose = () => {
+    
+    const handleCancel = () => {
         setOpen(false);
         setToShowRows(rows);
+    };
+    const handleClose = () => {
+        setOpen(false);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        selectedOption === 'state'
-            ? filter(e.target[0].value, e.target[1].value)
-            : filter(e.target[0].value, e.target[2].value);
-    };
-    
-
-    const filter = (value, option) => {
-        setToShowRows(rows);
-        if (option === 'lastname') {
-            value
-                ? setToShowRows(
-                      toShowRows.filter((r) => {
-                        return r[option]
-                            .toLowerCase()
-                            .includes(value.toLowerCase());
-                      })
-                  )
-                : setToShowRows(rows);
-        } else if (option === 'medical_specialities') {
-            value
-                ? setToShowRows(
-                      toShowRows.filter((r) =>
-                          r[option].some((e) =>
-                              e.name.toLowerCase().includes(value.toLowerCase())
-                          )
-                      )
-                  )
-                : setToShowRows(rows);
-        } else setToShowRows(rows);
         setOpen(false);
+        setToShowRows(medicsToShow);
     };
 
     return (
@@ -325,7 +290,7 @@ const EnhancedTableToolbar = (props) => {
                 MEDICOS
             </Typography>
             <Tooltip title='Clear' 
-                onClick={handleClose} className={classes.iconFilter}>
+                onClick={handleCancel} className={classes.iconFilter}>
                 <IconButton aria-label='reset'>
                     <ClearAllIcon />
                 </IconButton>
@@ -336,62 +301,6 @@ const EnhancedTableToolbar = (props) => {
                     <FilterListIcon />
                 </IconButton>
             </Tooltip>
-            <FormControl className={classes.formControl}>
-                <InputLabel htmlFor='demo-dialog-native'>
-                    Filter By
-                </InputLabel>
-                <Select
-                    native
-                    value={selectedState}
-                    onChange={handleStateOption}
-                    input={<Input id='demo-dialog-native' />}
-                >
-                    {states &&
-                        states.map(      
-                            (state, index) => (
-                                <option
-                                    className='inputSel'
-                                    key={index}
-                                    value={
-                                        state.id
-                                    }
-                                >
-                                    {
-                                        state.name
-                                    }
-                                </option>
-                            )
-                        )}
-                </Select>
-            </FormControl>
-            <FormControl className={classes.formControl}>
-                <InputLabel htmlFor='demo-dialog-native'>
-                    Filter By
-                </InputLabel>
-                <Select
-                    native
-                    value={selectedLocality}
-                    onChange={handleStateOption}
-                    input={<Input id='demo-dialog-native' />}
-                >
-                    {localities &&
-                        localities.map(      
-                            (locality, index) => (
-                                <option
-                                    className='inputSel'
-                                    key={index}
-                                    value={
-                                        locality.id_locality
-                                    }
-                                >
-                                    {
-                                        locality.name
-                                    }
-                                </option>
-                            )
-                        )}
-                </Select>
-            </FormControl>
             <Dialog
                 disableBackdropClick
                 disableEscapeKeyDown
@@ -400,7 +309,7 @@ const EnhancedTableToolbar = (props) => {
                 className={classes.dialog}
             >
                 <DialogTitle>Fill the form</DialogTitle>
-                <form className={classes.container} onSubmit={handleSubmit}>
+                <form className={classes.container}>
                     <DialogContent>
                         <FormControl className={classes.formControl}>
                             <InputLabel htmlFor='demo-dialog-native'>
@@ -408,25 +317,62 @@ const EnhancedTableToolbar = (props) => {
                             </InputLabel>
                             <Select
                                 native
-                                value={selectedOption}
-                                onChange={handleChange}
+                                value={selectedState}
+                                onChange={handleStateOption}
                                 input={<Input id='demo-dialog-native' />}
                             >
-                                <option aria-label='None' value='' />
-                                <option value='dni'>DNI</option>
-                                <option value='lastname'>Last Name</option>
-                                <option value='medical_specialities'>
-                                    Specialty
-                                </option>
-                                <option value='state'>State</option>
+                                {states &&
+                                    states.map(      
+                                        (state, index) => (
+                                            <option
+                                                className='inputSel'
+                                                key={index}
+                                                value={
+                                                    state.id
+                                                }
+                                            >
+                                                {
+                                                    state.name
+                                                }
+                                            </option>
+                                        )
+                                    )}
+                            </Select>
+                        </FormControl>
+                        <FormControl className={classes.formControl}>
+                            <InputLabel htmlFor='demo-dialog-native'>
+                                Filter By
+                            </InputLabel>
+                            <Select
+                                native
+                                value={selectedLocality}
+                                onChange={handleLocalityOption}
+                                input={<Input id='demo-dialog-native' />}
+                            >
+                                {localities &&
+                                    localities.map(      
+                                        (locality, index) => (
+                                            <option
+                                                className='inputSel'
+                                                key={index}
+                                                value={
+                                                    locality.id_locality
+                                                }
+                                            >
+                                                {
+                                                    locality.name
+                                                }
+                                            </option>
+                                        )
+                                    )}
                             </Select>
                         </FormControl>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose} color='primary'>
+                        <Button onClick={handleCancel} color='primary'>
                             Cancel
                         </Button>
-                        <Button color='primary' type='submit'>
+                        <Button onClick={handleSubmit}>
                             Ok
                         </Button>
                     </DialogActions>
@@ -440,23 +386,6 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//         width: '100%',
-//     },
-//     paper: {
-//         width: '100%',
-//         marginBottom: theme.spacing(2),
-//     },
-//     table: {
-//         minWidth: 750,
-//     },
-//     visuallyHidden: {
-//         clip: 'rect(0 0 0 0)',
-//         overflow: 'hidden',
-//         padding: 0,
-//     },
-// }));
 
 //-------------------- EnhancedTableToolbar Style
 const useStyles = makeStyles((theme) => ({
@@ -517,16 +446,7 @@ export default function SearchDoctors() {
     const [toShowRows, setToShowRows] = React.useState([]);
     const MySwal = withReactContent(Swal);
 
-    // const fetchMedics = async () => {
-    //     const { data: medics, error: errorFetchMedics } = await supabase
-    //         .from('medics')
-    //         .select(
-    //             'dni, name, lastname, medic_license, email, phone_number, birthdate, state, profilePic, medical_specialities (id, name)'
-    //         );
-    //     if (errorFetchMedics) return console.log(errorFetchMedics);
-    //     setToShowRows(medics);
-    //     setListMedics(medics);
-    // };
+
     const fetchMedics = async () => {
         const { data: medics, error: errorFetchMedics } = await supabase
             .from('medics')
@@ -539,6 +459,19 @@ export default function SearchDoctors() {
         setListMedics(medics);
     };
 
+    // const fetchMedicsStateAndLocality = async (idState,idLocality) => {
+    //     const { data: medics, error: errorFetchMedics } = await supabase
+    //         .from('localities')
+    //         .select(
+    //             'id_locality, name, postal_code,state_id))'
+    //         )
+    //         .eq('state_id',idState)
+    //         console.log(medics);
+    //     if (errorFetchMedics) return console.log(errorFetchMedics);
+    //     setToShowRows(medics);
+    //     setListMedics(medics);
+    // };
+
     const fetchSpecialities = async () => {
         const { data: specialities, error: errorFetchSpecialities } =
             await supabase.from('medical_specialities').select('name, id');
@@ -547,6 +480,7 @@ export default function SearchDoctors() {
     };
 
     React.useEffect(() => {
+        // fetchMedicsStateAndLocality()
         fetchMedics();
         fetchSpecialities();
     }, []);
@@ -598,6 +532,8 @@ export default function SearchDoctors() {
     };
 
     const isSelected = (name) => selected.indexOf(name) !== -1;
+
+    toShowRows.length>14?console.log('16 medicos'):console.log(toShowRows)
 
     const emptyRows =
         rowsPerPage -
