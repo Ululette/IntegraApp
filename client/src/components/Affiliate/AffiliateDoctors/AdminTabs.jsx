@@ -6,7 +6,8 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import SearchDoctors from './SearchDoctors';
+import MedicsTable from './MedicsTable';
+import FormSpecialities from '../Speciality/FormSpecialities';
 //----FALTA CORREGIR
 /*
 1-ubicar tabla paralela linea tab izquierda
@@ -96,10 +97,10 @@ export default function AdminMedicTabs() {
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
-                <SearchDoctors />
+                <MedicsTable />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                {/* <FormSpecialities /> */}
+                <FormSpecialities />
             </TabPanel>
         </div>
     );
