@@ -21,7 +21,6 @@
 }
 
 .iconCard {
-    background-color: #56ae5a;
     width: 85px;
     height: 85px;
     margin-left: 1rem;
@@ -35,6 +34,34 @@
     z-index: 1;
     margin-top: 60px;
     position: absolute;
+}
+
+.bg_green {
+    background-color: #56ae5a;
+}
+
+.bg_lightblue {
+    background-color: rgb(23, 162, 184);
+}
+
+.bg_blue {
+    background-color: #6200ea;
+}
+
+.bg_yellow {
+    background-color: #ffc107;
+}
+
+.bg_red {
+    background-color: #f06292;
+}
+
+.bg_purple {
+    background-color: #9c27b0;
+}
+
+.bg_black {
+    background-color: #656e75;
 }
 
 .iconCard svg {
@@ -140,6 +167,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    margin-top: 2rem;
 }
 
 .iconChart {

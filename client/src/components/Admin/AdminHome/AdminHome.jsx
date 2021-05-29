@@ -19,8 +19,6 @@ import WarningIcon from '@material-ui/icons/Warning';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 function AdminHome() {
-    const adminData = JSON.parse(localStorage.getItem('admindata'));
-
     const [activeAffiliates, setActiveAffiliates] = useState('');
     const [affiliatesToRevision, setAffiliatesToRevision] = useState('');
     const [downRequests, setDownRequests] = useState('');
@@ -163,14 +161,11 @@ function AdminHome() {
         };
     });
 
-    console.log(rows);
-
     return (
         <div className={styles.container}>
-            <h1>Hola {adminData.name}</h1>
             <div className={styles.dataContainer}>
                 <section className={styles.card}>
-                    <div className={styles.iconCard}>
+                    <div className={`${styles.iconCard} ${styles.bg_green}`}>
                         <StorefrontIcon />
                     </div>
                     <div className={styles.infoCard}>
@@ -184,7 +179,7 @@ function AdminHome() {
                     </div>
                 </section>
                 <section className={styles.card}>
-                    <div className={styles.iconCard}>
+                    <div className={`${styles.iconCard} ${styles.bg_blue}`}>
                         <AddToQueueIcon />
                     </div>
                     <div className={styles.infoCard}>
@@ -201,7 +196,9 @@ function AdminHome() {
                     </div>
                 </section>
                 <section className={styles.card}>
-                    <div className={styles.iconCard}>
+                    <div
+                        className={`${styles.iconCard} ${styles.bg_lightblue}`}
+                    >
                         <HourglassEmptyIcon />
                     </div>
                     <div className={styles.infoCard}>
@@ -215,7 +212,7 @@ function AdminHome() {
                     </div>
                 </section>
                 <section className={styles.card}>
-                    <div className={styles.iconCard}>
+                    <div className={`${styles.iconCard} ${styles.bg_yellow}`}>
                         <ErrorIcon />
                     </div>
                     <div className={styles.infoCard}>
@@ -229,7 +226,7 @@ function AdminHome() {
                     </div>
                 </section>
                 <section className={styles.card}>
-                    <div className={styles.iconCard}>
+                    <div className={`${styles.iconCard} ${styles.bg_purple}`}>
                         <AccessibilityIcon />
                     </div>
                     <div className={styles.infoCard}>
@@ -243,7 +240,7 @@ function AdminHome() {
                     </div>
                 </section>
                 <section className={styles.card}>
-                    <div className={styles.iconCard}>
+                    <div className={`${styles.iconCard} ${styles.bg_red}`}>
                         <AddBoxIcon />
                     </div>
                     <div className={styles.infoCard}>
@@ -257,7 +254,7 @@ function AdminHome() {
                     </div>
                 </section>
                 <section className={styles.card}>
-                    <div className={styles.iconCard}>
+                    <div className={`${styles.iconCard} ${styles.bg_black}`}>
                         <SettingsIcon />
                     </div>
                     <div className={styles.infoCard}>
@@ -271,15 +268,7 @@ function AdminHome() {
                     </div>
                 </section>
             </div>
-            <div className={styles.dataGridContainer}>
-                <div className={styles.iconGrid}>
-                    <WarningIcon />
-                    <h3>Socios con deudas</h3>
-                </div>
-                <section className={styles.dataGrid}>
-                    <DataGrid rows={rows} columns={columns} pageSize={5} />
-                </section>
-            </div>
+
             <section className={styles.chartContainer}>
                 <div className={styles.iconChart}>
                     <ShoppingCartIcon />
@@ -294,6 +283,15 @@ function AdminHome() {
                     className={styles.chart}
                 />
             </section>
+            <div className={styles.dataGridContainer}>
+                <div className={styles.iconGrid}>
+                    <WarningIcon />
+                    <h3>Socios con deudas</h3>
+                </div>
+                <section className={styles.dataGrid}>
+                    <DataGrid rows={rows} columns={columns} pageSize={5} />
+                </section>
+            </div>
         </div>
     );
 }

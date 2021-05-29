@@ -1,9 +1,12 @@
 import React from 'react';
 import { useUser } from 'reactfire';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
+import supabase from '../../../supabase.config';
+
+import Popover from '@material-ui/core/Popover';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,7 +16,6 @@ import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Badge from '@material-ui/core/Badge';
@@ -21,6 +23,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { CircularProgress, Button } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 
 //Icons
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -32,6 +35,7 @@ import DoneAllIcon from '@material-ui/icons/DoneAll';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import HealingIcon from '@material-ui/icons/Healing';
+import ClearIcon from '@material-ui/icons/Clear';
 
 // OUR COMPONENTS
 import AdminHome from '../AdminHome/AdminHome.jsx';
@@ -46,6 +50,8 @@ import FormUsers from '../AdminsUsers/FormUsers.jsx';
 
 import styles from './AdminNav.module.css';
 import AdminOrders from '../AdminOrders/AdminOrders.jsx';
+import { ContactSupport, Send, ThumbDown } from '@material-ui/icons';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 
 const drawerWidth = 260;
 
@@ -94,6 +100,7 @@ function AdminNav({ firebase, window: windowMui }) {
     const classes = useStyles();
     const theme = useTheme();
     const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [notifications, setNotifications] = React.useState('');
 
     const userData = JSON.parse(localStorage.getItem('userdata'));
     const adminData = JSON.parse(localStorage.getItem('admindata'));
@@ -106,18 +113,59 @@ function AdminNav({ firebase, window: windowMui }) {
     const MySwal = withReactContent(Swal);
 
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorPop, setAnchorPop] = React.useState(null);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
+    };
+
+    const handleClickPop = (event) => {
+        setAnchorPop(event.currentTarget);
     };
 
     const handleClose = () => {
         setAnchorEl(null);
     };
 
+    const handleClosePop = () => {
+        setAnchorPop(null);
+    };
+
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
+
+    const openPop = Boolean(anchorPop);
+    const id = openPop ? 'simple-popover' : undefined;
+
+    const fetchNotifications = async () => {
+        let { data: notificationsGuest } = await supabase
+            .from('guest_contacts')
+            .select('*')
+            .eq('seen', false);
+        let { data: notificationsDowns } = await supabase
+            .from('familiar_downs_request')
+            .select('*')
+            .match({ status: 'pendiente', seen: false });
+        let { data: notificationsForms } = await supabase
+            .from('medical_records')
+            .select('*, partners(name, lastname)')
+            .eq('seen', false);
+
+        setNotifications(
+            []
+                .concat(
+                    notificationsGuest,
+                    notificationsDowns,
+                    notificationsForms
+                )
+                .filter((el) => el !== null)
+        );
+    };
+
+    React.useEffect(() => {
+        fetchNotifications();
+    }, []);
 
     const logout = async () => {
         setAnchorEl(null);
@@ -141,13 +189,15 @@ function AdminNav({ firebase, window: windowMui }) {
         });
     };
 
-    if (!userDataFirebase.data) return <CircularProgress />;
-
     const drawer = (
         <div>
             <div className={classes.toolbar} />
             <List>
-                <NavLink to={`/${userData.dni}/admin`} className={styles.link}>
+                <NavLink
+                    to={`/${userData.dni}/admin/dashboard`}
+                    className={styles.link}
+                    activeClassName={styles.activeLink}
+                >
                     <ListItem button>
                         <HomeIcon />
                         <ListItemText primary='Inicio' />
@@ -231,6 +281,19 @@ function AdminNav({ firebase, window: windowMui }) {
     const container =
         windowMui !== undefined ? () => window().document.body : undefined;
 
+    const handleSeenNotification = async (el) => {
+        const table = el.hasOwnProperty('phone_number')
+            ? 'guest_contacts'
+            : el.hasOwnProperty('familiar_name')
+            ? 'familiar_downs_request'
+            : 'medical_records';
+        await supabase.from(table).update({ seen: true }).eq('id', el.id);
+        await fetchNotifications();
+    };
+
+    if (!userDataFirebase.data && notifications === '')
+        return <CircularProgress />;
+
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -255,11 +318,74 @@ function AdminNav({ firebase, window: windowMui }) {
                 </a>
                 <section className={styles.userData}>
                     <Badge
-                        badgeContent={2}
+                        badgeContent={notifications.length}
                         color='secondary'
                         className={styles.navIcon}
                     >
-                        <MailIcon />
+                        <NotificationsIcon
+                            aria-describedby={id}
+                            variant='contained'
+                            color='white'
+                            onClick={handleClickPop}
+                        />
+                        <Popover
+                            id={id}
+                            open={openPop}
+                            anchorEl={anchorPop}
+                            onClose={handleClosePop}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'center',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'center',
+                            }}
+                        >
+                            <List>
+                                {notifications.map((el, idx) => (
+                                    <ListItem
+                                        button
+                                        key={`notification-${idx}`}
+                                    >
+                                        <ListItemIcon>
+                                            {el.hasOwnProperty(
+                                                'phone_number'
+                                            ) ? (
+                                                <ContactSupport />
+                                            ) : el.hasOwnProperty(
+                                                  'familiar_name'
+                                              ) ? (
+                                                <ThumbDown />
+                                            ) : (
+                                                <Send />
+                                            )}
+                                        </ListItemIcon>
+                                        <ListItemText
+                                            primary={
+                                                el.hasOwnProperty(
+                                                    'phone_number'
+                                                )
+                                                    ? `Un interesado ${el.name} se ha comunicado con la prepaga.`
+                                                    : el.hasOwnProperty(
+                                                          'familiar_name'
+                                                      )
+                                                    ? `El socio titular con ${el.titular_dni} ha solicitado la baja de un familiar.`
+                                                    : `El interesado ${el.partner_dni} ha enviado el formulario y queda pendiente de revision.`
+                                            }
+                                        />
+                                        <ListItemIcon
+                                            button
+                                            onClick={() =>
+                                                handleSeenNotification(el)
+                                            }
+                                        >
+                                            <ClearIcon />
+                                        </ListItemIcon>
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </Popover>
                     </Badge>
                     <article className={styles.namesContainer}>
                         <p>{`${adminData.name} ${adminData.lastname}`}</p>
@@ -342,7 +468,7 @@ function AdminNav({ firebase, window: windowMui }) {
             <main className={classes.content}>
                 <div className={classes.toolbar} />
                 {window.location.pathname === `/${userData.dni}/admin` ? (
-                    <AdminHome firebase={firebase} />
+                    <Redirect to={`/${userData.dni}/admin/dashboard`} />
                 ) : window.location.pathname ===
                   `/${userData.dni}/admin/medics` ? (
                     <AdminMedicTabs />
