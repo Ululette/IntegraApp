@@ -20,6 +20,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import supabase from '../../../supabase.config';
 import getSome from '../../../actions/elgetter'
+import { IconButton, Tooltip } from '@material-ui/core';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -319,11 +320,15 @@ export default function GuestsAplications() {
                                             selected={isItemSelected}
                                         >
                                             <TableCell align='center'>
-                                                <DeleteIcon
-                                                    onClick={() =>
-                                                        handleDelete(row)
-                                                    }
-                                                />
+                                                <Tooltip title='Borrar'>
+                                                    <IconButton aria-label='delete' >
+                                                        <DeleteIcon
+                                                            onClick={() =>
+                                                                handleDelete(row)
+                                                            }
+                                                        />
+                                                    </IconButton>
+                                                </Tooltip>
                                             </TableCell>
                                             <TableCell align='left'>
                                                 {row.name}
