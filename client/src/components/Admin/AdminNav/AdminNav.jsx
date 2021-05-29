@@ -364,6 +364,9 @@ function AdminNav({ firebase, window: windowMui }) {
                 ) : window.location.pathname ===
                   `/${userData.dni}/admin/users` ? (
                     <FormUsers />
+                ) : window.location.pathname ===
+                  `/${userData.dni}/admin/dashboard` ? (
+                    <AdminHome />
                 ) : (
                     <NotFound />
                 )}

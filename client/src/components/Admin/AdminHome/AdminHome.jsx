@@ -86,13 +86,6 @@ function AdminHome() {
     if (authorizations === '' && bestPlans === '')
         return <CircularProgress color='secondary' />;
 
-    // console.log(activeAffiliates);
-    // console.log(affiliatesToRevision);
-    // console.log(downRequests);
-    // console.log(medics);
-    // console.log(contactForm);
-    // console.log(authorizations);
-
     const counts = {};
     const countPlans = [['Plan', 'Socios']];
 
