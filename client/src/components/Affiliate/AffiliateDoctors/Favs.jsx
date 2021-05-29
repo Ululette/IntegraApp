@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -15,31 +15,12 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import ClearAllIcon from '@material-ui/icons/ClearAll';
-import EditIcon from '@material-ui/icons/Edit';
+import InfoIcon from '@material-ui/icons/Info';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import blue from '@material-ui/core/colors/blue'
 import 'firebase/auth';
-import AdminMedicAdd from '../AdminMedics/AdminMedicAdd';
-import AdminMedicEdit from '../AdminMedics/AdminMedicEdit';
 import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
-import {
-    Avatar,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    FormControl,
-    InputLabel,
-    Select,
-    Input,
-    DialogActions,
-    TextField,
-} from '@material-ui/core';
-import { Button } from '@material-ui/core';
-import calculateAge from '../../../functions/calculateAge';
+import { Avatar } from '@material-ui/core';
 import supabase from '../../../supabase.config';
 
 function descendingComparator(a, b, orderBy) {
@@ -89,33 +70,11 @@ const headCells = [
         label: 'APELLIDO',
     },
     {
-        id: 'medic_license',
-        numeric: false,
-        disablePadding: false,
-        label: 'MATRICULA',
-    },
-    { id: 'dni', numeric: true, disablePadding: false, label: 'DNI' },
-    { id: 'email', numeric: false, disablePadding: false, label: 'E-MAIL' },
-    {
-        id: 'phone_number',
-        numeric: false,
-        disablePadding: false,
-        label: 'TELEFONO',
-    },
-    {
-        id: 'birthdate',
-        numeric: true,
-        disablePadding: false,
-        label: 'EDAD',
-    },
-
-    {
         id: 'specialties',
         numeric: false,
         disablePadding: false,
         label: 'ESPECIALIDAD',
     },
-    { id: 'state', numeric: false, disablePadding: false, label: 'ESTADO' },
 ];
 
 function EnhancedTableHead(props) {
@@ -165,29 +124,6 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired,
 };
-
-// const useToolbarStyles = makeStyles((theme) => ({
-//     root: {
-//         paddingLeft: theme.spacing(2),
-//         paddingRight: theme.spacing(1),
-//     },
-//     highlight:
-//         theme.palette.type === 'light'
-//             ? {
-//                   color: theme.palette.secondary.main,
-//                   backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-//               }
-//             : {
-//                   color: theme.palette.text.primary,
-//                   backgroundColor: theme.palette.secondary.dark,
-//               },
-//     title: {
-//         flex: '1 1 100%',
-//     },
-//     dialog: {
-//         zIndex: '-6',
-//     },
-// }));
 
 //------------------------makeStyle1---------------------------------------------------------------------------------------
 const useToolbarStyles = makeStyles((theme) => ({
@@ -239,79 +175,25 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
-    const { numSelected, setToShowRows, toShowRows, rows,medicSpecialities } = props;
-    const [open, setOpen] = React.useState(false);
-    const [selectedOption, setSelectedOption] = React.useState('');
-    const [selectedState, setSelectedState] = React.useState('activo');
+    const { numSelected, setToShowRows, toShowRows, rows, medicSpecialities, deleteFav } = props;
+    let userDni = JSON.parse(localStorage.getItem('userdata')).dni;
 
-    const handleChange = (event) => {
-        event.target.name === 'state'
-            ?   setSelectedState(event.target.value) &&
-                setSelectedOption(event.target.value)
-            :   setSelectedOption(event.target.value);
+    const fetchFavs = async (userDni) => {
+        const { data: medics, error: errorFetchMedics } = await supabase
+            .from('favorites')
+            .select('medics(dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name)))))')
+            .eq('partner_dni',userDni)
+            let array=[];
+            for(let ad of medics){
+                array.push(ad.medics);
+            }
+            setToShowRows(array)
+        if (errorFetchMedics) return console.log(errorFetchMedics);
     };
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-        setToShowRows(rows);
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        selectedOption === 'state'
-            ? filter(e.target[0].value, e.target[1].value)
-            : filter(e.target[0].value, e.target[2].value);
-    };
-
-    const filter = (value, option) => {
-        setToShowRows(rows);
-        if (option === 'lastname') {
-            value
-                ? setToShowRows(
-                      toShowRows.filter((r) => {
-                        return r[option]
-                            .toLowerCase()
-                            .includes(value.toLowerCase());
-                      })
-                  )
-                : setToShowRows(rows);
-        } else if (option === 'dni') {
-            value
-                ? setToShowRows(
-                      toShowRows.filter((r) => {
-                          return String(r[option])
-                              .toLowerCase()
-                              .includes(value.toLowerCase());
-                      })
-                  )
-                : setToShowRows(rows);
-        } else if (option === 'medical_specialities') {
-            value
-                ? setToShowRows(
-                      toShowRows.filter((r) =>
-                          r[option].some((e) =>
-                              e.name.toLowerCase().includes(value.toLowerCase())
-                          )
-                      )
-                  )
-                : setToShowRows(rows);
-        } else if (option === 'state') {
-            value
-                ? setToShowRows(
-                      toShowRows.filter((r) => {
-                          return (
-                              r[option].toLowerCase() === value.toLowerCase()
-                          );
-                      })
-                  )
-                : setToShowRows(rows);
-        } else setToShowRows(rows);
-        setOpen(false);
-    };
+    useEffect(async()=>{
+        fetchFavs(userDni)
+    },[deleteFav]);
 
     return (
         <Toolbar
@@ -319,7 +201,6 @@ const EnhancedTableToolbar = (props) => {
                 [classes.highlight]: numSelected > 0,
             })}
         >
-            <AdminMedicAdd medicSpecialities={medicSpecialities} />
             <Typography
                 className={classes.title}
                 variant='h6'
@@ -328,84 +209,6 @@ const EnhancedTableToolbar = (props) => {
             >
                 MEDICOS
             </Typography>
-            <Tooltip title='Clear' 
-                onClick={handleClose} className={classes.iconFilter}>
-                <IconButton aria-label='reset'>
-                    <ClearAllIcon />
-                </IconButton>
-            </Tooltip>
-            <Tooltip title='Filter list' 
-                onClick={handleClickOpen} className={classes.iconFilter}>
-                <IconButton aria-label='filter'>
-                    <FilterListIcon />
-                </IconButton>
-            </Tooltip>
-            <Dialog
-                disableBackdropClick
-                disableEscapeKeyDown
-                open={open}
-                onClose={handleClose}
-                className={classes.dialog}
-            >
-                <DialogTitle>Fill the form</DialogTitle>
-                <form className={classes.container} onSubmit={handleSubmit}>
-                    <DialogContent>
-                        <FormControl className={classes.formControl}>
-                            {selectedOption === 'state' ? (
-                                <FormControl className={classes.formControl}>
-                                    <Select
-                                        native
-                                        value={selectedState}
-                                        onChange={handleChange}
-                                        input={
-                                            <Input id='demo-dialog-native' />
-                                        }
-                                        name='state'
-                                        label='value'
-                                    >
-                                        <option aria-label='None' value='' />
-                                        <option value='activo'>Activo</option>
-                                        <option value='inhabilitado'>Inhabilitado</option>
-                                    </Select>
-                                </FormControl>
-                            ) : (
-                                <TextField
-                                    id='outlined-basic'
-                                    label='value'
-                                    variant='outlined'
-                                />
-                            )}
-                        </FormControl>
-                        <FormControl className={classes.formControl}>
-                            <InputLabel htmlFor='demo-dialog-native'>
-                                Filter By
-                            </InputLabel>
-                            <Select
-                                native
-                                value={selectedOption}
-                                onChange={handleChange}
-                                input={<Input id='demo-dialog-native' />}
-                            >
-                                <option aria-label='None' value='' />
-                                <option value='dni'>DNI</option>
-                                <option value='lastname'>Last Name</option>
-                                <option value='medical_specialities'>
-                                    Specialty
-                                </option>
-                                <option value='state'>State</option>
-                            </Select>
-                        </FormControl>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose} color='primary'>
-                            Cancel
-                        </Button>
-                        <Button color='primary' type='submit'>
-                            Ok
-                        </Button>
-                    </DialogActions>
-                </form>
-            </Dialog>
         </Toolbar>
     );
 };
@@ -414,28 +217,12 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//         width: '100%',
-//     },
-//     paper: {
-//         width: '100%',
-//         marginBottom: theme.spacing(2),
-//     },
-//     table: {
-//         minWidth: 750,
-//     },
-//     visuallyHidden: {
-//         clip: 'rect(0 0 0 0)',
-//         overflow: 'hidden',
-//         padding: 0,
-//     },
-// }));
 
 //-------------------- EnhancedTableToolbar Style
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
+        position: 'relative',
     },
     paper: {
         width: '100%',
@@ -476,7 +263,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function SearchDoctors() {
+export default function Favs() {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -485,20 +272,28 @@ export default function SearchDoctors() {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [listMedics, setListMedics] = React.useState([]);
     const [medicSpecialities, setMedicSpecialities] = React.useState([]);
-    const [editActive, setEditActive] = React.useState(false);
+    const [infoActive, setInfoActive] = React.useState(false);
     const [medicData, setMedicData] = React.useState(null);
     const [toShowRows, setToShowRows] = React.useState([]);
-    const MySwal = withReactContent(Swal);
+    const [deleteFavNoti, setDeleteFavNoti] = React.useState(false);
+    let userDni = JSON.parse(localStorage.getItem('userdata')).dni;
 
-    const fetchMedics = async () => {
-        const { data: medics, error: errorFetchMedics } = await supabase
-            .from('medics')
-            .select(
-                'dni, name, lastname, medic_license, email, phone_number, birthdate, state, profilePic, medical_specialities (id, name)'
-            );
-        if (errorFetchMedics) return console.log(errorFetchMedics);
-        setToShowRows(medics);
-        setListMedics(medics);
+    const deleteFav = async (medicDni) => {
+            console.log('DNI a eliminar:',medicDni)
+            const { data, error } = await supabase
+                .from('favorites')
+                .delete()
+                .eq('medic_dni',medicDni)
+                .eq('partner_dni',userDni)
+            Swal.fire({
+                icon: 'success',
+                title: 'Médico eliminado de favoritos',
+                showConfirmButton: false,
+                timer: 1500
+            })
+            setDeleteFavNoti(true);
+            setDeleteFavNoti(false)
+        if (error) return console.log(error);
     };
 
     const fetchSpecialities = async () => {
@@ -509,40 +304,33 @@ export default function SearchDoctors() {
     };
 
     React.useEffect(() => {
-        fetchMedics();
-        fetchSpecialities();
+        fetchSpecialities()
     }, []);
 
-    const handleEdit = (medicData) => {
-        console.log(medicData, 'medicData Tabs');
-        setMedicData(medicData);
-        setEditActive(true);
-        if (editActive) setEditActive(false);
-    };
+    const handleDeleteFav = (row) => {
+        deleteFav(row.dni);
+    }
 
-    const handleDelete = async (medicData) => {
-        MySwal.fire({
-            title: `Desea inhabilitar al medico ${medicData.name} ${medicData.lastname} de la obra social?`,
-            showCloseButton: true,
-            showCancelButton: true,
-            icon: 'question',
-        }).then(async (res) => {
-            if (res.isConfirmed) {
-                try {
-                    await supabase
-                        .from('medics')
-                        .update({ state: 'inhabilitado' })
-                        .eq('dni', medicData.dni);
-                    MySwal.fire({
-                        title: 'Se inhabilito al medico con exito!',
-                        icon: 'success',
-                        timer: 2000,
-                    }).then(() => window.location.reload());
-                } catch (error) {
-                    console.log(error);
-                }
-            }
-        });
+    const handleInfo = (medicData) => {
+        setMedicData(medicData);
+        console.log('Handle info:',medicData)
+        let floor = medicData.address[0].floor!==null?`Piso: ${medicData.address[0].floor}`:'';
+        let department = medicData.address[0].department!==null?`Depto.: ${medicData.address[0].department}`:'';
+        Swal.fire({
+            position: 'bottom',
+            title: `Dr. ${medicData.name} ${medicData.lastname}`,
+            html:
+                `<p>Email: ${medicData.email}</p>`+
+                `<p>Teléfono: ${medicData.phone_number}</p>`+
+                `<p>Dirección: ${medicData.address[0].street+' '+medicData.address[0].street_number}</p>`+
+                `<p>${floor+' '+ department}</p>`+
+                `<p>${medicData.address[0].localities.name}</p>`+
+                `<p>${medicData.address[0].localities.states.name}</p>`,
+            imageUrl: medicData.profilePic,
+            imageWidth: 300,
+            imageHeight: 300,
+            imageAlt: 'Custom image',
+        })
     };
 
     const handleRequestSort = (event, property) => {
@@ -571,11 +359,12 @@ export default function SearchDoctors() {
 
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
+    toShowRows.length>14?console.log('16 medicos'):console.log(toShowRows)
+
     const emptyRows =
         rowsPerPage -
         Math.min(rowsPerPage, toShowRows.length - page * rowsPerPage);
 
-    if (toShowRows.length === 0) return <CircularProgress color='secondary' />;
     const rows = listMedics;
 
     return (
@@ -587,6 +376,7 @@ export default function SearchDoctors() {
                     toShowRows={toShowRows}
                     rows={rows}
                     medicSpecialities={medicSpecialities}
+                    deleteFav={deleteFavNoti}
                 />
                 <TableContainer>
                     <Table
@@ -628,23 +418,23 @@ export default function SearchDoctors() {
                                             selected={isItemSelected}
                                         >
                                             <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
-                                                <Tooltip title='Delete' className={classes.iconFilter}>
-                                                    <IconButton aria-label='Edit' >
-                                                        <EditIcon
+                                                <Tooltip title='Mas info.' className={classes.iconFilter}>
+                                                    <IconButton aria-label='Mas info.' >
+                                                        <InfoIcon
                                                             onClick={() =>
-                                                                handleEdit(row)
+                                                                handleInfo(row)
                                                             }
                                                         />
                                                     </IconButton>
                                                 </Tooltip>
-                                                <Tooltip title='Delete' className={classes.iconFilter}>
-                                                    <IconButton aria-label='Delete' >
-                                                        <DeleteIcon
+                                                <Tooltip title='Mas info.' className={classes.iconFilter}>
+                                                    <IconButton aria-label='Mas info.' >
+                                                        <DeleteForeverIcon
                                                             onClick={() =>
-                                                                handleDelete(row)
+                                                                handleDeleteFav(row)
                                                             }
                                                         />
-                                                   </IconButton>
+                                                    </IconButton>
                                                 </Tooltip>
                                             </TableCell>
                                             <TableCell align='center' className={index%2 ===1 ? classes.rowColor :null}>
@@ -665,22 +455,6 @@ export default function SearchDoctors() {
                                             <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
                                                 {row.lastname}
                                             </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
-                                                {row.medic_license}
-                                            </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
-                                                {row.dni}
-                                            </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
-                                                {row.email}
-                                            </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
-                                                {row.phone_number}
-                                            </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
-                                                {calculateAge(row.birthdate)}
-                                            </TableCell>
-
                                             <TableCell className={index%2 ===1 ? classes.rowColor :null}>
                                                 <ul>
                                                     {row.medical_specialities
@@ -704,9 +478,6 @@ export default function SearchDoctors() {
                                                     )}
                                                 </ul>
                                             </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
-                                                {row.state}
-                                            </TableCell>
                                         </TableRow>
                                     );
                                 })}
@@ -729,15 +500,6 @@ export default function SearchDoctors() {
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                 />
             </Paper>
-            {editActive ? (
-                <AdminMedicEdit
-                    medicData={medicData}
-                    medicSpecialities={medicSpecialities}
-                    setEditActive={setEditActive}
-                    editActive={editActive}
-                />
-            ) : null}
-            {/* <AdminMedicAdd medicSpecialities={medicSpecialities} /> */}
         </div>
     );
 }

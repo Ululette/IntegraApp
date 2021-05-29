@@ -7,6 +7,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import SearchDoctors from './SearchDoctors';
+import Favs from './Favs';
 //----FALTA CORREGIR
 /*
 1-ubicar tabla paralela linea tab izquierda
@@ -92,14 +93,14 @@ export default function AdminMedicTabs() {
                     aria-label='simple tabs example'
                 >
                     <Tab label='Medicos' {...a11yProps(0) } />
-                    <Tab label='Especialidades' {...a11yProps(1)} />
+                    <Tab label='Favoritos' {...a11yProps(1)} />
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
                 <SearchDoctors />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                {/* <FormSpecialities /> */}
+                <Favs />
             </TabPanel>
         </div>
     );

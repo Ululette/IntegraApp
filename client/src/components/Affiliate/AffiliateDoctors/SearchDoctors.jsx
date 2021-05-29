@@ -15,13 +15,11 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ClearAllIcon from '@material-ui/icons/ClearAll';
 import InfoIcon from '@material-ui/icons/Info';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import blue from '@material-ui/core/colors/blue'
 import 'firebase/auth';
 import Swal from 'sweetalert2';
@@ -40,7 +38,6 @@ import {
     TextField,
 } from '@material-ui/core';
 import { Button } from '@material-ui/core';
-import calculateAge from '../../../functions/calculateAge';
 import supabase from '../../../supabase.config';
 
 function descendingComparator(a, b, orderBy) {
@@ -197,12 +194,19 @@ const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
     const { numSelected, setToShowRows, toShowRows, rows,medicSpecialities } = props;
     const [open, setOpen] = React.useState(false);
-    const [selectedState, setSelectedState] = React.useState(6);
+    const [selectedState, setSelectedState] = React.useState();
     const [states, setStates] = React.useState();
-    const [selectedLocality, setSelectedLocality] = React.useState(4742);
+    const [selectedLocality, setSelectedLocality] = React.useState();
     const [localities, setLocalities] = React.useState();
+    const [selectedSpeciality, setSelectedSpeciality] = React.useState();
+    const [specialities, setSpecialities] = React.useState();
     const [medicsToShow, setMedicsToShow] = React.useState([]);
 
+    const resetStates=async()=>{
+        setSelectedLocality();
+        setSelectedSpeciality();
+        setSelectedState();
+    }
 
     useEffect(async()=>{
         try {
@@ -218,43 +222,123 @@ const EnhancedTableToolbar = (props) => {
         try {
             let { data: localities } = await supabase
                 .from('localities')
-                .select('id_locality,name,postal_code,state_id')
+                .select('id,id_locality,name,postal_code,state_id')
                 .eq('state_id',idState)
             setLocalities(localities);
         } catch (err) {
             console.error(err);
         }
     }
-    const getMedics=async(idLocality)=>{
-        try {
-            let { data: medics, error: errorFetchMedics } = await supabase
-            .from('address')
-            .select('street,medics(name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name))))')
-            .eq('locality_id',idLocality)
-            console.log(medics);
-            let array=[];
-            for(let ad of medics){
-                array.push(ad.medics);
+
+    const getMedics=async(idLocality,idSpeciality)=>{
+        console.log('idLocality',idLocality)
+        if(!idSpeciality&&idLocality){
+            console.log('!idSpeciality&&idLocality');
+            try {
+                let { data: medics, error: errorFetchMedics } = await supabase
+                .from('address')
+                .select('medics(name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id,id_locality, name, postal_code,states(id,name))))')
+                .eq('locality_id',idLocality)
+                console.log('Medicos:',medics);
+                let array=[];
+                for(let ad of medics){
+                    if(ad!==null){
+                        array.push(ad.medics);
+                    }
+                }
+                console.log('Array final:',array);
+                setMedicsToShow(array);
+            } catch (err) {
+                console.error(err);
             }
-            console.log(array);
-            setMedicsToShow(array);
-        } catch (err) {
-            console.error(err);
+        } else if(idLocality&&idSpeciality){
+            console.log('idLocality&&idSpeciality');
+            try {
+                let { data: medics, error: errorFetchMedics } = await supabase
+                .from('address')
+                .select('medics(name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name)))))')
+                .eq('locality_id',idLocality)
+                // .eq('medical_specialities.id',idSpeciality)
+                console.log(medics);
+                let array=[];
+                let retorno=[];
+                for(let ad of medics){
+                    array.push(ad.medics);
+                }
+                // console.log('array:',array);
+                for(let med of array){   
+                    for(let spec of med.medical_specialities){
+                        // console.log('spec:',spec);
+                        if(spec.id==idSpeciality){
+                            console.log('spec.id:',spec.id);
+                            retorno.push(med);
+                        }
+                    }
+                }
+                console.log('retorno:',retorno);
+                setMedicsToShow(retorno);
+            } catch (err) {
+                console.error(err);
+            }
+        } else if(!idLocality&&idSpeciality){
+            console.log('!idLocality&&idSpeciality');
+            try {
+                let { data: medics, error: errorFetchMedics } = await supabase
+                .from('medics_medical_specialities')
+                .select('medics(name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name))))')
+                .eq('speciality_id',idSpeciality)
+                let array=[];
+                for(let ad of medics){
+                    array.push(ad.medics);
+                }
+                console.log(array);
+                setMedicsToShow(array);
+            } catch (err) {
+                console.error(err);
+            }
+        } else if(!idLocality&&!idSpeciality){
+            console.log('!idLocality&&!idSpeciality');
+            try {
+                let { data: medics, error: errorFetchMedics } = await supabase
+                .from('medics')
+                .select('name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name))))')
+                console.log(medics);
+                setMedicsToShow(medics);
+            } catch (err) {
+                console.error(err);
+            }
         }
     }
+    
+    const getSpecialities = async () => {
+        const { data: specialitiesData, error: errorFetchSpecialities } =
+            await supabase.from('medical_specialities').select('name, id');
+        if (errorFetchSpecialities) return console.log(errorFetchSpecialities);
+        setSpecialities(specialitiesData);
+    };
 
+    useEffect(()=>{
+        getSpecialities(selectedState)
+    },[]);
     useEffect(()=>{
         getLocalities(selectedState)
     },[selectedState]);
     useEffect(()=>{
-        getMedics(selectedLocality)
+        getMedics(selectedLocality,selectedSpeciality)
     },[selectedLocality]);
+    useEffect(()=>{
+        getMedics(selectedLocality,selectedSpeciality)
+    },[selectedSpeciality]);
     
     const handleStateOption = (e) => {
         setSelectedState(e.target.value);
+        console.log('state seleccionado',selectedState)
     }
     const handleLocalityOption = (e) => {
         setSelectedLocality(e.target.value);
+    }
+    const handleSpecialityOption = (e) => {
+        setSelectedSpeciality(e.target.value);
     }
 
     const handleClickOpen = () => {
@@ -262,6 +346,7 @@ const EnhancedTableToolbar = (props) => {
     };
     
     const handleCancel = () => {
+        resetStates()
         setOpen(false);
         setToShowRows(rows);
     };
@@ -317,10 +402,40 @@ const EnhancedTableToolbar = (props) => {
                             </InputLabel>
                             <Select
                                 native
+                                value={selectedSpeciality}
+                                onChange={handleSpecialityOption}
+                                input={<Input id='demo-dialog-native' />}
+                            >
+                                <option></option>
+                                {specialities &&
+                                    specialities.map(      
+                                        (speciality, index) => (
+                                            <option
+                                                className='inputSel'
+                                                key={index}
+                                                value={
+                                                    speciality.id
+                                                }
+                                            >
+                                                {
+                                                    speciality.name
+                                                }
+                                            </option>
+                                        )
+                                    )}
+                            </Select>
+                        </FormControl>
+                        <FormControl className={classes.formControl}>
+                            <InputLabel htmlFor='demo-dialog-native'>
+                                Filter By
+                            </InputLabel>
+                            <Select
+                                native
                                 value={selectedState}
                                 onChange={handleStateOption}
                                 input={<Input id='demo-dialog-native' />}
                             >
+                                <option></option>
                                 {states &&
                                     states.map(      
                                         (state, index) => (
@@ -349,6 +464,7 @@ const EnhancedTableToolbar = (props) => {
                                 onChange={handleLocalityOption}
                                 input={<Input id='demo-dialog-native' />}
                             >
+                                <option></option>
                                 {localities &&
                                     localities.map(      
                                         (locality, index) => (
@@ -356,7 +472,7 @@ const EnhancedTableToolbar = (props) => {
                                                 className='inputSel'
                                                 key={index}
                                                 value={
-                                                    locality.id_locality
+                                                    locality.id
                                                 }
                                             >
                                                 {
@@ -445,32 +561,20 @@ export default function SearchDoctors() {
     const [medicData, setMedicData] = React.useState(null);
     const [toShowRows, setToShowRows] = React.useState([]);
     const MySwal = withReactContent(Swal);
+    let userDni = JSON.parse(localStorage.getItem('userdata')).dni;
 
 
     const fetchMedics = async () => {
         const { data: medics, error: errorFetchMedics } = await supabase
             .from('medics')
             .select(
-                'name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name)))'
+                'dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name)))'
             );
             console.log(medics);
         if (errorFetchMedics) return console.log(errorFetchMedics);
         setToShowRows(medics);
         setListMedics(medics);
     };
-
-    // const fetchMedicsStateAndLocality = async (idState,idLocality) => {
-    //     const { data: medics, error: errorFetchMedics } = await supabase
-    //         .from('localities')
-    //         .select(
-    //             'id_locality, name, postal_code,state_id))'
-    //         )
-    //         .eq('state_id',idState)
-    //         console.log(medics);
-    //     if (errorFetchMedics) return console.log(errorFetchMedics);
-    //     setToShowRows(medics);
-    //     setListMedics(medics);
-    // };
 
     const fetchSpecialities = async () => {
         const { data: specialities, error: errorFetchSpecialities } =
@@ -480,10 +584,44 @@ export default function SearchDoctors() {
     };
 
     React.useEffect(() => {
-        // fetchMedicsStateAndLocality()
+        fetchSpecialities()
         fetchMedics();
         fetchSpecialities();
     }, []);
+
+    const fetchFavs = async (medicDni) => {
+        const { data: favs, error: errorFetchFavs } = await supabase
+            .from('favorites')
+            .select('id')
+            .eq('medic_dni',medicDni)
+            .eq('partner_dni',userDni)
+            console.log('Medicos fav',favs)
+        if(favs.length===0){
+            console.log('Agrego fav')
+            const { data, error } = await supabase
+                .from('favorites')
+                .insert([
+                    { partner_dni: userDni, medic_dni: medicDni },
+                ])
+            Swal.fire({
+                icon: 'success',
+                title: 'Médico agregado a favoritos',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        } else {
+            console.log('No agrega a fav')
+            Swal.fire({
+                icon: 'error',
+                title: 'El médico ya se encuentra entre tus favoritos',
+              })
+        }
+        if (errorFetchFavs) return console.log(errorFetchFavs);
+    };
+
+    const handleFav = (row) => {
+        fetchFavs(row.dni);
+    }
 
     const handleInfo = (medicData) => {
         setMedicData(medicData);
@@ -597,6 +735,15 @@ export default function SearchDoctors() {
                                                         <InfoIcon
                                                             onClick={() =>
                                                                 handleInfo(row)
+                                                            }
+                                                        />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title='Mas info.' className={classes.iconFilter}>
+                                                    <IconButton aria-label='Mas info.' >
+                                                        <FavoriteIcon
+                                                            onClick={() =>
+                                                                handleFav(row)
                                                             }
                                                         />
                                                     </IconButton>
