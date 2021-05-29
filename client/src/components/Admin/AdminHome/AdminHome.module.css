@@ -88,7 +88,6 @@
     height: 400px;
     border-radius: 3px;
     margin: 3rem auto;
-    display: flex;
     width: 100%;
     background-color: #fff;
     display: flex;
@@ -112,6 +111,7 @@
     align-items: center;
     color: white;
     font-size: 1.5rem;
+    margin-top: -10px;
 }
 
 .iconGrid svg {
@@ -136,6 +136,10 @@
     box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(0 0 0 / 40%);
     background-color: #fff;
     border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .iconChart {
@@ -152,7 +156,7 @@
     align-items: center;
     color: white;
     font-size: 1.5rem;
-    margin: 0 auto;
+    margin: -10px auto 0 auto;
     z-index: 10;
 }
 
@@ -162,7 +166,7 @@
 }
 
 .chart {
-    width: 800px;
+    width: 1000px;
     height: 500px;
     margin: 0px auto;
     box-shadow: none;
