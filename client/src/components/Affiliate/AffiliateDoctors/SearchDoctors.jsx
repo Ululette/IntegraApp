@@ -460,8 +460,8 @@ const EnhancedTableToolbar = (props) => {
                             </Select>
                         </FormControl>
                         <FormControl className={classes.formControl}>
-                            {/* {selectedState &&
-                            <div> */}
+                            {selectedState &&
+                            <div>
                                 <InputLabel htmlFor='demo-dialog-native'>
                                     Localidad
                                 </InputLabel>
@@ -489,8 +489,8 @@ const EnhancedTableToolbar = (props) => {
                                                 )
                                             )}
                                 </Select>
-                            {/* </div>
-                            } */}
+                            </div>
+                            }
                         </FormControl>
                     </DialogContent>
                     <DialogActions>
