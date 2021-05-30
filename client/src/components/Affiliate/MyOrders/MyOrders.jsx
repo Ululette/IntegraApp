@@ -68,6 +68,8 @@ const headCells = [
         disablePadding: false,
         label: 'Estudio',
     },
+    { id: 'namePartner', numeric: false, disablePadding: true, label: 'Paciente' },
+    { id: 'dni', numeric: false, disablePadding: true, label: 'DNI' },
     { id: 'name', numeric: false, disablePadding: true, label: 'Médico' },
     {
         id: 'status',
@@ -175,20 +177,30 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
-    const { numSelected, setToShowRows, toShowRows, rows, medicSpecialities, deleteFav } = props;
-    let userDni = JSON.parse(localStorage.getItem('userdata')).dni;
+    const { numSelected, setToShowRows} = props;
+    let userFamilyGroup = JSON.parse(localStorage.getItem('affiliatedata')).family_group;
 
-    const fetchOrders = async (userDni) => {
-        const { data: orders, error: errorFetchOrders } = await supabase
-            .from('orders')
-            .select('study_name,date,status,results,medics(name,lastname)')
-            .eq('partner_dni',userDni)
-            setToShowRows(orders)
-        if (errorFetchOrders) return console.log(errorFetchOrders);
+    
+    const fetchOrders = async () => {
+        try {
+            const { data: orders, error: dataError } = await supabase
+                .from('orders')
+                .select(`study_name,date,status(name),results,partners(dni, name, lastname, family_group),medics(name,lastname)`)
+                // .eq('partner_dni',userDni)
+            console.log(orders);
+            console.log(dataError, 'error');
+            setToShowRows(
+                orders.filter(
+                    (el) => el.partners.family_group === userFamilyGroup
+                )
+            );
+        } catch (err) {
+            return err;
+        }
     };
 
     useEffect(async()=>{
-        fetchOrders(userDni)
+        fetchOrders()
     },[]);
 
     return (
@@ -266,7 +278,6 @@ export default function MyOrders() {
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const [listMedics, setListMedics] = React.useState([]);
     const [toShowRows, setToShowRows] = React.useState([]);
 
     const handleRequestSort = (event, property) => {
@@ -336,7 +347,8 @@ export default function MyOrders() {
                                 .map((row, index) => {
                                     const isItemSelected = isSelected(row.name);
                                     const labelId = `enhanced-table-checkbox-${index}`;
-
+                                    let medicName = `${row.medics.name} ${row.medics.lastname}`
+                                    let patientName=`${row.partners.name} ${row.partners.lastname}`
                                     return (
                                         <TableRow
                                             hover
@@ -370,11 +382,17 @@ export default function MyOrders() {
                                             >
                                                 {row.study_name}
                                             </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
-                                                {row.medics.name}{row.medics.lastname}
+                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>  
+                                                {patientName}
+                                            </TableCell>
+                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>  
+                                                {row.partners.dni}
                                             </TableCell>
                                             <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
-                                                {row.status}
+                                                {medicName}
+                                            </TableCell>
+                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
+                                                {row.status.name}
                                             </TableCell>
                                         </TableRow>
                                     );
@@ -401,93 +419,3 @@ export default function MyOrders() {
         </div>
     );
 }
-
-
-// import React, { useEffect, useState } from 'react';
-// import { CircularProgress } from '@material-ui/core';
-// import supabase from '../../../supabase.config.js';
-// import styles from './MyOrders.module.css';
-
-// import { DataGrid } from '@material-ui/data-grid';
-
-// const columns = [
-//     { field: 'id', headerName: 'DNI', width: 160 },
-//     { field: 'firstname', headerName: 'Nombre', width: 160 },
-//     { field: 'lastname', headerName: 'Apellido', width: 160 },
-//     {
-//         field: 'studyname',
-//         headerName: 'Estudio',
-//         sortable: true,
-//         width: 160,
-//     },
-//     {
-//         field: 'date',
-//         headerName: 'Fecha',
-//         sortable: true,
-//         width: 160,
-//     },
-//     {
-//         field: 'medicfullname',
-//         headerName: 'Medico',
-//         sortable: false,
-//         width: 160,
-//     },
-//     {
-//         field: 'status',
-//         headerName: 'Estado',
-//         sortable: true,
-//         width: 160,
-//     },
-// ];
-
-// function MyOrders({ affiliateData }) {
-//     const [family, setFamily] = useState([]);
-
-//     const fetchOrders = async () => {
-//         const { data: orders, error: errorFetchOrders } = await supabase
-//             .from('orders')
-//             .select(
-//                 'study_name, date, status, partners(dni, name, lastname, family_group), medics(name, lastname, medical_specialities(name))'
-//             );
-//         if (errorFetchOrders) return alert(errorFetchOrders.message);
-//         setFamily(
-//             orders.filter(
-//                 (el) => el.partners.family_group === affiliateData.family_group
-//             )
-//         );
-//     };
-
-//     useEffect(() => {
-//         fetchOrders();
-//         //eslint-disable-next-line
-//     }, []);
-
-//     if (family.length === 0) return <CircularProgress />;
-
-//     const rows = family.map((el) => {
-//         return {
-//             id: el.partners.dni,
-//             firstname: el.partners.name,
-//             lastname: el.partners.lastname,
-//             studyname: el.study_name,
-//             date: el.date,
-//             medicfullname: `${el.medics.name} ${el.medics.lastname}`,
-//             status: el.status,
-//         };
-//     });
-
-//     return (
-//         <div className={styles.container}>
-//             <h1>Mis autorizaciones</h1>
-//             <DataGrid
-//                 rows={rows}
-//                 columns={columns}
-//                 pageSize={5}
-//                 checkboxSelection
-//                 className={styles.datagrid}
-//             />
-//         </div>
-//     );
-// }
-
-// export default MyOrders;
