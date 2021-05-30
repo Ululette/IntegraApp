@@ -318,7 +318,7 @@ export default function EnhancedTable({ rows }) {
                         title: `La espcialidad ${name.toUpperCase()} se ha eliminado con exito.`,
                         icon: 'success',
                         timer: 2000,
-                    }).then(() => window.location.reload());
+                    })
             }
             // deleteMedicsSpeciality(id);
             // deleteSpeciality (id);

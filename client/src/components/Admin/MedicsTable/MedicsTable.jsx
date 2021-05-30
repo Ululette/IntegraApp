@@ -192,10 +192,10 @@ EnhancedTableHead.propTypes = {
 //------------------------makeStyle1---------------------------------------------------------------------------------------
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
-        paddingLeft: theme.spacing(0),
-        paddingRight: theme.spacing(0),
+        // paddingLeft: theme.spacing(0),
+        // paddingRight: theme.spacing(0),
         backgroundColor: lighten('#34a7a1', 0.3), 
-        
+        padding: '0px 0px 0px 0px',
         //color barra superior '
     },
     highlight:
@@ -234,6 +234,12 @@ const useToolbarStyles = makeStyles((theme) => ({
         '&:hover':{
             backgroundColor: lighten('#34a7a1', 0.8),
         }
+    },
+    p:{
+        fontWeight:'bold',
+        fontSize:'1.4rem',
+        color: '#fafafa',
+        textAlign:'rigth'
     }
 }));
 
@@ -328,16 +334,17 @@ const EnhancedTableToolbar = (props) => {
             >
                 MEDICOS
             </Typography>
-            <Tooltip title='Clear' 
-                onClick={handleClose} className={classes.iconFilter}>
-                <IconButton aria-label='reset'>
-                    <ClearAllIcon />
-                </IconButton>
-            </Tooltip>
+            <p className={classes.p}>Filtros</p>
             <Tooltip title='Filter list' 
                 onClick={handleClickOpen} className={classes.iconFilter}>
                 <IconButton aria-label='filter'>
                     <FilterListIcon />
+                </IconButton>
+            </Tooltip>
+            <Tooltip title='Clear' 
+                onClick={handleClose} className={classes.iconFilter}>
+                <IconButton aria-label='reset'>
+                    <ClearAllIcon />
                 </IconButton>
             </Tooltip>
             <Dialog
@@ -435,10 +442,11 @@ EnhancedTableToolbar.propTypes = {
 //-------------------- EnhancedTableToolbar Style
 const useStyles = makeStyles((theme) => ({
     root: {
-        width: '100%',
+        width: '85%',
+        padding: '0px 0px 0px 0px',
     },
     paper: {
-        width: '100%',
+        width: '85%',
         marginBottom: theme.spacing(2),
     },
     table: {
@@ -628,7 +636,7 @@ export default function MedicsTable() {
                                             selected={isItemSelected}
                                         >
                                             <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
-                                                <Tooltip title='Delete' className={classes.iconFilter}>
+                                                <Tooltip title='Edit' className={classes.iconFilter}>
                                                     <IconButton aria-label='Edit' >
                                                         <EditIcon
                                                             onClick={() =>
