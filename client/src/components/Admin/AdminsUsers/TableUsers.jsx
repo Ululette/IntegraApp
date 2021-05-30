@@ -67,8 +67,8 @@ function stableSort(array, comparator) {
 const headCells = [
     { id: 'dni', numeric: false, disablePadding: true, label: 'DNI' },
     { id: 'email', numeric: false, disablePadding: false, label: 'EMAIL' },
-    { id: 'role', numeric: false, disablePadding: false, label: 'ROLE' },
-    { id: 'account', numeric: false, disablePadding: false, label: 'ACCOUNT' },
+    { id: 'role', numeric: false, disablePadding: false, label: 'TIPO' },
+    { id: 'account', numeric: false, disablePadding: false, label: 'CUENTA' },
 ];
 
 
@@ -181,6 +181,25 @@ const useToolbarStyles = makeStyles((theme) => ({
         fontWeight:'bold',
         '&:hover':{
             backgroundColor: blue[500],
+        }
+    },
+    popup:{
+        color: '#fafafa',
+        backgroundColor: '#2c7f7b',
+        fontWeight:'bold',
+        fontSize:'30px'
+    },
+    popupBtn:{
+        color: '#fafafa',
+        padding: theme.spacing(0.5),
+        border: '3px solid #2c7f7b',
+        backgroundColor:'#2c7f7b',
+        fontWeight:'bold',
+        fontSize:'15px',
+        '&:hover':{
+            backgroundColor: lighten('#fafafa', 0.2),
+            color:'#2c7f7b',
+            padding: theme.spacing(0.5),
         }
     }
 }));
@@ -354,18 +373,19 @@ const EnhancedTableToolbar = (props) => {
                     </div>
                     
                     <Dialog
+                        
                         disableBackdropClick
                         disableEscapeKeyDown
                         open={open}
                         onClose={handleClose}
                     >
-                        <DialogTitle>Filter By:</DialogTitle>
+                        <DialogTitle className={classes.popup}>FILTRADO POR:</DialogTitle>
                         <form
                             /* className={classes.container}>*/ onSubmit={
                                 handleSubmit
                             }
                         >
-                            <DialogContent>
+                            <DialogContent >
                                 <FormControl /* className={classes.formControl} */
                                 >
                                     {/* <InputLabel htmlFor='demo-dialog-native'>
@@ -455,11 +475,11 @@ const EnhancedTableToolbar = (props) => {
                                 ) : optionSelected === '' ? null : null}
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={handleClose} color='primary'>
-                                    Cancel
+                                <Button onClick={handleClose}  className={classes.popupBtn}>
+                                    Cancelar
                                 </Button>
-                                <Button color='primary' type='submit'>
-                                    Ok
+                                <Button type='submit' className={classes.popupBtn}>
+                                    Filtrar
                                 </Button>
                             </DialogActions>
                         </form>

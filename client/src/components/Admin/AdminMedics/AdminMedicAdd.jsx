@@ -20,8 +20,10 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(2),
         backgroundColor: '#2c7f7b',
         fontSize:'35px',
+        border:'3px solid #2c7f7b',
         '&:hover':{
-            backgroundColor: '#34ccc4',
+            backgroundColor: '#2c7f7b',
+            border:'3px solid #fafafa'
         }
     },
     absolute: {

@@ -89,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
     },
     content: {
         flexGrow: 1,
-        padding: '24px 0px 0px 10px',
+        padding: '12px 0px 0px 0px',
     },
 }));
 
