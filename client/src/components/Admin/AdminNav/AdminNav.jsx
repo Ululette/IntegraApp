@@ -344,45 +344,50 @@ function AdminNav({ firebase, window: windowMui }) {
                         >
                             <List>
                                 {notifications.map((el, idx) => (
-                                    <ListItem
-                                        button
-                                        key={`notification-${idx}`}
+                                    <a
+                                        href={`/${userData.dni}/admin/aplications`}
+                                        className={styles.link}
                                     >
-                                        <ListItemIcon>
-                                            {el.hasOwnProperty(
-                                                'phone_number'
-                                            ) ? (
-                                                <ContactSupport />
-                                            ) : el.hasOwnProperty(
-                                                  'familiar_name'
-                                              ) ? (
-                                                <ThumbDown />
-                                            ) : (
-                                                <Send />
-                                            )}
-                                        </ListItemIcon>
-                                        <ListItemText
-                                            primary={
-                                                el.hasOwnProperty(
-                                                    'phone_number'
-                                                )
-                                                    ? `Un interesado ${el.name} se ha comunicado con la prepaga.`
-                                                    : el.hasOwnProperty(
-                                                          'familiar_name'
-                                                      )
-                                                    ? `El socio titular con ${el.titular_dni} ha solicitado la baja de un familiar.`
-                                                    : `El interesado ${el.partner_dni} ha enviado el formulario y queda pendiente de revision.`
-                                            }
-                                        />
-                                        <ListItemIcon
+                                        <ListItem
                                             button
-                                            onClick={() =>
-                                                handleSeenNotification(el)
-                                            }
+                                            key={`notification-${idx}`}
                                         >
-                                            <ClearIcon />
-                                        </ListItemIcon>
-                                    </ListItem>
+                                            <ListItemIcon>
+                                                {el.hasOwnProperty(
+                                                    'phone_number'
+                                                ) ? (
+                                                    <ContactSupport />
+                                                ) : el.hasOwnProperty(
+                                                      'familiar_name'
+                                                  ) ? (
+                                                    <ThumbDown />
+                                                ) : (
+                                                    <Send />
+                                                )}
+                                            </ListItemIcon>
+                                            <ListItemText
+                                                primary={
+                                                    el.hasOwnProperty(
+                                                        'phone_number'
+                                                    )
+                                                        ? `Un interesado ${el.name} se ha comunicado con la prepaga.`
+                                                        : el.hasOwnProperty(
+                                                              'familiar_name'
+                                                          )
+                                                        ? `El socio titular con ${el.titular_dni} ha solicitado la baja de un familiar.`
+                                                        : `El interesado ${el.partner_dni} ha enviado el formulario y queda pendiente de revision.`
+                                                }
+                                            />
+                                            <ListItemIcon
+                                                button
+                                                onClick={() =>
+                                                    handleSeenNotification(el)
+                                                }
+                                            >
+                                                <ClearIcon />
+                                            </ListItemIcon>
+                                        </ListItem>
+                                    </a>
                                 ))}
                             </List>
                         </Popover>
