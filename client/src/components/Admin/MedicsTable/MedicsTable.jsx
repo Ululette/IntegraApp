@@ -166,28 +166,6 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
 };
 
-// const useToolbarStyles = makeStyles((theme) => ({
-//     root: {
-//         paddingLeft: theme.spacing(2),
-//         paddingRight: theme.spacing(1),
-//     },
-//     highlight:
-//         theme.palette.type === 'light'
-//             ? {
-//                   color: theme.palette.secondary.main,
-//                   backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-//               }
-//             : {
-//                   color: theme.palette.text.primary,
-//                   backgroundColor: theme.palette.secondary.dark,
-//               },
-//     title: {
-//         flex: '1 1 100%',
-//     },
-//     dialog: {
-//         zIndex: '-6',
-//     },
-// }));
 
 //------------------------makeStyle1---------------------------------------------------------------------------------------
 const useToolbarStyles = makeStyles((theme) => ({
@@ -240,6 +218,25 @@ const useToolbarStyles = makeStyles((theme) => ({
         fontSize:'1.4rem',
         color: '#fafafa',
         textAlign:'rigth'
+    },
+    popup:{
+        color: '#fafafa',
+        backgroundColor: '#2c7f7b',
+        fontWeight:'bold',
+        fontSize:'30px'
+    },
+    popupBtn:{
+        color: '#fafafa',
+        padding: theme.spacing(0.5),
+        border: '3px solid #2c7f7b',
+        backgroundColor:'#2c7f7b',
+        fontWeight:'bold',
+        fontSize:'15px',
+        '&:hover':{
+            backgroundColor: lighten('#fafafa', 0.2),
+            color:'#2c7f7b',
+            padding: theme.spacing(0.5),
+        }
     }
 }));
 
@@ -259,6 +256,7 @@ const EnhancedTableToolbar = (props) => {
 
     const handleClickOpen = () => {
         setOpen(true);
+        setToShowRows(rows);
     };
 
     const handleClose = () => {
@@ -274,7 +272,7 @@ const EnhancedTableToolbar = (props) => {
     };
 
     const filter = (value, option) => {
-        setToShowRows(rows);
+        
         if (option === 'lastname') {
             value
                 ? setToShowRows(
@@ -354,7 +352,7 @@ const EnhancedTableToolbar = (props) => {
                 onClose={handleClose}
                 className={classes.dialog}
             >
-                <DialogTitle>Fill the form</DialogTitle>
+                <DialogTitle className={classes.popup}>FILTRADO POR:</DialogTitle>
                 <form className={classes.container} onSubmit={handleSubmit}>
                     <DialogContent>
                         <FormControl className={classes.formControl}>
@@ -385,7 +383,7 @@ const EnhancedTableToolbar = (props) => {
                         </FormControl>
                         <FormControl className={classes.formControl}>
                             <InputLabel htmlFor='demo-dialog-native'>
-                                Filter By
+                                POR:
                             </InputLabel>
                             <Select
                                 native
@@ -397,18 +395,18 @@ const EnhancedTableToolbar = (props) => {
                                 <option value='dni'>DNI</option>
                                 <option value='lastname'>Last Name</option>
                                 <option value='medical_specialities'>
-                                    Specialty
+                                    Especialidad
                                 </option>
                                 <option value='state'>State</option>
                             </Select>
                         </FormControl>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose} color='primary'>
-                            Cancel
+                        <Button onClick={handleClose} className={classes.popupBtn}>
+                            Cancelar
                         </Button>
-                        <Button color='primary' type='submit'>
-                            Ok
+                        <Button className={classes.popupBtn} type='submit'>
+                            Filtrar
                         </Button>
                     </DialogActions>
                 </form>
@@ -497,7 +495,7 @@ export default function MedicsTable() {
     const [medicData, setMedicData] = React.useState(null);
     const [toShowRows, setToShowRows] = React.useState([]);
     const MySwal = withReactContent(Swal);
-
+    
     const fetchMedics = async () => {
         const { data: medics, error: errorFetchMedics } = await supabase
             .from('medics')
@@ -508,7 +506,7 @@ export default function MedicsTable() {
         setToShowRows(medics);
         setListMedics(medics);
     };
-
+    const rows = listMedics;
     const fetchSpecialities = async () => {
         const { data: specialities, error: errorFetchSpecialities } =
             await supabase.from('medical_specialities').select('name, id');
@@ -584,7 +582,7 @@ export default function MedicsTable() {
         Math.min(rowsPerPage, toShowRows.length - page * rowsPerPage);
 
     if (toShowRows.length === 0) return <CircularProgress color='secondary' />;
-    const rows = listMedics;
+    
 
     return (
         <div className={classes.root}>

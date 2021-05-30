@@ -23,6 +23,7 @@ import withReactContent from 'sweetalert2-react-content';
 
 import PopUpEdit from '../Speciality/PopUpEdit';
 import supabase from '../../../supabase.config.js';
+import InputSpecialities from './InputSpecialities';
 
 //crear tabla  OK
 //traer especialidades de base >> redux
@@ -114,6 +115,7 @@ EnhancedTableHead.propTypes = {
 //------------------------makeStyle1---------------------------------------------------------------------------------------
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
+        padding:'4px 4px 4px 4 px',
         paddingLeft: theme.spacing(0),
         paddingRight: theme.spacing(0),
         backgroundColor: lighten('#34a7a1', 0.3)
@@ -125,7 +127,7 @@ const useToolbarStyles = makeStyles((theme) => ({
                 color: '#fafafa',
                 backgroundColor: lighten(blue[500], 0.5),//color barra superior cuando selecciono item
                 fontWeight:'bold',
-                fontSize:'30px'
+                fontSize:'30px',
             }
             : {
                 color: theme.palette.text.primary,
@@ -133,11 +135,12 @@ const useToolbarStyles = makeStyles((theme) => ({
                 
             },
     title: {
-        flex: '1 1 100%',
+        flex: '1 1 50%',
         fontWeight:'bold',
         fontSize:'1.4rem',
         color: '#fafafa',
-        textAlign:'center'
+        textAlign:'left',
+        marginLeft:'10%'
     },
     filters:{
         display:'flex'
@@ -160,7 +163,11 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
-    const { numSelected } = props;
+    const { numSelected,addClick2 } = props;
+
+    const addClick = (value)=>{
+        addClick2(value);
+    }
 
     return (
         <Toolbar
@@ -168,16 +175,7 @@ const EnhancedTableToolbar = (props) => {
                 [classes.highlight]: numSelected > 0,
             })}
         >
-            {numSelected > 0 ? (
-                <Typography
-                    className={classes.title}
-                    color='inherit'
-                    variant='subtitle1'
-                    component='div'
-                >
-                    {numSelected} selected
-                </Typography>
-            ) : (
+            <InputSpecialities addClick={addClick}/>
                 <Typography
                     className={classes.title}
                     variant='h6'
@@ -186,13 +184,6 @@ const EnhancedTableToolbar = (props) => {
                 >
                     ESPECIALIDADES
                 </Typography>
-            )}
-
-            {/* <Tooltip title='Filter list'>
-                <IconButton aria-label='filter list'>
-                    <FilterListIcon />
-                </IconButton>
-            </Tooltip> */}
         </Toolbar>
     );
 };
@@ -200,27 +191,6 @@ const EnhancedTableToolbar = (props) => {
 EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
-
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//         width: '100%',
-//     },
-//     paper: {
-//         width: '100%',
-//         marginBottom: theme.spacing(2),
-//     },
-//     table: {
-//         minWidth: 750,
-//     },
-//     visuallyHidden: {
-//         border: 0,
-//         clip: 'rect(0 0 0 0)',
-//         height: 1,
-//         margin: -1,
-//         overflow: 'hidden',
-//         padding: 0,
-//     },
-// }));
 
 //-------------------- EnhancedTableToolbar Style
 const useStyles = makeStyles((theme) => ({
@@ -266,7 +236,7 @@ const useStyles = makeStyles((theme) => ({
         }
     }
 }));
-export default function EnhancedTable({ rows }) {
+export default function EnhancedTable({ rows,handlerButtonClick }) {
     const classes = useStyles();
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('specialities');
@@ -276,6 +246,10 @@ export default function EnhancedTable({ rows }) {
     const [nameSpeciality, setNameSpeciality] = useState('');
     const MySwal = withReactContent(Swal);
 
+
+    const addClick2 = (value)=>{
+        handlerButtonClick(value);
+    }
     //---HANDLERS-----
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -344,7 +318,7 @@ export default function EnhancedTable({ rows }) {
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
-                <EnhancedTableToolbar />
+                <EnhancedTableToolbar addClick2={addClick2}/>
                 <TableContainer>
                     <Table
                         className={classes.table}
