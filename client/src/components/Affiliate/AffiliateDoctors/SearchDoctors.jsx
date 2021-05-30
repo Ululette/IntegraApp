@@ -187,6 +187,14 @@ const useToolbarStyles = makeStyles((theme) => ({
         '&:hover':{
             backgroundColor: lighten('#34a7a1', 0.8),
         }
+    },
+    container:{
+        margin: theme.spacing(1),
+        width: '90%',
+    },
+    formControl:{
+        margin: theme.spacing(1),
+        width: '80%',
     }
 }));
 
@@ -340,11 +348,9 @@ const EnhancedTableToolbar = (props) => {
     const handleSpecialityOption = (e) => {
         setSelectedSpeciality(e.target.value);
     }
-
     const handleClickOpen = () => {
         setOpen(true);
-    };
-    
+    };  
     const handleCancel = () => {
         resetStates()
         setOpen(false);
@@ -353,7 +359,6 @@ const EnhancedTableToolbar = (props) => {
     const handleClose = () => {
         setOpen(false);
     };
-
     const handleSubmit = (e) => {
         e.preventDefault();
         setOpen(false);
@@ -393,12 +398,12 @@ const EnhancedTableToolbar = (props) => {
                 onClose={handleClose}
                 className={classes.dialog}
             >
-                <DialogTitle>Fill the form</DialogTitle>
+                <DialogTitle>Filtrar por</DialogTitle>
                 <form className={classes.container}>
                     <DialogContent>
                         <FormControl className={classes.formControl}>
                             <InputLabel htmlFor='demo-dialog-native'>
-                                Filter By
+                                Especialidad
                             </InputLabel>
                             <Select
                                 native
@@ -427,7 +432,7 @@ const EnhancedTableToolbar = (props) => {
                         </FormControl>
                         <FormControl className={classes.formControl}>
                             <InputLabel htmlFor='demo-dialog-native'>
-                                Filter By
+                                Provincia
                             </InputLabel>
                             <Select
                                 native
@@ -455,33 +460,36 @@ const EnhancedTableToolbar = (props) => {
                             </Select>
                         </FormControl>
                         <FormControl className={classes.formControl}>
-                            <InputLabel htmlFor='demo-dialog-native'>
-                                Filter By
-                            </InputLabel>
-                            <Select
-                                native
-                                value={selectedLocality}
-                                onChange={handleLocalityOption}
-                                input={<Input id='demo-dialog-native' />}
-                            >
-                                <option></option>
-                                {localities &&
-                                    localities.map(      
-                                        (locality, index) => (
-                                            <option
-                                                className='inputSel'
-                                                key={index}
-                                                value={
-                                                    locality.id
-                                                }
-                                            >
-                                                {
-                                                    locality.name
-                                                }
-                                            </option>
-                                        )
-                                    )}
-                            </Select>
+                            {selectedState &&
+                            <div>
+                                <InputLabel htmlFor='demo-dialog-native'>
+                                    Localidad
+                                </InputLabel>
+                                <Select
+                                    native
+                                    value={selectedLocality}
+                                    onChange={handleLocalityOption}
+                                    input={<Input id='demo-dialog-native' />}
+                                >
+                                    <option></option>
+                                    {localities &&
+                                            localities.map(      
+                                                (locality, index) => (
+                                                    <option
+                                                        className='inputSel'
+                                                        key={index}
+                                                        value={
+                                                            locality.id
+                                                        }
+                                                    >
+                                                        {
+                                                            locality.name
+                                                        }
+                                                    </option>
+                                                )
+                                            )}
+                                </Select>
+                            </div>}
                         </FormControl>
                     </DialogContent>
                     <DialogActions>
