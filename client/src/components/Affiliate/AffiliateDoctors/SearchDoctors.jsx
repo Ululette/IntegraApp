@@ -250,7 +250,7 @@ const EnhancedTableToolbar = (props) => {
                 console.log('Medicos:',medics);
                 let array=[];
                 for(let ad of medics){
-                    if(ad!==null){
+                    if(ad!==null&&ad.medics!==null){
                         array.push(ad.medics);
                     }
                 }
@@ -460,8 +460,8 @@ const EnhancedTableToolbar = (props) => {
                             </Select>
                         </FormControl>
                         <FormControl className={classes.formControl}>
-                            {selectedState &&
-                            <div>
+                            {/* {selectedState &&
+                            <div> */}
                                 <InputLabel htmlFor='demo-dialog-native'>
                                     Localidad
                                 </InputLabel>
@@ -489,7 +489,8 @@ const EnhancedTableToolbar = (props) => {
                                                 )
                                             )}
                                 </Select>
-                            </div>}
+                            {/* </div>
+                            } */}
                         </FormControl>
                     </DialogContent>
                     <DialogActions>
