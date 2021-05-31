@@ -118,6 +118,8 @@ const headCells = [
     { id: 'state', numeric: false, disablePadding: false, label: 'ESTADO' },
 ];
 
+const MySwal = withReactContent(Swal)
+
 function EnhancedTableHead(props) {
     const { classes, order, orderBy, onRequestSort } = props;
     const createSortHandler = (property) => (event) => {
@@ -172,7 +174,7 @@ const useToolbarStyles = makeStyles((theme) => ({
     root: {
         // paddingLeft: theme.spacing(0),
         // paddingRight: theme.spacing(0),
-        backgroundColor: lighten('#34a7a1', 0.3), 
+        backgroundColor: lighten('#34a7a1', 0.3),
         padding: '0px 0px 0px 0px',
         //color barra superior '
     },
@@ -181,77 +183,81 @@ const useToolbarStyles = makeStyles((theme) => ({
             ? {
                 color: '#fafafa',
                 backgroundColor: lighten(blue[500], 0.5),//color barra superior cuando selecciono item
-                fontWeight:'bold',
-                fontSize:'30px'
+                fontWeight: 'bold',
+                fontSize: '30px'
             }
             : {
                 color: theme.palette.text.primary,
                 backgroundColor: lighten('#34a7a1', 0.3),
-                
+
             },
     title: {
         flex: '1 1 100%',
-        fontWeight:'bold',
-        fontSize:'1.4rem',
+        fontWeight: 'bold',
+        fontSize: '1.4rem',
         color: '#fafafa',
-        textAlign:'center'
+        textAlign: 'center'
     },
-    filters:{
-        display:'flex'
+    filters: {
+        display: 'flex'
     },
-    iconFilter:{
-        color:'#fafafa',
-        fontWeight:'bold',
-        '&:hover':{
+    iconFilter: {
+        color: '#fafafa',
+        fontWeight: 'bold',
+        '&:hover': {
             backgroundColor: '#34a7a1',
         }
     },
-    iconBlock:{
-        color:'#fafafa',
-        fontWeight:'bold',
-        '&:hover':{
+    iconBlock: {
+        color: '#fafafa',
+        fontWeight: 'bold',
+        '&:hover': {
             backgroundColor: lighten('#34a7a1', 0.8),
         }
     },
-    p:{
-        fontWeight:'bold',
-        fontSize:'1.4rem',
+    p: {
+        fontWeight: 'bold',
+        fontSize: '1.4rem',
         color: '#fafafa',
-        textAlign:'rigth'
+        textAlign: 'rigth'
     },
-    popup:{
+    popup: {
         color: '#fafafa',
         backgroundColor: '#2c7f7b',
-        fontWeight:'bold',
-        fontSize:'30px'
+        fontWeight: 'bold',
+        fontSize: '30px'
     },
-    popupBtn:{
+    popupBtn: {
         color: '#fafafa',
         padding: theme.spacing(0.5),
         border: '3px solid #2c7f7b',
-        backgroundColor:'#2c7f7b',
-        fontWeight:'bold',
-        fontSize:'15px',
-        '&:hover':{
+        backgroundColor: '#2c7f7b',
+        fontWeight: 'bold',
+        fontSize: '15px',
+        '&:hover': {
             backgroundColor: lighten('#fafafa', 0.2),
-            color:'#2c7f7b',
+            color: '#2c7f7b',
             padding: theme.spacing(0.5),
         }
+    },
+    formControl : {
+        width: '177px'
     }
+
 }));
 
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
-    const { numSelected, setToShowRows, toShowRows, rows,medicSpecialities } = props;
+    const { numSelected, setToShowRows, toShowRows, rows, medicSpecialities } = props;
     const [open, setOpen] = React.useState(false);
     const [selectedOption, setSelectedOption] = React.useState('');
-    const [selectedState, setSelectedState] = React.useState('activo');
+    const [selectedState, setSelectedState] = React.useState('');
 
     const handleChange = (event) => {
         event.target.name === 'state'
-            ?   setSelectedState(event.target.value) &&
-                setSelectedOption(event.target.value)
-            :   setSelectedOption(event.target.value);
+            ? setSelectedState(event.target.value) &&
+            setSelectedOption(event.target.value)
+            : setSelectedOption(event.target.value);
     };
 
     const handleClickOpen = () => {
@@ -260,60 +266,64 @@ const EnhancedTableToolbar = (props) => {
     };
 
     const handleClose = () => {
+        setSelectedOption('');
+        setSelectedState('');
         setOpen(false);
         setToShowRows(rows);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        selectedOption === 'state'
-            ? filter(e.target[0].value, e.target[1].value)
-            : filter(e.target[0].value, e.target[2].value);
+        filter(e.target[0].value, e.target[2].value);
     };
 
     const filter = (value, option) => {
-        
+
+        let result = rows
+
         if (option === 'lastname') {
             value
-                ? setToShowRows(
-                      toShowRows.filter((r) => {
-                        return r[option]
-                            .toLowerCase()
-                            .includes(value.toLowerCase());
-                      })
-                  )
-                : setToShowRows(rows);
+                ? result = toShowRows.filter((r) => {
+                    return r[option]
+                        .toLowerCase()
+                        .includes(value.toLowerCase());
+                })
+                : result = rows;
         } else if (option === 'dni') {
             value
-                ? setToShowRows(
-                      toShowRows.filter((r) => {
-                          return String(r[option])
-                              .toLowerCase()
-                              .includes(value.toLowerCase());
-                      })
-                  )
-                : setToShowRows(rows);
+                ?
+                result = toShowRows.filter((r) => {
+                    return String(r[option])
+                        .toLowerCase()
+                        .includes(value.toLowerCase());
+                })
+                : result = rows;
         } else if (option === 'medical_specialities') {
             value
-                ? setToShowRows(
-                      toShowRows.filter((r) =>
-                          r[option].some((e) =>
-                              e.name.toLowerCase().includes(value.toLowerCase())
-                          )
-                      )
-                  )
-                : setToShowRows(rows);
+                ?
+                result = toShowRows.filter((r) =>
+                    r[option].some((e) =>
+                        e.name.toLowerCase().includes(value.toLowerCase())
+                    )
+                )
+                : result = rows;
         } else if (option === 'state') {
             value
-                ? setToShowRows(
-                      toShowRows.filter((r) => {
-                          return (
-                              r[option].toLowerCase() === value.toLowerCase()
-                          );
-                      })
-                  )
-                : setToShowRows(rows);
-        } else setToShowRows(rows);
+                ?
+                result = toShowRows.filter((r) => {
+                    return r[option].toLowerCase() === value.toLowerCase();
+                })
+                : result = rows;
+        }
+
+        if (!result.length) {
+            console.log('no hay resultados')
+            setToShowRows(rows);
+            MySwal.fire('Sin resultados...', 'No hay coincidencias!', 2000)
+        } else {
+            setToShowRows(result)
+        }
+
         setOpen(false);
     };
 
@@ -333,13 +343,13 @@ const EnhancedTableToolbar = (props) => {
                 MEDICOS
             </Typography>
             <p className={classes.p}>Filtros</p>
-            <Tooltip title='Filter list' 
+            <Tooltip title='Filter list'
                 onClick={handleClickOpen} className={classes.iconFilter}>
                 <IconButton aria-label='filter'>
                     <FilterListIcon />
                 </IconButton>
             </Tooltip>
-            <Tooltip title='Clear' 
+            <Tooltip title='Clear'
                 onClick={handleClose} className={classes.iconFilter}>
                 <IconButton aria-label='reset'>
                     <ClearAllIcon />
@@ -356,15 +366,36 @@ const EnhancedTableToolbar = (props) => {
                 <form className={classes.container} onSubmit={handleSubmit}>
                     <DialogContent>
                         <FormControl className={classes.formControl}>
+                            <InputLabel htmlFor='demo-dialog-native'>
+                                                </InputLabel>
+                            <Select
+                                id='outlined-basic1'
+                                label={selectedOption.toUpperCase()}
+                                variant='outlined'
+                                native
+                                value={selectedOption}
+                                onChange={handleChange}
+                            >
+                                <option aria-label='None' value='' />
+                                <option value='dni'>DNI</option>
+                                <option value='lastname'>Last Name</option>
+                                <option value='medical_specialities'>Especialidad</option>
+                                <option value='state'>State</option>
+                            </Select>
+                        </FormControl>
+                        <FormControl className={classes.formControl}>
                             {selectedOption === 'state' ? (
                                 <FormControl className={classes.formControl}>
                                     <Select
+                                        inputProps={{
+                                            style: { width: '177px' },
+                                            id: 'outlined-age-native-simple',
+                                            name: 'state',
+                                        }}
+                                        variant='outlined'
                                         native
                                         value={selectedState}
                                         onChange={handleChange}
-                                        input={
-                                            <Input id='demo-dialog-native' />
-                                        }
                                         name='state'
                                         label='value'
                                     >
@@ -376,29 +407,11 @@ const EnhancedTableToolbar = (props) => {
                             ) : (
                                 <TextField
                                     id='outlined-basic'
-                                    label='value'
+                                    label='ingresar...'
                                     variant='outlined'
+                                    disabled={!selectedOption}
                                 />
                             )}
-                        </FormControl>
-                        <FormControl className={classes.formControl}>
-                            <InputLabel htmlFor='demo-dialog-native'>
-                                POR:
-                            </InputLabel>
-                            <Select
-                                native
-                                value={selectedOption}
-                                onChange={handleChange}
-                                input={<Input id='demo-dialog-native' />}
-                            >
-                                <option aria-label='None' value='' />
-                                <option value='dni'>DNI</option>
-                                <option value='lastname'>Last Name</option>
-                                <option value='medical_specialities'>
-                                    Especialidad
-                                </option>
-                                <option value='state'>State</option>
-                            </Select>
                         </FormControl>
                     </DialogContent>
                     <DialogActions>
@@ -419,24 +432,6 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//         width: '100%',
-//     },
-//     paper: {
-//         width: '100%',
-//         marginBottom: theme.spacing(2),
-//     },
-//     table: {
-//         minWidth: 750,
-//     },
-//     visuallyHidden: {
-//         clip: 'rect(0 0 0 0)',
-//         overflow: 'hidden',
-//         padding: 0,
-//     },
-// }));
-
 //-------------------- EnhancedTableToolbar Style
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -449,7 +444,7 @@ const useStyles = makeStyles((theme) => ({
     },
     table: {
         minWidth: 750,
-        
+
     },
     visuallyHidden: {
         border: 0,
@@ -462,21 +457,21 @@ const useStyles = makeStyles((theme) => ({
         top: 20,
         width: 1
     },
-    title:{
-        color:'#212121',
+    title: {
+        color: '#212121',
         fontWeight: 'bold',
         backgroundColor: lighten('#34a7a1', 0.6)
     },
-    rowColor:{
+    rowColor: {
         backgroundColor: lighten('#e0e0e0', 0.3),
-        ':checked':{
-            color:blue[500]
+        ':checked': {
+            color: blue[500]
         }
     },
-    iconFilter:{
-        color:'rgba(0, 0, 0, 0.47)',
-        fontWeight:'bold',
-        '&:hover':{
+    iconFilter: {
+        color: 'rgba(0, 0, 0, 0.47)',
+        fontWeight: 'bold',
+        '&:hover': {
             backgroundColor: lighten('#34a7a1', 0.8),
         }
     }
@@ -495,7 +490,7 @@ export default function MedicsTable() {
     const [medicData, setMedicData] = React.useState(null);
     const [toShowRows, setToShowRows] = React.useState([]);
     const MySwal = withReactContent(Swal);
-    
+
     const fetchMedics = async () => {
         const { data: medics, error: errorFetchMedics } = await supabase
             .from('medics')
@@ -582,7 +577,7 @@ export default function MedicsTable() {
         Math.min(rowsPerPage, toShowRows.length - page * rowsPerPage);
 
     if (toShowRows.length === 0) return <CircularProgress color='secondary' />;
-    
+
 
     return (
         <div className={classes.root}>
@@ -633,7 +628,7 @@ export default function MedicsTable() {
                                             key={row.name}
                                             selected={isItemSelected}
                                         >
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
+                                            <TableCell align='left' className={index % 2 === 1 ? classes.rowColor : null}>
                                                 <Tooltip title='Edit' className={classes.iconFilter}>
                                                     <IconButton aria-label='Edit' >
                                                         <EditIcon
@@ -650,17 +645,17 @@ export default function MedicsTable() {
                                                                 handleDelete(row)
                                                             }
                                                         />
-                                                   </IconButton>
+                                                    </IconButton>
                                                 </Tooltip>
                                             </TableCell>
-                                            <TableCell align='center' className={index%2 ===1 ? classes.rowColor :null}>
+                                            <TableCell align='center' className={index % 2 === 1 ? classes.rowColor : null}>
                                                 <Avatar
                                                     alt='Profile Picture'
                                                     src={row.profilePic}
                                                 />
                                             </TableCell>
                                             <TableCell
-                                                className={index%2 ===1 ? classes.rowColor :null}
+                                                className={index % 2 === 1 ? classes.rowColor : null}
                                                 component='th'
                                                 id={labelId}
                                                 scope='row'
@@ -668,26 +663,26 @@ export default function MedicsTable() {
                                             >
                                                 {row.name}
                                             </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
+                                            <TableCell align='left' className={index % 2 === 1 ? classes.rowColor : null}>
                                                 {row.lastname}
                                             </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
+                                            <TableCell align='left' className={index % 2 === 1 ? classes.rowColor : null}>
                                                 {row.medic_license}
                                             </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
+                                            <TableCell align='left' className={index % 2 === 1 ? classes.rowColor : null}>
                                                 {row.dni}
                                             </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
+                                            <TableCell align='left' className={index % 2 === 1 ? classes.rowColor : null}>
                                                 {row.email}
                                             </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
+                                            <TableCell align='left' className={index % 2 === 1 ? classes.rowColor : null}>
                                                 {row.phone_number}
                                             </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
+                                            <TableCell align='left' className={index % 2 === 1 ? classes.rowColor : null}>
                                                 {calculateAge(row.birthdate)}
                                             </TableCell>
 
-                                            <TableCell className={index%2 ===1 ? classes.rowColor :null}>
+                                            <TableCell className={index % 2 === 1 ? classes.rowColor : null}>
                                                 <ul>
                                                     {row.medical_specialities
                                                         .length === 0 ? (
@@ -710,7 +705,7 @@ export default function MedicsTable() {
                                                     )}
                                                 </ul>
                                             </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
+                                            <TableCell align='left' className={index % 2 === 1 ? classes.rowColor : null}>
                                                 {row.state}
                                             </TableCell>
                                         </TableRow>
