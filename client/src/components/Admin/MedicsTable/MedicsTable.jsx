@@ -118,6 +118,8 @@ const headCells = [
     { id: 'state', numeric: false, disablePadding: false, label: 'ESTADO' },
 ];
 
+const MySwal = withReactContent(Swal);
+
 function EnhancedTableHead(props) {
     const { classes, order, orderBy, onRequestSort } = props;
     const createSortHandler = (property) => (event) => {
@@ -215,7 +217,7 @@ const useToolbarStyles = makeStyles((theme) => ({
         fontWeight: 'bold',
         fontSize: '1.4rem',
         color: '#fafafa',
-        textAlign: 'rigth',
+        textAlign: 'right',
     },
     popup: {
         color: '#fafafa',
@@ -236,6 +238,9 @@ const useToolbarStyles = makeStyles((theme) => ({
             padding: theme.spacing(0.5),
         },
     },
+    formControl: {
+        width: '177px',
+    },
 }));
 
 const EnhancedTableToolbar = (props) => {
@@ -244,7 +249,7 @@ const EnhancedTableToolbar = (props) => {
         props;
     const [open, setOpen] = React.useState(false);
     const [selectedOption, setSelectedOption] = React.useState('');
-    const [selectedState, setSelectedState] = React.useState('activo');
+    const [selectedState, setSelectedState] = React.useState('');
 
     const handleChange = (event) => {
         event.target.name === 'state'
@@ -259,59 +264,60 @@ const EnhancedTableToolbar = (props) => {
     };
 
     const handleClose = () => {
+        setSelectedOption('');
+        setSelectedState('');
         setOpen(false);
         setToShowRows(rows);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        selectedOption === 'state'
-            ? filter(e.target[0].value, e.target[1].value)
-            : filter(e.target[0].value, e.target[2].value);
+        filter(e.target[0].value, e.target[2].value);
     };
 
     const filter = (value, option) => {
+        let result = rows;
+
         if (option === 'lastname') {
             value
-                ? setToShowRows(
-                      toShowRows.filter((r) => {
-                          return r[option]
-                              .toLowerCase()
-                              .includes(value.toLowerCase());
-                      })
-                  )
-                : setToShowRows(rows);
+                ? (result = toShowRows.filter((r) => {
+                      return r[option]
+                          .toLowerCase()
+                          .includes(value.toLowerCase());
+                  }))
+                : (result = rows);
         } else if (option === 'dni') {
             value
-                ? setToShowRows(
-                      toShowRows.filter((r) => {
-                          return String(r[option])
-                              .toLowerCase()
-                              .includes(value.toLowerCase());
-                      })
-                  )
-                : setToShowRows(rows);
+                ? (result = toShowRows.filter((r) => {
+                      return String(r[option])
+                          .toLowerCase()
+                          .includes(value.toLowerCase());
+                  }))
+                : (result = rows);
         } else if (option === 'medical_specialities') {
             value
-                ? setToShowRows(
-                      toShowRows.filter((r) =>
-                          r[option].some((e) =>
-                              e.name.toLowerCase().includes(value.toLowerCase())
-                          )
+                ? (result = toShowRows.filter((r) =>
+                      r[option].some((e) =>
+                          e.name.toLowerCase().includes(value.toLowerCase())
                       )
-                  )
-                : setToShowRows(rows);
+                  ))
+                : (result = rows);
         } else if (option === 'state') {
             value
-                ? setToShowRows(
-                      toShowRows.filter((r) => {
-                          return (
-                              r[option].toLowerCase() === value.toLowerCase()
-                          );
-                      })
-                  )
-                : setToShowRows(rows);
-        } else setToShowRows(rows);
+                ? (result = toShowRows.filter((r) => {
+                      return r[option].toLowerCase() === value.toLowerCase();
+                  }))
+                : (result = rows);
+        }
+
+        if (!result.length) {
+            console.log('no hay resultados');
+            setToShowRows(rows);
+            MySwal.fire('Sin resultados...', 'No hay coincidencias!', 2000);
+        } else {
+            setToShowRows(result);
+        }
+
         setOpen(false);
     };
 
@@ -361,10 +367,17 @@ const EnhancedTableToolbar = (props) => {
                 </DialogTitle>
                 <form className={classes.container} onSubmit={handleSubmit}>
                     <DialogContent>
-                        <FormControl className={classes.formControl}>
+                        <FormControl /* className={classes.formControl} */>
                             {selectedOption === 'state' ? (
-                                <FormControl className={classes.formControl}>
+                                <FormControl /* className={classes.formControl} */
+                                >
                                     <Select
+                                        inputProps={{
+                                            style: { width: '177px' },
+                                            id: 'outlined-age-native-simple',
+                                            name: 'state',
+                                        }}
+                                        variant='outlined'
                                         native
                                         value={selectedState}
                                         onChange={handleChange}
@@ -384,28 +397,35 @@ const EnhancedTableToolbar = (props) => {
                             ) : (
                                 <TextField
                                     id='outlined-basic'
-                                    label='value'
+                                    label='ingresar...'
                                     variant='outlined'
+                                    disabled={!selectedOption}
                                 />
                             )}
                         </FormControl>
-                        <FormControl className={classes.formControl}>
-                            <InputLabel htmlFor='demo-dialog-native'>
+                        <FormControl /* className={classes.formControl} */>
+                            {/* <InputLabel htmlFor='demo-dialog-native'>
                                 POR:
-                            </InputLabel>
+                            </InputLabel> */}
                             <Select
                                 native
                                 value={selectedOption}
                                 onChange={handleChange}
+                                variant='outlined'
                                 input={<Input id='demo-dialog-native' />}
+                                inputProps={{
+                                    style: { width: '177px' },
+                                    id: 'outlined-age-native-simple',
+                                    name: 'filter-type',
+                                }}
                             >
                                 <option aria-label='None' value='' />
                                 <option value='dni'>DNI</option>
-                                <option value='lastname'>Last Name</option>
+                                <option value='lastname'>Apellido</option>
                                 <option value='medical_specialities'>
                                     Especialidad
                                 </option>
-                                <option value='state'>State</option>
+                                <option value='state'>Estado</option>
                             </Select>
                         </FormControl>
                     </DialogContent>
@@ -429,24 +449,6 @@ const EnhancedTableToolbar = (props) => {
 EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
-
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//         width: '100%',
-//     },
-//     paper: {
-//         width: '100%',
-//         marginBottom: theme.spacing(2),
-//     },
-//     table: {
-//         minWidth: 750,
-//     },
-//     visuallyHidden: {
-//         clip: 'rect(0 0 0 0)',
-//         overflow: 'hidden',
-//         padding: 0,
-//     },
-// }));
 
 //-------------------- EnhancedTableToolbar Style
 const useStyles = makeStyles((theme) => ({

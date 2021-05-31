@@ -50,7 +50,7 @@ function a11yProps(index) {
 
 const useStyles = makeStyles(() => ({
     root: {
-        width:'100%',
+        width:'88%',
         margin:'0px',
         padding:'0px 0px 0px 0px',
         alignItems: 'left',
