@@ -172,9 +172,14 @@ function AdminPlans({ firebase }) {
       .update({ name: e.target[0].value, price: e.target[1].value })
       .eq("id", modalPlan.id_plan);
     handleCloseModalModify();
+    MySwal.fire({
+      title: "Se modificó el plan con exito!.",
+      icon: "success",
+    }).then(() => window.location.reload());
   };
 
   const handleSubmitDelete = async (e, id) => {
+    console.log(id);
     e.preventDefault();
     try {
       let userData = JSON.parse(localStorage.getItem("userdata"));
@@ -182,6 +187,14 @@ function AdminPlans({ firebase }) {
         .auth()
         .signInWithEmailAndPassword(userData.email, e.target[0].value);
       setPassword({ password: "", error: false });
+      const { data: deleteBenefits, error: errorBenefits } = await supabase
+        .from("plans_benefits")
+        .delete()
+        .eq("plan_id", id);
+      const { data: deletePlan, error: errorPlan } = await supabase
+        .from("plans")
+        .delete()
+        .eq("id", id);
       handleCloseModalDelete();
       MySwal.fire({
         title: "Se elimino el plan con exito!.",
