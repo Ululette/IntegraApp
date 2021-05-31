@@ -6,25 +6,42 @@
     position: absolute;
     bottom: 0;
     margin-bottom: 10rem;
+    /* margin: theme.spacing(2), */
+    background-color: #2c7f7b;
+    font-size:35px;
+    border:3px solid #2c7f7b;
+}
+.addButton:hover{
+    background-color: '#2c7f7b';
+    border:3px solid #fafafa;
 }
 
 .filters {
     display: flex;
-    width: 20%;
-    justify-content: center;
-    align-items: flex-end;
+    flex-direction: column;
+    width: 40%;
+    justify-content:space-between;
+    align-items:center;
+
+
 }
 
 .filtersSelector {
     width: 50%;
-    display: block;
+    display: flex;
+    justify-content: space-around;
+   
 }
 
 .filtersSelect {
-    width: 100%;
+    width: 177px;
+    margin-right: 20px;
+    height: 40px;
+    background-color: white;
 }
 
 .filtersinput {
-    margin-left: 10px;
-    width: 50%;
+    width: 177px;
+    background-color: white;
+    border-radius:5px;
 }

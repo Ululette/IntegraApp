@@ -32,7 +32,7 @@ import {
     FormControl,
     Select,
     DialogActions,
-    TextField,
+    TextField
 } from '@material-ui/core';
 
 function descendingComparator(a, b, orderBy) {
@@ -138,13 +138,12 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired,
 };
-//------------------------makeStyle1---------------------------------------------------------------------------------------
+//------------------------EnhancedTableToolbar Style ---------------------------------------------------------------------------------------
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(1),
-        backgroundColor: lighten('#34a7a1', 0.3)
-        //color barra superior '
+        backgroundColor: lighten('#34a7a1', 0.3),
     },
     highlight:
         theme.palette.type === 'light'
@@ -347,12 +346,12 @@ const EnhancedTableToolbar = (props) => {
                     id='tableTitle'
                     component='div'
                 >
-                    USERS
+                    USUARIOS
                 </Typography>
             )}
 
             {numSelected > 0 ? (
-                <Tooltip title='Active/Unactive Users' onClick={handleBlock}>
+                <Tooltip title='Activar/Desactivar Usuarios' onClick={handleBlock}>
                     <IconButton aria-label='Edit' className={classes.iconBlock}>
                         <BlockIcon />
                     </IconButton>
@@ -360,12 +359,12 @@ const EnhancedTableToolbar = (props) => {
             ) : (
                 <div>
                     <div className={classes.filters}>
-                        <Tooltip title='Filter' onClick={handleClickOpen} >
+                        <Tooltip title='Filtro' onClick={handleClickOpen} >
                         <IconButton aria-label='filter list' className={classes.iconFilter}>
                             <FilterListIcon />
                         </IconButton>
                         </Tooltip>
-                        <Tooltip title='Clear Filter' onClick={hanldeReset}>
+                        <Tooltip title='Borrar Filtro' onClick={hanldeReset}>
                             <IconButton aria-label='reset' className={classes.iconFilter}>
                                 <ClearAllIcon />
                             </IconButton>
@@ -381,16 +380,13 @@ const EnhancedTableToolbar = (props) => {
                     >
                         <DialogTitle className={classes.popup}>FILTRADO POR:</DialogTitle>
                         <form
-                            /* className={classes.container}>*/ onSubmit={
+                            onSubmit={
                                 handleSubmit
                             }
                         >
                             <DialogContent >
-                                <FormControl /* className={classes.formControl} */
+                                <FormControl 
                                 >
-                                    {/* <InputLabel htmlFor='demo-dialog-native'>
-                                Filter By
-                            </InputLabel> */}
                                     <Select
                                         inputProps={{
                                             style: { width: '177px' },
@@ -420,7 +416,7 @@ const EnhancedTableToolbar = (props) => {
                                         onChange={(e) => handleInput(e)}
                                     />
                                 ) : optionSelected === 'role' ? (
-                                    <FormControl /* className={classes.formControl} */
+                                    <FormControl 
                                     >
                                         <Select
                                             inputProps={{
@@ -446,7 +442,7 @@ const EnhancedTableToolbar = (props) => {
                                         </Select>
                                     </FormControl>
                                 ) : optionSelected === 'account' ? (
-                                    <FormControl /* className={classes.formControl} */
+                                    <FormControl 
                                     >
                                         <Select
                                             inputProps={{
@@ -494,7 +490,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-//-------------------- EnhancedTableToolbar Style
+//-------------------- Style Table Users
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',

@@ -355,13 +355,19 @@ const EnhancedTableToolbar = (props) => {
                 <DialogTitle className={classes.popup}>FILTRADO POR:</DialogTitle>
                 <form className={classes.container} onSubmit={handleSubmit}>
                     <DialogContent>
-                        <FormControl className={classes.formControl}>
+                        <FormControl /* className={classes.formControl} */>
                             {selectedOption === 'state' ? (
-                                <FormControl className={classes.formControl}>
+                                <FormControl /* className={classes.formControl} */>
                                     <Select
                                         native
                                         value={selectedState}
                                         onChange={handleChange}
+                                        variant='outlined'
+                                        inputProps={{
+                                            style: { width: '177px' },
+                                            id: 'outlined-age-native-simple',
+                                            name: 'filter-state',
+                                        }}
                                         input={
                                             <Input id='demo-dialog-native' />
                                         }
@@ -381,23 +387,29 @@ const EnhancedTableToolbar = (props) => {
                                 />
                             )}
                         </FormControl>
-                        <FormControl className={classes.formControl}>
-                            <InputLabel htmlFor='demo-dialog-native'>
+                        <FormControl /* className={classes.formControl} */>
+                            {/* <InputLabel htmlFor='demo-dialog-native'>
                                 POR:
-                            </InputLabel>
+                            </InputLabel> */}
                             <Select
                                 native
                                 value={selectedOption}
                                 onChange={handleChange}
+                                variant='outlined'
                                 input={<Input id='demo-dialog-native' />}
+                                inputProps={{
+                                    style: { width: '177px' },
+                                    id: 'outlined-age-native-simple',
+                                    name: 'filter-type',
+                                }}
                             >
                                 <option aria-label='None' value='' />
                                 <option value='dni'>DNI</option>
-                                <option value='lastname'>Last Name</option>
+                                <option value='lastname'>Apellido</option>
                                 <option value='medical_specialities'>
                                     Especialidad
                                 </option>
-                                <option value='state'>State</option>
+                                <option value='state'>Estado</option>
                             </Select>
                         </FormControl>
                     </DialogContent>
@@ -418,24 +430,6 @@ const EnhancedTableToolbar = (props) => {
 EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
-
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//         width: '100%',
-//     },
-//     paper: {
-//         width: '100%',
-//         marginBottom: theme.spacing(2),
-//     },
-//     table: {
-//         minWidth: 750,
-//     },
-//     visuallyHidden: {
-//         clip: 'rect(0 0 0 0)',
-//         overflow: 'hidden',
-//         padding: 0,
-//     },
-// }));
 
 //-------------------- EnhancedTableToolbar Style
 const useStyles = makeStyles((theme) => ({

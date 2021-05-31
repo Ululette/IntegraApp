@@ -35,7 +35,36 @@ const useStyles = makeStyles((theme) => ({
     },
     chip: {
         margin: theme.spacing(0.5),
+        backgroundColor:'#3db7b1',
+        color:'white',
+        fontWeight:'bold',
+        fontSize:'15px',
+        
     },
+    popup:{
+        color: '#fafafa',
+        backgroundColor: '#2c7f7b',
+        fontWeight:'bold',
+        fontSize:'30px'
+    },
+    popupBtn:{
+        color: '#fafafa',
+        padding: theme.spacing(0.5),
+        border: '3px solid #2c7f7b',
+        borderRadius:'5px',
+        backgroundColor:'#2c7f7b',
+        fontWeight:'bold',
+        fontSize:'15px',
+        '&:hover':{
+            backgroundColor:'#fafafa',
+            color:'#2c7f7b',
+            padding: theme.spacing(0.5),
+        }
+    },
+    select:{
+        width:'177px',
+        textTransform:'capitalize',
+    }
 }));
 
 function AdminMedicEdit({
@@ -164,10 +193,10 @@ function AdminMedicEdit({
 
     return (
         <Dialog open={editActive} onClose={handleClose} onSubmit={handleSubmit}>
-            <DialogTitle>Editar Medico</DialogTitle>
+            <DialogTitle className={classes.popup}>EDITAR MEDICO</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Formulario para editar medico.
+                    Ingrese los datos solicitados.
                 </DialogContentText>
                 <TextField
                     autoFocus
@@ -222,6 +251,7 @@ function AdminMedicEdit({
                 />
                 <InputLabel htmlFor='status'>Estado</InputLabel>
                 <Select
+                    className={classes.select}
                     name='status'
                     onChange={handleChange}
                     value={input.status}
@@ -233,7 +263,7 @@ function AdminMedicEdit({
                     ))}
                 </Select>
                 <InputLabel htmlFor='specialities'>Especialidades</InputLabel>
-                <Select name='specialities' onChange={handleChipAdd}>
+                <Select name='specialities' onChange={handleChipAdd} className={classes.select}>
                     {medicSpecialities.map((el, index) => (
                         <MenuItem key={`speciality-${index}`} value={el.name}>
                             {el.name}
@@ -324,10 +354,10 @@ function AdminMedicEdit({
                         /> */}
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color='primary'>
+                <Button onClick={handleClose} color='primary' className={classes.popupBtn}>
                     Cancelar
                 </Button>
-                <Button onClick={handleSubmit} type='submit' color='primary'>
+                <Button onClick={handleSubmit} type='submit' color='primary' className={classes.popupBtn}>
                     Editar
                 </Button>
             </DialogActions>
