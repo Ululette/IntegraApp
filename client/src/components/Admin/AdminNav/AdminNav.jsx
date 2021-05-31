@@ -45,6 +45,7 @@ import AdminMedicTabs from '../MedicsTable/AdminTabs.jsx';
 import AdminAffiliate from '../AdminAffiliate/AdminAffiliate.jsx';
 import FormSpecialities from '../Speciality/FormSpecialities.jsx';
 import AdminRegistration from '../AdminRegistration/AdminRegistration.jsx';
+import AplicationsTabs from '../Aplications/AplicationsTabs';
 import NotFound from '../../Status/NotFound.jsx';
 import FormUsers from '../AdminsUsers/FormUsers.jsx';
 
@@ -207,16 +208,16 @@ function AdminNav({ firebase, window: windowMui }) {
                     <FaceIcon />
                     <ListItemText primary='Mi cuenta' />
                 </ListItem>
-                <ListItem button>
-                    <Badge
-                        color='secondary'
-                        badgeContent={2}
-                        className={styles.notifications}
-                    >
+                <NavLink
+                    to={`/${userData.dni}/admin/aplications`}
+                    className={styles.link}
+                    activeClassName={styles.activeLink}
+                >
+                    <ListItem button>
                         <GroupAddIcon />
-                        <ListItemText primary='Solicitudes de asociacion' />
-                    </Badge>
-                </ListItem>
+                        <ListItemText primary='Solicitudes' />
+                    </ListItem>
+                </NavLink>
                 <NavLink
                     to={`/${userData.dni}/admin/plans`}
                     className={styles.link}
@@ -498,6 +499,9 @@ function AdminNav({ firebase, window: windowMui }) {
                 ) : window.location.pathname ===
                   `/${userData.dni}/admin/dashboard` ? (
                     <AdminHome />
+                ) : window.location.pathname ===
+                  `/${userData.dni}/admin/aplications` ? (
+                    <AplicationsTabs />
                 ) : (
                     <NotFound />
                 )}

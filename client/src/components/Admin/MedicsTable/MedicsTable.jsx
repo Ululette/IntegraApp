@@ -294,7 +294,7 @@ const EnhancedTableToolbar = (props) => {
                 onClose={handleClose}
                 className={classes.dialog}
             >
-                <DialogTitle>Fill the form</DialogTitle>
+                <DialogTitle>Parámetros de filtrado</DialogTitle>
                 <form className={classes.container} onSubmit={handleSubmit}>
                     <DialogContent>
                         <FormControl className={classes.formControl}>
@@ -336,9 +336,7 @@ const EnhancedTableToolbar = (props) => {
                                 <option aria-label='None' value='' />
                                 <option value='dni'>DNI</option>
                                 <option value='lastname'>Last Name</option>
-                                <option value='medical_specialities'>
-                                    Specialty
-                                </option>
+                                <option value='medical_specialities'>Specialty</option>
                                 <option value='state'>State</option>
                             </Select>
                         </FormControl>
@@ -399,15 +397,15 @@ export default function MedicsTable() {
             .select(
                 'dni, name, lastname, medic_license, email, phone_number, birthdate, state, profilePic, medical_specialities (id, name)'
             );
-        if (errorFetchMedics) return console.log(errorFetchMedics);
-        setToShowRows(medics);
+        if (errorFetchMedics) return console.log(errorFetchMedics.message);
+        medics && setToShowRows(medics);
         setListMedics(medics);
     };
 
     const fetchSpecialities = async () => {
         const { data: specialities, error: errorFetchSpecialities } =
             await supabase.from('medical_specialities').select('name, id');
-        if (errorFetchSpecialities) return console.log(errorFetchSpecialities);
+        if (errorFetchSpecialities) return console.log(errorFetchSpecialities.message);
         setMedicSpecialities(specialities);
     };
 
