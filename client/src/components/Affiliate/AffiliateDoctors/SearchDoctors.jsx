@@ -145,10 +145,10 @@ EnhancedTableHead.propTypes = {
 //------------------------makeStyle1---------------------------------------------------------------------------------------
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
-        paddingLeft: theme.spacing(0),
-        paddingRight: theme.spacing(0),
+        // paddingLeft: theme.spacing(0),
+        // paddingRight: theme.spacing(0),
         backgroundColor: lighten('#34a7a1', 0.3), 
-        
+        padding: '0px 0px 0px 0px',
         //color barra superior '
     },
     highlight:
@@ -188,14 +188,36 @@ const useToolbarStyles = makeStyles((theme) => ({
             backgroundColor: lighten('#34a7a1', 0.8),
         }
     },
-    container:{
-        margin: theme.spacing(1),
-        width: '90%',
+    p:{
+        fontWeight:'bold',
+        fontSize:'1.4rem',
+        color: '#fafafa',
+        textAlign:'rigth'
+    },
+    popup:{
+        color: '#fafafa',
+        backgroundColor: '#2c7f7b',
+        fontWeight:'bold',
+        fontSize:'30px'
+    },
+    popupBtn:{
+        color: '#fafafa',
+        padding: theme.spacing(0.5),
+        border: '3px solid #2c7f7b',
+        backgroundColor:'#2c7f7b',
+        fontWeight:'bold',
+        fontSize:'15px',
+        '&:hover':{
+            backgroundColor: lighten('#fafafa', 0.2),
+            color:'#2c7f7b',
+            padding: theme.spacing(0.5),
+        }
     },
     formControl:{
-        margin: theme.spacing(1),
-        width: '80%',
-    }
+        display:'flex',
+        flexDirection:'column',
+        padding: theme.spacing(0.5),
+    },
 }));
 
 const EnhancedTableToolbar = (props) => {
@@ -245,7 +267,7 @@ const EnhancedTableToolbar = (props) => {
             try {
                 let { data: medics, error: errorFetchMedics } = await supabase
                 .from('address')
-                .select('medics(name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id,id_locality, name, postal_code,states(id,name))))')
+                .select('medics(dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id,id_locality, name, postal_code,states(id,name))))')
                 .eq('locality_id',idLocality)
                 console.log('Medicos:',medics);
                 let array=[];
@@ -264,7 +286,7 @@ const EnhancedTableToolbar = (props) => {
             try {
                 let { data: medics, error: errorFetchMedics } = await supabase
                 .from('address')
-                .select('medics(name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name)))))')
+                .select('medics(dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name)))))')
                 .eq('locality_id',idLocality)
                 // .eq('medical_specialities.id',idSpeciality)
                 console.log(medics);
@@ -293,7 +315,7 @@ const EnhancedTableToolbar = (props) => {
             try {
                 let { data: medics, error: errorFetchMedics } = await supabase
                 .from('medics_medical_specialities')
-                .select('medics(name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name))))')
+                .select('medics(dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name))))')
                 .eq('speciality_id',idSpeciality)
                 let array=[];
                 for(let ad of medics){
@@ -309,7 +331,7 @@ const EnhancedTableToolbar = (props) => {
             try {
                 let { data: medics, error: errorFetchMedics } = await supabase
                 .from('medics')
-                .select('name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name))))')
+                .select('dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name))))')
                 console.log(medics);
                 setMedicsToShow(medics);
             } catch (err) {
@@ -379,16 +401,17 @@ const EnhancedTableToolbar = (props) => {
             >
                 MEDICOS
             </Typography>
-            <Tooltip title='Clear' 
-                onClick={handleCancel} className={classes.iconFilter}>
-                <IconButton aria-label='reset'>
-                    <ClearAllIcon />
-                </IconButton>
-            </Tooltip>
+            <p className={classes.p}>Filtros</p>
             <Tooltip title='Filter list' 
                 onClick={handleClickOpen} className={classes.iconFilter}>
                 <IconButton aria-label='filter'>
                     <FilterListIcon />
+                </IconButton>
+            </Tooltip>
+            <Tooltip title='Clear' 
+                onClick={handleCancel} className={classes.iconFilter}>
+                <IconButton aria-label='reset'>
+                    <ClearAllIcon />
                 </IconButton>
             </Tooltip>
             <Dialog
@@ -398,8 +421,8 @@ const EnhancedTableToolbar = (props) => {
                 onClose={handleClose}
                 className={classes.dialog}
             >
-                <DialogTitle>Filtrar por</DialogTitle>
-                <form className={classes.container}>
+                <DialogTitle className={classes.popup}>FILTRADO POR:</DialogTitle>
+                <form>
                     <DialogContent>
                         <FormControl className={classes.formControl}>
                             <InputLabel htmlFor='demo-dialog-native'>
@@ -436,6 +459,7 @@ const EnhancedTableToolbar = (props) => {
                             </InputLabel>
                             <Select
                                 native
+                                className={classes.select}
                                 value={selectedState}
                                 onChange={handleStateOption}
                                 input={<Input id='demo-dialog-native' />}
@@ -470,6 +494,7 @@ const EnhancedTableToolbar = (props) => {
                                     value={selectedLocality}
                                     onChange={handleLocalityOption}
                                     input={<Input id='demo-dialog-native' />}
+                                    variant='outlined'
                                 >
                                     <option></option>
                                     {localities &&
@@ -494,10 +519,10 @@ const EnhancedTableToolbar = (props) => {
                         </FormControl>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleCancel} color='primary'>
+                        <Button onClick={handleCancel} className={classes.popupBtn} >
                             Cancel
                         </Button>
-                        <Button onClick={handleSubmit}>
+                        <Button onClick={handleSubmit} className={classes.popupBtn}>
                             Ok
                         </Button>
                     </DialogActions>
@@ -566,7 +591,6 @@ export default function SearchDoctors() {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [listMedics, setListMedics] = React.useState([]);
     const [medicSpecialities, setMedicSpecialities] = React.useState([]);
-    const [infoActive, setInfoActive] = React.useState(false);
     const [medicData, setMedicData] = React.useState(null);
     const [toShowRows, setToShowRows] = React.useState([]);
     const MySwal = withReactContent(Swal);
