@@ -20,6 +20,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import CreateIcon from "@material-ui/icons/Create";
 import { Button } from "@material-ui/core";
 
+import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
+
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -47,15 +49,22 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
+  { id: "action", numeric: false, disablePadding: false, label: "Acciones" },
   {
     id: "name",
     numeric: false,
     disablePadding: true,
-    label: "Name",
+    label: "Nombre",
   },
-  { id: "price", numeric: true, disablePadding: false, label: "Price" },
-  { id: "detail", numeric: false, disablePadding: false, label: "Details" },
-  { id: "action", numeric: false, disablePadding: false, label: "Actions" },
+  { id: "price", numeric: true, disablePadding: false, label: "Precio" },
+  { id: "detail", numeric: false, disablePadding: false, label: "Detalles" },
+  {
+    id: "users",
+    numeric: false,
+    disablePadding: false,
+    label: "Usuarios con este plan",
+  },
+  { id: "state", numeric: false, disablePadding: false, label: "Estado" },
 ];
 
 function EnhancedTableHead(props) {
@@ -173,6 +182,7 @@ export default function PlansTable({
   handleOpenModalModify,
   handleOpenModalDelete,
   handleOpenModalDetails,
+  handleOpenModalState,
 }) {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
@@ -242,6 +252,38 @@ export default function PlansTable({
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
                     <TableRow>
+                      <TableCell padding="default">
+                        <Tooltip
+                          title="Editar plan"
+                          onClick={() => handleOpenModalModify(row)}
+                        >
+                          <CreateIcon />
+                        </Tooltip>
+                        {row.active ? (
+                          <Tooltip
+                            title="Desactivar"
+                            aria-label="deactivate"
+                            onClick={() => handleOpenModalState(row)}
+                          >
+                            <PowerSettingsNewIcon />
+                          </Tooltip>
+                        ) : (
+                          <Tooltip
+                            title="Activar"
+                            aria-label="activate"
+                            onClick={() => handleOpenModalState(row)}
+                          >
+                            <PowerSettingsNewIcon />
+                          </Tooltip>
+                        )}
+                        <Tooltip
+                          title="Eliminar plan"
+                          aria-label="delete"
+                          onClick={() => handleOpenModalDelete(row)}
+                        >
+                          <DeleteIcon />
+                        </Tooltip>
+                      </TableCell>
                       <TableCell
                         component="th"
                         id={labelId}
@@ -260,20 +302,10 @@ export default function PlansTable({
                           View
                         </Button>
                       </TableCell>
+                      <TableCell padding="default">{row.users}</TableCell>
+
                       <TableCell padding="default">
-                        <Tooltip
-                          title="Editar plan"
-                          onClick={() => handleOpenModalModify(row)}
-                        >
-                          <CreateIcon />
-                        </Tooltip>
-                        <Tooltip
-                          title="Eliminar plan"
-                          aria-label="delete"
-                          onClick={() => handleOpenModalDelete(row)}
-                        >
-                          <DeleteIcon />
-                        </Tooltip>
+                        {row.active ? "Activo" : "Inactivo"}
                       </TableCell>
                     </TableRow>
                   );

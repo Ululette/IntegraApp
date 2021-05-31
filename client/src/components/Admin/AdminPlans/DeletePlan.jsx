@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -24,6 +24,52 @@ export default function DeletePlan({
   deletePlan,
   password,
 }) {
+  if (deletePlan.users !== 0) {
+    return (
+      <Dialog
+        open={open}
+        onClose={handleCloseModal}
+        aria-labelledby="form-dialog-title"
+      >
+        <form onSubmit={(e) => handleSubmit(e, deletePlan.id_plan)}>
+          <DialogTitle id="form-dialog-title">Delete Plan</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              {`You cannot delete a plan that is assigned to ${deletePlan.users} people. First change this people to another plan and then delete this plan.`}
+            </DialogContentText>
+            <Box margin={1}>
+              <Typography variant="h8" gutterBottom component="div">
+                Benefits
+              </Typography>
+              <Table size="small" aria-label="purchases">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Description</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {deletePlan.benefits.map((benefit) => (
+                    <TableRow>
+                      <TableCell>{benefit.title}</TableCell>
+                      <TableCell>{benefit.description}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Box>
+          </DialogContent>
+
+          <DialogActions>
+            <Button onClick={handleCloseModal} color="primary">
+              Cancel
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+    );
+  }
+
   return (
     <Dialog
       open={open}
@@ -34,7 +80,7 @@ export default function DeletePlan({
         <DialogTitle id="form-dialog-title">Delete Plan</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete {deletePlan.name} ?
+            {`Are you sure you want to delete ${deletePlan.name} ?`}
           </DialogContentText>
           <Box margin={1}>
             <Typography variant="h8" gutterBottom component="div">
