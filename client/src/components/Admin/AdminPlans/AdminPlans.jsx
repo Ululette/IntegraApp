@@ -202,7 +202,11 @@ function AdminPlans({ firebase }) {
       }).then(() => window.location.reload());
     } catch (error) {
       setPassword({ password: "", error: true });
-      console.log(error);
+      handleCloseModalDelete();
+      MySwal.fire({
+        title: "Contraseña Incorrecta",
+        icon: "error",
+      });
     }
   };
 
