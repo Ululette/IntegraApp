@@ -59,14 +59,12 @@ const drawerWidth = 260;
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
-        
     },
     drawer: {
         [theme.breakpoints.up('sm')]: {
             width: drawerWidth,
             flexShrink: 0,
         },
-        
     },
     appBar: {
         [theme.breakpoints.up('sm')]: {
@@ -80,7 +78,6 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: '10rem',
         height: '75px',
         backgroundColor: '#00897b',
-        zIndex:'2000'
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -96,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
     },
     content: {
         flexGrow: 1,
-        padding: '12px 0px 0px 0px',
+        padding: theme.spacing(3),
     },
 }));
 
@@ -237,14 +234,8 @@ function AdminNav({ firebase, window: windowMui }) {
                     activeClassName={styles.activeLink}
                 >
                     <ListItem button>
-                        <Badge
-                            color='secondary'
-                            badgeContent={2}
-                            className={styles.notifications}
-                        >
-                            <DoneAllIcon />
-                            <ListItemText primary='Autorizaciones' />
-                        </Badge>
+                        <DoneAllIcon />
+                        <ListItemText primary='Autorizaciones' />
                     </ListItem>
                 </NavLink>
 
@@ -313,7 +304,7 @@ function AdminNav({ firebase, window: windowMui }) {
                         <MenuIcon />
                     </IconButton>
                 </Toolbar>
-                <a href={`/${userData.dni}/admin`}>
+                <a href={`/${userData.dni}/admin/dashboard`}>
                     <img
                         src='../../assets/images/logo.png'
                         alt='Integra icon.'
@@ -348,50 +339,45 @@ function AdminNav({ firebase, window: windowMui }) {
                         >
                             <List>
                                 {notifications.map((el, idx) => (
-                                    <a
-                                        href={`/${userData.dni}/admin/aplications`}
-                                        className={styles.link}
+                                    <ListItem
+                                        button
+                                        key={`notification-${idx}`}
                                     >
-                                        <ListItem
-                                            button
-                                            key={`notification-${idx}`}
-                                        >
-                                            <ListItemIcon>
-                                                {el.hasOwnProperty(
+                                        <ListItemIcon>
+                                            {el.hasOwnProperty(
+                                                'phone_number'
+                                            ) ? (
+                                                <ContactSupport />
+                                            ) : el.hasOwnProperty(
+                                                  'familiar_name'
+                                              ) ? (
+                                                <ThumbDown />
+                                            ) : (
+                                                <Send />
+                                            )}
+                                        </ListItemIcon>
+                                        <ListItemText
+                                            primary={
+                                                el.hasOwnProperty(
                                                     'phone_number'
-                                                ) ? (
-                                                    <ContactSupport />
-                                                ) : el.hasOwnProperty(
-                                                      'familiar_name'
-                                                  ) ? (
-                                                    <ThumbDown />
-                                                ) : (
-                                                    <Send />
-                                                )}
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                primary={
-                                                    el.hasOwnProperty(
-                                                        'phone_number'
-                                                    )
-                                                        ? `Un interesado ${el.name} se ha comunicado con la prepaga.`
-                                                        : el.hasOwnProperty(
-                                                              'familiar_name'
-                                                          )
-                                                        ? `El socio titular con ${el.titular_dni} ha solicitado la baja de un familiar.`
-                                                        : `El interesado ${el.partner_dni} ha enviado el formulario y queda pendiente de revision.`
-                                                }
-                                            />
-                                            <ListItemIcon
-                                                button
-                                                onClick={() =>
-                                                    handleSeenNotification(el)
-                                                }
-                                            >
-                                                <ClearIcon />
-                                            </ListItemIcon>
-                                        </ListItem>
-                                    </a>
+                                                )
+                                                    ? `Un interesado ${el.name} se ha comunicado con la prepaga.`
+                                                    : el.hasOwnProperty(
+                                                          'familiar_name'
+                                                      )
+                                                    ? `El socio titular con ${el.titular_dni} ha solicitado la baja de un familiar.`
+                                                    : `El interesado ${el.partner_dni} ha enviado el formulario y queda pendiente de revision.`
+                                            }
+                                        />
+                                        <ListItemIcon
+                                            button
+                                            onClick={() =>
+                                                handleSeenNotification(el)
+                                            }
+                                        >
+                                            <ClearIcon />
+                                        </ListItemIcon>
+                                    </ListItem>
                                 ))}
                             </List>
                         </Popover>

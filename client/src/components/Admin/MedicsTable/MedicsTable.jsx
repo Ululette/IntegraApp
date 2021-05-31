@@ -32,7 +32,6 @@ import {
     DialogTitle,
     DialogContent,
     FormControl,
-    InputLabel,
     Select,
     Input,
     DialogActions,
