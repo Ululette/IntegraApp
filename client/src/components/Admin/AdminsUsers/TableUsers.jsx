@@ -32,7 +32,7 @@ import {
     FormControl,
     Select,
     DialogActions,
-    TextField
+    TextField,
 } from '@material-ui/core';
 
 function descendingComparator(a, b, orderBy) {
@@ -71,8 +71,6 @@ const headCells = [
     { id: 'account', numeric: false, disablePadding: false, label: 'CUENTA' },
 ];
 
-
-
 function EnhancedTableHead(props) {
     const {
         classes,
@@ -89,9 +87,11 @@ function EnhancedTableHead(props) {
 
     return (
         <TableHead className={classes.title}>
-            <TableRow >
-                <TableCell padding='checkbox' >
-                    <Checkbox defaultChecked color="primary"
+            <TableRow>
+                <TableCell padding='checkbox'>
+                    <Checkbox
+                        defaultChecked
+                        color='primary'
                         indeterminate={
                             numSelected > 0 && numSelected < rowCount
                         }
@@ -148,59 +148,58 @@ const useToolbarStyles = makeStyles((theme) => ({
     highlight:
         theme.palette.type === 'light'
             ? {
-                color: '#fafafa',
-                backgroundColor: lighten(blue[500], 0.5),//color barra superior cuando selecciono item
-                fontWeight:'bold',
-                fontSize:'30px'
-            }
+                  color: '#fafafa',
+                  backgroundColor: lighten(blue[500], 0.5), //color barra superior cuando selecciono item
+                  fontWeight: 'bold',
+                  fontSize: '30px',
+              }
             : {
-                color: theme.palette.text.primary,
-                backgroundColor: lighten('#34a7a1', 0.3),
-                
-            },
+                  color: theme.palette.text.primary,
+                  backgroundColor: lighten('#34a7a1', 0.3),
+              },
     title: {
         flex: '1 1 100%',
-        fontWeight:'bold',
-        fontSize:'1.4rem',
+        fontWeight: 'bold',
+        fontSize: '1.4rem',
         color: '#fafafa',
-        textAlign:'center'
+        textAlign: 'center',
     },
-    filters:{
-        display:'flex'
+    filters: {
+        display: 'flex',
     },
-    iconFilter:{
-        color:'#fafafa',
-        fontWeight:'bold',
-        '&:hover':{
+    iconFilter: {
+        color: '#fafafa',
+        fontWeight: 'bold',
+        '&:hover': {
             backgroundColor: '#34a7a1',
-        }
+        },
     },
-    iconBlock:{
-        color:'#fafafa',
-        fontWeight:'bold',
-        '&:hover':{
+    iconBlock: {
+        color: '#fafafa',
+        fontWeight: 'bold',
+        '&:hover': {
             backgroundColor: blue[500],
-        }
+        },
     },
-    popup:{
+    popup: {
         color: '#fafafa',
         backgroundColor: '#2c7f7b',
-        fontWeight:'bold',
-        fontSize:'30px'
+        fontWeight: 'bold',
+        fontSize: '30px',
     },
-    popupBtn:{
+    popupBtn: {
         color: '#fafafa',
         padding: theme.spacing(0.5),
         border: '3px solid #2c7f7b',
-        backgroundColor:'#2c7f7b',
-        fontWeight:'bold',
-        fontSize:'15px',
-        '&:hover':{
+        backgroundColor: '#2c7f7b',
+        fontWeight: 'bold',
+        fontSize: '15px',
+        '&:hover': {
             backgroundColor: lighten('#fafafa', 0.2),
-            color:'#2c7f7b',
+            color: '#2c7f7b',
             padding: theme.spacing(0.5),
-        }
-    }
+        },
+    },
 }));
 
 const EnhancedTableToolbar = (props) => {
@@ -218,7 +217,6 @@ const EnhancedTableToolbar = (props) => {
         sendFilter('reset');
         setOpen(true);
         setListFilter(list);
-
     };
     const hanldeReset = () => {
         sendFilter('reset');
@@ -279,6 +277,7 @@ const EnhancedTableToolbar = (props) => {
             let wanted;
             switch (option) {
                 case 'dni':
+                    //eslint-disable-next-line
                     wanted = listFilter.find((user) => user.dni == value);
                     if (wanted) {
                         res.push(wanted);
@@ -289,6 +288,7 @@ const EnhancedTableToolbar = (props) => {
                     } else alert(`no existe`);
                     break;
                 case 'email':
+                    //eslint-disable-next-line
                     wanted = listFilter.find((user) => user.email == value);
                     if (wanted) {
                         res.push(wanted);
@@ -299,19 +299,21 @@ const EnhancedTableToolbar = (props) => {
                     } else alert(`no existe`);
                     break;
                 case 'role':
-                    console.log(listFilter)
+                    console.log(listFilter);
+                    //eslint-disable-next-line
                     res = listFilter.filter((user) => user.role == value);
-                    
-                    if(res.length > 0) sendFilter(res)
-                    else{
+
+                    if (res.length > 0) sendFilter(res);
+                    else {
                         sendFilter('reset');
                         alert(`no se encontraron resultados`);
-                    }    
+                    }
                     setSelectedRole('');
                     setOptionSelected('');
                     setOpen(false);
                     break;
                 default:
+                    //eslint-disable-next-line
                     res = listFilter.filter((user) => user.account == value);
                     res.length > 0
                         ? sendFilter(res)
@@ -351,7 +353,10 @@ const EnhancedTableToolbar = (props) => {
             )}
 
             {numSelected > 0 ? (
-                <Tooltip title='Activar/Desactivar Usuarios' onClick={handleBlock}>
+                <Tooltip
+                    title='Activar/Desactivar Usuarios'
+                    onClick={handleBlock}
+                >
                     <IconButton aria-label='Edit' className={classes.iconBlock}>
                         <BlockIcon />
                     </IconButton>
@@ -359,34 +364,36 @@ const EnhancedTableToolbar = (props) => {
             ) : (
                 <div>
                     <div className={classes.filters}>
-                        <Tooltip title='Filtro' onClick={handleClickOpen} >
-                        <IconButton aria-label='filter list' className={classes.iconFilter}>
-                            <FilterListIcon />
-                        </IconButton>
+                        <Tooltip title='Filtro' onClick={handleClickOpen}>
+                            <IconButton
+                                aria-label='filter list'
+                                className={classes.iconFilter}
+                            >
+                                <FilterListIcon />
+                            </IconButton>
                         </Tooltip>
                         <Tooltip title='Borrar Filtro' onClick={hanldeReset}>
-                            <IconButton aria-label='reset' className={classes.iconFilter}>
+                            <IconButton
+                                aria-label='reset'
+                                className={classes.iconFilter}
+                            >
                                 <ClearAllIcon />
                             </IconButton>
                         </Tooltip>
                     </div>
-                    
+
                     <Dialog
-                        
                         disableBackdropClick
                         disableEscapeKeyDown
                         open={open}
                         onClose={handleClose}
                     >
-                        <DialogTitle className={classes.popup}>FILTRADO POR:</DialogTitle>
-                        <form
-                            onSubmit={
-                                handleSubmit
-                            }
-                        >
-                            <DialogContent >
-                                <FormControl 
-                                >
+                        <DialogTitle className={classes.popup}>
+                            FILTRADO POR:
+                        </DialogTitle>
+                        <form onSubmit={handleSubmit}>
+                            <DialogContent>
+                                <FormControl>
                                     <Select
                                         inputProps={{
                                             style: { width: '177px' },
@@ -416,8 +423,7 @@ const EnhancedTableToolbar = (props) => {
                                         onChange={(e) => handleInput(e)}
                                     />
                                 ) : optionSelected === 'role' ? (
-                                    <FormControl 
-                                    >
+                                    <FormControl>
                                         <Select
                                             inputProps={{
                                                 style: { width: '177px' },
@@ -442,8 +448,7 @@ const EnhancedTableToolbar = (props) => {
                                         </Select>
                                     </FormControl>
                                 ) : optionSelected === 'account' ? (
-                                    <FormControl 
-                                    >
+                                    <FormControl>
                                         <Select
                                             inputProps={{
                                                 style: { width: '177px' },
@@ -471,10 +476,16 @@ const EnhancedTableToolbar = (props) => {
                                 ) : optionSelected === '' ? null : null}
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={handleClose}  className={classes.popupBtn}>
+                                <Button
+                                    onClick={handleClose}
+                                    className={classes.popupBtn}
+                                >
                                     Cancelar
                                 </Button>
-                                <Button type='submit' className={classes.popupBtn}>
+                                <Button
+                                    type='submit'
+                                    className={classes.popupBtn}
+                                >
                                     Filtrar
                                 </Button>
                             </DialogActions>
@@ -501,7 +512,6 @@ const useStyles = makeStyles((theme) => ({
     },
     table: {
         minWidth: 750,
-        
     },
     visuallyHidden: {
         border: 0,
@@ -512,22 +522,22 @@ const useStyles = makeStyles((theme) => ({
         padding: 0,
         position: 'absolute',
         top: 20,
-        width: 1
+        width: 1,
     },
-    title:{
-        color:'#212121',
+    title: {
+        color: '#212121',
         fontWeight: 'bold',
-        backgroundColor: lighten('#34a7a1', 0.6)
+        backgroundColor: lighten('#34a7a1', 0.6),
     },
-    rowColor:{
+    rowColor: {
         backgroundColor: lighten('#e0e0e0', 0.3),
-        ':checked':{
-            color:blue[500]
-        }
-    }
+        ':checked': {
+            color: blue[500],
+        },
+    },
 }));
 
-export default function TableUsers({ rows, handleFilter,allUsers }) {
+export default function TableUsers({ rows, handleFilter, allUsers }) {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('account');
@@ -718,9 +728,18 @@ export default function TableUsers({ rows, handleFilter,allUsers }) {
                                             key={row.dni}
                                             selected={isItemSelected}
                                         >
-                                            <TableCell padding='checkbox' className={index%2 ===1 ? classes.rowColor :null}>
-                                                <Checkbox defaultChecked color="primary"
-                                                className= {classes.rowColor}
+                                            <TableCell
+                                                padding='checkbox'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
+                                                <Checkbox
+                                                    defaultChecked
+                                                    color='primary'
+                                                    className={classes.rowColor}
                                                     checked={isItemSelected}
                                                     inputProps={{
                                                         'aria-labelledby':
@@ -728,16 +747,44 @@ export default function TableUsers({ rows, handleFilter,allUsers }) {
                                                     }}
                                                 />
                                             </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null} >
+                                            <TableCell
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
                                                 {row.dni}
                                             </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
+                                            <TableCell
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
                                                 {row.email}
                                             </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
+                                            <TableCell
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
                                                 {row.role}
                                             </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
+                                            <TableCell
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
                                                 {row.account}
                                             </TableCell>
                                         </TableRow>

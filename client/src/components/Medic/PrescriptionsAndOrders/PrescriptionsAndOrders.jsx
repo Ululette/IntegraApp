@@ -43,13 +43,10 @@ async function getData(query) {
     let { selection, param } = query;
     let column = selection === 'orders' ? 'study_name' : 'drug_name';
     try {
-        console.log('queryParams', selection, param);
         const { data, error: dataError } = await supabase
             .from(selection)
             .select(`*, medical_consultations(partner: partner_dni(name))`)
             .ilike(`${column}`, `%${param}%`);
-        data && console.log(data);
-        dataError && console.log(dataError);
         return data ? data : dataError;
     } catch (err) {
         console.error(err);
@@ -117,35 +114,44 @@ export default function PrescriptionsAndOrders() {
                                         ? 'Estudio'
                                         : 'Medicamento'}
                                 </TableCell>
-                                {query.selection === 'orders' ? <TableCell align='right'>Estado</TableCell> : null}
+                                {query.selection === 'orders' ? (
+                                    <TableCell align='right'>Estado</TableCell>
+                                ) : null}
                                 <TableCell align='right'>Paciente</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.length > 0 ? data.map((row) => (
-                                <TableRow key={row.name}>
-                                    <TableCell component='th' scope='row'>
-                                        {row.id}
-                                    </TableCell>
-                                    <TableCell align='right'>
-                                        {row.medical_consultation_id}
-                                    </TableCell>
-                                    <TableCell align='right'>
-                                        {row.date}
-                                    </TableCell>
-                                    <TableCell align='right'>
-                                        {query.selection === 'orders'
-                                            ? row.study_name
-                                            : row.drug_name}
-                                    </TableCell>
-                                    {query.selection === 'orders' ? <TableCell align='right'>
-                                        {row.status}
-                                    </TableCell> : null}
-                                    <TableCell align='right'>
-                                        {row.medical_consultations.partner.name}
-                                    </TableCell>
-                                </TableRow>
-                            )): null}
+                            {data.length > 0
+                                ? data.map((row) => (
+                                      <TableRow key={row.name}>
+                                          <TableCell component='th' scope='row'>
+                                              {row.id}
+                                          </TableCell>
+                                          <TableCell align='right'>
+                                              {row.medical_consultation_id}
+                                          </TableCell>
+                                          <TableCell align='right'>
+                                              {row.date}
+                                          </TableCell>
+                                          <TableCell align='right'>
+                                              {query.selection === 'orders'
+                                                  ? row.study_name
+                                                  : row.drug_name}
+                                          </TableCell>
+                                          {query.selection === 'orders' ? (
+                                              <TableCell align='right'>
+                                                  {row.status}
+                                              </TableCell>
+                                          ) : null}
+                                          <TableCell align='right'>
+                                              {
+                                                  row.medical_consultations
+                                                      .partner.name
+                                              }
+                                          </TableCell>
+                                      </TableRow>
+                                  ))
+                                : null}
                         </TableBody>
                     </Table>
                 </TableContainer>

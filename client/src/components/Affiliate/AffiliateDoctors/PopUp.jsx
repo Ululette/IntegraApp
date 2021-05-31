@@ -18,7 +18,7 @@ const PopUp = (props) => {
             }
         }
     }, [show]);
-    console.log(props);
+
     return (
         <Dialog
             open={show}

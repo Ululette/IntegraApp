@@ -17,7 +17,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import InfoIcon from '@material-ui/icons/Info';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import blue from '@material-ui/core/colors/blue'
+import blue from '@material-ui/core/colors/blue';
 import 'firebase/auth';
 import Swal from 'sweetalert2';
 import { Avatar } from '@material-ui/core';
@@ -130,70 +130,72 @@ const useToolbarStyles = makeStyles((theme) => ({
     root: {
         paddingLeft: theme.spacing(0),
         paddingRight: theme.spacing(0),
-        backgroundColor: lighten('#34a7a1', 0.3), 
-        
+        backgroundColor: lighten('#34a7a1', 0.3),
+
         //color barra superior '
     },
     highlight:
         theme.palette.type === 'light'
             ? {
-                color: '#fafafa',
-                backgroundColor: lighten(blue[500], 0.5),//color barra superior cuando selecciono item
-                fontWeight:'bold',
-                fontSize:'30px'
-            }
+                  color: '#fafafa',
+                  backgroundColor: lighten(blue[500], 0.5), //color barra superior cuando selecciono item
+                  fontWeight: 'bold',
+                  fontSize: '30px',
+              }
             : {
-                color: theme.palette.text.primary,
-                backgroundColor: lighten('#34a7a1', 0.3),
-                
-            },
+                  color: theme.palette.text.primary,
+                  backgroundColor: lighten('#34a7a1', 0.3),
+              },
     title: {
         flex: '1 1 100%',
-        fontWeight:'bold',
-        fontSize:'1.4rem',
+        fontWeight: 'bold',
+        fontSize: '1.4rem',
         color: '#fafafa',
-        textAlign:'center'
+        textAlign: 'center',
     },
-    filters:{
-        display:'flex'
+    filters: {
+        display: 'flex',
     },
-    iconFilter:{
-        color:'#fafafa',
-        fontWeight:'bold',
-        '&:hover':{
+    iconFilter: {
+        color: '#fafafa',
+        fontWeight: 'bold',
+        '&:hover': {
             backgroundColor: '#34a7a1',
-        }
+        },
     },
-    iconBlock:{
-        color:'#fafafa',
-        fontWeight:'bold',
-        '&:hover':{
+    iconBlock: {
+        color: '#fafafa',
+        fontWeight: 'bold',
+        '&:hover': {
             backgroundColor: lighten('#34a7a1', 0.8),
-        }
-    }
+        },
+    },
 }));
 
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
-    const { numSelected, setToShowRows, toShowRows, rows, medicSpecialities, deleteFav } = props;
+    const { numSelected, setToShowRows, deleteFav } = props;
     let userDni = JSON.parse(localStorage.getItem('userdata')).dni;
 
     const fetchFavs = async (userDni) => {
         const { data: medics, error: errorFetchMedics } = await supabase
             .from('favorites')
-            .select('medics(dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name)))))')
-            .eq('partner_dni',userDni)
-            let array=[];
-            for(let ad of medics){
-                array.push(ad.medics);
-            }
-            setToShowRows(array)
+            .select(
+                'medics(dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name)))))'
+            )
+            .eq('partner_dni', userDni);
+        let array = [];
+        for (let ad of medics) {
+            array.push(ad.medics);
+        }
         if (errorFetchMedics) return console.log(errorFetchMedics);
+        setToShowRows(array);
     };
 
-    useEffect(async()=>{
-        fetchFavs(userDni)
-    },[deleteFav]);
+    useEffect(() => {
+        fetchFavs(userDni);
+        //eslint-disable-next-line
+    }, [deleteFav]);
 
     return (
         <Toolbar
@@ -217,7 +219,6 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-
 //-------------------- EnhancedTableToolbar Style
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -230,7 +231,6 @@ const useStyles = makeStyles((theme) => ({
     },
     table: {
         minWidth: 750,
-        
     },
     visuallyHidden: {
         border: 0,
@@ -241,26 +241,26 @@ const useStyles = makeStyles((theme) => ({
         padding: 0,
         position: 'absolute',
         top: 20,
-        width: 1
+        width: 1,
     },
-    title:{
-        color:'#212121',
+    title: {
+        color: '#212121',
         fontWeight: 'bold',
-        backgroundColor: lighten('#34a7a1', 0.6)
+        backgroundColor: lighten('#34a7a1', 0.6),
     },
-    rowColor:{
+    rowColor: {
         backgroundColor: lighten('#e0e0e0', 0.3),
-        ':checked':{
-            color:blue[500]
-        }
+        ':checked': {
+            color: blue[500],
+        },
     },
-    iconFilter:{
-        color:'rgba(0, 0, 0, 0.47)',
-        fontWeight:'bold',
-        '&:hover':{
+    iconFilter: {
+        color: 'rgba(0, 0, 0, 0.47)',
+        fontWeight: 'bold',
+        '&:hover': {
             backgroundColor: lighten('#34a7a1', 0.8),
-        }
-    }
+        },
+    },
 }));
 
 export default function Favs() {
@@ -270,29 +270,30 @@ export default function Favs() {
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    //eslint-disable-next-line
     const [listMedics, setListMedics] = React.useState([]);
     const [medicSpecialities, setMedicSpecialities] = React.useState([]);
-    const [infoActive, setInfoActive] = React.useState(false);
+
+    //eslint-disable-next-line
     const [medicData, setMedicData] = React.useState(null);
     const [toShowRows, setToShowRows] = React.useState([]);
     const [deleteFavNoti, setDeleteFavNoti] = React.useState(false);
     let userDni = JSON.parse(localStorage.getItem('userdata')).dni;
 
     const deleteFav = async (medicDni) => {
-            console.log('DNI a eliminar:',medicDni)
-            const { data, error } = await supabase
-                .from('favorites')
-                .delete()
-                .eq('medic_dni',medicDni)
-                .eq('partner_dni',userDni)
-            Swal.fire({
-                icon: 'success',
-                title: 'Médico eliminado de favoritos',
-                showConfirmButton: false,
-                timer: 1500
-            })
-            setDeleteFavNoti(true);
-            setDeleteFavNoti(false)
+        const { error } = await supabase
+            .from('favorites')
+            .delete()
+            .eq('medic_dni', medicDni)
+            .eq('partner_dni', userDni);
+        Swal.fire({
+            icon: 'success',
+            title: 'Médico eliminado de favoritos',
+            showConfirmButton: false,
+            timer: 1500,
+        });
+        setDeleteFavNoti(true);
+        setDeleteFavNoti(false);
         if (error) return console.log(error);
     };
 
@@ -304,33 +305,42 @@ export default function Favs() {
     };
 
     React.useEffect(() => {
-        fetchSpecialities()
+        fetchSpecialities();
     }, []);
 
     const handleDeleteFav = (row) => {
         deleteFav(row.dni);
-    }
+    };
 
     const handleInfo = (medicData) => {
         setMedicData(medicData);
-        console.log('Handle info:',medicData)
-        let floor = medicData.address[0].floor!==null?`Piso: ${medicData.address[0].floor}`:'';
-        let department = medicData.address[0].department!==null?`Depto.: ${medicData.address[0].department}`:'';
+        let floor =
+            medicData.address[0].floor !== null
+                ? `Piso: ${medicData.address[0].floor}`
+                : '';
+        let department =
+            medicData.address[0].department !== null
+                ? `Depto.: ${medicData.address[0].department}`
+                : '';
         Swal.fire({
             position: 'bottom',
             title: `Dr. ${medicData.name} ${medicData.lastname}`,
             html:
-                `<p>Email: ${medicData.email}</p>`+
-                `<p>Teléfono: ${medicData.phone_number}</p>`+
-                `<p>Dirección: ${medicData.address[0].street+' '+medicData.address[0].street_number}</p>`+
-                `<p>${floor+' '+ department}</p>`+
-                `<p>${medicData.address[0].localities.name}</p>`+
+                `<p>Email: ${medicData.email}</p>` +
+                `<p>Teléfono: ${medicData.phone_number}</p>` +
+                `<p>Dirección: ${
+                    medicData.address[0].street +
+                    ' ' +
+                    medicData.address[0].street_number
+                }</p>` +
+                `<p>${floor + ' ' + department}</p>` +
+                `<p>${medicData.address[0].localities.name}</p>` +
                 `<p>${medicData.address[0].localities.states.name}</p>`,
             imageUrl: medicData.profilePic,
             imageWidth: 300,
             imageHeight: 300,
             imageAlt: 'Custom image',
-        })
+        });
     };
 
     const handleRequestSort = (event, property) => {
@@ -358,8 +368,6 @@ export default function Favs() {
     };
 
     const isSelected = (name) => selected.indexOf(name) !== -1;
-
-    toShowRows.length>14?console.log('16 medicos'):console.log(toShowRows)
 
     const emptyRows =
         rowsPerPage -
@@ -417,9 +425,21 @@ export default function Favs() {
                                             key={row.name}
                                             selected={isItemSelected}
                                         >
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
-                                                <Tooltip title='Mas info.' className={classes.iconFilter}>
-                                                    <IconButton aria-label='Mas info.' >
+                                            <TableCell
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
+                                                <Tooltip
+                                                    title='Mas info.'
+                                                    className={
+                                                        classes.iconFilter
+                                                    }
+                                                >
+                                                    <IconButton aria-label='Mas info.'>
                                                         <InfoIcon
                                                             onClick={() =>
                                                                 handleInfo(row)
@@ -427,24 +447,42 @@ export default function Favs() {
                                                         />
                                                     </IconButton>
                                                 </Tooltip>
-                                                <Tooltip title='Mas info.' className={classes.iconFilter}>
-                                                    <IconButton aria-label='Mas info.' >
+                                                <Tooltip
+                                                    title='Mas info.'
+                                                    className={
+                                                        classes.iconFilter
+                                                    }
+                                                >
+                                                    <IconButton aria-label='Mas info.'>
                                                         <DeleteForeverIcon
                                                             onClick={() =>
-                                                                handleDeleteFav(row)
+                                                                handleDeleteFav(
+                                                                    row
+                                                                )
                                                             }
                                                         />
                                                     </IconButton>
                                                 </Tooltip>
                                             </TableCell>
-                                            <TableCell align='center' className={index%2 ===1 ? classes.rowColor :null}>
+                                            <TableCell
+                                                align='center'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
                                                 <Avatar
                                                     alt='Profile Picture'
                                                     src={row.profilePic}
                                                 />
                                             </TableCell>
                                             <TableCell
-                                                className={index%2 ===1 ? classes.rowColor :null}
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
                                                 component='th'
                                                 id={labelId}
                                                 scope='row'
@@ -452,10 +490,23 @@ export default function Favs() {
                                             >
                                                 {row.name}
                                             </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
+                                            <TableCell
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
                                                 {row.lastname}
                                             </TableCell>
-                                            <TableCell className={index%2 ===1 ? classes.rowColor :null}>
+                                            <TableCell
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
                                                 <ul>
                                                     {row.medical_specialities
                                                         .length === 0 ? (

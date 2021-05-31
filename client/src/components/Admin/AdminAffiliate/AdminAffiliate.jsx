@@ -129,7 +129,7 @@ function EnhancedTableHead(props) {
                     <TableCell
                         key={headCell.id}
                         align='left'
-                        padding= 'default'
+                        padding='default'
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
                         <TableSortLabel
@@ -211,6 +211,7 @@ EnhancedTableHead.propTypes = {
 // }));
 
 //------------------------makeStyle1---------------------------------------------------------------------------------------
+//eslint-disable-next-line
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
         paddingLeft: theme.spacing(2),
@@ -223,63 +224,62 @@ const useToolbarStyles = makeStyles((theme) => ({
     highlight:
         theme.palette.type === 'light'
             ? {
-                color: '#fafafa',
-                backgroundColor: lighten(blue[500], 0.5),//color barra superior cuando selecciono item
-                fontWeight:'bold',
-                fontSize:'30px'
-            }
+                  color: '#fafafa',
+                  backgroundColor: lighten(blue[500], 0.5), //color barra superior cuando selecciono item
+                  fontWeight: 'bold',
+                  fontSize: '30px',
+              }
             : {
-                color: theme.palette.text.primary,
-                backgroundColor: lighten('#34a7a1', 0.3),
-                
-            },
+                  color: theme.palette.text.primary,
+                  backgroundColor: lighten('#34a7a1', 0.3),
+              },
     title: {
         //flex: '1 1 auto',
-        fontWeight:'bold',
-        fontSize:'1.4rem',
+        fontWeight: 'bold',
+        fontSize: '1.4rem',
         color: '#fafafa',
-        textAlign:'rigth',
+        textAlign: 'rigth',
     },
-    filters:{
-        display:'flex'
+    filters: {
+        display: 'flex',
     },
-    iconFilter:{
-        color:'#fafafa',
-        fontWeight:'bold',
-        '&:hover':{
+    iconFilter: {
+        color: '#fafafa',
+        fontWeight: 'bold',
+        '&:hover': {
             backgroundColor: '#34a7a1',
-        }
+        },
     },
-    iconBlock:{
-        color:'#fafafa',
-        fontWeight:'bold',
-        '&:hover':{
+    iconBlock: {
+        color: '#fafafa',
+        fontWeight: 'bold',
+        '&:hover': {
             backgroundColor: blue[500],
-        }
+        },
     },
-    popup:{
+    popup: {
         color: '#fafafa',
         backgroundColor: '#2c7f7b',
-        fontWeight:'bold',
-        fontSize:'30px'
+        fontWeight: 'bold',
+        fontSize: '30px',
     },
-    popupBtn:{
+    popupBtn: {
         color: '#fafafa',
         padding: theme.spacing(0.5),
         border: '3px solid #2c7f7b',
-        backgroundColor:'#2c7f7b',
-        fontWeight:'bold',
-        fontSize:'15px',
-        '&:hover':{
+        backgroundColor: '#2c7f7b',
+        fontWeight: 'bold',
+        fontSize: '15px',
+        '&:hover': {
             backgroundColor: lighten('#fafafa', 0.2),
-            color:'#2c7f7b',
+            color: '#2c7f7b',
             padding: theme.spacing(0.5),
-        }
+        },
     },
-    list:{
-        fontWeight:'bold',
-        fontSize:'15px',
-    }
+    list: {
+        fontWeight: 'bold',
+        fontSize: '15px',
+    },
 }));
 
 //-------------------- EnhancedTableToolbar Style
@@ -289,18 +289,16 @@ const useStyles = makeStyles((theme) => ({
     },
     paper: {
         width: '100%',
-        
     },
     table: {
         minWidth: '750px',
-        
     },
-    toolBar:{
+    toolBar: {
         backgroundColor: lighten('#34a7a1', 0.3),
-        display:'flex',
-        justifyContent:'space-between',
-        padding:'10px 10px 10px 10px',
-        alignItems:'center'
+        display: 'flex',
+        justifyContent: 'space-between',
+        padding: '10px 10px 10px 10px',
+        alignItems: 'center',
     },
     visuallyHidden: {
         border: 0,
@@ -311,80 +309,78 @@ const useStyles = makeStyles((theme) => ({
         padding: 0,
         position: 'absolute',
         top: 20,
-        width: 1
+        width: 1,
     },
-    title:{
-        width:'60%',
-        color:'#212121',
+    title: {
+        width: '60%',
+        color: '#212121',
         fontWeight: 'bold',
         backgroundColor: lighten('#34a7a1', 0.6),
-        textAlign:'center',
-
+        textAlign: 'center',
     },
-    rowColor:{
+    rowColor: {
         backgroundColor: lighten('#e0e0e0', 0.3),
-        ':checked':{
-            color:blue[500]
-        }
+        ':checked': {
+            color: blue[500],
+        },
     },
     fab: {
         margin: theme.spacing(2),
         backgroundColor: '#2c7f7b',
-        fontSize:'35px',
-        border:'3px solid #2c7f7b',
-        '&:hover':{
+        fontSize: '35px',
+        border: '3px solid #2c7f7b',
+        '&:hover': {
             backgroundColor: '#2c7f7b',
-            border:'3px solid #fafafa'
-        }
+            border: '3px solid #fafafa',
+        },
     },
-    p:{
-        fontWeight:'bold',
-        fontSize:'1.1rem',
+    p: {
+        fontWeight: 'bold',
+        fontSize: '1.1rem',
         color: '#fafafa',
-        textAlign:'left',
-        width:'100%'
+        textAlign: 'left',
+        width: '100%',
     },
     titleFilter: {
-        
-        fontWeight:'bold',
-        fontSize:'1.6rem',
+        fontWeight: 'bold',
+        fontSize: '1.6rem',
         color: '#fafafa',
-        textAlign:'center'
+        textAlign: 'center',
     },
-    filters:{
-        display:'flex',
-        justifyContent:'space-around'
+    filters: {
+        display: 'flex',
+        justifyContent: 'space-around',
     },
-    popup:{
+    popup: {
         color: '#fafafa',
         backgroundColor: '#2c7f7b',
-        fontWeight:'bold',
-        fontSize:'30px'
+        fontWeight: 'bold',
+        fontSize: '30px',
     },
-    popupBtn:{
+    popupBtn: {
         color: '#fafafa',
         padding: theme.spacing(0.5),
         border: '3px solid #2c7f7b',
-        backgroundColor:'#2c7f7b',
-        fontWeight:'bold',
-        fontSize:'15px',
-        '&:hover':{
+        backgroundColor: '#2c7f7b',
+        fontWeight: 'bold',
+        fontSize: '15px',
+        '&:hover': {
             backgroundColor: lighten('#fafafa', 0.2),
-            color:'#2c7f7b',
+            color: '#2c7f7b',
             padding: theme.spacing(0.5),
-        }
+        },
     },
-    list:{
-        fontWeight:'bold',
-        fontSize:'15px',
+    list: {
+        fontWeight: 'bold',
+        fontSize: '15px',
     },
-    iconFilter:{
-        color:'rgba(0, 0, 0, 0.47)',
-        fontWeight:'bold',
-        '&:hover':{
+    iconFilter: {
+        color: 'rgba(0, 0, 0, 0.47)',
+        fontWeight: 'bold',
+        '&:hover': {
             backgroundColor: lighten('#34a7a1', 0.8),
-        }
-    }
+        },
+    },
 }));
 
 function AdminAffiliate({ firebase }) {
@@ -398,7 +394,6 @@ function AdminAffiliate({ firebase }) {
         delete: false,
         add: false,
     });
-    const classesFilter = useToolbarStyles();
     const [inputFilters, setInputFilters] = React.useState({
         select: '',
         text: '',
@@ -685,14 +680,14 @@ function AdminAffiliate({ firebase }) {
         <div className={classes.root}>
             <Paper className={classes.paper}>
                 <Toolbar className={classes.toolBar}>
-                <Fab
-                onClick={handleOpenDialogAdd}
-                color='primary'
-                aria-label='add'
-                className={classes.fab}
-                >
-                    <AddIcon />
-                </Fab>
+                    <Fab
+                        onClick={handleOpenDialogAdd}
+                        color='primary'
+                        aria-label='add'
+                        className={classes.fab}
+                    >
+                        <AddIcon />
+                    </Fab>
                     <Typography
                         className={classes.titleFilter}
                         variant='h6'
@@ -703,55 +698,61 @@ function AdminAffiliate({ firebase }) {
                     </Typography>
                     <section className={styles.filters}>
                         <div>
-                            <InputLabel id='filter-select'  className={classes.p}>
+                            <InputLabel
+                                id='filter-select'
+                                className={classes.p}
+                            >
                                 Filtrar por:
                             </InputLabel>
                         </div>
-                        
+
                         <div className={styles.filtersSelector}>
                             <div>
                                 <Select
-                                className={styles.filtersSelect}
-                                labelId='filter-select'
-                                name='select'
-                                onChange={handleChangeFilters}
-                                value={inputFilters.select}
-                                variant='outlined'
-                                
-                            >
-                                <MenuItem value='dni'>DNI</MenuItem>
-                                <MenuItem value='age'>Edad</MenuItem>
-                                <MenuItem value='contact'>Telefono</MenuItem>
-                                <MenuItem value='email'>Email</MenuItem>
-                                <MenuItem value='familyBond'>
-                                    Parentesco
-                                </MenuItem>
-                                <MenuItem value='familyGroup'>
-                                    Grupo Familiar
-                                </MenuItem>
-                                <MenuItem value='gender'>Genero</MenuItem>
-                                <MenuItem value='name'>Nombre/s</MenuItem>
-                                <MenuItem value='lastname'>Apellido/s</MenuItem>
-                                <MenuItem value='plan'>Plan</MenuItem>
-                                <MenuItem value='state'>Estado</MenuItem>
-                                <MenuItem value='titular'>Titularidad</MenuItem>
-                            </Select>
+                                    className={styles.filtersSelect}
+                                    labelId='filter-select'
+                                    name='select'
+                                    onChange={handleChangeFilters}
+                                    value={inputFilters.select}
+                                    variant='outlined'
+                                >
+                                    <MenuItem value='dni'>DNI</MenuItem>
+                                    <MenuItem value='age'>Edad</MenuItem>
+                                    <MenuItem value='contact'>
+                                        Telefono
+                                    </MenuItem>
+                                    <MenuItem value='email'>Email</MenuItem>
+                                    <MenuItem value='familyBond'>
+                                        Parentesco
+                                    </MenuItem>
+                                    <MenuItem value='familyGroup'>
+                                        Grupo Familiar
+                                    </MenuItem>
+                                    <MenuItem value='gender'>Genero</MenuItem>
+                                    <MenuItem value='name'>Nombre/s</MenuItem>
+                                    <MenuItem value='lastname'>
+                                        Apellido/s
+                                    </MenuItem>
+                                    <MenuItem value='plan'>Plan</MenuItem>
+                                    <MenuItem value='state'>Estado</MenuItem>
+                                    <MenuItem value='titular'>
+                                        Titularidad
+                                    </MenuItem>
+                                </Select>
                             </div>
                             <div>
-                            <TextField
-                            className={styles.filtersinput}
-                            label='Filtro'
-                            type='text'
-                            name='text'
-                            variant='outlined'
-                            size='small'
-                            value={inputFilters.text}
-                            onChange={handleChangeFilters}
-                        />
+                                <TextField
+                                    className={styles.filtersinput}
+                                    label='Filtro'
+                                    type='text'
+                                    name='text'
+                                    variant='outlined'
+                                    size='small'
+                                    value={inputFilters.text}
+                                    onChange={handleChangeFilters}
+                                />
                             </div>
-                            
                         </div>
-                        
                     </section>
                 </Toolbar>
                 <TableContainer>
@@ -782,21 +783,32 @@ function AdminAffiliate({ firebase }) {
                                             tabIndex={-1}
                                             key={row.dni}
                                         >
-                                            <TableCell padding='checkbox' className={index%2 ===1 ? classes.rowColor :null}>
+                                            <TableCell
+                                                padding='checkbox'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
                                                 <div className={styles.toolbar}>
                                                     <Tooltip
-                                                        className={classes.iconFilter}
+                                                        className={
+                                                            classes.iconFilter
+                                                        }
                                                         title='Editar'
                                                         onClick={() =>
                                                             handleEdit(row)
                                                         }
                                                     >
-                                                        <IconButton aria-label='edit' >
+                                                        <IconButton aria-label='edit'>
                                                             <EditIcon />
                                                         </IconButton>
                                                     </Tooltip>
                                                     <Tooltip
-                                                        className={classes.iconFilter}
+                                                        className={
+                                                            classes.iconFilter
+                                                        }
                                                         title='Eliminar'
                                                         onClick={() =>
                                                             openDialogDelete(
@@ -811,7 +823,11 @@ function AdminAffiliate({ firebase }) {
                                                 </div>
                                             </TableCell>
                                             <TableCell
-                                                className={index%2 ===1 ? classes.rowColor :null}
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
                                                 value={row.dni}
                                                 component='th'
                                                 id={labelId}
@@ -822,77 +838,121 @@ function AdminAffiliate({ firebase }) {
                                                 {row.dni}
                                             </TableCell>
                                             <TableCell
-                                                className={index%2 ===1 ? classes.rowColor :null}
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
                                                 value={row.lastname}
                                                 align='left'
                                             >
                                                 {row.lastname}
                                             </TableCell>
                                             <TableCell
-                                                className={index%2 ===1 ? classes.rowColor :null}
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
                                                 value={row.name}
                                                 align='left'
                                             >
                                                 {row.name}
                                             </TableCell>
                                             <TableCell
-                                                className={index%2 ===1 ? classes.rowColor :null}
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
                                                 value={row.age}
                                                 align='left'
                                             >
                                                 {row.age}
                                             </TableCell>
                                             <TableCell
-                                                className={index%2 ===1 ? classes.rowColor :null}
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
                                                 value={row.plan}
                                                 align='left'
                                             >
                                                 {row.plan}
                                             </TableCell>
                                             <TableCell
-                                                className={index%2 ===1 ? classes.rowColor :null}
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
                                                 value={row.gender}
                                                 align='left'
                                             >
                                                 {row.gender}
                                             </TableCell>
                                             <TableCell
-                                                className={index%2 ===1 ? classes.rowColor :null}
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
                                                 value={row.contact}
                                                 align='left'
                                             >
                                                 {row.contact}
                                             </TableCell>
                                             <TableCell
-                                                className={index%2 ===1 ? classes.rowColor :null}
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
                                                 value={row.email}
                                                 align='left'
                                             >
                                                 {row.email}
                                             </TableCell>
                                             <TableCell
-                                                className={index%2 ===1 ? classes.rowColor :null}
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
                                                 value={row.titular}
                                                 align='left'
                                             >
                                                 {row.titular}
                                             </TableCell>
                                             <TableCell
-                                                className={index%2 ===1 ? classes.rowColor :null}
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
                                                 value={row.familyBond}
                                                 align='left'
                                             >
                                                 {row.familyBond}
                                             </TableCell>
                                             <TableCell
-                                                className={index%2 ===1 ? classes.rowColor :null}
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
                                                 value={row.familyGroup}
                                                 align='left'
                                             >
                                                 {row.familyGroup}
                                             </TableCell>
                                             <TableCell
-                                                className={index%2 ===1 ? classes.rowColor :null}
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
                                                 value={row.state}
                                                 align='left'
                                             >
@@ -933,9 +993,12 @@ function AdminAffiliate({ firebase }) {
                     onClose={() => handleClose('edit')}
                     aria-labelledby='form-dialog-title'
                 >
-                    <DialogTitle id='form-dialog-title' className={classes.popup}>
+                    <DialogTitle
+                        id='form-dialog-title'
+                        className={classes.popup}
+                    >
                         EDITAR SOCIO
-                    </DialogTitle >
+                    </DialogTitle>
                     <DialogContent>
                         <TextField
                             autoFocus
@@ -1068,7 +1131,11 @@ function AdminAffiliate({ firebase }) {
                         >
                             Cancelar
                         </Button>
-                        <Button onClick={handleUpdate} color='primary' className={classes.popupBtn}>
+                        <Button
+                            onClick={handleUpdate}
+                            color='primary'
+                            className={classes.popupBtn}
+                        >
                             Actualizar
                         </Button>
                     </DialogActions>
@@ -1080,12 +1147,15 @@ function AdminAffiliate({ firebase }) {
                     onClose={() => handleClose('delete')}
                     aria-labelledby='form-dialog-title'
                 >
-                    <DialogTitle id='form-dialog-title' className={classes.popup}>
+                    <DialogTitle
+                        id='form-dialog-title'
+                        className={classes.popup}
+                    >
                         ELIMINAR
                     </DialogTitle>
                     <DialogContent>
                         <List>
-                            <ListItemText 
+                            <ListItemText
                                 primary={`DNI: ${input.dni}`}
                                 fullWidth
                             />
@@ -1110,7 +1180,9 @@ function AdminAffiliate({ firebase }) {
                                 fullWidth
                             />
                             <ListItemText
-                                primary={`Titular? ${input.titular ? 'NO' : 'SI'}`}
+                                primary={`Titular? ${
+                                    input.titular ? 'NO' : 'SI'
+                                }`}
                                 fullWidth
                             />
                             <ListItemText
@@ -1151,7 +1223,9 @@ function AdminAffiliate({ firebase }) {
                     </DialogActions>
                 </Dialog>
                 <Dialog open={open.add} onClose={() => handleClose('add')}>
-                    <DialogTitle className={classes.popup}>AGREGAR SOCIO</DialogTitle>
+                    <DialogTitle className={classes.popup}>
+                        AGREGAR SOCIO
+                    </DialogTitle>
                     <DialogContent>
                         <TextField
                             autoFocus

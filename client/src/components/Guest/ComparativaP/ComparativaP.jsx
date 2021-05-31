@@ -5,7 +5,6 @@ import family from '../../../assets/images/family.png';
 import fondo from '../../../assets/images/fondo1.png';
 import supabase from '../../../supabase.config';
 import AcccessibleTable from './AcccessibleTable';
-//path='/ComparativaP'
 
 export default function ComparativaP() {
     let [plans, setPlans] = useState([]);
@@ -24,12 +23,6 @@ export default function ComparativaP() {
     useEffect(() => {
         getPlans();
     }, []);
-
-    useEffect(() => {
-        // if (plans.length) {
-        //   console.log(plans)
-        // }
-    }, [plans]);
 
     return (
         <div className='comp_page'>

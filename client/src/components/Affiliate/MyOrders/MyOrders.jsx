@@ -17,11 +17,8 @@ import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import InfoIcon from '@material-ui/icons/Info';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import blue from '@material-ui/core/colors/blue'
+import blue from '@material-ui/core/colors/blue';
 import 'firebase/auth';
-import Swal from 'sweetalert2';
-import { Avatar } from '@material-ui/core';
 import supabase from '../../../supabase.config';
 
 function descendingComparator(a, b, orderBy) {
@@ -69,7 +66,12 @@ const headCells = [
         disablePadding: false,
         label: 'Estudio',
     },
-    { id: 'namePartner', numeric: false, disablePadding: true, label: 'Paciente' },
+    {
+        id: 'namePartner',
+        numeric: false,
+        disablePadding: true,
+        label: 'Paciente',
+    },
     { id: 'dni', numeric: false, disablePadding: true, label: 'DNI' },
     { id: 'name', numeric: false, disablePadding: true, label: 'Médico' },
     {
@@ -133,72 +135,72 @@ const useToolbarStyles = makeStyles((theme) => ({
     root: {
         paddingLeft: theme.spacing(0),
         paddingRight: theme.spacing(0),
-        backgroundColor: lighten('#34a7a1', 0.3), 
-        
+        backgroundColor: lighten('#34a7a1', 0.3),
+
         //color barra superior '
     },
     highlight:
         theme.palette.type === 'light'
             ? {
-                color: '#fafafa',
-                backgroundColor: lighten(blue[500], 0.5),//color barra superior cuando selecciono item
-                fontWeight:'bold',
-                fontSize:'30px'
-            }
+                  color: '#fafafa',
+                  backgroundColor: lighten(blue[500], 0.5), //color barra superior cuando selecciono item
+                  fontWeight: 'bold',
+                  fontSize: '30px',
+              }
             : {
-                color: theme.palette.text.primary,
-                backgroundColor: lighten('#34a7a1', 0.3),
-                
-            },
+                  color: theme.palette.text.primary,
+                  backgroundColor: lighten('#34a7a1', 0.3),
+              },
     title: {
         flex: '1 1 100%',
-        fontWeight:'bold',
-        fontSize:'1.4rem',
+        fontWeight: 'bold',
+        fontSize: '1.4rem',
         color: '#fafafa',
-        textAlign:'center'
+        textAlign: 'center',
     },
-    filters:{
-        display:'flex'
+    filters: {
+        display: 'flex',
     },
-    iconFilter:{
-        color:'#fafafa',
-        fontWeight:'bold',
-        '&:hover':{
+    iconFilter: {
+        color: '#fafafa',
+        fontWeight: 'bold',
+        '&:hover': {
             backgroundColor: '#34a7a1',
-        }
+        },
     },
-    iconBlock:{
-        color:'#fafafa',
-        fontWeight:'bold',
-        '&:hover':{
+    iconBlock: {
+        color: '#fafafa',
+        fontWeight: 'bold',
+        '&:hover': {
             backgroundColor: lighten('#34a7a1', 0.8),
-        }
+        },
     },
-    input:{
+    input: {
         margin: theme.spacing(1),
-        size:'small',
-        width:'50%',
+        size: 'small',
+        width: '50%',
         backgroundColor: '#ffffff',
-        borderRadius:'5px'
-    }
+        borderRadius: '5px',
+    },
 }));
 
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
-    const { numSelected, setToShowRows} = props;
-    const [inputSearch,setInputSearch] = useState('')
-    let userFamilyGroup = JSON.parse(localStorage.getItem('affiliatedata')).family_group;
+    const { numSelected, setToShowRows } = props;
+    const [inputSearch, setInputSearch] = useState('');
+    let userFamilyGroup = JSON.parse(
+        localStorage.getItem('affiliatedata')
+    ).family_group;
 
-    
     const fetchOrders = async (studyName) => {
-        if(studyName){
+        if (studyName) {
             try {
-                const { data: orders, error: dataError } = await supabase
+                const { data: orders } = await supabase
                     .from('orders')
-                    .select(`study_name,date,status(name),results,partners(dni, name, lastname, family_group),medics(name,lastname)`)
-                    .ilike('study_name', `%${studyName}%`)
-                console.log(orders);
-                console.log(dataError, 'error');
+                    .select(
+                        `study_name,date,status(name),results,partners(dni, name, lastname, family_group),medics(name,lastname)`
+                    )
+                    .ilike('study_name', `%${studyName}%`);
                 setToShowRows(
                     orders.filter(
                         (el) => el.partners.family_group === userFamilyGroup
@@ -209,12 +211,12 @@ const EnhancedTableToolbar = (props) => {
             }
         } else {
             try {
-                const { data: orders, error: dataError } = await supabase
+                const { data: orders } = await supabase
                     .from('orders')
-                    .select(`study_name,date,status(name),results,partners(dni, name, lastname, family_group),medics(name,lastname)`)
-                    // .eq('partner_dni',userDni)
-                console.log(orders);
-                console.log(dataError, 'error');
+                    .select(
+                        `study_name,date,status(name),results,partners(dni, name, lastname, family_group),medics(name,lastname)`
+                    );
+                // .eq('partner_dni',userDni)
                 setToShowRows(
                     orders.filter(
                         (el) => el.partners.family_group === userFamilyGroup
@@ -228,12 +230,13 @@ const EnhancedTableToolbar = (props) => {
 
     const handleInputSearch = (e) => {
         setInputSearch(e.target.value);
-        fetchOrders(inputSearch)
-    }
+        fetchOrders(inputSearch);
+    };
 
-    useEffect(async()=>{
-        fetchOrders()
-    },[]);
+    useEffect(() => {
+        fetchOrders();
+        //eslint-disable-next-line
+    }, []);
 
     return (
         <Toolbar
@@ -266,7 +269,6 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-
 //-------------------- EnhancedTableToolbar Style
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -279,7 +281,6 @@ const useStyles = makeStyles((theme) => ({
     },
     table: {
         minWidth: 750,
-        
     },
     visuallyHidden: {
         border: 0,
@@ -290,26 +291,26 @@ const useStyles = makeStyles((theme) => ({
         padding: 0,
         position: 'absolute',
         top: 20,
-        width: 1
+        width: 1,
     },
-    title:{
-        color:'#212121',
+    title: {
+        color: '#212121',
         fontWeight: 'bold',
-        backgroundColor: lighten('#34a7a1', 0.6)
+        backgroundColor: lighten('#34a7a1', 0.6),
     },
-    rowColor:{
+    rowColor: {
         backgroundColor: lighten('#e0e0e0', 0.3),
-        ':checked':{
-            color:blue[500]
-        }
+        ':checked': {
+            color: blue[500],
+        },
     },
-    iconFilter:{
-        color:'rgba(0, 0, 0, 0.47)',
-        fontWeight:'bold',
-        '&:hover':{
+    iconFilter: {
+        color: 'rgba(0, 0, 0, 0.47)',
+        fontWeight: 'bold',
+        '&:hover': {
             backgroundColor: lighten('#34a7a1', 0.8),
-        }
-    }
+        },
+    },
 }));
 
 export default function MyOrders() {
@@ -346,8 +347,6 @@ export default function MyOrders() {
     };
 
     const isSelected = (name) => selected.indexOf(name) !== -1;
-
-    toShowRows.length>14?console.log('16 medicos'):console.log(toShowRows)
 
     const emptyRows =
         rowsPerPage -
@@ -388,8 +387,8 @@ export default function MyOrders() {
                                 .map((row, index) => {
                                     const isItemSelected = isSelected(row.name);
                                     const labelId = `enhanced-table-checkbox-${index}`;
-                                    let medicName = `${row.medics.name} ${row.medics.lastname}`
-                                    let patientName=`${row.partners.name} ${row.partners.lastname}`
+                                    let medicName = `${row.medics.name} ${row.medics.lastname}`;
+                                    let patientName = `${row.partners.name} ${row.partners.lastname}`;
                                     return (
                                         <TableRow
                                             hover
@@ -400,22 +399,41 @@ export default function MyOrders() {
                                             key={row.name}
                                             selected={isItemSelected}
                                         >
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
-                                                <Tooltip title='Resultados' className={classes.iconFilter}>
-                                                    <IconButton aria-label='Resultados' >
-                                                        <InfoIcon
-                                                            // onClick={() =>
-                                                            //     handleInfo(row)
-                                                            // }
-                                                        />
+                                            <TableCell
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
+                                                <Tooltip
+                                                    title='Resultados'
+                                                    className={
+                                                        classes.iconFilter
+                                                    }
+                                                >
+                                                    <IconButton aria-label='Resultados'>
+                                                        <InfoIcon />
                                                     </IconButton>
                                                 </Tooltip>
                                             </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
-                                                    {row.date}
+                                            <TableCell
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
+                                                {row.date}
                                             </TableCell>
                                             <TableCell
-                                                className={index%2 ===1 ? classes.rowColor :null}
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
                                                 component='th'
                                                 id={labelId}
                                                 scope='row'
@@ -423,16 +441,44 @@ export default function MyOrders() {
                                             >
                                                 {row.study_name}
                                             </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>  
+                                            <TableCell
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
                                                 {patientName}
                                             </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>  
+                                            <TableCell
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
                                                 {row.partners.dni}
                                             </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
+                                            <TableCell
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
                                                 {medicName}
                                             </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
+                                            <TableCell
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
                                                 {row.status.name}
                                             </TableCell>
                                         </TableRow>

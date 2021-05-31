@@ -2,16 +2,6 @@ import React from 'react';
 import './InfoPlanCard.css';
 
 export default function InfoPlanCard({ name, price, benefits }) {
-    // console.log(benefits);
-    // console.log(benefits[0]);
-    // console.log(benefits[1]);
-
-    // const plans = useSelector((state) => state.allPlans);
-    // const dispatch = useDispatch();
-    // dispatch(getPlans());
-
-    // let [planInfo, setNewplan] = useState(null);
-
     return (
         <div className='pi_card'>
             <h3 className='pi_card_title'>{name}</h3>

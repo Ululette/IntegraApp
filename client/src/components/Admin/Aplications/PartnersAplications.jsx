@@ -9,34 +9,20 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import SaveIcon from '@material-ui/icons/Save';
-import EditIcon from '@material-ui/icons/Edit';
-import FilterListIcon from '@material-ui/icons/FilterList';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import ClearAllIcon from '@material-ui/icons/ClearAll';
 import 'firebase/auth';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    FormControl,
-    Select,
-    Input,
-    DialogActions,
-} from '@material-ui/core';
-import { Button } from '@material-ui/core';
+import { FormControl, Select, Input } from '@material-ui/core';
 import calculateAge from '../../../functions/calculateAge';
 import supabase from '../../../supabase.config';
-import getSome from '../../../actions/elgetter'
-
+import getSome from '../../../actions/elgetter';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -71,7 +57,12 @@ const headCells = [
         disablePadding: false,
         label: 'Acciones',
     },
-    { id: 'familiar_name', numeric: false, disablePadding: true, label: 'Nombre' },
+    {
+        id: 'familiar_name',
+        numeric: false,
+        disablePadding: true,
+        label: 'Nombre',
+    },
     {
         id: 'familiar_lastname',
         numeric: false,
@@ -79,7 +70,12 @@ const headCells = [
         label: 'Apellido',
     },
     { id: 'familiar_dni', numeric: true, disablePadding: false, label: 'DNI' },
-    { id: 'titular_dni', numeric: false, disablePadding: false, label: 'DNI del titular' },
+    {
+        id: 'titular_dni',
+        numeric: false,
+        disablePadding: false,
+        label: 'DNI del titular',
+    },
     {
         id: 'reason',
         numeric: false,
@@ -96,7 +92,6 @@ const headCells = [
 ];
 
 function EnhancedTableHead() {
-
     return (
         <TableHead>
             <TableRow>
@@ -132,13 +127,13 @@ const useToolbarStyles = makeStyles((theme) => ({
     highlight:
         theme.palette.type === 'light'
             ? {
-                color: theme.palette.secondary.main,
-                backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-            }
+                  color: theme.palette.secondary.main,
+                  backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+              }
             : {
-                color: theme.palette.text.primary,
-                backgroundColor: theme.palette.secondary.dark,
-            },
+                  color: theme.palette.text.primary,
+                  backgroundColor: theme.palette.secondary.dark,
+              },
     title: {
         flex: '1 1 100%',
     },
@@ -150,8 +145,6 @@ const useToolbarStyles = makeStyles((theme) => ({
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
     const { numSelected } = props;
-
-
 
     return (
         <Toolbar
@@ -175,25 +168,33 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-const StatusSelector = ({ current, setNewSatus, index, setIndexOnChange, indexOnChange }) => {
-
+const StatusSelector = ({
+    current,
+    setNewSatus,
+    index,
+    setIndexOnChange,
+    indexOnChange,
+}) => {
     const classes = useToolbarStyles();
 
-    const [status, setStatus] = React.useState(current)
+    const [status, setStatus] = React.useState(current);
 
     const handleChange = (e) => {
         e.preventDefault();
-        setStatus(e.target.value)
-    }
+        setStatus(e.target.value);
+    };
 
     React.useEffect(() => {
+        //eslint-disable-next-line
         if (status == current) {
-            setIndexOnChange(indexOnChange.filter(e => e != index))
+            //eslint-disable-next-line
+            setIndexOnChange(indexOnChange.filter((e) => e != index));
         } else {
-            setIndexOnChange([...indexOnChange, index])
-            setNewSatus(status)
+            setIndexOnChange([...indexOnChange, index]);
+            setNewSatus(status);
         }
-    }, [status])
+        //eslint-disable-next-line
+    }, [status]);
 
     return (
         <FormControl className={classes.formControl}>
@@ -201,9 +202,7 @@ const StatusSelector = ({ current, setNewSatus, index, setIndexOnChange, indexOn
                 native
                 value={status}
                 onChange={handleChange}
-                input={
-                    <Input id='demo-dialog-native-2' />
-                }
+                input={<Input id='demo-dialog-native-2' />}
                 name='status2'
                 label='value2'
             >
@@ -213,10 +212,8 @@ const StatusSelector = ({ current, setNewSatus, index, setIndexOnChange, indexOn
                 <option value='pendiente'>Pendiente</option>
             </Select>
         </FormControl>
-    )
-
-}
-
+    );
+};
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -247,28 +244,28 @@ export default function MedicsTable() {
     const [toShowRows, setToShowRows] = React.useState([]);
     const rows = listRequests;
     const MySwal = withReactContent(Swal);
-    const [newStatus, setNewSatus] = React.useState('')
-    const [indexOnChange, setIndexOnChange] = React.useState([])
-
-
+    const [newStatus, setNewSatus] = React.useState('');
+    const [indexOnChange, setIndexOnChange] = React.useState([]);
 
     const fetchRequests = () => {
-        getSome('familiar_downs_request')
-            .then(r => { setListRequests(r); setToShowRows(r) }, err => console.error(err.message))
-    }
-
+        getSome('familiar_downs_request').then(
+            (r) => {
+                setListRequests(r);
+                setToShowRows(r);
+            },
+            (err) => console.error(err.message)
+        );
+    };
 
     React.useEffect(() => {
         fetchRequests();
     }, []);
 
-
     const handleSave = async (request) => {
-
         const statusState = {
             aceptada: 'dado de baja',
             pendiente: 'revision pendiente',
-            rechazada: 'aceptado'
+            rechazada: 'aceptado',
         };
 
         MySwal.fire({
@@ -298,16 +295,16 @@ export default function MedicsTable() {
                                         La solicitud ha sido actualizada!`,
                                     icon: 'success',
                                     timer: 3000,
-                                }).then(() => window.location.reload())
-                            };
-                        })
+                                }).then(() => window.location.reload());
+                            }
+                        });
                 }
             }
         });
     };
 
     const handleRequestSort = (event, property) => {
-        event.preventDefault()
+        event.preventDefault();
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
@@ -323,7 +320,7 @@ export default function MedicsTable() {
     };
 
     const handleChangePage = (event, newPage) => {
-        event.preventDefault()
+        event.preventDefault();
         setPage(newPage);
     };
 
@@ -339,7 +336,6 @@ export default function MedicsTable() {
         Math.min(rowsPerPage, toShowRows.length - page * rowsPerPage);
 
     if (toShowRows.length === 0) return <CircularProgress color='secondary' />;
-
 
     return (
         <div className={classes.root}>
@@ -379,7 +375,6 @@ export default function MedicsTable() {
                                     const isItemSelected = isSelected(row.name);
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     return (
-
                                         <TableRow
                                             hover
                                             role='checkbox'
@@ -391,11 +386,25 @@ export default function MedicsTable() {
                                             <TableCell align='center'>
                                                 <Tooltip
                                                     title='Guardar'
-                                                    onClick={() => handleSave(row, index)}
-                                                    disabled={!indexOnChange.includes(index)}
+                                                    onClick={() =>
+                                                        handleSave(row, index)
+                                                    }
+                                                    disabled={
+                                                        !indexOnChange.includes(
+                                                            index
+                                                        )
+                                                    }
                                                 >
-                                                    <IconButton aria-label='save' >
-                                                        <SaveIcon color={!indexOnChange.includes(index) ? 'disabled' : 'primary'} />
+                                                    <IconButton aria-label='save'>
+                                                        <SaveIcon
+                                                            color={
+                                                                !indexOnChange.includes(
+                                                                    index
+                                                                )
+                                                                    ? 'disabled'
+                                                                    : 'primary'
+                                                            }
+                                                        />
                                                     </IconButton>
                                                 </Tooltip>
                                             </TableCell>
@@ -420,15 +429,21 @@ export default function MedicsTable() {
                                                 {row.reason}
                                             </TableCell>
                                             <TableCell align='right'>
-                                                {calculateAge(row.familiar_birthdate)}
+                                                {calculateAge(
+                                                    row.familiar_birthdate
+                                                )}
                                             </TableCell>
                                             <TableCell align='center'>
                                                 <StatusSelector
                                                     current={row.status}
                                                     setNewSatus={setNewSatus}
                                                     index={index}
-                                                    indexOnChange={indexOnChange}
-                                                    setIndexOnChange={setIndexOnChange}
+                                                    indexOnChange={
+                                                        indexOnChange
+                                                    }
+                                                    setIndexOnChange={
+                                                        setIndexOnChange
+                                                    }
                                                 />
                                             </TableCell>
                                         </TableRow>

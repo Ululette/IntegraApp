@@ -286,7 +286,6 @@ const DatosTitular = () => {
         .map((l) => {
             return <option value={`${l.id}-${l.name}`}>{l.name}</option>;
         });
-    console.log('localities', localities);
     return (
         <div className={styles.form}>
             <div className={styles.personalData}>

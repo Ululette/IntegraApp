@@ -117,7 +117,6 @@ function ContactForm() {
                 email: '',
             });
         } else {
-            console.log('Hay errores!', errors);
             setErrorRequest(true);
         }
     };
@@ -190,7 +189,6 @@ function ContactForm() {
             default:
                 return null;
         }
-        console.log(validateErrors);
         return validateErrors;
     }
 
@@ -199,8 +197,6 @@ function ContactForm() {
             .from('guest_contacts')
             .select('email')
             .eq('email', email);
-        emails && console.log('emails!', emails);
-        console.log(emails.length > 0);
         setErrors({ ...errors, onProcess: emails.length > 0 });
     }
 
@@ -220,10 +216,6 @@ function ContactForm() {
                     console.log('error:', error.text);
                 }
             );
-    }
-
-    function recaptchaLoaded() {
-        console.log('Recaptcha loaded');
     }
 
     const verifyCaptcha = (response) => {
@@ -375,7 +367,6 @@ function ContactForm() {
                         <Recaptcha
                             sitekey={process.env.REACT_APP_RECAPTCHA_KEY}
                             render='explicit'
-                            onloadCallback={recaptchaLoaded}
                             verifyCallback={verifyCaptcha}
                         />
                         <div>

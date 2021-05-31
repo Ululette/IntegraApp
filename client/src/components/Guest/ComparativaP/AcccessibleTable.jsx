@@ -10,8 +10,6 @@ import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import supabase from '../../../supabase.config';
 
-//https://material-ui.com/components/tables/ caption
-
 const useStyles = makeStyles({});
 
 export default function AcccessibleTable({ plans }) {
@@ -38,14 +36,6 @@ export default function AcccessibleTable({ plans }) {
     useEffect(() => {
         getBenefits();
     }, []);
-
-    useEffect(() => {
-        // if (compBenef.length) {
-        //   console.log(compBenef);
-        // }
-    }, [compBenef]);
-
-    console.log(compBenef);
 
     return (
         <TableContainer style={{ background: '#f1f1f1' }} component={Paper}>

@@ -25,39 +25,15 @@ export default function Footer({ history }) {
                 </li>
             </ul>
             <ul className={`col-sm-3 col-xs-3  ${styles.listunstyled}`}>
-                <li>
-                    {/* <Link to='/integraclientes/sobre_nosotros' className={styles.ftlink}> */}
-                    Sobre Nosotros
-                    {/* </Link> */}
-                </li>
-                <li>
-                    {/* <Link to='/integraclientes/privacidad' className={styles.ftlink}> */}
-                    Política de privacidad
-                    {/* </Link> */}
-                </li>
-                <li>
-                    {/* <Link to='/prepagaclientes/lineaDenuncias' className={styles.ftlink}> */}
-                    Línea de denuncias
-                    {/* </Link> */}
-                </li>
-                <li>
-                    {/* <Link to='/prepagaclientes/solicitud-baja' className={styles.ftlink}> */}
-                    Solicitud de baja
-                    {/* </Link> */}
-                </li>
-                <li>
-                    {/* <Link to='/prepagaclientes/solicitud-arrepentimiento' className={styles.ftlink}> */}
-                    Solicitud de arrepentimiento
-                    {/* </Link> */}
-                </li>
+                <li>Sobre Nosotros</li>
+                <li>Política de privacidad</li>
+                <li>Línea de denuncias</li>
+                <li>Solicitud de baja</li>
+                <li>Solicitud de arrepentimiento</li>
             </ul>
             <div className={`col-sm-3 col-xs-3`}>
                 <ul className={styles.listunstyled}>
-                    <li>
-                        {/* <Link to='/IntegraSalud.jobs.com' className={styles.ftlink}> */}
-                        Trabajá con nosotros
-                        {/* </Link> */}
-                    </li>
+                    <li>Trabajá con nosotros</li>
                 </ul>
                 <Iconos />
             </div>

@@ -45,7 +45,6 @@ export default function FamilyMembersList() {
 
                 setFamilyGroup(family);
                 setTitular(true);
-                console.log(family);
             } catch (err) {
                 console.log(err);
             }

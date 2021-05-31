@@ -16,14 +16,12 @@ import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import ClearAllIcon from '@material-ui/icons/ClearAll';
 import InfoIcon from '@material-ui/icons/Info';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import blue from '@material-ui/core/colors/blue'
+import blue from '@material-ui/core/colors/blue';
 import 'firebase/auth';
 import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
 import {
     Avatar,
     Dialog,
@@ -32,10 +30,8 @@ import {
     FormControl,
     InputLabel,
     Select,
-    MenuItem,
     Input,
     DialogActions,
-    TextField,
 } from '@material-ui/core';
 import { Button } from '@material-ui/core';
 import supabase from '../../../supabase.config';
@@ -147,82 +143,81 @@ const useToolbarStyles = makeStyles((theme) => ({
     root: {
         // paddingLeft: theme.spacing(0),
         // paddingRight: theme.spacing(0),
-        backgroundColor: lighten('#34a7a1', 0.3), 
+        backgroundColor: lighten('#34a7a1', 0.3),
         padding: '0px 0px 0px 0px',
         //color barra superior '
     },
     highlight:
         theme.palette.type === 'light'
             ? {
-                color: '#fafafa',
-                backgroundColor: lighten(blue[500], 0.5),//color barra superior cuando selecciono item
-                fontWeight:'bold',
-                fontSize:'30px'
-            }
+                  color: '#fafafa',
+                  backgroundColor: lighten(blue[500], 0.5), //color barra superior cuando selecciono item
+                  fontWeight: 'bold',
+                  fontSize: '30px',
+              }
             : {
-                color: theme.palette.text.primary,
-                backgroundColor: lighten('#34a7a1', 0.3),
-                
-            },
+                  color: theme.palette.text.primary,
+                  backgroundColor: lighten('#34a7a1', 0.3),
+              },
     title: {
         flex: '1 1 100%',
-        fontWeight:'bold',
-        fontSize:'1.4rem',
+        fontWeight: 'bold',
+        fontSize: '1.4rem',
         color: '#fafafa',
-        textAlign:'center'
+        textAlign: 'center',
     },
-    filters:{
-        display:'flex'
+    filters: {
+        display: 'flex',
     },
-    iconFilter:{
-        color:'#fafafa',
-        fontWeight:'bold',
-        '&:hover':{
+    iconFilter: {
+        color: '#fafafa',
+        fontWeight: 'bold',
+        '&:hover': {
             backgroundColor: '#34a7a1',
-        }
+        },
     },
-    iconBlock:{
-        color:'#fafafa',
-        fontWeight:'bold',
-        '&:hover':{
-            backgroundColor: lighten('#34a7a1', 0.8),
-        }
-    },
-    p:{
-        fontWeight:'bold',
-        fontSize:'1.4rem',
+    iconBlock: {
         color: '#fafafa',
-        textAlign:'rigth'
+        fontWeight: 'bold',
+        '&:hover': {
+            backgroundColor: lighten('#34a7a1', 0.8),
+        },
     },
-    popup:{
+    p: {
+        fontWeight: 'bold',
+        fontSize: '1.4rem',
+        color: '#fafafa',
+        textAlign: 'rigth',
+    },
+    popup: {
         color: '#fafafa',
         backgroundColor: '#2c7f7b',
-        fontWeight:'bold',
-        fontSize:'30px'
+        fontWeight: 'bold',
+        fontSize: '30px',
     },
-    popupBtn:{
+    popupBtn: {
         color: '#fafafa',
         padding: theme.spacing(0.5),
         border: '3px solid #2c7f7b',
-        backgroundColor:'#2c7f7b',
-        fontWeight:'bold',
-        fontSize:'15px',
-        '&:hover':{
+        backgroundColor: '#2c7f7b',
+        fontWeight: 'bold',
+        fontSize: '15px',
+        '&:hover': {
             backgroundColor: lighten('#fafafa', 0.2),
-            color:'#2c7f7b',
+            color: '#2c7f7b',
             padding: theme.spacing(0.5),
-        }
+        },
     },
-    formControl:{
-        display:'flex',
-        flexDirection:'column',
+    formControl: {
+        display: 'flex',
+        flexDirection: 'column',
         padding: theme.spacing(0.5),
     },
 }));
 
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
-    const { numSelected, setToShowRows, toShowRows, rows,medicSpecialities } = props;
+    const { numSelected, setToShowRows, rows } = props;
     const [open, setOpen] = React.useState(false);
     const [selectedState, setSelectedState] = React.useState();
     const [states, setStates] = React.useState();
@@ -232,116 +227,115 @@ const EnhancedTableToolbar = (props) => {
     const [specialities, setSpecialities] = React.useState();
     const [medicsToShow, setMedicsToShow] = React.useState([]);
 
-    const resetStates=async()=>{
+    const resetStates = async () => {
         setSelectedLocality();
         setSelectedSpeciality();
         setSelectedState();
-    }
+    };
 
-    useEffect(async()=>{
+    const fetchStates = async () => {
         try {
             let { data: states } = await supabase
                 .from('states')
-                .select('id,name')
+                .select('id,name');
             setStates(states);
         } catch (err) {
             console.error(err);
         }
-    },[]);
-    const getLocalities=async(idState)=>{
+    };
+
+    useEffect(() => {
+        fetchStates();
+    }, []);
+    const getLocalities = async (idState) => {
         try {
             let { data: localities } = await supabase
                 .from('localities')
                 .select('id,id_locality,name,postal_code,state_id')
-                .eq('state_id',idState)
+                .eq('state_id', idState);
             setLocalities(localities);
         } catch (err) {
             console.error(err);
         }
-    }
+    };
 
-    const getMedics=async(idLocality,idSpeciality)=>{
-        console.log('idLocality',idLocality)
-        if(!idSpeciality&&idLocality){
-            console.log('!idSpeciality&&idLocality');
+    const getMedics = async (idLocality, idSpeciality) => {
+        if (!idSpeciality && idLocality) {
             try {
-                let { data: medics, error: errorFetchMedics } = await supabase
-                .from('address')
-                .select('medics(dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id,id_locality, name, postal_code,states(id,name))))')
-                .eq('locality_id',idLocality)
-                console.log('Medicos:',medics);
-                let array=[];
-                for(let ad of medics){
-                    if(ad!==null&&ad.medics!==null){
+                let { data: medics } = await supabase
+                    .from('address')
+                    .select(
+                        'medics(dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id,id_locality, name, postal_code,states(id,name))))'
+                    )
+                    .eq('locality_id', idLocality);
+                let array = [];
+                for (let ad of medics) {
+                    if (ad !== null && ad.medics !== null) {
                         array.push(ad.medics);
                     }
                 }
-                console.log('Array final:',array);
                 setMedicsToShow(array);
             } catch (err) {
                 console.error(err);
             }
-        } else if(idLocality&&idSpeciality){
-            console.log('idLocality&&idSpeciality');
+        } else if (idLocality && idSpeciality) {
             try {
-                let { data: medics, error: errorFetchMedics } = await supabase
-                .from('address')
-                .select('medics(dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name)))))')
-                .eq('locality_id',idLocality)
+                let { data: medics } = await supabase
+                    .from('address')
+                    .select(
+                        'medics(dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name)))))'
+                    )
+                    .eq('locality_id', idLocality);
                 // .eq('medical_specialities.id',idSpeciality)
-                console.log(medics);
-                let array=[];
-                let retorno=[];
-                for(let ad of medics){
+                let array = [];
+                let retorno = [];
+                for (let ad of medics) {
                     array.push(ad.medics);
                 }
-                // console.log('array:',array);
-                for(let med of array){ 
-                    if(med!==null){
-                        for(let spec of med.medical_specialities){
-                            // console.log('spec:',spec);
-                            if(spec.id==idSpeciality){
-                                console.log('spec.id:',spec.id);
+                for (let med of array) {
+                    if (med !== null) {
+                        for (let spec of med.medical_specialities) {
+                            //eslint-disable-next-line
+                            if (spec.id == idSpeciality) {
                                 retorno.push(med);
                             }
                         }
-                    }  
+                    }
                 }
-                console.log('retorno:',retorno);
                 setMedicsToShow(retorno);
             } catch (err) {
                 console.error(err);
             }
-        } else if(!idLocality&&idSpeciality){
-            console.log('!idLocality&&idSpeciality');
+        } else if (!idLocality && idSpeciality) {
             try {
-                let { data: medics, error: errorFetchMedics } = await supabase
-                .from('medics_medical_specialities')
-                .select('medics(dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name))))')
-                .eq('speciality_id',idSpeciality)
-                let array=[];
-                for(let ad of medics){
+                let { data: medics } = await supabase
+                    .from('medics_medical_specialities')
+                    .select(
+                        'medics(dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name))))'
+                    )
+                    .eq('speciality_id', idSpeciality);
+                let array = [];
+                for (let ad of medics) {
                     array.push(ad.medics);
                 }
-                console.log(array);
                 setMedicsToShow(array);
             } catch (err) {
                 console.error(err);
             }
-        } else if(!idLocality&&!idSpeciality){
-            console.log('!idLocality&&!idSpeciality');
+        } else if (!idLocality && !idSpeciality) {
             try {
-                let { data: medics, error: errorFetchMedics } = await supabase
-                .from('medics')
-                .select('dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name))))')
-                console.log(medics);
+                let { data: medics } = await supabase
+                    .from('medics')
+                    .select(
+                        'dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name))))'
+                    );
                 setMedicsToShow(medics);
             } catch (err) {
                 console.error(err);
             }
         }
-    }
-    
+    };
+
     const getSpecialities = async () => {
         const { data: specialitiesData, error: errorFetchSpecialities } =
             await supabase.from('medical_specialities').select('name, id');
@@ -349,36 +343,38 @@ const EnhancedTableToolbar = (props) => {
         setSpecialities(specialitiesData);
     };
 
-    useEffect(()=>{
-        getSpecialities(selectedState)
-    },[]);
-    useEffect(()=>{
-        getLocalities(selectedState)
-    },[selectedState]);
-    useEffect(()=>{
-        getMedics(selectedLocality,selectedSpeciality)
-    },[selectedLocality]);
-    useEffect(()=>{
-        getMedics(selectedLocality,selectedSpeciality)
-    },[selectedSpeciality]);
-    
+    useEffect(() => {
+        getSpecialities(selectedState);
+        //eslint-disable-next-line
+    }, []);
+    useEffect(() => {
+        getLocalities(selectedState);
+    }, [selectedState]);
+    useEffect(() => {
+        getMedics(selectedLocality, selectedSpeciality);
+        //eslint-disable-next-line
+    }, [selectedLocality]);
+    useEffect(() => {
+        getMedics(selectedLocality, selectedSpeciality);
+        //eslint-disable-next-line
+    }, [selectedSpeciality]);
+
     const handleStateOption = (e) => {
         setSelectedState(e.target.value);
-        console.log('state seleccionado',selectedState)
-    }
+    };
     const handleLocalityOption = (e) => {
         setSelectedLocality(e.target.value);
-        getMedics(selectedLocality,selectedSpeciality)
-    }
+        getMedics(selectedLocality, selectedSpeciality);
+    };
     const handleSpecialityOption = (e) => {
         setSelectedSpeciality(e.target.value);
-        getMedics(selectedLocality,selectedSpeciality)
-    }
+        getMedics(selectedLocality, selectedSpeciality);
+    };
     const handleClickOpen = () => {
         setOpen(true);
-    };  
+    };
     const handleCancel = () => {
-        resetStates()
+        resetStates();
         setOpen(false);
         setToShowRows(rows);
     };
@@ -406,14 +402,20 @@ const EnhancedTableToolbar = (props) => {
                 MEDICOS
             </Typography>
             <p className={classes.p}>Filtros</p>
-            <Tooltip title='Filter list' 
-                onClick={handleClickOpen} className={classes.iconFilter}>
+            <Tooltip
+                title='Filter list'
+                onClick={handleClickOpen}
+                className={classes.iconFilter}
+            >
                 <IconButton aria-label='filter'>
                     <FilterListIcon />
                 </IconButton>
             </Tooltip>
-            <Tooltip title='Clear' 
-                onClick={handleCancel} className={classes.iconFilter}>
+            <Tooltip
+                title='Clear'
+                onClick={handleCancel}
+                className={classes.iconFilter}
+            >
                 <IconButton aria-label='reset'>
                     <ClearAllIcon />
                 </IconButton>
@@ -425,7 +427,9 @@ const EnhancedTableToolbar = (props) => {
                 onClose={handleClose}
                 className={classes.dialog}
             >
-                <DialogTitle className={classes.popup}>FILTRADO POR:</DialogTitle>
+                <DialogTitle className={classes.popup}>
+                    FILTRADO POR:
+                </DialogTitle>
                 <form>
                     <DialogContent>
                         <FormControl className={classes.formControl}>
@@ -440,21 +444,15 @@ const EnhancedTableToolbar = (props) => {
                             >
                                 <option></option>
                                 {specialities &&
-                                    specialities.map(      
-                                        (speciality, index) => (
-                                            <option
-                                                className='inputSel'
-                                                key={index}
-                                                value={
-                                                    speciality.id
-                                                }
-                                            >
-                                                {
-                                                    speciality.name
-                                                }
-                                            </option>
-                                        )
-                                    )}
+                                    specialities.map((speciality, index) => (
+                                        <option
+                                            className='inputSel'
+                                            key={index}
+                                            value={speciality.id}
+                                        >
+                                            {speciality.name}
+                                        </option>
+                                    ))}
                             </Select>
                         </FormControl>
                         <FormControl className={classes.formControl}>
@@ -470,63 +468,57 @@ const EnhancedTableToolbar = (props) => {
                             >
                                 <option></option>
                                 {states &&
-                                    states.map(      
-                                        (state, index) => (
-                                            <option
-                                                className='inputSel'
-                                                key={index}
-                                                value={
-                                                    state.id
-                                                }
-                                            >
-                                                {
-                                                    state.name
-                                                }
-                                            </option>
-                                        )
-                                    )}
+                                    states.map((state, index) => (
+                                        <option
+                                            className='inputSel'
+                                            key={index}
+                                            value={state.id}
+                                        >
+                                            {state.name}
+                                        </option>
+                                    ))}
                             </Select>
                         </FormControl>
                         <FormControl className={classes.formControl}>
                             {/* {selectedState &&
                             <div> */}
-                                <InputLabel htmlFor='demo-dialog-native'>
-                                    Localidad
-                                </InputLabel>
-                                <Select
-                                    native
-                                    value={selectedLocality}
-                                    onChange={handleLocalityOption}
-                                    input={<Input id='demo-dialog-native' />}
-                                    variant='outlined'
-                                >
-                                    <option></option>
-                                    {localities &&
-                                            localities.map(      
-                                                (locality, index) => (
-                                                    <option
-                                                        className='inputSel'
-                                                        key={index}
-                                                        value={
-                                                            locality.id
-                                                        }
-                                                    >
-                                                        {
-                                                            locality.name
-                                                        }
-                                                    </option>
-                                                )
-                                            )}
-                                </Select>
+                            <InputLabel htmlFor='demo-dialog-native'>
+                                Localidad
+                            </InputLabel>
+                            <Select
+                                native
+                                value={selectedLocality}
+                                onChange={handleLocalityOption}
+                                input={<Input id='demo-dialog-native' />}
+                                variant='outlined'
+                            >
+                                <option></option>
+                                {localities &&
+                                    localities.map((locality, index) => (
+                                        <option
+                                            className='inputSel'
+                                            key={index}
+                                            value={locality.id}
+                                        >
+                                            {locality.name}
+                                        </option>
+                                    ))}
+                            </Select>
                             {/* </div>
                             } */}
                         </FormControl>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleCancel} className={classes.popupBtn} >
+                        <Button
+                            onClick={handleCancel}
+                            className={classes.popupBtn}
+                        >
                             Cancel
                         </Button>
-                        <Button onClick={handleSubmit} className={classes.popupBtn}>
+                        <Button
+                            onClick={handleSubmit}
+                            className={classes.popupBtn}
+                        >
                             Ok
                         </Button>
                     </DialogActions>
@@ -540,7 +532,6 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-
 //-------------------- EnhancedTableToolbar Style
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -553,7 +544,6 @@ const useStyles = makeStyles((theme) => ({
     },
     table: {
         minWidth: 750,
-        
     },
     visuallyHidden: {
         border: 0,
@@ -564,33 +554,33 @@ const useStyles = makeStyles((theme) => ({
         padding: 0,
         position: 'absolute',
         top: 20,
-        width: 1
+        width: 1,
     },
-    title:{
-        color:'#212121',
+    title: {
+        color: '#212121',
         fontWeight: 'bold',
-        backgroundColor: lighten('#34a7a1', 0.6)
+        backgroundColor: lighten('#34a7a1', 0.6),
     },
     titleDos: {
         flex: '1 1 100%',
-        fontWeight:'bold',
-        fontSize:'1.4rem',
+        fontWeight: 'bold',
+        fontSize: '1.4rem',
         color: '#D9DCDF',
-        textAlign:'center'
+        textAlign: 'center',
     },
-    rowColor:{
+    rowColor: {
         backgroundColor: lighten('#e0e0e0', 0.3),
-        ':checked':{
-            color:blue[500]
-        }
+        ':checked': {
+            color: blue[500],
+        },
     },
-    iconFilter:{
-        color:'rgba(0, 0, 0, 0.47)',
-        fontWeight:'bold',
-        '&:hover':{
+    iconFilter: {
+        color: 'rgba(0, 0, 0, 0.47)',
+        fontWeight: 'bold',
+        '&:hover': {
             backgroundColor: lighten('#34a7a1', 0.8),
-        }
-    }
+        },
+    },
 }));
 
 export default function SearchDoctors() {
@@ -602,11 +592,10 @@ export default function SearchDoctors() {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [listMedics, setListMedics] = React.useState([]);
     const [medicSpecialities, setMedicSpecialities] = React.useState([]);
+    //eslint-disable-next-line
     const [medicData, setMedicData] = React.useState(null);
     const [toShowRows, setToShowRows] = React.useState([]);
-    const MySwal = withReactContent(Swal);
     let userDni = JSON.parse(localStorage.getItem('userdata')).dni;
-
 
     const fetchMedics = async () => {
         const { data: medics, error: errorFetchMedics } = await supabase
@@ -614,7 +603,6 @@ export default function SearchDoctors() {
             .select(
                 'dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name)))'
             );
-            console.log(medics);
         if (errorFetchMedics) return console.log(errorFetchMedics);
         setToShowRows(medics);
         setListMedics(medics);
@@ -628,7 +616,7 @@ export default function SearchDoctors() {
     };
 
     React.useEffect(() => {
-        fetchSpecialities()
+        fetchSpecialities();
         fetchMedics();
         fetchSpecialities();
     }, []);
@@ -637,56 +625,60 @@ export default function SearchDoctors() {
         const { data: favs, error: errorFetchFavs } = await supabase
             .from('favorites')
             .select('id')
-            .eq('medic_dni',medicDni)
-            .eq('partner_dni',userDni)
-            console.log('Medicos fav',favs)
-        if(favs.length===0){
-            console.log('Agrego fav')
-            const { data, error } = await supabase
+            .eq('medic_dni', medicDni)
+            .eq('partner_dni', userDni);
+        if (favs.length === 0) {
+            await supabase
                 .from('favorites')
-                .insert([
-                    { partner_dni: userDni, medic_dni: medicDni },
-                ])
+                .insert([{ partner_dni: userDni, medic_dni: medicDni }]);
             Swal.fire({
                 icon: 'success',
                 title: 'Médico agregado a favoritos',
                 showConfirmButton: false,
-                timer: 1500
-            })
+                timer: 1500,
+            });
         } else {
-            console.log('No agrega a fav')
             Swal.fire({
                 icon: 'error',
                 title: 'El médico ya se encuentra entre tus favoritos',
-              })
+            });
         }
         if (errorFetchFavs) return console.log(errorFetchFavs);
     };
 
     const handleFav = (row) => {
         fetchFavs(row.dni);
-    }
+    };
 
     const handleInfo = (medicData) => {
         setMedicData(medicData);
-        console.log('Handle info:',medicData)
-        let floor = medicData.address[0].floor!==null?`Piso: ${medicData.address[0].floor}`:'';
-        let department = medicData.address[0].department!==null?`Depto.: ${medicData.address[0].department}`:'';
+        let floor =
+            medicData.address[0].floor !== null
+                ? `Piso: ${medicData.address[0].floor}`
+                : '';
+        let department =
+            medicData.address[0].department !== null
+                ? `Depto.: ${medicData.address[0].department}`
+                : '';
         Swal.fire({
             position: 'bottom',
             title: `Dr. ${medicData.name} ${medicData.lastname}`,
             html:
-                `<p>Email: ${medicData.email}</p>`+
-                `<p>Teléfono: ${medicData.phone_number}</p>`+
-                `<p>Dirección: ${medicData.address[0].street+' '+medicData.address[0].street_number}</p>`+
-                `<p>${floor+' '+ department}</p>`+
-                `<p>${medicData.address[0].localities.name}</p>`+
+                `<p>Email: ${medicData.email}</p>` +
+                `<p>Teléfono: ${medicData.phone_number}</p>` +
+                `<p>Dirección: ${
+                    medicData.address[0].street +
+                    ' ' +
+                    medicData.address[0].street_number
+                }</p>` +
+                `<p>${floor + ' ' + department}</p>` +
+                `<p>${medicData.address[0].localities.name}</p>` +
                 `<p>${medicData.address[0].localities.states.name}</p>`,
             imageUrl: medicData.profilePic,
             imageWidth: 300,
             imageHeight: 300,
             imageAlt: 'Custom image',
-        })
+        });
     };
 
     const handleRequestSort = (event, property) => {
@@ -715,8 +707,6 @@ export default function SearchDoctors() {
 
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
-    toShowRows.length>14?console.log('16 medicos'):console.log(toShowRows)
-
     const emptyRows =
         rowsPerPage -
         Math.min(rowsPerPage, toShowRows.length - page * rowsPerPage);
@@ -735,10 +725,10 @@ export default function SearchDoctors() {
     //             >
 
     //             </TableRow>
-                
+
     //         </div>
     //     )
-    // } 
+    // }
     const rows = listMedics;
 
     return (
@@ -751,128 +741,181 @@ export default function SearchDoctors() {
                     rows={rows}
                     medicSpecialities={medicSpecialities}
                 />
-                {toShowRows.length !== 0?<TableContainer>
-                    <Table
-                        className={classes.table}
-                        aria-labelledby='tableTitle'
-                        size='small'
-                        aria-label='enhanced table'
-                    >
-                        <EnhancedTableHead
-                            classes={classes}
-                            numSelected={selected.length}
-                            order={order}
-                            orderBy={orderBy}
-                            onSelectAllClick={handleSelectAllClick}
-                            onRequestSort={handleRequestSort}
-                            rowCount={toShowRows.length}
-                        />
-                        <TableBody>
-                            {stableSort(
-                                toShowRows,
-                                getComparator(order, orderBy)
-                            )
-                                .slice(
-                                    page * rowsPerPage,
-                                    page * rowsPerPage + rowsPerPage
+                {toShowRows.length !== 0 ? (
+                    <TableContainer>
+                        <Table
+                            className={classes.table}
+                            aria-labelledby='tableTitle'
+                            size='small'
+                            aria-label='enhanced table'
+                        >
+                            <EnhancedTableHead
+                                classes={classes}
+                                numSelected={selected.length}
+                                order={order}
+                                orderBy={orderBy}
+                                onSelectAllClick={handleSelectAllClick}
+                                onRequestSort={handleRequestSort}
+                                rowCount={toShowRows.length}
+                            />
+                            <TableBody>
+                                {stableSort(
+                                    toShowRows,
+                                    getComparator(order, orderBy)
                                 )
-                                .map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
-                                    const labelId = `enhanced-table-checkbox-${index}`;
+                                    .slice(
+                                        page * rowsPerPage,
+                                        page * rowsPerPage + rowsPerPage
+                                    )
+                                    .map((row, index) => {
+                                        const isItemSelected = isSelected(
+                                            row.name
+                                        );
+                                        const labelId = `enhanced-table-checkbox-${index}`;
 
-                                    return (
-                                        <TableRow
-                                            hover
-                                            // onClick={(event) => handleClick(event, row.name)}
-                                            role='checkbox'
-                                            aria-checked={isItemSelected}
-                                            tabIndex={-1}
-                                            key={row.name}
-                                            selected={isItemSelected}
-                                        >
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
-                                                <Tooltip title='Mas info.' className={classes.iconFilter}>
-                                                    <IconButton aria-label='Mas info.' >
-                                                        <InfoIcon
-                                                            onClick={() =>
-                                                                handleInfo(row)
-                                                            }
-                                                        />
-                                                    </IconButton>
-                                                </Tooltip>
-                                                <Tooltip title='Mas info.' className={classes.iconFilter}>
-                                                    <IconButton aria-label='Mas info.' >
-                                                        <FavoriteIcon
-                                                            onClick={() =>
-                                                                handleFav(row)
-                                                            }
-                                                        />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </TableCell>
-                                            <TableCell align='center' className={index%2 ===1 ? classes.rowColor :null}>
-                                                <Avatar
-                                                    alt='Profile Picture'
-                                                    src={row.profilePic}
-                                                />
-                                            </TableCell>
-                                            <TableCell
-                                                className={index%2 ===1 ? classes.rowColor :null}
-                                                component='th'
-                                                id={labelId}
-                                                scope='row'
-                                                padding='default'
+                                        return (
+                                            <TableRow
+                                                hover
+                                                // onClick={(event) => handleClick(event, row.name)}
+                                                role='checkbox'
+                                                aria-checked={isItemSelected}
+                                                tabIndex={-1}
+                                                key={row.name}
+                                                selected={isItemSelected}
                                             >
-                                                {row.name}
-                                            </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
-                                                {row.lastname}
-                                            </TableCell>
-                                            <TableCell className={index%2 ===1 ? classes.rowColor :null}>
-                                                <ul>
-                                                    {row.medical_specialities
-                                                        .length === 0 ? (
-                                                        <li>Clinica</li>
-                                                    ) : (
-                                                        row.medical_specialities.map(
-                                                            (s) => (
-                                                                <li>
-                                                                    {s.name
-                                                                        .charAt(
-                                                                            0
-                                                                        )
-                                                                        .toUpperCase() +
-                                                                        s.name.slice(
-                                                                            1
-                                                                        )}
-                                                                </li>
+                                                <TableCell
+                                                    align='left'
+                                                    className={
+                                                        index % 2 === 1
+                                                            ? classes.rowColor
+                                                            : null
+                                                    }
+                                                >
+                                                    <Tooltip
+                                                        title='Mas info.'
+                                                        className={
+                                                            classes.iconFilter
+                                                        }
+                                                    >
+                                                        <IconButton aria-label='Mas info.'>
+                                                            <InfoIcon
+                                                                onClick={() =>
+                                                                    handleInfo(
+                                                                        row
+                                                                    )
+                                                                }
+                                                            />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                    <Tooltip
+                                                        title='Mas info.'
+                                                        className={
+                                                            classes.iconFilter
+                                                        }
+                                                    >
+                                                        <IconButton aria-label='Mas info.'>
+                                                            <FavoriteIcon
+                                                                onClick={() =>
+                                                                    handleFav(
+                                                                        row
+                                                                    )
+                                                                }
+                                                            />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                </TableCell>
+                                                <TableCell
+                                                    align='center'
+                                                    className={
+                                                        index % 2 === 1
+                                                            ? classes.rowColor
+                                                            : null
+                                                    }
+                                                >
+                                                    <Avatar
+                                                        alt='Profile Picture'
+                                                        src={row.profilePic}
+                                                    />
+                                                </TableCell>
+                                                <TableCell
+                                                    className={
+                                                        index % 2 === 1
+                                                            ? classes.rowColor
+                                                            : null
+                                                    }
+                                                    component='th'
+                                                    id={labelId}
+                                                    scope='row'
+                                                    padding='default'
+                                                >
+                                                    {row.name}
+                                                </TableCell>
+                                                <TableCell
+                                                    align='left'
+                                                    className={
+                                                        index % 2 === 1
+                                                            ? classes.rowColor
+                                                            : null
+                                                    }
+                                                >
+                                                    {row.lastname}
+                                                </TableCell>
+                                                <TableCell
+                                                    className={
+                                                        index % 2 === 1
+                                                            ? classes.rowColor
+                                                            : null
+                                                    }
+                                                >
+                                                    <ul>
+                                                        {row
+                                                            .medical_specialities
+                                                            .length === 0 ? (
+                                                            <li>Clinica</li>
+                                                        ) : (
+                                                            row.medical_specialities.map(
+                                                                (s) => (
+                                                                    <li>
+                                                                        {s.name
+                                                                            .charAt(
+                                                                                0
+                                                                            )
+                                                                            .toUpperCase() +
+                                                                            s.name.slice(
+                                                                                1
+                                                                            )}
+                                                                    </li>
+                                                                )
                                                             )
-                                                        )
-                                                    )}
-                                                </ul>
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                            {emptyRows > 0 && (
-                                <TableRow style={{ height: 33 * emptyRows }}>
-                                    <TableCell colSpan={10} />
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </TableContainer>:
-                <TableContainer>
-                    <Typography
-                        className={classes.titleDos}
-                        variant='h6'
-                        id='tableTitle'
-                        component='div'
-                    >
-                        No se encontraron médicos
-                    </Typography>
-                </TableContainer>}
-                
+                                                        )}
+                                                    </ul>
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                {emptyRows > 0 && (
+                                    <TableRow
+                                        style={{ height: 33 * emptyRows }}
+                                    >
+                                        <TableCell colSpan={10} />
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                ) : (
+                    <TableContainer>
+                        <Typography
+                            className={classes.titleDos}
+                            variant='h6'
+                            id='tableTitle'
+                            component='div'
+                        >
+                            No se encontraron médicos
+                        </Typography>
+                    </TableContainer>
+                )}
+
                 <TablePagination
                     className={classes.root}
                     rowsPerPageOptions={[5, 10, 15, 20]}

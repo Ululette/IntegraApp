@@ -19,7 +19,7 @@ import 'firebase/auth';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import supabase from '../../../supabase.config';
-import getSome from '../../../actions/elgetter'
+import getSome from '../../../actions/elgetter';
 import { IconButton, Tooltip } from '@material-ui/core';
 
 function descendingComparator(a, b, orderBy) {
@@ -65,13 +65,13 @@ const headCells = [
         id: 'dni',
         numeric: true,
         disablePadding: true,
-        label: 'DNI'
+        label: 'DNI',
     },
     {
         id: 'age',
         numeric: true,
         disablePadding: true,
-        label: 'Edad'
+        label: 'Edad',
     },
     {
         id: 'phone_number',
@@ -88,7 +88,7 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-    const { classes, order, orderBy, onRequestSort } = props;
+    const { order, orderBy, onRequestSort } = props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
@@ -135,13 +135,13 @@ const useToolbarStyles = makeStyles((theme) => ({
     highlight:
         theme.palette.type === 'light'
             ? {
-                color: theme.palette.secondary.main,
-                backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-            }
+                  color: theme.palette.secondary.main,
+                  backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+              }
             : {
-                color: theme.palette.text.primary,
-                backgroundColor: theme.palette.secondary.dark,
-            },
+                  color: theme.palette.text.primary,
+                  backgroundColor: theme.palette.secondary.dark,
+              },
     title: {
         flex: '1 1 100%',
     },
@@ -153,8 +153,6 @@ const useToolbarStyles = makeStyles((theme) => ({
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
     const { numSelected } = props;
-
-
 
     return (
         <Toolbar
@@ -206,15 +204,17 @@ export default function GuestsAplications() {
     const [request, setRequest] = React.useState([]);
     const MySwal = withReactContent(Swal);
 
-    const fetchGuest = () => getSome('guest_contacts').then(r => setRequest(r), err => console.error(err.message))
-
+    const fetchGuest = () =>
+        getSome('guest_contacts').then(
+            (r) => setRequest(r),
+            (err) => console.error(err.message)
+        );
 
     React.useEffect(() => {
         fetchGuest();
     }, []);
 
     const rows = request;
-
 
     const handleDelete = async (guestData) => {
         MySwal.fire({
@@ -268,11 +268,9 @@ export default function GuestsAplications() {
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
     const emptyRows =
-        rowsPerPage -
-        Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+        rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
     if (rows.length === 0) return <CircularProgress color='secondary' />;
-
 
     return (
         <div className={classes.root}>
@@ -298,10 +296,7 @@ export default function GuestsAplications() {
                             rowCount={rows.length}
                         />
                         <TableBody>
-                            {stableSort(
-                                rows,
-                                getComparator(order, orderBy)
-                            )
+                            {stableSort(rows, getComparator(order, orderBy))
                                 .slice(
                                     page * rowsPerPage,
                                     page * rowsPerPage + rowsPerPage
@@ -321,10 +316,12 @@ export default function GuestsAplications() {
                                         >
                                             <TableCell align='center'>
                                                 <Tooltip title='Borrar'>
-                                                    <IconButton aria-label='delete' >
+                                                    <IconButton aria-label='delete'>
                                                         <DeleteIcon
                                                             onClick={() =>
-                                                                handleDelete(row)
+                                                                handleDelete(
+                                                                    row
+                                                                )
                                                             }
                                                         />
                                                     </IconButton>
