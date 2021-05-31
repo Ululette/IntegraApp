@@ -83,16 +83,17 @@ function AdminHome() {
                 ? `0${rightNow.getDate()}`
                 : `${rightNow.getDate()}`;
 
-        const dateFormated = `${rightNow.getFullYear()}-${monthFormated}-${dayFormated}`;
+        const dateFormated = `${rightNow.getFullYear()}/${monthFormated}/${dayFormated}`;
+
+        console.log(dateFormated);
 
         const { data: paymentsExpired } = await supabase
             .from('payments')
             .select(
                 'expiration_date, amount, payed, partners(dni, name, lastname)'
             )
-            .lt('expiration_date', dateFormated)
+            // .lt('expiration_date', dateFormated)
             .eq('payed', false);
-
         setDebtors(paymentsExpired);
 
         const { data: numberPlans } = await supabase
@@ -110,7 +111,7 @@ function AdminHome() {
         const { data: numberAuth } = await supabase
             .from('orders')
             .select('id')
-            .eq('status', 'en espera de autorizacion');
+            .eq('status', 1);
 
         setAuthorizations(numberAuth.length);
     };

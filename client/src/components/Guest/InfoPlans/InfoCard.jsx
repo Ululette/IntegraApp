@@ -26,23 +26,13 @@ export default function InfoCard({ plan }) {
                 </Typography>
                 <List>
                     <ListItemText
-                        primary={`✔${
-                            plan.benefits[Math.floor(Math.random() * 8)]
-                                .description
-                        }`}
+                        primary={`✔${plan.benefits[0].description}`}
                     />
                     <ListItemText
-                        primary={`✔${
-                            plan.benefits[Math.floor(Math.random() * 8)]
-                                .description
-                        }`}
+                        primary={`✔${plan.benefits[0].description}`}
                     />
                     <ListItemText
-                        primary={`✔${
-                            plan.benefits[
-                                Math.floor(Math.random() * (8 - 1) + 1)
-                            ].description
-                        }`}
+                        primary={`✔${plan.benefits[0].description}`}
                     />
                 </List>
             </CardContent>
