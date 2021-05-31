@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
+import TextField from '@material-ui/core/TextField';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -165,6 +166,13 @@ const useToolbarStyles = makeStyles((theme) => ({
         '&:hover':{
             backgroundColor: lighten('#34a7a1', 0.8),
         }
+    },
+    input:{
+        margin: theme.spacing(1),
+        size:'small',
+        width:'18%',
+        backgroundColor: '#ffffff',
+        borderRadius:'5px'
     }
 }));
 
@@ -177,22 +185,44 @@ const EnhancedTableToolbar = (props) => {
     
     const user = JSON.parse(localStorage.getItem('affiliatedata'));
 
-    async function fetchPrescriptions() {
-        try {
-            const { data: prescriptions, error: dataError } = await supabase
-                .from('prescriptions')
-                .select(`*, partners(dni, name, lastname, family_group)`);
-
-            console.log(prescriptions);
-            console.log(dataError, 'error');
-            setToShowRows(
-                prescriptions.filter(
-                    (el) => el.partners.family_group === userFamilyGroup
-                )
-            );
-        } catch (err) {
-            return err;
+    async function fetchPrescriptions(date) {
+        if(date){
+            try {
+                const { data: prescriptions, error: dataError } = await supabase
+                    .from('prescriptions')
+                    .select(`*, partners(dni, name, lastname, family_group)`)
+                    .eq('date',date)
+                console.log(prescriptions);
+                console.log(dataError, 'error');
+                setToShowRows(
+                    prescriptions.filter(
+                        (el) => el.partners.family_group === userFamilyGroup
+                    )
+                );
+            } catch (err) {
+                return err;
+            }
+        } else {
+            try {
+                const { data: prescriptions, error: dataError } = await supabase
+                    .from('prescriptions')
+                    .select(`*, partners(dni, name, lastname, family_group)`);
+    
+                console.log(prescriptions);
+                console.log(dataError, 'error');
+                setToShowRows(
+                    prescriptions.filter(
+                        (el) => el.partners.family_group === userFamilyGroup
+                    )
+                );
+            } catch (err) {
+                return err;
+            }
         }
+    }
+
+    const handleDate = (e) => {
+        fetchPrescriptions(e.target.value);
     }
 
     useEffect(async()=>{
@@ -205,13 +235,25 @@ const EnhancedTableToolbar = (props) => {
                 [classes.highlight]: numSelected > 0,
             })}
         >
+             <TextField
+                id="date"
+                label="Buscar por fecha"
+                type="date"
+                size='small'
+                defaultValue="2021-01-01"
+                onChange={handleDate}
+                className={classes.input}
+                InputLabelProps={{
+                    shrink: true,
+                }}
+            />
             <Typography
                 className={classes.title}
                 variant='h6'
                 id='tableTitle'
                 component='div'
             >
-                Mis autorizaciones
+                Mis recetas
             </Typography>
         </Toolbar>
     );

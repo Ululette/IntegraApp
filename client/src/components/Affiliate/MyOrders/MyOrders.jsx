@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -172,32 +173,63 @@ const useToolbarStyles = makeStyles((theme) => ({
         '&:hover':{
             backgroundColor: lighten('#34a7a1', 0.8),
         }
+    },
+    input:{
+        margin: theme.spacing(1),
+        size:'small',
+        width:'50%',
+        backgroundColor: '#ffffff',
+        borderRadius:'5px'
     }
 }));
 
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
     const { numSelected, setToShowRows} = props;
+    const [inputSearch,setInputSearch] = useState('')
     let userFamilyGroup = JSON.parse(localStorage.getItem('affiliatedata')).family_group;
 
     
-    const fetchOrders = async () => {
-        try {
-            const { data: orders, error: dataError } = await supabase
-                .from('orders')
-                .select(`study_name,date,status(name),results,partners(dni, name, lastname, family_group),medics(name,lastname)`)
-                // .eq('partner_dni',userDni)
-            console.log(orders);
-            console.log(dataError, 'error');
-            setToShowRows(
-                orders.filter(
-                    (el) => el.partners.family_group === userFamilyGroup
-                )
-            );
-        } catch (err) {
-            return err;
+    const fetchOrders = async (studyName) => {
+        if(studyName){
+            try {
+                const { data: orders, error: dataError } = await supabase
+                    .from('orders')
+                    .select(`study_name,date,status(name),results,partners(dni, name, lastname, family_group),medics(name,lastname)`)
+                    .ilike('study_name', `%${studyName}%`)
+                console.log(orders);
+                console.log(dataError, 'error');
+                setToShowRows(
+                    orders.filter(
+                        (el) => el.partners.family_group === userFamilyGroup
+                    )
+                );
+            } catch (err) {
+                return err;
+            }
+        } else {
+            try {
+                const { data: orders, error: dataError } = await supabase
+                    .from('orders')
+                    .select(`study_name,date,status(name),results,partners(dni, name, lastname, family_group),medics(name,lastname)`)
+                    // .eq('partner_dni',userDni)
+                console.log(orders);
+                console.log(dataError, 'error');
+                setToShowRows(
+                    orders.filter(
+                        (el) => el.partners.family_group === userFamilyGroup
+                    )
+                );
+            } catch (err) {
+                return err;
+            }
         }
     };
+
+    const handleInputSearch = (e) => {
+        setInputSearch(e.target.value);
+        fetchOrders(inputSearch)
+    }
 
     useEffect(async()=>{
         fetchOrders()
@@ -209,6 +241,15 @@ const EnhancedTableToolbar = (props) => {
                 [classes.highlight]: numSelected > 0,
             })}
         >
+            <TextField
+                className={classes.input}
+                size='small'
+                id='outlined-basic'
+                label='Buscar por estudio'
+                variant='outlined'
+                onChange={handleInputSearch}
+                value={inputSearch}
+            />
             <Typography
                 className={classes.title}
                 variant='h6'
