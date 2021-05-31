@@ -145,10 +145,10 @@ EnhancedTableHead.propTypes = {
 //------------------------makeStyle1---------------------------------------------------------------------------------------
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
-        paddingLeft: theme.spacing(0),
-        paddingRight: theme.spacing(0),
+        // paddingLeft: theme.spacing(0),
+        // paddingRight: theme.spacing(0),
         backgroundColor: lighten('#34a7a1', 0.3), 
-        
+        padding: '0px 0px 0px 0px',
         //color barra superior '
     },
     highlight:
@@ -188,14 +188,36 @@ const useToolbarStyles = makeStyles((theme) => ({
             backgroundColor: lighten('#34a7a1', 0.8),
         }
     },
-    container:{
-        margin: theme.spacing(1),
-        width: '90%',
+    p:{
+        fontWeight:'bold',
+        fontSize:'1.4rem',
+        color: '#fafafa',
+        textAlign:'rigth'
+    },
+    popup:{
+        color: '#fafafa',
+        backgroundColor: '#2c7f7b',
+        fontWeight:'bold',
+        fontSize:'30px'
+    },
+    popupBtn:{
+        color: '#fafafa',
+        padding: theme.spacing(0.5),
+        border: '3px solid #2c7f7b',
+        backgroundColor:'#2c7f7b',
+        fontWeight:'bold',
+        fontSize:'15px',
+        '&:hover':{
+            backgroundColor: lighten('#fafafa', 0.2),
+            color:'#2c7f7b',
+            padding: theme.spacing(0.5),
+        }
     },
     formControl:{
-        margin: theme.spacing(1),
-        width: '80%',
-    }
+        display:'flex',
+        flexDirection:'column',
+        padding: theme.spacing(0.5),
+    },
 }));
 
 const EnhancedTableToolbar = (props) => {
@@ -226,7 +248,6 @@ const EnhancedTableToolbar = (props) => {
             console.error(err);
         }
     },[]);
-
     const getLocalities=async(idState)=>{
         try {
             let { data: localities } = await supabase
@@ -246,7 +267,7 @@ const EnhancedTableToolbar = (props) => {
             try {
                 let { data: medics, error: errorFetchMedics } = await supabase
                 .from('address')
-                .select('medics(name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id,id_locality, name, postal_code,states(id,name))))')
+                .select('medics(dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id,id_locality, name, postal_code,states(id,name))))')
                 .eq('locality_id',idLocality)
                 console.log('Medicos:',medics);
                 let array=[];
@@ -265,7 +286,7 @@ const EnhancedTableToolbar = (props) => {
             try {
                 let { data: medics, error: errorFetchMedics } = await supabase
                 .from('address')
-                .select('medics(name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name)))))')
+                .select('medics(dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name)))))')
                 .eq('locality_id',idLocality)
                 // .eq('medical_specialities.id',idSpeciality)
                 console.log(medics);
@@ -275,14 +296,16 @@ const EnhancedTableToolbar = (props) => {
                     array.push(ad.medics);
                 }
                 // console.log('array:',array);
-                for(let med of array){   
-                    for(let spec of med.medical_specialities){
-                        // console.log('spec:',spec);
-                        if(spec.id==idSpeciality){
-                            console.log('spec.id:',spec.id);
-                            retorno.push(med);
+                for(let med of array){ 
+                    if(med!==null){
+                        for(let spec of med.medical_specialities){
+                            // console.log('spec:',spec);
+                            if(spec.id==idSpeciality){
+                                console.log('spec.id:',spec.id);
+                                retorno.push(med);
+                            }
                         }
-                    }
+                    }  
                 }
                 console.log('retorno:',retorno);
                 setMedicsToShow(retorno);
@@ -294,7 +317,7 @@ const EnhancedTableToolbar = (props) => {
             try {
                 let { data: medics, error: errorFetchMedics } = await supabase
                 .from('medics_medical_specialities')
-                .select('medics(name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name))))')
+                .select('medics(dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name))))')
                 .eq('speciality_id',idSpeciality)
                 let array=[];
                 for(let ad of medics){
@@ -310,7 +333,7 @@ const EnhancedTableToolbar = (props) => {
             try {
                 let { data: medics, error: errorFetchMedics } = await supabase
                 .from('medics')
-                .select('name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name))))')
+                .select('dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name))))')
                 console.log(medics);
                 setMedicsToShow(medics);
             } catch (err) {
@@ -345,9 +368,11 @@ const EnhancedTableToolbar = (props) => {
     }
     const handleLocalityOption = (e) => {
         setSelectedLocality(e.target.value);
+        getMedics(selectedLocality,selectedSpeciality)
     }
     const handleSpecialityOption = (e) => {
         setSelectedSpeciality(e.target.value);
+        getMedics(selectedLocality,selectedSpeciality)
     }
     const handleClickOpen = () => {
         setOpen(true);
@@ -380,16 +405,17 @@ const EnhancedTableToolbar = (props) => {
             >
                 MEDICOS
             </Typography>
-            <Tooltip title='Clear' 
-                onClick={handleCancel} className={classes.iconFilter}>
-                <IconButton aria-label='reset'>
-                    <ClearAllIcon />
-                </IconButton>
-            </Tooltip>
+            <p className={classes.p}>Filtros</p>
             <Tooltip title='Filter list' 
                 onClick={handleClickOpen} className={classes.iconFilter}>
                 <IconButton aria-label='filter'>
                     <FilterListIcon />
+                </IconButton>
+            </Tooltip>
+            <Tooltip title='Clear' 
+                onClick={handleCancel} className={classes.iconFilter}>
+                <IconButton aria-label='reset'>
+                    <ClearAllIcon />
                 </IconButton>
             </Tooltip>
             <Dialog
@@ -399,8 +425,8 @@ const EnhancedTableToolbar = (props) => {
                 onClose={handleClose}
                 className={classes.dialog}
             >
-                <DialogTitle>Filtrar por</DialogTitle>
-                <form className={classes.container}>
+                <DialogTitle className={classes.popup}>FILTRADO POR:</DialogTitle>
+                <form>
                     <DialogContent>
                         <FormControl className={classes.formControl}>
                             <InputLabel htmlFor='demo-dialog-native'>
@@ -437,6 +463,7 @@ const EnhancedTableToolbar = (props) => {
                             </InputLabel>
                             <Select
                                 native
+                                className={classes.select}
                                 value={selectedState}
                                 onChange={handleStateOption}
                                 input={<Input id='demo-dialog-native' />}
@@ -461,8 +488,8 @@ const EnhancedTableToolbar = (props) => {
                             </Select>
                         </FormControl>
                         <FormControl className={classes.formControl}>
-                            {selectedState &&
-                            <div>
+                            {/* {selectedState &&
+                            <div> */}
                                 <InputLabel htmlFor='demo-dialog-native'>
                                     Localidad
                                 </InputLabel>
@@ -471,6 +498,7 @@ const EnhancedTableToolbar = (props) => {
                                     value={selectedLocality}
                                     onChange={handleLocalityOption}
                                     input={<Input id='demo-dialog-native' />}
+                                    variant='outlined'
                                 >
                                     <option></option>
                                     {localities &&
@@ -490,15 +518,15 @@ const EnhancedTableToolbar = (props) => {
                                                 )
                                             )}
                                 </Select>
-                            </div>
-                            }
+                            {/* </div>
+                            } */}
                         </FormControl>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleCancel} color='primary'>
+                        <Button onClick={handleCancel} className={classes.popupBtn} >
                             Cancel
                         </Button>
-                        <Button onClick={handleSubmit}>
+                        <Button onClick={handleSubmit} className={classes.popupBtn}>
                             Ok
                         </Button>
                     </DialogActions>
@@ -542,6 +570,13 @@ const useStyles = makeStyles((theme) => ({
         color:'#212121',
         fontWeight: 'bold',
         backgroundColor: lighten('#34a7a1', 0.6)
+    },
+    titleDos: {
+        flex: '1 1 100%',
+        fontWeight:'bold',
+        fontSize:'1.4rem',
+        color: '#D9DCDF',
+        textAlign:'center'
     },
     rowColor:{
         backgroundColor: lighten('#e0e0e0', 0.3),
@@ -686,7 +721,24 @@ export default function SearchDoctors() {
         rowsPerPage -
         Math.min(rowsPerPage, toShowRows.length - page * rowsPerPage);
 
-    if (toShowRows.length === 0) return <CircularProgress color='secondary' />;
+    // if (toShowRows.length === 0){
+    //     return(
+    //         <div>
+    //             <TableRow
+    //                 hover
+    //                 // onClick={(event) => handleClick(event, row.name)}
+    //                 role='checkbox'
+    //                 aria-checked={isItemSelected}
+    //                 tabIndex={-1}
+    //                 key={row.name}
+    //                 selected={isItemSelected}
+    //             >
+
+    //             </TableRow>
+                
+    //         </div>
+    //     )
+    // } 
     const rows = listMedics;
 
     return (
@@ -699,7 +751,7 @@ export default function SearchDoctors() {
                     rows={rows}
                     medicSpecialities={medicSpecialities}
                 />
-                <TableContainer>
+                {toShowRows.length !== 0?<TableContainer>
                     <Table
                         className={classes.table}
                         aria-labelledby='tableTitle'
@@ -809,7 +861,18 @@ export default function SearchDoctors() {
                             )}
                         </TableBody>
                     </Table>
-                </TableContainer>
+                </TableContainer>:
+                <TableContainer>
+                    <Typography
+                        className={classes.titleDos}
+                        variant='h6'
+                        id='tableTitle'
+                        component='div'
+                    >
+                        No se encontraron médicos
+                    </Typography>
+                </TableContainer>}
+                
                 <TablePagination
                     className={classes.root}
                     rowsPerPageOptions={[5, 10, 15, 20]}
