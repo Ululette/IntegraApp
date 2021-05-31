@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
-import TextField from '@material-ui/core/TextField';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -52,25 +51,30 @@ function stableSort(array, comparator) {
 
 const headCells = [
     {
-        id: 'download',
+        id: 'actions',
         numeric: false,
         disablePadding: false,
-        label: 'Descargar',
+        label: 'ACCIONES',
     },
     {
-        id: 'date',
+        id: 'profilePic',
         numeric: false,
         disablePadding: false,
-        label: 'Fecha',
+        label: 'FOTO',
+    },
+    { id: 'name', numeric: false, disablePadding: true, label: 'NOMBRE' },
+    {
+        id: 'lastname',
+        numeric: false,
+        disablePadding: false,
+        label: 'APELLIDO',
     },
     {
-        id: 'drugs',
+        id: 'specialties',
         numeric: false,
         disablePadding: false,
-        label: 'Medicamentos',
+        label: 'ESPECIALIDAD',
     },
-    { id: 'namePartner', numeric: false, disablePadding: true, label: 'Paciente' },
-    { id: 'dni', numeric: false, disablePadding: true, label: 'DNI' },
 ];
 
 function EnhancedTableHead(props) {
@@ -166,13 +170,6 @@ const useToolbarStyles = makeStyles((theme) => ({
         '&:hover':{
             backgroundColor: lighten('#34a7a1', 0.8),
         }
-    },
-    input:{
-        margin: theme.spacing(1),
-        size:'small',
-        width:'18%',
-        backgroundColor: '#ffffff',
-        borderRadius:'5px'
     }
 }));
 
@@ -180,54 +177,23 @@ const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
     const { numSelected, setToShowRows, toShowRows, rows, medicSpecialities, deleteFav } = props;
     let userDni = JSON.parse(localStorage.getItem('userdata')).dni;
-    let userFamilyGroup = JSON.parse(localStorage.getItem('affiliatedata')).family_group;
 
-    
-    const user = JSON.parse(localStorage.getItem('affiliatedata'));
-
-    async function fetchPrescriptions(date) {
-        if(date){
-            try {
-                const { data: prescriptions, error: dataError } = await supabase
-                    .from('prescriptions')
-                    .select(`*, partners(dni, name, lastname, family_group)`)
-                    .eq('date',date)
-                console.log(prescriptions);
-                console.log(dataError, 'error');
-                setToShowRows(
-                    prescriptions.filter(
-                        (el) => el.partners.family_group === userFamilyGroup
-                    )
-                );
-            } catch (err) {
-                return err;
+    const fetchFavs = async (userDni) => {
+        const { data: medics, error: errorFetchMedics } = await supabase
+            .from('favorites')
+            .select('medics(dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name)))))')
+            .eq('partner_dni',userDni)
+            let array=[];
+            for(let ad of medics){
+                array.push(ad.medics);
             }
-        } else {
-            try {
-                const { data: prescriptions, error: dataError } = await supabase
-                    .from('prescriptions')
-                    .select(`*, partners(dni, name, lastname, family_group)`);
-    
-                console.log(prescriptions);
-                console.log(dataError, 'error');
-                setToShowRows(
-                    prescriptions.filter(
-                        (el) => el.partners.family_group === userFamilyGroup
-                    )
-                );
-            } catch (err) {
-                return err;
-            }
-        }
-    }
-
-    const handleDate = (e) => {
-        fetchPrescriptions(e.target.value);
-    }
+            setToShowRows(array)
+        if (errorFetchMedics) return console.log(errorFetchMedics);
+    };
 
     useEffect(async()=>{
-        fetchPrescriptions()
-    },[]);
+        fetchFavs(userDni)
+    },[deleteFav]);
 
     return (
         <Toolbar
@@ -235,25 +201,13 @@ const EnhancedTableToolbar = (props) => {
                 [classes.highlight]: numSelected > 0,
             })}
         >
-             <TextField
-                id="date"
-                label="Buscar por fecha"
-                type="date"
-                size='small'
-                defaultValue="2021-01-01"
-                onChange={handleDate}
-                className={classes.input}
-                InputLabelProps={{
-                    shrink: true,
-                }}
-            />
             <Typography
                 className={classes.title}
                 variant='h6'
                 id='tableTitle'
                 component='div'
             >
-                Mis recetas
+                MEDICOS
             </Typography>
         </Toolbar>
     );
@@ -309,14 +263,75 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function MyOrders() {
+export default function Favs() {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [listMedics, setListMedics] = React.useState([]);
+    const [medicSpecialities, setMedicSpecialities] = React.useState([]);
+    const [infoActive, setInfoActive] = React.useState(false);
+    const [medicData, setMedicData] = React.useState(null);
     const [toShowRows, setToShowRows] = React.useState([]);
+    const [deleteFavNoti, setDeleteFavNoti] = React.useState(false);
+    let userDni = JSON.parse(localStorage.getItem('userdata')).dni;
+
+    const deleteFav = async (medicDni) => {
+            console.log('DNI a eliminar:',medicDni)
+            const { data, error } = await supabase
+                .from('favorites')
+                .delete()
+                .eq('medic_dni',medicDni)
+                .eq('partner_dni',userDni)
+            Swal.fire({
+                icon: 'success',
+                title: 'Médico eliminado de favoritos',
+                showConfirmButton: false,
+                timer: 1500
+            })
+            setDeleteFavNoti(true);
+            setDeleteFavNoti(false)
+        if (error) return console.log(error);
+    };
+
+    const fetchSpecialities = async () => {
+        const { data: specialities, error: errorFetchSpecialities } =
+            await supabase.from('medical_specialities').select('name, id');
+        if (errorFetchSpecialities) return console.log(errorFetchSpecialities);
+        setMedicSpecialities(specialities);
+    };
+
+    React.useEffect(() => {
+        fetchSpecialities()
+    }, []);
+
+    const handleDeleteFav = (row) => {
+        deleteFav(row.dni);
+    }
+
+    const handleInfo = (medicData) => {
+        setMedicData(medicData);
+        console.log('Handle info:',medicData)
+        let floor = medicData.address[0].floor!==null?`Piso: ${medicData.address[0].floor}`:'';
+        let department = medicData.address[0].department!==null?`Depto.: ${medicData.address[0].department}`:'';
+        Swal.fire({
+            position: 'bottom',
+            title: `Dr. ${medicData.name} ${medicData.lastname}`,
+            html:
+                `<p>Email: ${medicData.email}</p>`+
+                `<p>Teléfono: ${medicData.phone_number}</p>`+
+                `<p>Dirección: ${medicData.address[0].street+' '+medicData.address[0].street_number}</p>`+
+                `<p>${floor+' '+ department}</p>`+
+                `<p>${medicData.address[0].localities.name}</p>`+
+                `<p>${medicData.address[0].localities.states.name}</p>`,
+            imageUrl: medicData.profilePic,
+            imageWidth: 300,
+            imageHeight: 300,
+            imageAlt: 'Custom image',
+        })
+    };
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -350,12 +365,18 @@ export default function MyOrders() {
         rowsPerPage -
         Math.min(rowsPerPage, toShowRows.length - page * rowsPerPage);
 
+    const rows = listMedics;
+
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
                 <EnhancedTableToolbar
                     numSelected={selected.length}
                     setToShowRows={setToShowRows}
+                    toShowRows={toShowRows}
+                    rows={rows}
+                    medicSpecialities={medicSpecialities}
+                    deleteFav={deleteFavNoti}
                 />
                 <TableContainer>
                     <Table
@@ -384,8 +405,8 @@ export default function MyOrders() {
                                 )
                                 .map((row, index) => {
                                     const isItemSelected = isSelected(row.name);
-                                    let patientName=`${row.partners.name} ${row.partners.lastname}`
-                                    let drugName=row.drug_name_2?`${row.drug_name}-${row.drug_name_2}`:`${row.drug_name}`;
+                                    const labelId = `enhanced-table-checkbox-${index}`;
+
                                     return (
                                         <TableRow
                                             hover
@@ -397,27 +418,65 @@ export default function MyOrders() {
                                             selected={isItemSelected}
                                         >
                                             <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
-                                                <Tooltip title='Resultados' className={classes.iconFilter}>
-                                                    <IconButton aria-label='Resultados' >
+                                                <Tooltip title='Mas info.' className={classes.iconFilter}>
+                                                    <IconButton aria-label='Mas info.' >
                                                         <InfoIcon
-                                                            // onClick={() =>
-                                                            //     handleInfo(row)
-                                                            // }
+                                                            onClick={() =>
+                                                                handleInfo(row)
+                                                            }
+                                                        />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title='Mas info.' className={classes.iconFilter}>
+                                                    <IconButton aria-label='Mas info.' >
+                                                        <DeleteForeverIcon
+                                                            onClick={() =>
+                                                                handleDeleteFav(row)
+                                                            }
                                                         />
                                                     </IconButton>
                                                 </Tooltip>
                                             </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
-                                                {row.date}
+                                            <TableCell align='center' className={index%2 ===1 ? classes.rowColor :null}>
+                                                <Avatar
+                                                    alt='Profile Picture'
+                                                    src={row.profilePic}
+                                                />
+                                            </TableCell>
+                                            <TableCell
+                                                className={index%2 ===1 ? classes.rowColor :null}
+                                                component='th'
+                                                id={labelId}
+                                                scope='row'
+                                                padding='default'
+                                            >
+                                                {row.name}
                                             </TableCell>
                                             <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
-                                                {drugName}
+                                                {row.lastname}
                                             </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>  
-                                                {patientName}
-                                            </TableCell>
-                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>  
-                                                {row.partners.dni}
+                                            <TableCell className={index%2 ===1 ? classes.rowColor :null}>
+                                                <ul>
+                                                    {row.medical_specialities
+                                                        .length === 0 ? (
+                                                        <li>Clinica</li>
+                                                    ) : (
+                                                        row.medical_specialities.map(
+                                                            (s) => (
+                                                                <li>
+                                                                    {s.name
+                                                                        .charAt(
+                                                                            0
+                                                                        )
+                                                                        .toUpperCase() +
+                                                                        s.name.slice(
+                                                                            1
+                                                                        )}
+                                                                </li>
+                                                            )
+                                                        )
+                                                    )}
+                                                </ul>
                                             </TableCell>
                                         </TableRow>
                                     );

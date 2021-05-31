@@ -7,30 +7,26 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import SearchDoctors from './SearchDoctors';
-//Hacer tabs, una de favoritos y otra de busqueda
-//Tab de busqueda ---> profesionales
-//                ---> Provincia: meter tabla de provincias en un estado, mapearlo y meterlo en un select
-//                ---> Localidad (opcional): meter tabla de localidades en un estado,  mapearlo y meterlo en un select
-//                ---> Especialidad: meter tabla de especialidades en un estado, mapearlo y meterlo en un select
-//                ---> Nombre: meter la tabla de medicos en un estado, mapearlo y hacer una live bar
-//                ---> Paginado:
-// filtro desde el back o el front? Una vez que tengo provincicas filtar localidades desde el back
-//una vez que este seleccionaa la provincia, setea el estado con un use effect y hacer llamado al back de las localidades ya filtradas
-//segun el ID
+import Favs from './Favs';
+//----FALTA CORREGIR
+/*
+1-ubicar tabla paralela linea tab izquierda
+2-cambiar de lugar boton agregar medico
+3-quitarle el fondo a las tab y resaltar las seleccionadas
 
+*/
 function TabPanel(props) {
-    const { children, value, index, ...other } = props;
+    const { children, value, index } = props;
 
     return (
         <div
             role='tabpanel'
             hidden={value !== index}
-            id={`full-width-tabpanel-${index}`}
-            aria-labelledby={`full-width-tab-${index}`}
-            {...other}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`wrapped-tab-${index}`}
         >
             {value === index && (
-                <Box p={3}>
+                <Box p={3} padding='2px 2px 2px 0px'>
                     <Typography>{children}</Typography>
                 </Box>
             )}
@@ -46,20 +42,49 @@ TabPanel.propTypes = {
 
 function a11yProps(index) {
     return {
-        id: `full-width-tab-${index}`,
-        'aria-controls': `full-width-tabpanel-${index}`,
+        id: `wrapped-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`,
     };
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
-        backgroundColor: theme.palette.background.paper,
-        width: 500,
-        margin: '5rem auto',
+        width:'100%',
+        margin:'0px',
+        padding:'0px 0px 0px 0px',
+        alignItems: 'left',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        backgroundColor: '#ffffff',
     },
+    tab: {
+        width:'100%',
+        margin:'0px',
+        padding:'0px',
+        color:'#212121',
+        position: 'relative',
+        alignItems: 'left',
+        backgroundColor: '#fafafa',
+        display: 'flex',
+        justifyContent: 'center',
+        overflow:'auto'
+    },
+    prueba:{
+        backgroundColor: '#ffffff',
+        
+        //backgroundColor: 'rgb(217 222 222 / 56%)',
+        margin:'0px',
+        padding:'0px',
+        boxShadow:'none'
+    },
+    prueba2:{
+        backgroundColor: 'rgb(112, 193, 189)',
+        fontWeight:'bold'
+    }
 }));
 
-export default function MedicalDirectory() {
+export default function AdminMedicTabs() {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 
@@ -69,39 +94,22 @@ export default function MedicalDirectory() {
 
     return (
         <div className={classes.root}>
-            <AppBar position='static' color='default'>
-                <Tabs
+            <AppBar bgcolor='background.paper' className={classes.tab}>
+                <Tabs 
                     value={value}
                     onChange={handleChange}
-                    indicatorColor='primary'
-                    textColor='primary'
-                    variant='fullWidth'
-                    aria-label='full width tabs example'
+                    aria-label='simple tabs example'
                 >
-                    <Tab label='Buscar médicos' {...a11yProps(0)} />
-                    <Tab disabled label='Favoritos' {...a11yProps(1)} />
-                    <Tab
-                        disabled
-                        label='Buscar instituciones'
-                        {...a11yProps(2)}
-                    />
+                    <Tab label='Medicos' {...a11yProps(0) } className={classes.prueba2}/>
+                    <Tab label='Favoritos' {...a11yProps(1)} className={classes.prueba2} />
                 </Tabs>
             </AppBar>
-            {/* <SwipeableViews
-          axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-          index={value}
-          onChangeIndex={handleChangeIndex}
-        >
-          <TabPanel value={value} index={0} dir={theme.direction}>
-          <SearchDoctors/>
-                    </TabPanel>
-          <TabPanel value={value} index={1} dir={theme.direction}>
-          Buscar medicos          </TabPanel>
-          <TabPanel value={value} index={2} dir={theme.direction}>
-          Buscar instituciones
-                    </TabPanel>
-        </SwipeableViews> */}
-            <SearchDoctors />
+            <TabPanel value={value} index={0}>
+                <SearchDoctors />
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+                <Favs />
+            </TabPanel>
         </div>
     );
 }
