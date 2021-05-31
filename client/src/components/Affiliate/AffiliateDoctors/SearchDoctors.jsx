@@ -226,6 +226,7 @@ const EnhancedTableToolbar = (props) => {
             console.error(err);
         }
     },[]);
+
     const getLocalities=async(idState)=>{
         try {
             let { data: localities } = await supabase
@@ -566,7 +567,6 @@ export default function SearchDoctors() {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [listMedics, setListMedics] = React.useState([]);
     const [medicSpecialities, setMedicSpecialities] = React.useState([]);
-    const [infoActive, setInfoActive] = React.useState(false);
     const [medicData, setMedicData] = React.useState(null);
     const [toShowRows, setToShowRows] = React.useState([]);
     const MySwal = withReactContent(Swal);
