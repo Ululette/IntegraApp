@@ -19,13 +19,13 @@ function InfoPlanes() {
     return (
         <div className={styles.carousel}>
             <Flicking gap={10} circular={true} className={styles.cardContainer}>
-                {plans.map((el, idx) => (
+                {/* {plans.map((el, idx) => (
                     <InfoCard
                         key={`plancito=${idx}`}
                         plan={el}
                         className={styles.card}
                     />
-                ))}
+                ))} */}
             </Flicking>
         </div>
     );
