@@ -64,7 +64,7 @@ const headCells = [
     disablePadding: false,
     label: "Usuarios con este plan",
   },
-  { id: "state", numeric: false, disablePadding: false, label: "Estado" },
+  { id: "state", numeric: true, disablePadding: false, label: "Estado" },
 ];
 
 function EnhancedTableHead(props) {

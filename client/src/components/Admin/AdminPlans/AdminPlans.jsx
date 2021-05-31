@@ -77,8 +77,6 @@ function AdminPlans({ firebase }) {
         .from("partners")
         .select("plan_id", { count: "exact" })
         .eq("plan_id", plan.id);
-
-      console.log(count);
       plans.push({
         id: "name",
         id_plan: plan.id,
@@ -167,15 +165,45 @@ function AdminPlans({ firebase }) {
 
   const handleSubmitModify = async (e) => {
     e.preventDefault();
-    const { data, error } = await supabase
+    let flag = false;
+    let benefitsArray = [];
+    for (const benefit of modalPlan.benefits) {
+      benefitsArray.push({
+        plan_id: modalPlan.id_plan,
+        benefit_id: benefit.id,
+      });
+    }
+    const { data: planData, error: planError } = await supabase
       .from("plans")
       .update({ name: e.target[0].value, price: e.target[1].value })
       .eq("id", modalPlan.id_plan);
+
+    if (benefitsArray.length !== 0 && benefitsArray[0].benefit_id) {
+      const { data: benefitsData, error: benefitsError } = await supabase
+        .from("plans_benefits")
+        .delete()
+        .eq("plan_id", modalPlan.id_plan);
+      const { data, error } = await supabase
+        .from("plans_benefits")
+        .insert(benefitsArray);
+    } else {
+      if (benefitsArray.length === 0) {
+        flag = true;
+      }
+    }
+
     handleCloseModalModify();
-    MySwal.fire({
-      title: "Se modificó el plan con exito!.",
-      icon: "success",
-    }).then(() => window.location.reload());
+    if (flag) {
+      MySwal.fire({
+        title: "El plan debe tener al menos 1 beneficio",
+        icon: "error",
+      });
+    } else {
+      MySwal.fire({
+        title: "Se modificó el plan con exito!.",
+        icon: "success",
+      }).then(() => window.location.reload());
+    }
   };
 
   const handleSubmitDelete = async (e, id) => {
