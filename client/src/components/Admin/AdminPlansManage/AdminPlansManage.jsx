@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './AdminPlansManage.css'
 import { makeStyles } from '@material-ui/core/styles';
 import {
   AppBar,
@@ -7,10 +8,10 @@ import {
   Tab,
   Typography,
   Box
-}from '@material-ui/core';
+} from '@material-ui/core';
 import AdminPlans from './AdminPlans/AdminPlans.jsx';
-import NewPlanP from './NewPlanP/NewPlanP.jsx';
-import NewBenefP from './NewPlanP/NewPlanP.jsx';
+import NewPlan from './NewPlan/NewPlan.jsx';
+import NewBenef from './NewBenef/NewBenef.jsx';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -45,11 +46,34 @@ function a11yProps(index) {
   };
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: '#fafafa',
+    padding: 0,
   },
+  tabshead: {
+    width: '600px',
+    display: 'flex',
+    flexdirection: 'row',
+    alignItems: 'center',/* -- */
+    justifyContent: 'center', /* | */
+  },
+  tabs: {
+    margin: 0,
+    padding: 0,
+    width: '100%',
+    backgroundColor: '#27978b',
+    display: 'flex',
+    flexdirection: 'column',
+    alignItems: 'center',/* | */
+    justifyContent: 'center', /* -- */
+  },
+  overflow: {
+    flexdirection: 'column',
+    alignItems: 'center',/* | */
+    justifyContent: 'center', /* -- */
+  }
 }));
 
 export default function AdminPlansManage() {
@@ -61,26 +85,27 @@ export default function AdminPlansManage() {
   };
 
   return (
-    <div className={classes.root}>
-      <AppBar position='static'>
+    <div className={classes.root}  >
+      <AppBar position='static' className={classes.tabshead} display="flex" alignItems="center" justifyContent="center">
         <Tabs
+          className={classes.tabs}
           value={value}
           onChange={handleChange}
           aria-label='simple tabs example'
         >
           <Tab label='Planes' {...a11yProps(0)} />
-          <Tab label='Agregar nuevo plan' {...a11yProps(1)} />
+          <Tab label='Nuevo plan' {...a11yProps(1)} />
           <Tab label='Nuevo beneficio' {...a11yProps(2)} />
         </Tabs>
       </AppBar>
-      <TabPanel value={value} index={0}>
+      <TabPanel  value={value} index={0}>
         <AdminPlans />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <NewPlanP />
+        <NewPlan />
       </TabPanel>
-      <TabPanel value={value} index={1}>
-        <NewBenefP />
+      <TabPanel value={value} index={2} >
+        <NewBenef />
       </TabPanel>
     </div>
   )
