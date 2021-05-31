@@ -9,6 +9,13 @@ import Box from '@material-ui/core/Box';
 import MedicsTable from './MedicsTable';
 import FormSpecialities from '../Speciality/FormSpecialities';
 
+//----FALTA CORREGIR
+/*
+1-ubicar tabla paralela linea tab izquierda
+2-cambiar de lugar boton agregar medico
+3-quitarle el fondo a las tab y resaltar las seleccionadas
+
+*/
 function TabPanel(props) {
     const { children, value, index } = props;
 
@@ -20,7 +27,7 @@ function TabPanel(props) {
             aria-labelledby={`wrapped-tab-${index}`}
         >
             {value === index && (
-                <Box p={3}>
+                <Box p={3} padding='2px 2px 2px 0px'>
                     <Typography>{children}</Typography>
                 </Box>
             )}
@@ -43,18 +50,39 @@ function a11yProps(index) {
 
 const useStyles = makeStyles(() => ({
     root: {
-        alignItems: 'center',
+        width:'100%',
+        margin:'0px',
+        padding:'0px 0px 0px 0px',
+        alignItems: 'left',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-around',
+        backgroundColor: '#ffffff',
     },
     tab: {
+        width:'100%',
+        margin:'0px',
+        padding:'0px',
+        color:'#212121',
         position: 'relative',
-        alignItems: 'center',
-        backgroundColor: '#4ca1a3',
+        alignItems: 'left',
+        backgroundColor: '#fafafa',
         display: 'flex',
         justifyContent: 'center',
+        overflow:'auto'
     },
+    prueba:{
+        backgroundColor: '#ffffff',
+        
+        //backgroundColor: 'rgb(217 222 222 / 56%)',
+        margin:'0px',
+        padding:'0px',
+        boxShadow:'none'
+    },
+    prueba2:{
+        backgroundColor: 'rgb(112, 193, 189)',
+        fontWeight:'bold'
+    }
 }));
 
 export default function AdminMedicTabs() {
@@ -68,16 +96,17 @@ export default function AdminMedicTabs() {
     return (
         <div className={classes.root}>
             <AppBar bgcolor='background.paper' className={classes.tab}>
-                <Tabs
+                <Tabs 
+                    className={classes.prueba}
                     value={value}
                     onChange={handleChange}
                     aria-label='simple tabs example'
                 >
-                    <Tab label='Medicos' {...a11yProps(0)} />
-                    <Tab label='Especialidades' {...a11yProps(1)} />
+                    <Tab label='Medicos' {...a11yProps(0) } className={classes.prueba2}/>
+                    <Tab label='Especialidades' {...a11yProps(1)} className={classes.prueba2}/>
                 </Tabs>
             </AppBar>
-            <TabPanel value={value} index={0}>
+            <TabPanel value={value} index={0} >
                 <MedicsTable />
             </TabPanel>
             <TabPanel value={value} index={1}>

@@ -14,7 +14,6 @@ const FormUsers = () => {
 
     useEffect(() => {
         dispatch(getAllUsers());
-        //eslint-disable-next-line
     }, []);
 
     useEffect(() => {
@@ -26,19 +25,19 @@ const FormUsers = () => {
     // }, [filter]);
 
     const handleFilter = (filterList) => {
-        console.log('pase por form user', filterList);
+        //console.log('pase por form user', filterList);
         if (filterList === 'reset') setRows(users);
         else setRows(filterList);
+        
     };
 
     //
     return (
         <div>
-            <h2>Users</h2>
             {rows.length === 0 ? (
                 <CircularProgress />
             ) : (
-                <TableUsers rows={rows} handleFilter={handleFilter} />
+                <TableUsers rows={rows} allUsers={users} handleFilter={handleFilter} />
             )}
         </div>
     );

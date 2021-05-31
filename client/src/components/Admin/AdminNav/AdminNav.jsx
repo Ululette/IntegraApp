@@ -53,12 +53,14 @@ const drawerWidth = 260;
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
+        
     },
     drawer: {
         [theme.breakpoints.up('sm')]: {
             width: drawerWidth,
             flexShrink: 0,
         },
+        
     },
     appBar: {
         [theme.breakpoints.up('sm')]: {
@@ -72,6 +74,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: '10rem',
         height: '75px',
         backgroundColor: '#00897b',
+        zIndex:'2000'
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -87,7 +90,7 @@ const useStyles = makeStyles((theme) => ({
     },
     content: {
         flexGrow: 1,
-        padding: theme.spacing(3),
+        padding: '12px 0px 0px 0px',
     },
 }));
 

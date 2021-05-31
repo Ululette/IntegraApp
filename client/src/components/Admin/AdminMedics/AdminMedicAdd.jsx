@@ -18,6 +18,13 @@ import withReactContent from 'sweetalert2-react-content';
 const useStyles = makeStyles((theme) => ({
     fab: {
         margin: theme.spacing(2),
+        backgroundColor: '#2c7f7b',
+        fontSize:'35px',
+        border:'3px solid #2c7f7b',
+        '&:hover':{
+            backgroundColor: '#2c7f7b',
+            border:'3px solid #fafafa'
+        }
     },
     absolute: {
         position: 'absolute',
