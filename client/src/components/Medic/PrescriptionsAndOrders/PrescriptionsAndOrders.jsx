@@ -123,10 +123,13 @@ export default function PrescriptionsAndOrders() {
         <div className={classes.root}>
             <div className={classes.formControl}>
                 <FormControl className={classes.selectEmpty}>
+                <InputLabel htmlFor='demo-simple-select-label'>
+                                Selección
+                            </InputLabel>
                     <Select
                         variant='outlined'
                         labelId='demo-simple-select-label'
-                        id='demo-simple-select'
+                        id='demo-simple-select-label'
                         value={query.selection}
                         onChange={handleChange}
                         name='selection'
@@ -136,11 +139,13 @@ export default function PrescriptionsAndOrders() {
                     </Select>
                 </FormControl>
                 <FormControl className={classes.selectEmpty}>
+                <InputLabel htmlFor='demo-simple-select-label-1'>
+                                Paciente
+                            </InputLabel>
                     <Select
                         variant='outlined'
-                        label='Paciente'
-                        labelId='demo-simple-select-label'
-                        id='demo-simple-select'
+                        labelId='demo-simple-select-label-1'
+                        id='demo-simple-select-label-1'
                         value={name}
                         onChange={handleChangeName}
                         name='name'
