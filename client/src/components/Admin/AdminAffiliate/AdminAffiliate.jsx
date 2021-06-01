@@ -34,6 +34,7 @@ import AddIcon from '@material-ui/icons/Add';
 import blue from '@material-ui/core/colors/blue';
 import List from '@material-ui/core/List';
 import ListItemText from '@material-ui/core/ListItemText';
+import { useForm } from 'react-hook-form';
 
 import { statesAff } from '../../../functions/states';
 import { getAffiliates, getPlans } from '../../../actions/getter.action.js';
@@ -383,17 +384,24 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function AdminAffiliate({ firebase }) {
+function AdminAffiliate() {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [page, setPage] = React.useState(0);
+    const [maxId, setMaxId] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [open, setOpen] = React.useState({
         edit: false,
         delete: false,
         add: false,
     });
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm();
     const [inputFilters, setInputFilters] = React.useState({
         select: '',
         text: '',
@@ -415,13 +423,27 @@ function AdminAffiliate({ firebase }) {
         state: '',
     });
 
+    const maxIdPartners = async () => {
+        const { data: id } = await supabase
+            .from('partners')
+            .select('id')
+            .order('id', { ascending: false });
+        setMaxId(id[0].id + 1);
+    };
+
+    useEffect(() => {
+        dispatch(getPlans());
+        maxIdPartners();
+        //eslint-disable-next-line
+    }, []);
+
     const [inputAdd, setInputAdd] = React.useState({
         dni: '',
         lastname: '',
         name: '',
         titular: '',
         familyBond: '',
-        familyGroup: '',
+        familyGroup: maxId,
         contact: '',
         email: '',
         birthdate: '',
@@ -430,16 +452,13 @@ function AdminAffiliate({ firebase }) {
         plan: '',
     });
 
+    const onSubmit = (data) => console.log(data);
+
     const allAffiliates = useSelector(
         (state) => state.affiliates.allAffiliates
     );
     const allPlans = useSelector((state) => state.plans.allPlans);
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(getPlans());
-        //eslint-disable-next-line
-    }, []);
 
     useEffect(() => {
         dispatch(getAffiliates());
@@ -601,7 +620,17 @@ function AdminAffiliate({ firebase }) {
     const handleChangeAdd = (e) => {
         const name = e.target.name;
         const value = e.target.value;
-        setInputAdd({ ...inputAdd, [name]: value });
+        const id = e.target.id;
+        const regex = /^[0-9\b]+$/; // this regex is to accept only numbers
+        if (id === 'dni') {
+            if ((value === '' || regex.test(value)) && value.length <= 8)
+                setInputAdd({
+                    ...input,
+                    dni: value,
+                });
+        } else {
+            setInputAdd({ ...inputAdd, [name]: value });
+        }
     };
 
     const handleOpenDialogAdd = () => {
@@ -623,6 +652,7 @@ function AdminAffiliate({ firebase }) {
     };
 
     const handleAdd = async () => {
+        handleClose('add');
         const { error: errorAddAffiliate } = await supabase
             .from('partners')
             .insert([
@@ -654,7 +684,6 @@ function AdminAffiliate({ firebase }) {
             text: `Socio con DNI ${inputAdd.dni} y nombre/s apellido/s ${inputAdd.name} ${inputAdd.lastname} se agrego con exito.`,
             icon: 'success',
         });
-        handleClose('add');
     };
 
     if (rows.length === 0) return <CircularProgress />;
@@ -715,6 +744,7 @@ function AdminAffiliate({ firebase }) {
                                     onChange={handleChangeFilters}
                                     value={inputFilters.select}
                                     variant='outlined'
+                                    defaultValue='dni'
                                 >
                                     <MenuItem value='dni'>DNI</MenuItem>
                                     <MenuItem value='age'>Edad</MenuItem>
@@ -979,14 +1009,7 @@ function AdminAffiliate({ firebase }) {
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                 />
             </Paper>
-            {/* <Fab
-                onClick={handleOpenDialogAdd}
-                color='primary'
-                aria-label='add'
-                className={styles.addButton}
-            >
-                <AddIcon />
-            </Fab> */}
+
             <div>
                 <Dialog
                     open={open.edit}
@@ -1231,6 +1254,7 @@ function AdminAffiliate({ firebase }) {
                             autoFocus
                             margin='dense'
                             name='dni'
+                            id='dni'
                             label='DNI'
                             type='number'
                             value={inputAdd.dni}
@@ -1258,16 +1282,21 @@ function AdminAffiliate({ firebase }) {
                             onChange={handleChangeAdd}
                             fullWidth
                         />
-                        <TextField
+                        <InputLabel>¿Es titular?</InputLabel>
+                        <Select
+                            className={styles.filtersSelect}
                             autoFocus
-                            value={inputAdd.titular}
                             margin='dense'
-                            name='titular'
                             label='Titular'
                             type='text'
-                            onChange={handleChangeAdd}
+                            name='titular'
+                            value={inputAdd.titular}
                             fullWidth
-                        />
+                            onChange={handleChangeAdd}
+                        >
+                            <MenuItem value='true'>Si</MenuItem>
+                            <MenuItem value='false'>No</MenuItem>
+                        </Select>
                         <TextField
                             autoFocus
                             value={inputAdd.familyBond}
@@ -1285,6 +1314,7 @@ function AdminAffiliate({ firebase }) {
                             name='familyGroup'
                             label='Grupo Familiar'
                             type='number'
+                            placeholder={`Recomendado: ${maxId}`}
                             onChange={handleChangeAdd}
                             fullWidth
                         />
@@ -1320,17 +1350,21 @@ function AdminAffiliate({ firebase }) {
                                 shrink: true,
                             }}
                         />
-                        <TextField
-                            name='gender'
+                        <InputLabel>Genero</InputLabel>
+                        <Select
+                            className={styles.filtersSelect}
+                            autoFocus
+                            margin='dense'
                             label='Genero'
                             type='text'
                             value={inputAdd.gender}
+                            name='gender'
                             onChange={handleChangeAdd}
-                            className={classes.textField}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
+                        >
+                            <MenuItem value='hombre'>Hombre</MenuItem>
+                            <MenuItem value='mujer'>Mujer</MenuItem>
+                            <MenuItem value='otro'>Otro</MenuItem>
+                        </Select>
                         <InputLabel htmlFor='state'>Estado</InputLabel>
                         <Select
                             className={styles.filtersSelect}

@@ -45,11 +45,11 @@
 }
 
 .bg_blue {
-    background-color: #6200ea;
+    background-color: #8b38ff;
 }
 
 .bg_yellow {
-    background-color: #ffc107;
+    background-color: #ffd34f;
 }
 
 .bg_red {
@@ -57,7 +57,7 @@
 }
 
 .bg_purple {
-    background-color: #9c27b0;
+    background-color: #a64fb6;
 }
 
 .bg_black {
@@ -128,7 +128,7 @@
     width: 95%;
     height: 75px;
     padding: 0 20px;
-    background: linear-gradient(60deg, rgb(218, 0, 0), rgb(218, 0, 0));
+    background: linear-gradient(60deg, #e26363, #ca5d5d);
     background-color: rgb(218, 0, 0);
     border-radius: 3px;
     box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%),
@@ -174,8 +174,8 @@
     width: 95%;
     height: 75px;
     padding: 0 20px;
-    background: linear-gradient(60deg, rgb(253, 149, 12), rgb(255, 182, 87));
-    background-color: rgb(253, 149, 12);
+    background: linear-gradient(60deg, #00897b, #009788);
+    background-color: #00897b;
     border-radius: 3px;
     box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%),
         0 7px 10px -5px rgb(218 0 0 / 40%);
