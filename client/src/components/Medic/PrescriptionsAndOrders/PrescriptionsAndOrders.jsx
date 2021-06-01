@@ -17,8 +17,6 @@ import {
     TableRow,
     TextField,
 } from '@material-ui/core';
-import './PrescriptionsAndOrder.module.css'
-import Swal from 'sweetalert2';
 
 const useStyles = makeStyles((theme) => ({
     title2: {
@@ -133,7 +131,6 @@ export default function PrescriptionsAndOrders() {
                         onChange={handleChange}
                         name='selection'
                     >
-                        <MenuItem value='selecionar' aria-label='None' />
                         <MenuItem value='orders'>Ordenes</MenuItem>
                         <MenuItem value='prescriptions'>Recetas</MenuItem>
                     </Select>
@@ -141,6 +138,7 @@ export default function PrescriptionsAndOrders() {
                 <FormControl className={classes.selectEmpty}>
                     <Select
                         variant='outlined'
+                        label='Paciente'
                         labelId='demo-simple-select-label'
                         id='demo-simple-select'
                         value={name}
@@ -167,7 +165,7 @@ export default function PrescriptionsAndOrders() {
             </div>
             <div style={{ display: 'flex' }} >
                 <TableContainer component={Paper} className={classes.paper}>
-                    <h3 className={classes.title2}>Recetas y ordenes</h3>
+                    <h3 className={classes.title2}>{query.selection === 'orders' ? 'Ordenes' : 'Recetas'}</h3>
                     <Table className={classes.table} aria-label='simple table'>
                         <TableHead className={classes.title}>
                             <TableRow>
