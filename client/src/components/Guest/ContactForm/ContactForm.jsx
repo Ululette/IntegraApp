@@ -369,7 +369,7 @@ function ContactForm() {
                             render='explicit'
                             verifyCallback={verifyCaptcha}
                         />
-                        <div>
+                        <div className={Styles.buttonSend}>
                             <Button
                                 variant='contained'
                                 color='primary'
@@ -393,7 +393,7 @@ function ContactForm() {
                             onClose={handleClose}
                         >
                             <Alert onClose={handleClose} severity='info'>
-                                Éste correo ya tiene una solicitud en proceso!
+                                Este correo ya tiene una solicitud en proceso!
                             </Alert>
                         </Snackbar>
                     </div>

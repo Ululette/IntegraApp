@@ -281,7 +281,10 @@ export default function LandingPage() {
                     <h1 data-aos='flip-down'>Estas a un solo paso</h1>
                     <h2 data-aos='flip-down'>de ser parte de Integra Salud</h2>
                 </div>
-                <ContactForm data-aos='zoom-in' />
+                <ContactForm
+                    data-aos='zoom-in'
+                    className={styles.contactForm}
+                />
             </section>
 
             <Fab className={`${classes.root} ${styles.chatbot}`}>

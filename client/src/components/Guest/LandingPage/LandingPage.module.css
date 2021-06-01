@@ -337,7 +337,7 @@
 
 .contactSection {
     width: 100%;
-    height: 90vh;
+    height: 110vh;
     background-color: #1c8383;
     color: white;
 }
@@ -345,13 +345,13 @@
 .titlesContact {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     font-size: 2.5rem;
     position: absolute;
     text-align: center;
     width: 100%;
-    margin-top: 3rem;
+    margin-top: 2rem;
 }
 
 /* The typing effect */

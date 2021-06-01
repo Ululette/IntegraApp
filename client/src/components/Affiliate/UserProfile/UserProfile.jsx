@@ -4,7 +4,7 @@ import supabase from '../../../supabase.config';
 import './UserProfile.css';
 import Swal from 'sweetalert2';
 import { Autocomplete } from '@material-ui/lab';
-import { Button, TextField } from '@material-ui/core';
+import { Button, StylesProvider, TextField } from '@material-ui/core';
 
 // Estilos usados en componentes de MUI.
 const useStyles = makeStyles({
@@ -82,9 +82,10 @@ export default function UserProfile() {
     // Al cargar la página por primera vez, se trae del localStorage
     // el dni del usuario y carga en user los datos que se trae
     // de la base de datos.
+    const userDni = JSON.parse(localStorage.getItem('userdata'));
     useEffect(() => {
-        let userDni = JSON.parse(localStorage.getItem('userdata')).dni;
-        fetchUserData(userDni);
+        fetchUserData(userDni.dni);
+        //eslint-disable-next-line
     }, []);
 
     // Función que calcula la edad en base a la F.Nac.
@@ -392,9 +393,14 @@ export default function UserProfile() {
                         <div className='input_info'>
                             <h1 className='title'>Mi Perfil</h1>
                             <div className='on_line_cont'>
-                                <div className='one_info_cont'>
-                                    <p className='profile_title'>Plan:</p>
-                                    <p className='profile_info'>{user.plan}</p>
+                                <div className='one_info_cont imgContainer'>
+                                    <img
+                                        src={`${userDni.avatar_url}`}
+                                        alt='Profile pic.'
+                                    />
+                                    <div className='changeImg'>
+                                        <p>Cambiar Imagen</p>
+                                    </div>
                                 </div>
                             </div>
                             <div className='on_line_cont'>
