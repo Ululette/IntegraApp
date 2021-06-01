@@ -28,7 +28,7 @@ function AdminHome() {
     const [planInfo, setPlanInfo] = useState('');
     const [admins, setAdmins] = useState('');
     const [authorizations, setAuthorizations] = useState('');
-    const [debtors, setDebtors] = useState('');
+    const [debtors, setDebtors] = useState([]);
 
     const fetchingData = async () => {
         const { data: numberAffiliates } = await supabase
@@ -92,7 +92,7 @@ function AdminHome() {
             .select(
                 'expiration_date, amount, payed, partners(dni, name, lastname)'
             )
-            // .lt('expiration_date', dateFormated)
+            .lt('expiration_date', dateFormated)
             .eq('payed', false);
         setDebtors(paymentsExpired);
 
@@ -151,16 +151,27 @@ function AdminHome() {
         },
     ];
 
-    const rows = debtors.map((el, index) => {
-        return {
-            id: index,
-            dni: el.partners.dni,
-            name: el.partners.name,
-            lastname: el.partners.lastname,
-            month: el.expiration_date,
-            debt: el.amount,
-        };
-    });
+    const rows = debtors
+        ? debtors.map((el, index) => {
+              return {
+                  id: index,
+                  dni: el.partners.dni,
+                  name: el.partners.name,
+                  lastname: el.partners.lastname,
+                  month: el.expiration_date,
+                  debt: el.amount,
+              };
+          })
+        : [
+              {
+                  id: 0,
+                  dni: '00000000',
+                  name: 'Ningun',
+                  lastname: 'afiliado',
+                  month: 'con',
+                  debt: 'deudas',
+              },
+          ];
 
     return (
         <div className={styles.container}>
@@ -174,7 +185,8 @@ function AdminHome() {
                         <article className={styles.description}>
                             <p>Ganancias mensuales</p>
                             <h3>
-                                $<CountUp end={planInfo} duration={10} />
+                                $
+                                <CountUp end={Number(planInfo)} duration={10} />
                             </h3>
                         </article>
                     </div>
@@ -189,7 +201,7 @@ function AdminHome() {
                             <p>Interesados a revisar</p>
                             <h3>
                                 <CountUp
-                                    end={affiliatesToRevision}
+                                    end={Number(affiliatesToRevision)}
                                     duration={5}
                                 />
                             </h3>
@@ -207,7 +219,10 @@ function AdminHome() {
                         <article className={styles.description}>
                             <p>Faltan enviar formulario</p>
                             <h3>
-                                <CountUp end={contactForm} duration={5} />
+                                <CountUp
+                                    end={Number(contactForm)}
+                                    duration={5}
+                                />
                             </h3>
                         </article>
                     </div>
@@ -221,7 +236,10 @@ function AdminHome() {
                         <article className={styles.description}>
                             <p>Socios que quieren la baja</p>
                             <h3>
-                                <CountUp end={downRequests} duration={5} />
+                                <CountUp
+                                    end={Number(downRequests)}
+                                    duration={5}
+                                />
                             </h3>
                         </article>
                     </div>
@@ -235,7 +253,10 @@ function AdminHome() {
                         <article className={styles.description}>
                             <p>Afiliados activos</p>
                             <h3>
-                                <CountUp end={activeAffiliates} duration={5} />
+                                <CountUp
+                                    end={Number(activeAffiliates)}
+                                    duration={5}
+                                />
                             </h3>
                         </article>
                     </div>
@@ -249,7 +270,7 @@ function AdminHome() {
                         <article className={styles.description}>
                             <p>Medicos activos</p>
                             <h3>
-                                <CountUp end={medics} duration={5} />
+                                <CountUp end={Number(medics)} duration={5} />
                             </h3>
                         </article>
                     </div>
@@ -263,7 +284,7 @@ function AdminHome() {
                         <article className={styles.description}>
                             <p>Administradores</p>
                             <h3>
-                                <CountUp end={admins} duration={5} />
+                                <CountUp end={Number(admins)} duration={5} />
                             </h3>
                         </article>
                     </div>

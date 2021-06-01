@@ -144,21 +144,21 @@ function AdminNav({ firebase, window: windowMui }) {
             .from('guest_contacts')
             .select('*')
             .eq('seen', false);
-        let { data: notificationsDowns } = await supabase
-            .from('familiar_downs_request')
-            .select('*')
-            .match({ status: 'pendiente', seen: false });
-        let { data: notificationsForms } = await supabase
-            .from('medical_records')
-            .select('*, partners(name, lastname)')
-            .eq('seen', false);
+        // let { data: notificationsDowns } = await supabase
+        //     .from('familiar_downs_request')
+        //     .select('*')
+        //     .match({ status: 'pendiente', seen: false });
+        // let { data: notificationsForms } = await supabase
+        //     .from('medical_records')
+        //     .select('*, partners(name, lastname)')
+        //     .eq('seen', false);
 
         setNotifications(
             []
                 .concat(
-                    notificationsGuest,
-                    notificationsDowns,
-                    notificationsForms
+                    notificationsGuest
+                    // notificationsDowns,
+                    // notificationsForms
                 )
                 .filter((el) => el !== null)
         );
@@ -189,6 +189,8 @@ function AdminNav({ firebase, window: windowMui }) {
             }
         });
     };
+
+    console.log(notifications);
 
     const drawer = (
         <div>
@@ -286,8 +288,7 @@ function AdminNav({ firebase, window: windowMui }) {
         await fetchNotifications();
     };
 
-    if (!userDataFirebase.data && notifications === '')
-        return <CircularProgress />;
+    if (notifications === '' || !notifications) return <CircularProgress />;
 
     return (
         <div className={classes.root}>
