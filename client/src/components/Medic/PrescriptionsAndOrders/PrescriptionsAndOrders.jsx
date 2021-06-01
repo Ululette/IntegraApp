@@ -1,6 +1,7 @@
+/* eslint-disable */
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux'
-import { getAffiliates } from '../../../actions/getter.action'
+import { useDispatch, useSelector } from 'react-redux';
+import { getAffiliates } from '../../../actions/getter.action';
 import supabase from '../../../supabase.config';
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import {
@@ -26,12 +27,12 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 'bold',
         fontSize: '1.4rem',
         color: '#fafafa',
-        textAlign: 'center'
+        textAlign: 'center',
     },
     title: {
         color: '#212121',
         fontWeight: 'bold',
-        backgroundColor: lighten('#34a7a1', 0.6)
+        backgroundColor: lighten('#34a7a1', 0.6),
     },
     rowColor: {
         backgroundColor: lighten('#e0e0e0', 0.3),
@@ -60,8 +61,8 @@ const useStyles = makeStyles((theme) => ({
     },
     root: {
         top: theme.spacing(3),
-        width: '100%'
-    }
+        width: '100%',
+    },
 }));
 
 async function getData(query) {
@@ -71,7 +72,9 @@ async function getData(query) {
         console.log('queryParams', selection, param);
         const { data, error: dataError } = await supabase
             .from(selection)
-            .select(`*, medical_consultations(partner: partner_dni(name, lastname))`)
+            .select(
+                `*, medical_consultations(partner: partner_dni(name, lastname))`
+            )
             .ilike(`${column}`, `%${param}%`);
         data && console.log(data);
         dataError && console.log(dataError);
@@ -85,11 +88,16 @@ export default function PrescriptionsAndOrders() {
     const classes = useStyles();
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
-    const [filteredData, setFilteredData] = useState(data)
-    const [query, setQuery] = useState({ param: '', selection: 'prescriptions' });
-    const [name, setName] = useState('')
-    const partners = useSelector(state => state.affiliates.allAffiliates)
-    const allAffiliates = partners.filter(e => data.find(d => d.medical_consultations.partner.lastname == e.lastname))
+    const [filteredData, setFilteredData] = useState(data);
+    const [query, setQuery] = useState({
+        param: '',
+        selection: 'prescriptions',
+    });
+    const [name, setName] = useState('');
+    const partners = useSelector((state) => state.affiliates.allAffiliates);
+    const allAffiliates = partners.filter((e) =>
+        data.find((d) => d.medical_consultations.partner.lastname == e.lastname)
+    );
 
     const handleChange = (event) => {
         setQuery({ ...query, [event.target.name]: event.target.value });
@@ -97,10 +105,10 @@ export default function PrescriptionsAndOrders() {
 
     const handleChangeName = (event) => {
         setName(event.target.value);
-    }
+    };
 
     useEffect(() => {
-        dispatch(getAffiliates())
+        dispatch(getAffiliates());
         getData(query).then(
             (r) => setData(r),
             (err) => console.log(err)
@@ -108,24 +116,26 @@ export default function PrescriptionsAndOrders() {
     }, [query]);
 
     useEffect(() => {
-        setFilteredData(data)
+        setFilteredData(data);
     }, [data]);
-
 
     useEffect(() => {
         let newData = data;
-        if(name.length) newData = newData.filter(e => e.medical_consultations.partner.lastname == name);
-        if(!newData.length) newData = data;
-        setFilteredData(newData)
-    }, [name, data])
+        if (name.length)
+            newData = newData.filter(
+                (e) => e.medical_consultations.partner.lastname == name
+            );
+        if (!newData.length) newData = data;
+        setFilteredData(newData);
+    }, [name, data]);
 
     return (
         <div className={classes.root}>
             <div className={classes.formControl}>
                 <FormControl className={classes.selectEmpty}>
-                <InputLabel htmlFor='demo-simple-select-label'>
-                                Selección
-                            </InputLabel>
+                    <InputLabel htmlFor='demo-simple-select-label'>
+                        Selección
+                    </InputLabel>
                     <Select
                         variant='outlined'
                         labelId='demo-simple-select-label'
@@ -139,9 +149,9 @@ export default function PrescriptionsAndOrders() {
                     </Select>
                 </FormControl>
                 <FormControl className={classes.selectEmpty}>
-                <InputLabel htmlFor='demo-simple-select-label-1'>
-                                Paciente
-                            </InputLabel>
+                    <InputLabel htmlFor='demo-simple-select-label-1'>
+                        Paciente
+                    </InputLabel>
                     <Select
                         variant='outlined'
                         labelId='demo-simple-select-label-1'
@@ -151,7 +161,7 @@ export default function PrescriptionsAndOrders() {
                         name='name'
                     >
                         <MenuItem value='Paciente...' aria-label='None' />
-                        {allAffiliates.map(e => (
+                        {allAffiliates.map((e) => (
                             <MenuItem value={e.lastname}>{e.lastname}</MenuItem>
                         ))}
                     </Select>
@@ -161,15 +171,21 @@ export default function PrescriptionsAndOrders() {
                         onChange={handleChange}
                         name='param'
                         id='outlined-basic'
-                        label={query.selection === 'orders' ? 'Estudio...' : 'Medicamento...'}
+                        label={
+                            query.selection === 'orders'
+                                ? 'Estudio...'
+                                : 'Medicamento...'
+                        }
                         variant='outlined'
                         className={classes.selectEmpty}
                     />
                 </FormControl>
             </div>
-            <div style={{ display: 'flex' }} >
+            <div style={{ display: 'flex' }}>
                 <TableContainer component={Paper} className={classes.paper}>
-                    <h3 className={classes.title2}>{query.selection === 'orders' ? 'Ordenes' : 'Recetas'}</h3>
+                    <h3 className={classes.title2}>
+                        {query.selection === 'orders' ? 'Ordenes' : 'Recetas'}
+                    </h3>
                     <Table className={classes.table} aria-label='simple table'>
                         <TableHead className={classes.title}>
                             <TableRow>
@@ -185,35 +201,52 @@ export default function PrescriptionsAndOrders() {
                                         ? 'Estudio'
                                         : 'Medicamento'}
                                 </TableCell>
-                                {query.selection === 'orders' ? <TableCell align='left'>Estado</TableCell> : null}
+                                {query.selection === 'orders' ? (
+                                    <TableCell align='left'>Estado</TableCell>
+                                ) : null}
                                 <TableCell align='left'>Paciente</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {filteredData.length > 0 ? filteredData.map((row, index) => (
-                                <TableRow key={row.name} className={index % 2 === 1 ? classes.rowColor : null}>
-                                    <TableCell component='th' scope='row'>
-                                        {row.id}
-                                    </TableCell>
-                                    <TableCell align='left'>
-                                        {row.medical_consultation_id}
-                                    </TableCell>
-                                    <TableCell align='left'>
-                                        {row.date}
-                                    </TableCell>
-                                    <TableCell align='left'>
-                                        {query.selection === 'orders'
-                                            ? row.study_name
-                                            : row.drug_name}
-                                    </TableCell>
-                                    {query.selection === 'orders' ? <TableCell align='left'>
-                                        {row.status}
-                                    </TableCell> : null}
-                                    <TableCell align='left'>
-                                        {row.medical_consultations.partner.name + ' ' + row.medical_consultations.partner.lastname}
-                                    </TableCell>
-                                </TableRow>
-                            )) : null}
+                            {filteredData.length > 0
+                                ? filteredData.map((row, index) => (
+                                      <TableRow
+                                          key={row.name}
+                                          className={
+                                              index % 2 === 1
+                                                  ? classes.rowColor
+                                                  : null
+                                          }
+                                      >
+                                          <TableCell component='th' scope='row'>
+                                              {row.id}
+                                          </TableCell>
+                                          <TableCell align='left'>
+                                              {row.medical_consultation_id}
+                                          </TableCell>
+                                          <TableCell align='left'>
+                                              {row.date}
+                                          </TableCell>
+                                          <TableCell align='left'>
+                                              {query.selection === 'orders'
+                                                  ? row.study_name
+                                                  : row.drug_name}
+                                          </TableCell>
+                                          {query.selection === 'orders' ? (
+                                              <TableCell align='left'>
+                                                  {row.status}
+                                              </TableCell>
+                                          ) : null}
+                                          <TableCell align='left'>
+                                              {row.medical_consultations.partner
+                                                  .name +
+                                                  ' ' +
+                                                  row.medical_consultations
+                                                      .partner.lastname}
+                                          </TableCell>
+                                      </TableRow>
+                                  ))
+                                : null}
                         </TableBody>
                     </Table>
                 </TableContainer>
