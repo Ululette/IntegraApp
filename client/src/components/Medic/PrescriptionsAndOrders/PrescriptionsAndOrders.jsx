@@ -117,7 +117,7 @@ export default function PrescriptionsAndOrders() {
         if(name.length) newData = newData.filter(e => e.medical_consultations.partner.lastname == name);
         if(!newData.length) newData = data;
         setFilteredData(newData)
-    }, [name])
+    }, [name, data])
 
     return (
         <div className={classes.root}>
