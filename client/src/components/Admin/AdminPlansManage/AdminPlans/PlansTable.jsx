@@ -1,27 +1,26 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { lighten, makeStyles } from "@material-ui/core/styles";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
-  TableSortLabel,
-  Toolbar,
-  Typography,
-  Paper,
-  Tooltip,
-  FormControlLabel,
-  Switch,
-} from "@material-ui/core";
-
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
+import TableSortLabel from "@material-ui/core/TableSortLabel";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import Paper from "@material-ui/core/Paper";
+import Tooltip from "@material-ui/core/Tooltip";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 import CreateIcon from "@material-ui/icons/Create";
 import { Button } from "@material-ui/core";
+
+import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -50,15 +49,22 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
+  { id: "action", numeric: false, disablePadding: false, label: "Acciones" },
   {
     id: "name",
     numeric: false,
     disablePadding: true,
     label: "Nombre",
   },
-  { id: "price", numeric: true, disablePadding: false, label: "Importe" },
-  { id: "detail", numeric: false, disablePadding: false, label: "Detalle" },
-  { id: "action", numeric: false, disablePadding: false, label: "Acción" },
+  { id: "price", numeric: true, disablePadding: false, label: "Precio" },
+  { id: "detail", numeric: false, disablePadding: false, label: "Detalles" },
+  {
+    id: "users",
+    numeric: false,
+    disablePadding: false,
+    label: "Usuarios con este plan",
+  },
+  { id: "state", numeric: true, disablePadding: false, label: "Estado" },
 ];
 
 function EnhancedTableHead(props) {
@@ -114,13 +120,13 @@ const useToolbarStyles = makeStyles((theme) => ({
   highlight:
     theme.palette.type === "light"
       ? {
-        color: theme.palette.secondary.main,
-        backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-      }
+          color: theme.palette.secondary.main,
+          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+        }
       : {
-        color: theme.palette.text.primary,
-        backgroundColor: theme.palette.secondary.dark,
-      },
+          color: theme.palette.text.primary,
+          backgroundColor: theme.palette.secondary.dark,
+        },
   title: {
     flex: "1 1 100%",
   },
@@ -137,7 +143,7 @@ const EnhancedTableToolbar = (props) => {
         component="div"
         align="center"
       >
-        Planes
+        Plans
       </Typography>
     </Toolbar>
   );
@@ -176,6 +182,7 @@ export default function PlansTable({
   handleOpenModalModify,
   handleOpenModalDelete,
   handleOpenModalDetails,
+  handleOpenModalState,
 }) {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
@@ -245,6 +252,38 @@ export default function PlansTable({
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
                     <TableRow>
+                      <TableCell padding="default">
+                        <Tooltip
+                          title="Editar plan"
+                          onClick={() => handleOpenModalModify(row)}
+                        >
+                          <CreateIcon />
+                        </Tooltip>
+                        {row.active ? (
+                          <Tooltip
+                            title="Desactivar"
+                            aria-label="deactivate"
+                            onClick={() => handleOpenModalState(row)}
+                          >
+                            <PowerSettingsNewIcon />
+                          </Tooltip>
+                        ) : (
+                          <Tooltip
+                            title="Activar"
+                            aria-label="activate"
+                            onClick={() => handleOpenModalState(row)}
+                          >
+                            <PowerSettingsNewIcon />
+                          </Tooltip>
+                        )}
+                        <Tooltip
+                          title="Eliminar plan"
+                          aria-label="delete"
+                          onClick={() => handleOpenModalDelete(row)}
+                        >
+                          <DeleteIcon />
+                        </Tooltip>
+                      </TableCell>
                       <TableCell
                         component="th"
                         id={labelId}
@@ -263,20 +302,10 @@ export default function PlansTable({
                           Ver
                         </Button>
                       </TableCell>
+                      <TableCell padding="default">{row.users}</TableCell>
+
                       <TableCell padding="default">
-                        <Tooltip
-                          title="Editar plan"
-                          onClick={() => handleOpenModalModify(row)}
-                        >
-                          <CreateIcon />
-                        </Tooltip>
-                        <Tooltip
-                          title="Eliminar plan"
-                          aria-label="delete"
-                          onClick={() => handleOpenModalDelete(row)}
-                        >
-                          <DeleteIcon />
-                        </Tooltip>
+                        {row.active ? "Activo" : "Inactivo"}
                       </TableCell>
                     </TableRow>
                   );

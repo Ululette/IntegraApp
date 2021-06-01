@@ -1,25 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { getPlans, getBenefits } from '../../../../actions/getter.action.js';
-import { CircularProgress } from '@material-ui/core';
-import 'firebase/auth';
-import styles from './AdminPlans.module.css';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getPlans, getBenefits } from "../../../../actions/getter.action.js";
+import { CircularProgress } from "@material-ui/core";
+import "firebase/auth";
+import styles from "./AdminPlans.module.css";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 // Table
 
-import PlansTable from './PlansTable.jsx';
+import PlansTable from "./PlansTable.jsx";
 
 // Supa
 
-import supabase from '../../../../supabase.config';
+import supabase from "../../../../supabase.config";
 
 // Pop ups
 
-import ModifyPlan from './ModifyPlan.jsx';
-import PlanDetails from './PlanDetails.jsx';
-import DeletePlan from './DeletePlan';
+import ModifyPlan from "./ModifyPlan.jsx";
+import PlanDetails from "./PlanDetails.jsx";
+import DeletePlan from "./DeletePlan.jsx";
+import PlanState from "./PlanState.jsx";
 
 function AdminPlans({ firebase }) {
   const allPlans = useSelector((state) => state.plans.allPlans);
@@ -33,41 +34,62 @@ function AdminPlans({ firebase }) {
     //eslint-disable-next-line
   }, []);
 
+  useEffect(() => {
+    prueba();
+  }, [allPlans]);
+
   const [openModify, setOpenModify] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [openDetails, setOpenDetails] = useState(false);
+  const [openState, setOpenState] = useState(false);
   const [deletePlan, setDeletePlan] = useState({
-    id_plan: '',
-    name: '',
-    price: '',
+    id_plan: "",
+    name: "",
+    price: "",
     benefits: [],
   });
   const [planDetail, setPlanDetail] = useState({
-    id_plan: '',
-    name: '',
-    price: '',
+    id_plan: "",
+    name: "",
+    price: "",
     benefits: [],
   });
   const [modalPlan, setModalPlan] = useState({
-    id_plan: '',
-    name: '',
-    price: '',
+    id_plan: "",
+    name: "",
+    price: "",
     benefits: [],
   });
-  const [password, setPassword] = useState({ password: '', error: false });
-
-  const plansForTable = [];
-
-  allPlans.forEach((plan) => {
-    plansForTable.push({
-      id: 'name',
-      id_plan: plan.id,
-      name: plan.name,
-      price: plan.price,
-      benefits: plan.benefits,
-      description: plan.description,
-    });
+  const [planState, setPlanState] = useState({
+    id_plan: "",
+    active: false,
   });
+
+  const [password, setPassword] = useState({ password: "", error: false });
+
+  const [plansForTable, setPlansForTable] = useState([]);
+
+  const prueba = async () => {
+    const plans = [];
+
+    for (const plan of allPlans) {
+      const { data, error, count } = await supabase
+        .from("partners")
+        .select("plan_id", { count: "exact" })
+        .eq("plan_id", plan.id);
+      plans.push({
+        id: "name",
+        id_plan: plan.id,
+        name: plan.name,
+        price: plan.price,
+        benefits: plan.benefits,
+        description: plan.description,
+        active: plan.active,
+        users: count,
+      });
+    }
+    setPlansForTable(plans);
+  };
 
   // Modals open
 
@@ -87,6 +109,7 @@ function AdminPlans({ firebase }) {
       name: plan.name,
       price: plan.price,
       benefits: plan.benefits,
+      users: plan.users,
     });
     setOpenDelete(true);
   };
@@ -101,6 +124,14 @@ function AdminPlans({ firebase }) {
     setOpenDetails(true);
   };
 
+  const handleOpenModalState = (plan) => {
+    setPlanState({
+      id_plan: plan.id_plan,
+      active: plan.active,
+    });
+    setOpenState(true);
+  };
+
   // Modals close
 
   const handleCloseModalModify = () => {
@@ -108,12 +139,16 @@ function AdminPlans({ firebase }) {
   };
 
   const handleCloseModalDelete = () => {
-    setPassword({ password: '', error: false });
+    setPassword({ password: "", error: false });
     setOpenDelete(false);
   };
 
   const handleCloseModalDetails = () => {
     setOpenDetails(false);
+  };
+
+  const handleCloseModalState = () => {
+    setOpenState(false);
   };
 
   // Modify Modal Field Changes
@@ -129,52 +164,87 @@ function AdminPlans({ firebase }) {
   // Submits
 
   const handleSubmitModify = async (e) => {
-    const { data, error } = await supabase
-      .from('plans')
+    e.preventDefault();
+    let flag = false;
+    let benefitsArray = [];
+    for (const benefit of modalPlan.benefits) {
+      benefitsArray.push({
+        plan_id: modalPlan.id_plan,
+        benefit_id: benefit.id,
+      });
+    }
+    const { data: planData, error: planError } = await supabase
+      .from("plans")
       .update({ name: e.target[0].value, price: e.target[1].value })
-      .eq('id', modalPlan.id_plan);
-    console.log(data);
-    console.log(error);
+      .eq("id", modalPlan.id_plan);
+
+    if (benefitsArray.length !== 0 && benefitsArray[0].benefit_id) {
+      const { data: benefitsData, error: benefitsError } = await supabase
+        .from("plans_benefits")
+        .delete()
+        .eq("plan_id", modalPlan.id_plan);
+      const { data, error } = await supabase
+        .from("plans_benefits")
+        .insert(benefitsArray);
+    } else {
+      if (benefitsArray.length === 0) {
+        flag = true;
+      }
+    }
+
     handleCloseModalModify();
+    if (flag) {
+      MySwal.fire({
+        title: "El plan debe tener al menos 1 beneficio",
+        icon: "error",
+      });
+    } else {
+      MySwal.fire({
+        title: "Se modificó el plan con exito!.",
+        icon: "success",
+      }).then(() => window.location.reload());
+    }
   };
 
   const handleSubmitDelete = async (e, id) => {
+    console.log(id);
     e.preventDefault();
-    MySwal.fire({
-      title: 'Desea eliminar el plan? Esta accion no es reversible.',
-      icon: 'question',
-      showCloseButton: true,
-      showCancelButton: true,
-    }).then(async (res) => {
-      if (res.isConfirmed) {
-        try {
-          let userData = JSON.parse(localStorage.getItem('userdata'));
-          await firebase
-            .auth()
-            .signInWithEmailAndPassword(
-              userData.email,
-              e.target[0].value
-            );
-          setPassword({ password: '', error: false });
-          handleCloseModalDelete();
-          MySwal.fire({
-            title: 'Se elimino el plan con exito!.',
-            icon: 'success',
-          }).then(() => window.location.reload());
-        } catch (error) {
-          setPassword({ password: '', error: true });
-          console.log(error);
-        }
-      }
-    });
+    try {
+      let userData = JSON.parse(localStorage.getItem("userdata"));
+      await firebase
+        .auth()
+        .signInWithEmailAndPassword(userData.email, e.target[0].value);
+      setPassword({ password: "", error: false });
+      const { data: deleteBenefits, error: errorBenefits } = await supabase
+        .from("plans_benefits")
+        .delete()
+        .eq("plan_id", id);
+      const { data: deletePlan, error: errorPlan } = await supabase
+        .from("plans")
+        .delete()
+        .eq("id", id);
+      handleCloseModalDelete();
+      MySwal.fire({
+        title: "Se elimino el plan con exito!.",
+        icon: "success",
+      }).then(() => window.location.reload());
+    } catch (error) {
+      setPassword({ password: "", error: true });
+      handleCloseModalDelete();
+      MySwal.fire({
+        title: "Contraseña Incorrecta",
+        icon: "error",
+      });
+    }
   };
 
-  if (allPlans.length === 0) return <CircularProgress />;
+  if (allPlans.length === 0 || plansForTable.length === 0)
+    return <CircularProgress />;
 
   return (
     <div
       className={styles.container}
-      style={{ filter: openModify || openDelete ? 'blur(4px)' : 'none' }} // PARA PONER EL FONDO BLURRY
+      style={{ filter: openModify || openDelete ? "blur(4px)" : "none" }} // PARA PONER EL FONDO BLURRY
     >
       <section className={styles.plansContainer}>
         <PlansTable
@@ -182,6 +252,7 @@ function AdminPlans({ firebase }) {
           handleOpenModalModify={handleOpenModalModify}
           handleOpenModalDelete={handleOpenModalDelete}
           handleOpenModalDetails={handleOpenModalDetails}
+          handleOpenModalState={handleOpenModalState}
         />
       </section>
       <ModifyPlan
@@ -205,6 +276,11 @@ function AdminPlans({ firebase }) {
         planDetail={planDetail}
         handleCloseModal={handleCloseModalDetails}
         password={password}
+      />
+      <PlanState
+        open={openState}
+        planState={planState}
+        handleCloseModal={handleCloseModalState}
       />
     </div>
   );
