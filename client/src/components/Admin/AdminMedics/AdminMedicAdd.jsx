@@ -19,12 +19,12 @@ const useStyles = makeStyles((theme) => ({
     fab: {
         margin: theme.spacing(2),
         backgroundColor: '#2c7f7b',
-        fontSize:'35px',
-        border:'3px solid #2c7f7b',
-        '&:hover':{
+        fontSize: '35px',
+        border: '3px solid #2c7f7b',
+        '&:hover': {
             backgroundColor: '#2c7f7b',
-            border:'3px solid #fafafa'
-        }
+            border: '3px solid #fafafa',
+        },
     },
     absolute: {
         position: 'absolute',
@@ -41,37 +41,35 @@ const useStyles = makeStyles((theme) => ({
     },
     chip: {
         margin: theme.spacing(0.5),
-        backgroundColor:'#3db7b1',
-        color:'white',
-        fontWeight:'bold',
-        fontSize:'15px',
-        
+        backgroundColor: '#3db7b1',
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: '15px',
     },
-    popup:{
+    popup: {
         color: '#fafafa',
         backgroundColor: '#2c7f7b',
-        fontWeight:'bold',
-        fontSize:'30px'
+        fontWeight: 'bold',
+        fontSize: '30px',
     },
-    popupBtn:{
+    popupBtn: {
         color: '#fafafa',
         padding: theme.spacing(0.5),
         border: '3px solid #2c7f7b',
-        borderRadius:'5px',
-        backgroundColor:'#2c7f7b',
-        fontWeight:'bold',
-        fontSize:'15px',
-        '&:hover':{
-            backgroundColor:'#fafafa',
-            color:'#2c7f7b',
+        borderRadius: '5px',
+        backgroundColor: '#2c7f7b',
+        fontWeight: 'bold',
+        fontSize: '15px',
+        '&:hover': {
+            backgroundColor: '#fafafa',
+            color: '#2c7f7b',
             padding: theme.spacing(0.5),
-        }
+        },
     },
-    select:{
-        width:'177px',
-        textTransform:'capitalize',
-    }
-
+    select: {
+        width: '177px',
+        textTransform: 'capitalize',
+    },
 }));
 
 const resetInputs = {
@@ -197,8 +195,10 @@ function AdminMedicAdd({ medicSpecialities }) {
                 </Fab>
             </Tooltip>
             <Dialog open={open} onClose={handleClose} onSubmit={handleSubmit}>
-                <DialogTitle className={classes.popup}>AGREGAR NUEVO MEDICO</DialogTitle>
-                <DialogContent >
+                <DialogTitle className={classes.popup}>
+                    AGREGAR NUEVO MEDICO
+                </DialogTitle>
+                <DialogContent>
                     <DialogContentText>
                         Ingrese los datos solicitados.
                     </DialogContentText>
@@ -276,14 +276,14 @@ function AdminMedicAdd({ medicSpecialities }) {
                     <InputLabel htmlFor='specialityA'>
                         Especialidades
                     </InputLabel>
-                    <Select 
+                    <Select
                         className={classes.select}
-                        name='specialities' onChange={handleChipAdd}
+                        name='specialities'
+                        onChange={handleChipAdd}
                         inputProps={{
                             style: { width: '177px' },
                         }}
-                        
-                        >
+                    >
                         {medicSpecialities.map((el, index) => (
                             <MenuItem
                                 key={`speciality-${index}`}
@@ -300,7 +300,6 @@ function AdminMedicAdd({ medicSpecialities }) {
                                     className={classes.chip}
                                     label={data}
                                     onDelete={() => handleChipDelete(data)}
-                                    className={classes.chip}
                                 />
                             </li>
                         ))}

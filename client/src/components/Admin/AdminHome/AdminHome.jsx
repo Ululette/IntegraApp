@@ -76,16 +76,14 @@ function AdminHome() {
         const rightNow = new Date();
         const monthFormated =
             String(rightNow.getMonth()).length === 1
-                ? `0${rightNow.getMonth()}`
-                : `${rightNow.getMonth()}`;
+                ? `0${rightNow.getMonth() + 1}`
+                : `${rightNow.getMonth() + 1}`;
         const dayFormated =
             String(rightNow.getDate()).length === 1
                 ? `0${rightNow.getDate()}`
                 : `${rightNow.getDate()}`;
 
-        const dateFormated = `${rightNow.getFullYear()}/${monthFormated}/${dayFormated}`;
-
-        console.log(dateFormated);
+        const dateFormated = `${rightNow.getFullYear()}-${monthFormated}-${dayFormated}`;
 
         const { data: paymentsExpired } = await supabase
             .from('payments')
