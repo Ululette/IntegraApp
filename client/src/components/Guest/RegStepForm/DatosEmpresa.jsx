@@ -1,4 +1,11 @@
-import { TextField } from '@material-ui/core';
+import {
+    Checkbox,
+    FormControl,
+    FormControlLabel,
+    FormLabel,
+    InputLabel,
+    TextField,
+} from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import validator from './Validator.js';
 import * as styles from './DatosEmpresa.module.css';
@@ -9,6 +16,7 @@ const DatosEmpresa = () => {
     });
     const [textInputsNum, setTextInputsNum] = useState({
         company_phone: '',
+        company_cuit: '',
     });
     const [textInputsMix, setTextInputsMix] = useState({
         bussines_name: '',
@@ -41,6 +49,7 @@ const DatosEmpresa = () => {
             });
             setTextInputsNum({
                 company_phone: datosEmpresa.company_phone,
+                company_cuit: datosEmpresa.company_cuit,
             });
             setTextInputsMix({
                 bussines_name: datosEmpresa.bussines_name,
@@ -250,6 +259,20 @@ const DatosEmpresa = () => {
                             {...(errors.emailErrors.company_email && {
                                 error: errors.emailErrors.company_email,
                                 helperText: errors.emailErrors.company_email,
+                            })}
+                        />
+                    </div>
+                    <div className={styles.input}>
+                        <TextField
+                            name='company_cuit'
+                            label='CUIT'
+                            variant='outlined'
+                            value={textInputsNum.company_cuit}
+                            onChange={(e) => handleNumberChange(e)}
+                            onBlur={saveInLocalStorage}
+                            {...(errors.textNumErrors.company_cuit && {
+                                error: errors.textNumErrors.company_cuit,
+                                helperText: errors.textNumErrors.company_cuit,
                             })}
                         />
                     </div>

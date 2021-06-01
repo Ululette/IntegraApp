@@ -79,12 +79,7 @@ const Declaration = () => {
             [name]: value,
         });
     };
-    // const handleNum = (e) => {
-    //   let { name, value } = e.target;
-    //   validin(value,"number");
-    //   setInputNum({ [name]: value });
-    //   saveInLocalStorage()
-    // };
+
     const handleCheck = (e) => {
         setCheckInput({ ...checkInput, [e.target.name]: e.target.checked });
     };

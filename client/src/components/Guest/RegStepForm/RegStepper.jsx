@@ -157,6 +157,32 @@ export default function RegStepper() {
                     })
                     .shift().family_group + 1;
 
+            let idCompany = null;
+
+            const { data: companyData } = await supabase
+                .from('companies')
+                .select('id')
+                .eq('cuit', datosEmpresa.company_cuit);
+            console.log(companyData, 'companyData');
+
+            if (companyData.length === 0) {
+                const { data: newId, error: errorInsertCompany } =
+                    await supabase.from('companies').insert([
+                        {
+                            business_name: datosEmpresa.bussines_name,
+                            cuit: datosEmpresa.company_cuit,
+                            phone_number: datosEmpresa.company_phone,
+                            email: datosEmpresa.company_email,
+                        },
+                    ]);
+                console.log(errorInsertCompany, 'errorInsertCompany');
+                console.log(newId, 'newId');
+
+                idCompany = newId[0].id;
+            } else {
+                idCompany = companyData[0].id;
+            }
+
             await supabase.from('partners').insert([
                 {
                     dni: datosTitular.dni,
@@ -170,7 +196,7 @@ export default function RegStepper() {
                     state: 'revision pendiente',
                     email: datosTitular.email,
                     plan_id: 8,
-                    company_id: null,
+                    company_id: idCompany,
                     gender: datosTitular.gender,
                 },
             ]);
@@ -184,15 +210,6 @@ export default function RegStepper() {
                     partner_dni: datosTitular.dni,
                     department:
                         datosTitular.apartment && datosTitular.apartment,
-                },
-            ]);
-
-            await supabase.from('companies').insert([
-                {
-                    business_name: datosEmpresa.bussines_name,
-                    cuit: datosEmpresa.company_cuit,
-                    phone_number: datosEmpresa.company_phone,
-                    email: datosEmpresa.company_email,
                 },
             ]);
 
