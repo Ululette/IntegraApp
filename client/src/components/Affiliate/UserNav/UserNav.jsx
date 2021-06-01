@@ -389,6 +389,7 @@ function AdminNav({ firebase, window: windowMui }) {
                                 <img
                                     src={userData.avatar_url}
                                     alt='User profile pic.'
+                                    className={styles.profilePic}
                                 />
                             ) : (
                                 <AccountCircleIcon
@@ -435,7 +436,6 @@ function AdminNav({ firebase, window: windowMui }) {
                 </section>
             </AppBar>
             <nav className={classes.drawer} aria-label='mailbox folders'>
-                {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
                 <Hidden smUp implementation='css'>
                     <Drawer
                         container={container}
@@ -447,7 +447,7 @@ function AdminNav({ firebase, window: windowMui }) {
                             paper: classes.drawerPaper,
                         }}
                         ModalProps={{
-                            keepMounted: true, // Better open performance on mobile.
+                            keepMounted: true,
                         }}
                     >
                         {drawer}

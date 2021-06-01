@@ -34,8 +34,6 @@ import AddIcon from '@material-ui/icons/Add';
 import blue from '@material-ui/core/colors/blue';
 import List from '@material-ui/core/List';
 import ListItemText from '@material-ui/core/ListItemText';
-import { useForm } from 'react-hook-form';
-
 import { statesAff } from '../../../functions/states';
 import { getAffiliates, getPlans } from '../../../actions/getter.action.js';
 import calculateAge from '../../../functions/calculateAge.js';
@@ -396,12 +394,7 @@ function AdminAffiliate() {
         delete: false,
         add: false,
     });
-    const {
-        register,
-        handleSubmit,
-        watch,
-        formState: { errors },
-    } = useForm();
+
     const [inputFilters, setInputFilters] = React.useState({
         select: '',
         text: '',
@@ -451,8 +444,6 @@ function AdminAffiliate() {
         state: '',
         plan: '',
     });
-
-    const onSubmit = (data) => console.log(data);
 
     const allAffiliates = useSelector(
         (state) => state.affiliates.allAffiliates
