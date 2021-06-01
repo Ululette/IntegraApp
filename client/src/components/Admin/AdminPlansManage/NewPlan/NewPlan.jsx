@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import supabase from '../../../../supabase.config';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { Autocomplete } from '@material-ui/lab';
-import { TextField, Button } from '@material-ui/core';
+import { TextField, Button, Box } from '@material-ui/core';
 import './NewPlan.css';
 
 //Switch
@@ -100,11 +100,18 @@ export default function NewPlan() {
     getBenefAsync();
   }, []);
 
+  // recarga los beneficios a usar en el selector
+  useEffect(() => {
+    // if(benefits){
+    //   console.log(benefits); //[{id: , title: , description:}]
+    // }
+  }, [benefits]);
+
   // Estado de información del plan a agregar
   let [state, setState] = useState({
     title: '',
     price: '',
-    benefit: null,
+    sbenefits: [],
     active: true,
   });
 
@@ -112,7 +119,7 @@ export default function NewPlan() {
   let [error, setError] = useState({
     title: 'No puede quedar incompleto o en blanco.',
     price: 'Debe ser un número de 4 a 6 cifras',
-    benefit: 'Debe tener al menos un beneficio.',
+    sbenefits: 'Debe tener al menos un beneficio.',
     active: '',
   });
 
@@ -120,7 +127,7 @@ export default function NewPlan() {
     setError({
       title: 'No puede quedar incompleto o en blanco.',
       price: 'Debe ser un número de 4 a 6 cifras',
-      benefit: 'Debe tener al menos un beneficio.',
+      sbenefits: 'Debe tener al menos un beneficio.',
       active: '',
     });
   }, []);
@@ -171,25 +178,10 @@ export default function NewPlan() {
     }
   }
 
-  // Estado de beneficio seleccionado
-  let [sbenef, setSbenef] = useState(null);
-
-  // Selección del beneficio
-  let handleselect = (event, value) => {
-
-    if ((value === null) || (value === '')) {
-      setError((error) => ({
-        ...error, benefit: 'No puede quedar incompleto o en blanco.',
-      }));
-    } else {
-      setError((error) => ({ ...error, benefit: '' }));
-    }
-
-    setState({ ...state, benefit: value });
-  }
-
   useEffect(() => {
-    // console.log('state', state);
+    // if (state.sbenefits.length) {
+    //   console.log('sbenefits', state.sbenefits);
+    // }
   }, [error, state]);
 
   // Función que verifica que no haya errores en los inputs
@@ -199,10 +191,10 @@ export default function NewPlan() {
     //si no tiene ningún mensaje de error devuelve true
   };
 
+  // Función que guarda la info del nuevo plan en la base de datos.
   async function handlesubmit(e) {
     e.preventDefault();
     console.log('vas a guardar:', state)
-
     // Agrega el plan nuevo en la tabla de planes.
     async function addNewPlan(state) {
       await supabase
@@ -235,32 +227,47 @@ export default function NewPlan() {
 
     let idplan = await GetNewPlanId(state);
 
-    // agrega el beneficio al plan
-    // Busca el id del beneficio seleccionado
-    // y los conecta
-    async function addPlanBenef(idplan, idbenef) {
-      let { error } = await supabase
-        .from('plans_benefits')
-        .insert([
-          {
-            plan_id: idplan,
-            benefit_id: idbenef,
-          }
-        ])
-      if (error) console.log(error);
-    };
-    await addPlanBenef(idplan, state.benefit.id);
+    // Agrega cada beneficio al plan
+    // Busca el id del beneficio seleccionado y lo conecta.
+    async function addPlanBenef(idplan, sbenefits) { //idbenef -> sbenefits
+      for (let i = 0; i < sbenefits.length; i++) {
+        let { error } = await supabase
+          .from('plans_benefits')
+          .insert([
+            {
+              plan_id: idplan,
+              benefit_id: sbenefits[i].id,
+            }
+          ])
+        if (error) console.log(error);
+      }
+    }
+    await addPlanBenef(idplan, state.sbenefits);
 
     alert('listo');
     // Luego limpia
-    setState({ title: '', price: '', benefit: null, active: true });
+    setState({ title: '', price: '', sbenefits: [], active: true });
     setError({
       title: 'No puede quedar incompleto o en blanco.',
       price: 'Debe ser un número de 4 a 6 cifras',
-      benefit: 'Debe tener al menos un beneficio.',
+      sbenefits: 'Debe tener al menos un beneficio.',
       active: '',
     });
   }
+
+
+  // Función que administra el selector de beneficios.
+  let handleAutoComplete = (values) => {
+    // console.log('seleccionaste :', values)
+    if (values.length === 0) {
+      setError((error) => ({
+        ...error, sbenefits: 'Debe tener al menos un beneficio.',
+      }));
+    } else {
+      setError((error) => ({ ...error, sbenefits: '' }));
+    }
+    setState({ ...state, sbenefits: values })
+  };
 
   return (
     <div className={classes.container}>
@@ -287,38 +294,36 @@ export default function NewPlan() {
             error={error.price}
             helperText={error.price}
           />
-          <Autocomplete
+          {benefits && <Autocomplete
+            multiple
+            limitTags={2}
             id='benefitInputa'
-            name='benefit'
+            // name='benefit'
             className={classes.beneficio}
             //  Acá va el arreglo a mostrar en el selector
             options={benefits}
-            autoHighlight
-            label='Beneficioa'
-            value={state.benefit}
-            variant='outlined'
-            onChange={handleselect}
-            getOptionLabel={option => option.description}
-            renderOption={option => option.description}
+            getOptionLabel={option => option.title}
+            onChange={(event, value) => handleAutoComplete(value)}
+            renderOption={option => option.title}
             renderInput={params => (
-              benefits && (
-                <TextField
-                  id='benefitInput'
-                  name='benefit'
-                  {...params}
-                  label='Beneficio'
-                  variant='outlined'
-                  error={error.benefit}
-                  helperText={error.benefit}
-                  inputProps={{
-                    ...params.inputProps,
-                    autoComplete:
-                      'new-password', // disable autocomplete and autofill
-                  }}
-                />
-              )
+              <TextField
+                id='benefitInput'
+                name='benefit'
+                {...params}
+                label='Beneficios'
+                variant='outlined'
+                error={error.sbenefits}
+                helperText={error.sbenefits}
+
+                inputProps={{
+                  ...params.inputProps,
+                  autoComplete:
+                    'new-password', // disable autocomplete and autofill
+                }}
+              />
             )}
           />
+          }
 
         </div>
         {/* switch */}

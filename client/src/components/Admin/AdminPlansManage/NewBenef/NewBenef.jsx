@@ -204,8 +204,6 @@ export default function NewBenef() {
             variant='outlined'
             value={state.description}
             onChange={handlechange}
-          // error={error.description}
-          // helperText={error.description}
           />
 
           {/* {categories && (
