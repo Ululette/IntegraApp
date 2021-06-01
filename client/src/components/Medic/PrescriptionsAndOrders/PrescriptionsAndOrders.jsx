@@ -164,7 +164,6 @@ export default function PrescriptionsAndOrders() {
                         label={query.selection === 'orders' ? 'Estudio...' : 'Medicamento...'}
                         variant='outlined'
                         className={classes.selectEmpty}
-                        disabled={!query.selection}
                     />
                 </FormControl>
             </div>
