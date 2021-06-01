@@ -33,7 +33,7 @@ export default function ModifyPlan({
             id="plan-description"
             label="Name"
             type="string"
-            name="description"
+            name="name"
             value={modalPlan.name}
             onChange={(e) => handleChangeModal(e)}
             fullWidth

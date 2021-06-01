@@ -13,7 +13,7 @@ function getPlans() {
         try {
             const { data: plans } = await supabase
                 .from('plans')
-                .select('id, name, price, benefits (title, description)');
+                .select('id, name, price, active, benefits (title, description)');
             dispatch({ type: GET_PLANS_BENEFITS, payload: plans });
         } catch (err) {
             console.log(err);
