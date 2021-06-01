@@ -781,6 +781,7 @@ function AdminAffiliate({ firebase }) {
                                             hover
                                             tabIndex={-1}
                                             key={row.dni}
+                                            
                                         >
                                             <TableCell padding='checkbox' className={index%2 ===1 ? classes.rowColor :null}>
                                                 <div className={styles.toolbar}>
