@@ -35,36 +35,35 @@ const useStyles = makeStyles((theme) => ({
     },
     chip: {
         margin: theme.spacing(0.5),
-        backgroundColor:'#3db7b1',
-        color:'white',
-        fontWeight:'bold',
-        fontSize:'15px',
-        
+        backgroundColor: '#3db7b1',
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: '15px',
     },
-    popup:{
+    popup: {
         color: '#fafafa',
         backgroundColor: '#2c7f7b',
-        fontWeight:'bold',
-        fontSize:'30px'
+        fontWeight: 'bold',
+        fontSize: '30px',
     },
-    popupBtn:{
+    popupBtn: {
         color: '#fafafa',
         padding: theme.spacing(0.5),
         border: '3px solid #2c7f7b',
-        borderRadius:'5px',
-        backgroundColor:'#2c7f7b',
-        fontWeight:'bold',
-        fontSize:'15px',
-        '&:hover':{
-            backgroundColor:'#fafafa',
-            color:'#2c7f7b',
+        borderRadius: '5px',
+        backgroundColor: '#2c7f7b',
+        fontWeight: 'bold',
+        fontSize: '15px',
+        '&:hover': {
+            backgroundColor: '#fafafa',
+            color: '#2c7f7b',
             padding: theme.spacing(0.5),
-        }
+        },
     },
-    select:{
-        width:'177px',
-        textTransform:'capitalize',
-    }
+    select: {
+        width: '177px',
+        textTransform: 'capitalize',
+    },
 }));
 
 function AdminMedicEdit({
@@ -85,12 +84,45 @@ function AdminMedicEdit({
         status: medicData.state,
     });
 
+    const [address, setAddress] = useState({
+        street: '',
+        number: '',
+        floor: '',
+        department: '',
+        locality: '',
+        postalCode: '',
+        state: '',
+    });
+
     const [chipSpecialities, setChipSpecialities] = useState(
         input.specialities.map((el) => el.name)
     );
 
+    const [localities, setLocalities] = useState([]);
+
     const handleClose = () => {
         setEditActive(false);
+    };
+
+    const handleChangeAddress = async (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+
+        setAddress({ ...address, [name]: value });
+    };
+
+    const handlePostalCode = async () => {
+        if (
+            address.postalCode !== '' &&
+            String(address.postalCode).length >= 4
+        ) {
+            const { data } = await supabase
+                .from('localities')
+                .select('name, postal_code, states (name)')
+                .eq('postal_code', address.postalCode);
+            setLocalities(data);
+            setAddress({ ...address, state: data[0].states.name });
+        }
     };
 
     const handleChipAdd = (toAdd) => {
@@ -189,8 +221,6 @@ function AdminMedicEdit({
 
     if (!medicData) return <CircularProgress />;
 
-    console.log(input);
-
     return (
         <Dialog open={editActive} onClose={handleClose} onSubmit={handleSubmit}>
             <DialogTitle className={classes.popup}>EDITAR MEDICO</DialogTitle>
@@ -263,7 +293,11 @@ function AdminMedicEdit({
                     ))}
                 </Select>
                 <InputLabel htmlFor='specialities'>Especialidades</InputLabel>
-                <Select name='specialities' onChange={handleChipAdd} className={classes.select}>
+                <Select
+                    name='specialities'
+                    onChange={handleChipAdd}
+                    className={classes.select}
+                >
                     {medicSpecialities.map((el, index) => (
                         <MenuItem key={`speciality-${index}`} value={el.name}>
                             {el.name}
@@ -282,82 +316,86 @@ function AdminMedicEdit({
                     ))}
                 </Paper>
 
-                {/* <p>Direccion</p>
-                        <TextField
-                            autoFocus
-                            value={input.adressStreet}
-                            margin='dense'
-                            name='adressStreet'
-                            label='Calle'
-                            type='text'
-                            onChange={handleChange}
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            value={input.adressStreetNumber}
-                            margin='dense'
-                            name='adressStreetNumber'
-                            label='Numero'
-                            type='text'
-                            onChange={handleChange}
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            value={input.adressFloor}
-                            margin='dense'
-                            name='adressFloor'
-                            label='Piso'
-                            type='text'
-                            onChange={handleChange}
-                            fullWidth
-                        />
-                        <TextField
-                            autoFocus
-                            value={input.adressPostalCode}
-                            margin='dense'
-                            name='adressPostalCode'
-                            label='Codigo postal'
-                            type='text'
-                            onChange={handleChange}
-                            onBlur={handlePostalCode}
-                            fullWidth
-                        />
-                        <Select name='locality' onChange={handleChange}>
-                            {localities.length === 0
-                                ? null
-                                : localities.map((el, index) => (
-                                      <MenuItem
-                                          key={`locality-${index}`}
-                                          value={el.name}
-                                          name='locality'
-                                      >
-                                          {el.name}
-                                      </MenuItem>
-                                  ))}
-                        </Select>
-                        <TextField
-                            autoFocus
-                            value={
-                                localities.states
-                                    ? localities.states.name
-                                    : null
-                            }
-                            margin='dense'
-                            name='localityState'
-                            label='Provincia'
-                            disabled
-                            type='text'
-                            onChange={handleChange}
-                            fullWidth
-                        /> */}
+                <p>Direccion</p>
+                <TextField
+                    autoFocus
+                    value={address.street}
+                    margin='dense'
+                    name='street'
+                    label='Calle'
+                    type='text'
+                    onChange={handleChangeAddress}
+                    fullWidth
+                />
+                <TextField
+                    autoFocus
+                    value={address.number}
+                    margin='dense'
+                    name='number'
+                    label='Numero'
+                    type='text'
+                    onChange={handleChangeAddress}
+                    fullWidth
+                />
+                <TextField
+                    autoFocus
+                    value={address.floor}
+                    margin='dense'
+                    name='floor'
+                    label='Piso'
+                    type='text'
+                    onChange={handleChangeAddress}
+                    fullWidth
+                />
+                <TextField
+                    autoFocus
+                    value={address.postalCode}
+                    margin='dense'
+                    name='postalCode'
+                    label='Codigo postal'
+                    type='text'
+                    onChange={handleChangeAddress}
+                    onBlur={handlePostalCode}
+                    fullWidth
+                />
+                <Select name='locality' onChange={handleChangeAddress}>
+                    {localities.length === 0
+                        ? null
+                        : localities.map((el, index) => (
+                              <MenuItem
+                                  key={`locality-${index}`}
+                                  value={el.name}
+                                  name='locality'
+                              >
+                                  {el.name}
+                              </MenuItem>
+                          ))}
+                </Select>
+                <TextField
+                    autoFocus
+                    margin='dense'
+                    name='state'
+                    label='Provincia'
+                    value={address.state}
+                    disabled
+                    type='text'
+                    fullWidth
+                />
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color='primary' className={classes.popupBtn}>
+                <Button
+                    onClick={handleClose}
+                    color='primary'
+                    className={classes.popupBtn}
+                >
                     Cancelar
                 </Button>
-                <Button onClick={handleSubmit} type='submit' color='primary' className={classes.popupBtn}>
+                <Button
+                    onClick={handleSubmit}
+                    type='submit'
+                    color='primary'
+                    className={classes.popupBtn}
+                >
                     Editar
                 </Button>
             </DialogActions>
