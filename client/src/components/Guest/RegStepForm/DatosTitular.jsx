@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { getStates, getLocalities } from '../../../actions/getter.action';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -15,9 +13,7 @@ const DatosTitular = () => {
     const [allLocalities, setAllLocalities] = useState([]);
 
     const provincias = async () => {
-        const { data: Prov, error: errorProv } = await supabase
-            .from('states')
-            .select();
+        const { data: Prov } = await supabase.from('states').select();
         setAllStates(Prov);
     };
     const localidades = async (provincia) => {

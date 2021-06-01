@@ -10,12 +10,20 @@ import RegStepper from '../Guest/RegStepForm/RegStepper';
 function RoutesGuest() {
     return (
         <>
-            <Route exact path='/' component={NavBar} />
+            <Route
+                exact
+                path={['/', '/faqs', '/plandetails']}
+                component={NavBar}
+            />
             <Route exact path='/' component={LandingPage} />
             <Route exact path='/step' component={RegStepper} />
             <Route exact path='/faqs' component={FaqsPage} />
             <Route exact path='/plandetails' component={ComparativaP} />
-            <Route exact path='/' component={Footer} />
+            <Route
+                exact
+                path={['/', '/faqs', '/plandetails']}
+                component={Footer}
+            />
         </>
     );
 }
