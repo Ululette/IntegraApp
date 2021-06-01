@@ -13,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
     minWidth:'360px'
   },
   p: {
-      //fontWeight: 'bold',
       fontSize: '1.3rem',
       color: '#000000',
       textAlign: 'rigth'

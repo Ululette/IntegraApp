@@ -136,8 +136,7 @@ EnhancedTableHead.propTypes = {
 //------------------------makeStyle1---------------------------------------------------------------------------------------
 const useToolbarStyles = makeStyles((theme) => ({
   root: {
-      // paddingLeft: theme.spacing(0),
-      // paddingRight: theme.spacing(0),
+
       backgroundColor: lighten('#34a7a1', 0.3),
       padding: '0px 0px 0px 0px',
       //color barra superior '

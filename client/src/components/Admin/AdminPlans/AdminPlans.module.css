@@ -1,8 +1,9 @@
 .container {
+    padding:12px 0px 0px 0px;
     align-items: center;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: auto;
     justify-content: flex-start;
     width: 100%;
 }
@@ -64,7 +65,7 @@
     flex-wrap: wrap;
     justify-content: space-evenly;
     margin: 3rem;
-    width: 50%;
+    width: 100%;
 }
 
 .detailContainer {
