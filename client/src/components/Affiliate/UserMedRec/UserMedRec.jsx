@@ -26,23 +26,36 @@ import styles from './UserMedRec.module.css';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import Divider from '@material-ui/core/Divider';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Typography from '@material-ui/core/Typography';
 import supabase from '../../../supabase.config';
 
-const useStyles = makeStyles({
-    root: {
-        display:'flex',
-        justifyContent:'space-around',
-        minWidth: 300,
-    },
-    title: {
-      fontSize: 14,
-    },
-    pos: {
+const useStyles = makeStyles((theme)=>({
+    // root: {
+    //     display:'flex',
+    //     justifyContent:'space-around',
+    //     minWidth: 300,
+    // },
+    // title: {
+    //   fontSize: 14,
+    // },
+    // pos: {
         
-        // marginBottom: 12,
+    //     // marginBottom: 12,
+    // },
+    root: {
+        width: '100%',
+        maxWidth: '40%',
+        backgroundColor: theme.palette.background.paper,
     },
-  });
+    inline: {
+        display: 'inline',
+    },
+  }));
 
 function UserMedRec() {
     const classes = useStyles();
@@ -69,123 +82,231 @@ function UserMedRec() {
     console.log('Medical record:',medicalRecord)
 
     return (
+        <div className={styles.container}>
+            <List className={classes.root}>
+                <ListItem alignItems="flex-start">
+                    <ListItemText
+                        primary="Alergias:"
+                        secondary={
+                        <React.Fragment>
+                            {medicalRecord.allergies==='Si'?`${medicalRecord.allergiesD}`:`No`}
+                        </React.Fragment>
+                        }
+                    />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                <ListItem alignItems="flex-start">
+                    <ListItemText
+                        primary="Asma"
+                        secondary={
+                        <React.Fragment>
+                            {medicalRecord.asthma==='Si'?`${medicalRecord.asthmaD}`:`No`}
+                        </React.Fragment>
+                        }
+                    />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                <ListItem alignItems="flex-start">
+                    <ListItemText
+                        primary="Diabetes:"
+                        secondary={
+                        <React.Fragment>
+                            {medicalRecord.diabetes==='Si'?`${medicalRecord.diabetesD}`:`No`}
+                        </React.Fragment>
+                        }
+                    />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                <ListItem alignItems="flex-start">
+                    <ListItemText
+                        primary="Desmayos:"
+                        secondary={
+                        <React.Fragment>
+                            {medicalRecord.fainting==='Si'?`${medicalRecord.faintingD}`:`No`}
+                        </React.Fragment>
+                        }
+                    />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                <ListItem alignItems="flex-start">
+                    <ListItemText
+                        primary="Patologias auditivas:"
+                        secondary={
+                        <React.Fragment>
+                            {medicalRecord.hearing==='Si'?`${medicalRecord.hearingD}`:`No`}
+                        </React.Fragment>
+                        }
+                    />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                <ListItem alignItems="flex-start">
+                    <ListItemText
+                        primary="Patologias cardiacas:"
+                        secondary={
+                        <React.Fragment>
+                            {medicalRecord.heart==='Si'?`${medicalRecord.heartD}`:`No`}
+                        </React.Fragment>
+                        }
+                    />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                <ListItem alignItems="flex-start">
+                    <ListItemText
+                        primary="Hernias:"
+                        secondary={
+                        <React.Fragment>
+                            {medicalRecord.hernia==='Si'?`${medicalRecord.herniaD}`:`No`}
+                        </React.Fragment>
+                        }
+                    />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                <ListItem alignItems="flex-start">
+                    <ListItemText
+                        primary="Hipertensión:"
+                        secondary={
+                        <React.Fragment>
+                            {medicalRecord.hypertension==='Si'?`${medicalRecord.hypertensionD}`:`No`}
+                        </React.Fragment>
+                        }
+                    />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                <ListItem alignItems="flex-start">
+                    <ListItemText
+                        primary="Hipotensión:"
+                        secondary={
+                        <React.Fragment>
+                            {medicalRecord.hypotension==='Si'?`${medicalRecord.hypotensionD}`:`No`}
+                        </React.Fragment>
+                        }
+                    />
+                </ListItem>
+            </List>
+            <List className={classes.root}>
+                <ListItem alignItems="flex-start">
+                    <ListItemText
+                        primary="Medicinas:"
+                        secondary={
+                        <React.Fragment>
+                            {medicalRecord.medicines==='Si'?`${medicalRecord.medicinesD}`:`No`}
+                        </React.Fragment>
+                        }
+                    />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                <ListItem alignItems="flex-start">
+                    <ListItemText
+                        primary="Problemas psiquiátricos:"
+                        secondary={
+                        <React.Fragment>
+                            {medicalRecord.psychiatric==='Si'?`${medicalRecord.psychiatricD}`:`No`}
+                        </React.Fragment>
+                        }
+                    />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                <ListItem alignItems="flex-start">
+                    <ListItemText
+                        primary="Problemas psicológicos::"
+                        secondary={
+                        <React.Fragment>
+                            {medicalRecord.psychological==='Si'?`${medicalRecord.psychologicalD}`:`No`}
+                        </React.Fragment>
+                        }
+                    />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                <ListItem alignItems="flex-start">
+                    <ListItemText
+                        primary="Convulsiones::"
+                        secondary={
+                        <React.Fragment>
+                            {medicalRecord.seizures==='Si'?`${medicalRecord.seizuresD}`:`No`}
+                        </React.Fragment>
+                        }
+                    />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                <ListItem alignItems="flex-start">
+                    <ListItemText
+                        primary="Sinusitis:"
+                        secondary={
+                        <React.Fragment>
+                            {medicalRecord.sinusitis==='Si'?`${medicalRecord.sinusitisD}`:`No`}
+                        </React.Fragment>
+                        }
+                    />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                <ListItem alignItems="flex-start">
+                    <ListItemText
+                        primary="Problemas de columna:"
+                        secondary={
+                        <React.Fragment>
+                            {medicalRecord.spine==='Si'?`${medicalRecord.spineD}`:`No`}
+                        </React.Fragment>
+                        }
+                    />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                <ListItem alignItems="flex-start">
+                    <ListItemText
+                        primary="Protesis:"
+                        secondary={
+                        <React.Fragment>
+                            {medicalRecord.surgeryProt==='Si'?`${medicalRecord.surgeryProtD}`:`No`}
+                        </React.Fragment>
+                        }
+                    />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                <ListItem alignItems="flex-start">
+                    <ListItemText
+                        primary="Problemas de visión:"
+                        secondary={
+                        <React.Fragment>
+                            {medicalRecord.visual==='Si'?`${medicalRecord.visualD}`:`No`}
+                        </React.Fragment>
+                        }
+                    />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+                <ListItem alignItems="flex-start">
+                    <ListItemText
+                        primary="Otros:"
+                        secondary={
+                        <React.Fragment>
+                            {medicalRecord.others==='Si'?`${medicalRecord.othersD}`:`No`}
+                        </React.Fragment>
+                        }
+                    />
+                </ListItem>
+            </List>
+        </div>
+       
+          
+        
         // <div className={styles.container}>
-            <Card className={classes.root}>
-                <CardContent>
-                    <Typography variant="h5" component="h3">
-                        Alergias:
-                    </Typography>
-                    <Typography variant="h6" component="h3">
-                        {medicalRecord.allergies==='Si'?`${medicalRecord.allergiesD}`:`No`}
-                    </Typography>
-                    <Typography variant="h5" component="h3">
-                        Asma:
-                    </Typography>
-                    <Typography variant="h6" component="h3">
-                        {medicalRecord.asthma==='Si'?`${medicalRecord.asthmaD}`:`No`}
-                    </Typography>
-                    <Typography variant="h5" component="h3">
-                        Diabetes:
-                    </Typography>
-                    <Typography variant="h6" component="h3">
-                        {medicalRecord.diabetes==='Si'?`${medicalRecord.diabetesD}`:`No`}
-                    </Typography>
-                    <Typography variant="h5" component="h3">
-                        Desmayos:
-                    </Typography>
-                    <Typography variant="h6" component="h3">
-                        {medicalRecord.fainting==='Si'?`${medicalRecord.faintingD}`:`No`}
-                    </Typography>
-                    <Typography variant="h5" component="h3">
-                        Patologias auditivas:
-                    </Typography>
-                    <Typography variant="h6" component="h3">
-                        {medicalRecord.hearing==='Si'?`${medicalRecord.hearingD}`:`No`}
-                    </Typography>
-                    <Typography variant="h5" component="h3">
-                        Patologias cardiacas:
-                    </Typography>
-                    <Typography variant="h6" component="h3">
-                        {medicalRecord.heart==='Si'?`${medicalRecord.heartD}`:`No`}
-                    </Typography>
-                    <Typography variant="h5" component="h3">
-                        Hernias:
-                    </Typography>
-                    <Typography variant="h6" component="h3">
-                        {medicalRecord.hernia==='Si'?`${medicalRecord.herniaD}`:`No`}
-                    </Typography>
-                    <Typography variant="h5" component="h3">
-                        Hipertensión:
-                    </Typography>
-                    <Typography variant="h6" component="h3">
-                        {medicalRecord.hypertension==='Si'?`${medicalRecord.hypertensionD}`:`No`}
-                    </Typography>
-                    <Typography variant="h5" component="h3">
-                        Hipotensión:
-                    </Typography>
-                    <Typography variant="h6" component="h3">
-                        {medicalRecord.hypotension==='Si'?`${medicalRecord.hypotensionD}`:`No`}
-                    </Typography>
-                </CardContent>
-                <CardContent>
-                    <Typography variant="h5" component="h3">
-                        Medicinas:
-                    </Typography>
-                    <Typography variant="h6" component="h3">
-                        {medicalRecord.medicines==='Si'?`${medicalRecord.medicinesD}`:`No`}
-                    </Typography>
-                    <Typography variant="h5" component="h3">
-                        Problemas psiquiátricos:
-                    </Typography>
-                    <Typography variant="h6" component="h3">
-                        {medicalRecord.psychiatric==='Si'?`${medicalRecord.psychiatricD}`:`No`}
-                    </Typography>
-                    <Typography variant="h5" component="h3">
-                        Problemas psicológicos:
-                    </Typography>
-                    <Typography variant="h6" component="h3">
-                        {medicalRecord.psychological==='Si'?`${medicalRecord.psychologicalD}`:`No`}
-                    </Typography>
-                    <Typography variant="h5" component="h3">
-                        Convulsiones:
-                    </Typography>
-                    <Typography variant="h6" component="h3">
-                        {medicalRecord.seizures==='Si'?`${medicalRecord.seizuresD}`:`No`}
-                    </Typography>
-                    <Typography variant="h5" component="h3">
-                        Sinusitis:
-                    </Typography>
-                    <Typography variant="h6" component="h3">
-                        {medicalRecord.sinusitis==='Si'?`${medicalRecord.sinusitisD}`:`No`}
-                    </Typography>
-                    <Typography variant="h5" component="h3">
-                        Problemas de columna:
-                    </Typography>
-                    <Typography variant="h6" component="h3">
-                        {medicalRecord.spine==='Si'?`${medicalRecord.spineD}`:`No`}
-                    </Typography>
-                    <Typography variant="h5" component="h3">
-                        Protesis:
-                    </Typography>
-                    <Typography variant="h6" component="h3">
-                        {medicalRecord.surgeryProt==='Si'?`${medicalRecord.surgeryProtD}`:`No`}
-                    </Typography>
-                    <Typography variant="h5" component="h3">
-                        Problemas de visión:
-                    </Typography>
-                    <Typography variant="h6" component="h3">
-                        {medicalRecord.visual==='Si'?`${medicalRecord.visualD}`:`No`}
-                    </Typography>
-                    <Typography variant="h5" component="h3">
-                        Otros:
-                    </Typography>
-                    <Typography variant="h6" component="h3">
-                        {medicalRecord.others==='Si'?`${medicalRecord.othersD}`:`No`}
-                    </Typography>
-                </CardContent>
-                </Card>
+            // <Card className={classes.root}>
+            //     <CardContent>
+            //       
+            //         <Typography variant="h5" component="h3">
+            //             Problemas de visión:
+            //         </Typography>
+            //         <Typography variant="h6" component="h3">
+            //             {medicalRecord.visual==='Si'?`${medicalRecord.visualD}`:`No`}
+            //         </Typography>
+            //         <Typography variant="h5" component="h3">
+            //             Otros:
+            //         </Typography>
+            //         <Typography variant="h6" component="h3">
+            //             {medicalRecord.others==='Si'?`${medicalRecord.othersD}`:`No`}
+            //         </Typography>
+            //     </CardContent>
+            //     </Card>
         // </div>
-    );
+    )
 }
 
 export default UserMedRec;
