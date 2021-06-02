@@ -129,7 +129,8 @@
     justify-content: center;
 }
 
-.imgContainer img {
+.imgContainer img,
+.imgContainer svg {
     width: 150px;
     height: 150px;
     border-radius: 50%;
@@ -146,12 +147,18 @@
     visibility: hidden;
 }
 
-.changeImg p {
+.picUpload {
+    display: none;
+}
+
+.iconUpload {
     margin-top: 45%;
+    color: white;
 }
 
 .imgContainer img:hover ~ .changeImg,
-.changeImg:hover {
+.changeImg:hover,
+.imgContainer svg:hover ~ .changeImg {
     transition: all 0.5s ease-in-out;
     background: rgba(0, 137, 123, 0.5);
     visibility: visible;

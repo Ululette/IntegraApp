@@ -4,7 +4,10 @@ import supabase from '../../../supabase.config';
 import './UserProfile.css';
 import Swal from 'sweetalert2';
 import { Autocomplete } from '@material-ui/lab';
-import { Button, StylesProvider, TextField } from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
+import { AccountCircleRounded } from '@material-ui/icons';
 
 // Estilos usados en componentes de MUI.
 const useStyles = makeStyles({
@@ -40,7 +43,7 @@ const useStyles = makeStyles({
     },
 });
 
-export default function UserProfile() {
+export default function UserProfile({ firebase }) {
     // Estilos para MUI.
     let classes = useStyles();
 
@@ -78,6 +81,8 @@ export default function UserProfile() {
         });
         if (errorFetchUser) return console.log(errorFetchUser);
     };
+
+    // const [file, setFile] = useState('');
 
     // Al cargar la página por primera vez, se trae del localStorage
     // el dni del usuario y carga en user los datos que se trae
@@ -379,10 +384,35 @@ export default function UserProfile() {
                 confirmButtonText: 'OK',
             });
             window.location.reload();
-        } else {
         }
     }
     //----------------------------------------------------
+    const handleFile = (e) => {
+        const file = e.target.files[0];
+        picUpload(file);
+    };
+
+    const picUpload = async (file) => {
+        console.log(file);
+        const userUid = firebase.auth().currentUser.uid;
+        try {
+            await firebase
+                .storage()
+                .ref(`users/${userUid}/profile.${file.name.slice(-3)}`)
+                .put(file);
+            console.log('Se subio exitosamente.');
+            let imgSrc = await firebase
+                .storage()
+                .ref(`users/${userUid}/profile.jpg`)
+                .getDownloadURL();
+            let newLS = { ...userDni, avatar_url: imgSrc };
+
+            localStorage.setItem('userdata', JSON.stringify(newLS));
+            window.location.reload();
+        } catch (error) {
+            console.log(error.message);
+        }
+    };
 
     return (
         <div className='ProfilePage_Cont'>
@@ -393,15 +423,54 @@ export default function UserProfile() {
                         <div className='input_info'>
                             <h1 className='title'>Mi Perfil</h1>
                             <div className='on_line_cont'>
-                                <div className='one_info_cont imgContainer'>
-                                    <img
-                                        src={`${userDni.avatar_url}`}
-                                        alt='Profile pic.'
-                                    />
-                                    <div className='changeImg'>
-                                        <p>Cambiar Imagen</p>
+                                {userDni.avatar_url ? (
+                                    <div className='one_info_cont imgContainer'>
+                                        <img
+                                            src={`${userDni.avatar_url}`}
+                                            alt='Profile pic.'
+                                        />
+                                        <div className='changeImg'>
+                                            <input
+                                                accept='image/*'
+                                                className='picUpload'
+                                                id='icon-button-file'
+                                                type='file'
+                                                onChange={handleFile}
+                                            />
+                                            <label htmlFor='icon-button-file'>
+                                                <IconButton
+                                                    color='primary'
+                                                    aria-label='upload picture'
+                                                    component='span'
+                                                >
+                                                    <PhotoCamera className='iconUpload' />
+                                                </IconButton>
+                                            </label>
+                                        </div>
                                     </div>
-                                </div>
+                                ) : (
+                                    <div className='one_info_cont imgContainer'>
+                                        <AccountCircleRounded />
+                                        <div className='changeImg'>
+                                            <input
+                                                accept='image/*'
+                                                className='picUpload'
+                                                id='icon-button-file'
+                                                type='file'
+                                                onChange={handleFile}
+                                            />
+                                            <label htmlFor='icon-button-file'>
+                                                <IconButton
+                                                    color='primary'
+                                                    aria-label='upload picture'
+                                                    component='span'
+                                                >
+                                                    <PhotoCamera className='iconUpload' />
+                                                </IconButton>
+                                            </label>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                             <div className='on_line_cont'>
                                 <div className='one_info_cont'>
