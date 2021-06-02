@@ -1,24 +1,3 @@
-// import React from 'react';
-// import Button from '@material-ui/core/Button';
-// import styles from './UserMedRec.module.css';
-
-// function UserMedRec() {
-//     return (
-//         <div className={styles.container}>
-//             <a
-//                 href={`../mymedicalrecords/pdf`}
-//                 target='_blank'
-//                 rel='noreferrer'
-//             >
-//                 <Button variant='outlined' color='secondary'>
-//                     Ir a mi ficha medica
-//                 </Button>
-//             </a>
-//         </div>
-//     );
-// }
-
-// export default UserMedRec;
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -74,239 +53,225 @@ function UserMedRec() {
                 .from('medical_records')
                 .select(`declaration`)
                 .eq('partner_dni',userDni)
-            setMedicalRecord(record[0].declaration);
+                record[0]?setMedicalRecord(record[0].declaration):setMedicalRecord(false)
         } catch (err) {
             return err;
         }
     }
     console.log('Medical record:',medicalRecord)
 
-    return (
-        <div className={styles.container}>
-            <List className={classes.root}>
-                <ListItem alignItems="flex-start">
-                    <ListItemText
-                        primary="Alergias:"
-                        secondary={
-                        <React.Fragment>
-                            {medicalRecord.allergies==='Si'?`${medicalRecord.allergiesD}`:`No`}
-                        </React.Fragment>
-                        }
-                    />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                    <ListItemText
-                        primary="Asma"
-                        secondary={
-                        <React.Fragment>
-                            {medicalRecord.asthma==='Si'?`${medicalRecord.asthmaD}`:`No`}
-                        </React.Fragment>
-                        }
-                    />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                    <ListItemText
-                        primary="Diabetes:"
-                        secondary={
-                        <React.Fragment>
-                            {medicalRecord.diabetes==='Si'?`${medicalRecord.diabetesD}`:`No`}
-                        </React.Fragment>
-                        }
-                    />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                    <ListItemText
-                        primary="Desmayos:"
-                        secondary={
-                        <React.Fragment>
-                            {medicalRecord.fainting==='Si'?`${medicalRecord.faintingD}`:`No`}
-                        </React.Fragment>
-                        }
-                    />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                    <ListItemText
-                        primary="Patologias auditivas:"
-                        secondary={
-                        <React.Fragment>
-                            {medicalRecord.hearing==='Si'?`${medicalRecord.hearingD}`:`No`}
-                        </React.Fragment>
-                        }
-                    />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                    <ListItemText
-                        primary="Patologias cardiacas:"
-                        secondary={
-                        <React.Fragment>
-                            {medicalRecord.heart==='Si'?`${medicalRecord.heartD}`:`No`}
-                        </React.Fragment>
-                        }
-                    />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                    <ListItemText
-                        primary="Hernias:"
-                        secondary={
-                        <React.Fragment>
-                            {medicalRecord.hernia==='Si'?`${medicalRecord.herniaD}`:`No`}
-                        </React.Fragment>
-                        }
-                    />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                    <ListItemText
-                        primary="Hipertensión:"
-                        secondary={
-                        <React.Fragment>
-                            {medicalRecord.hypertension==='Si'?`${medicalRecord.hypertensionD}`:`No`}
-                        </React.Fragment>
-                        }
-                    />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                    <ListItemText
-                        primary="Hipotensión:"
-                        secondary={
-                        <React.Fragment>
-                            {medicalRecord.hypotension==='Si'?`${medicalRecord.hypotensionD}`:`No`}
-                        </React.Fragment>
-                        }
-                    />
-                </ListItem>
-            </List>
-            <List className={classes.root}>
-                <ListItem alignItems="flex-start">
-                    <ListItemText
-                        primary="Medicinas:"
-                        secondary={
-                        <React.Fragment>
-                            {medicalRecord.medicines==='Si'?`${medicalRecord.medicinesD}`:`No`}
-                        </React.Fragment>
-                        }
-                    />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                    <ListItemText
-                        primary="Problemas psiquiátricos:"
-                        secondary={
-                        <React.Fragment>
-                            {medicalRecord.psychiatric==='Si'?`${medicalRecord.psychiatricD}`:`No`}
-                        </React.Fragment>
-                        }
-                    />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                    <ListItemText
-                        primary="Problemas psicológicos::"
-                        secondary={
-                        <React.Fragment>
-                            {medicalRecord.psychological==='Si'?`${medicalRecord.psychologicalD}`:`No`}
-                        </React.Fragment>
-                        }
-                    />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                    <ListItemText
-                        primary="Convulsiones::"
-                        secondary={
-                        <React.Fragment>
-                            {medicalRecord.seizures==='Si'?`${medicalRecord.seizuresD}`:`No`}
-                        </React.Fragment>
-                        }
-                    />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                    <ListItemText
-                        primary="Sinusitis:"
-                        secondary={
-                        <React.Fragment>
-                            {medicalRecord.sinusitis==='Si'?`${medicalRecord.sinusitisD}`:`No`}
-                        </React.Fragment>
-                        }
-                    />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                    <ListItemText
-                        primary="Problemas de columna:"
-                        secondary={
-                        <React.Fragment>
-                            {medicalRecord.spine==='Si'?`${medicalRecord.spineD}`:`No`}
-                        </React.Fragment>
-                        }
-                    />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                    <ListItemText
-                        primary="Protesis:"
-                        secondary={
-                        <React.Fragment>
-                            {medicalRecord.surgeryProt==='Si'?`${medicalRecord.surgeryProtD}`:`No`}
-                        </React.Fragment>
-                        }
-                    />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                    <ListItemText
-                        primary="Problemas de visión:"
-                        secondary={
-                        <React.Fragment>
-                            {medicalRecord.visual==='Si'?`${medicalRecord.visualD}`:`No`}
-                        </React.Fragment>
-                        }
-                    />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem alignItems="flex-start">
-                    <ListItemText
-                        primary="Otros:"
-                        secondary={
-                        <React.Fragment>
-                            {medicalRecord.others==='Si'?`${medicalRecord.othersD}`:`No`}
-                        </React.Fragment>
-                        }
-                    />
-                </ListItem>
-            </List>
-        </div>
-       
-          
-        
-        // <div className={styles.container}>
-            // <Card className={classes.root}>
-            //     <CardContent>
-            //       
-            //         <Typography variant="h5" component="h3">
-            //             Problemas de visión:
-            //         </Typography>
-            //         <Typography variant="h6" component="h3">
-            //             {medicalRecord.visual==='Si'?`${medicalRecord.visualD}`:`No`}
-            //         </Typography>
-            //         <Typography variant="h5" component="h3">
-            //             Otros:
-            //         </Typography>
-            //         <Typography variant="h6" component="h3">
-            //             {medicalRecord.others==='Si'?`${medicalRecord.othersD}`:`No`}
-            //         </Typography>
-            //     </CardContent>
-            //     </Card>
-        // </div>
-    )
+    if(medicalRecord){
+        return(
+            <div className={styles.container}>
+                <List className={classes.root}>
+                    <ListItem alignItems="flex-start">
+                        <ListItemText
+                            primary="Alergias:"
+                            secondary={
+                            <React.Fragment>
+                                {medicalRecord.allergies==='Si'?`${medicalRecord.allergiesD}`:`No`}
+                            </React.Fragment>
+                            }
+                        />
+                    </ListItem>
+                    <Divider variant="inset" component="li" />
+                    <ListItem alignItems="flex-start">
+                        <ListItemText
+                            primary="Asma"
+                            secondary={
+                            <React.Fragment>
+                                {medicalRecord.asthma==='Si'?`${medicalRecord.asthmaD}`:`No`}
+                            </React.Fragment>
+                            }
+                        />
+                    </ListItem>
+                    <Divider variant="inset" component="li" />
+                    <ListItem alignItems="flex-start">
+                        <ListItemText
+                            primary="Diabetes:"
+                            secondary={
+                            <React.Fragment>
+                                {medicalRecord.diabetes==='Si'?`${medicalRecord.diabetesD}`:`No`}
+                            </React.Fragment>
+                            }
+                        />
+                    </ListItem>
+                    <Divider variant="inset" component="li" />
+                    <ListItem alignItems="flex-start">
+                        <ListItemText
+                            primary="Desmayos:"
+                            secondary={
+                            <React.Fragment>
+                                {medicalRecord.fainting==='Si'?`${medicalRecord.faintingD}`:`No`}
+                            </React.Fragment>
+                            }
+                        />
+                    </ListItem>
+                    <Divider variant="inset" component="li" />
+                    <ListItem alignItems="flex-start">
+                        <ListItemText
+                            primary="Patologias auditivas:"
+                            secondary={
+                            <React.Fragment>
+                                {medicalRecord.hearing==='Si'?`${medicalRecord.hearingD}`:`No`}
+                            </React.Fragment>
+                            }
+                        />
+                    </ListItem>
+                    <Divider variant="inset" component="li" />
+                    <ListItem alignItems="flex-start">
+                        <ListItemText
+                            primary="Patologias cardiacas:"
+                            secondary={
+                            <React.Fragment>
+                                {medicalRecord.heart==='Si'?`${medicalRecord.heartD}`:`No`}
+                            </React.Fragment>
+                            }
+                        />
+                    </ListItem>
+                    <Divider variant="inset" component="li" />
+                    <ListItem alignItems="flex-start">
+                        <ListItemText
+                            primary="Hernias:"
+                            secondary={
+                            <React.Fragment>
+                                {medicalRecord.hernia==='Si'?`${medicalRecord.herniaD}`:`No`}
+                            </React.Fragment>
+                            }
+                        />
+                    </ListItem>
+                    <Divider variant="inset" component="li" />
+                    <ListItem alignItems="flex-start">
+                        <ListItemText
+                            primary="Hipertensión:"
+                            secondary={
+                            <React.Fragment>
+                                {medicalRecord.hypertension==='Si'?`${medicalRecord.hypertensionD}`:`No`}
+                            </React.Fragment>
+                            }
+                        />
+                    </ListItem>
+                    <Divider variant="inset" component="li" />
+                    <ListItem alignItems="flex-start">
+                        <ListItemText
+                            primary="Hipotensión:"
+                            secondary={
+                            <React.Fragment>
+                                {medicalRecord.hypotension==='Si'?`${medicalRecord.hypotensionD}`:`No`}
+                            </React.Fragment>
+                            }
+                        />
+                    </ListItem>
+                </List>
+                <List className={classes.root}>
+                    <ListItem alignItems="flex-start">
+                        <ListItemText
+                            primary="Medicinas:"
+                            secondary={
+                            <React.Fragment>
+                                {medicalRecord.medicines==='Si'?`${medicalRecord.medicinesD}`:`No`}
+                            </React.Fragment>
+                            }
+                        />
+                    </ListItem>
+                    <Divider variant="inset" component="li" />
+                    <ListItem alignItems="flex-start">
+                        <ListItemText
+                            primary="Problemas psiquiátricos:"
+                            secondary={
+                            <React.Fragment>
+                                {medicalRecord.psychiatric==='Si'?`${medicalRecord.psychiatricD}`:`No`}
+                            </React.Fragment>
+                            }
+                        />
+                    </ListItem>
+                    <Divider variant="inset" component="li" />
+                    <ListItem alignItems="flex-start">
+                        <ListItemText
+                            primary="Problemas psicológicos::"
+                            secondary={
+                            <React.Fragment>
+                                {medicalRecord.psychological==='Si'?`${medicalRecord.psychologicalD}`:`No`}
+                            </React.Fragment>
+                            }
+                        />
+                    </ListItem>
+                    <Divider variant="inset" component="li" />
+                    <ListItem alignItems="flex-start">
+                        <ListItemText
+                            primary="Convulsiones::"
+                            secondary={
+                            <React.Fragment>
+                                {medicalRecord.seizures==='Si'?`${medicalRecord.seizuresD}`:`No`}
+                            </React.Fragment>
+                            }
+                        />
+                    </ListItem>
+                    <Divider variant="inset" component="li" />
+                    <ListItem alignItems="flex-start">
+                        <ListItemText
+                            primary="Sinusitis:"
+                            secondary={
+                            <React.Fragment>
+                                {medicalRecord.sinusitis==='Si'?`${medicalRecord.sinusitisD}`:`No`}
+                            </React.Fragment>
+                            }
+                        />
+                    </ListItem>
+                    <Divider variant="inset" component="li" />
+                    <ListItem alignItems="flex-start">
+                        <ListItemText
+                            primary="Problemas de columna:"
+                            secondary={
+                            <React.Fragment>
+                                {medicalRecord.spine==='Si'?`${medicalRecord.spineD}`:`No`}
+                            </React.Fragment>
+                            }
+                        />
+                    </ListItem>
+                    <Divider variant="inset" component="li" />
+                    <ListItem alignItems="flex-start">
+                        <ListItemText
+                            primary="Protesis:"
+                            secondary={
+                            <React.Fragment>
+                                {medicalRecord.surgeryProt==='Si'?`${medicalRecord.surgeryProtD}`:`No`}
+                            </React.Fragment>
+                            }
+                        />
+                    </ListItem>
+                    <Divider variant="inset" component="li" />
+                    <ListItem alignItems="flex-start">
+                        <ListItemText
+                            primary="Problemas de visión:"
+                            secondary={
+                            <React.Fragment>
+                                {medicalRecord.visual==='Si'?`${medicalRecord.visualD}`:`No`}
+                            </React.Fragment>
+                            }
+                        />
+                    </ListItem>
+                    <Divider variant="inset" component="li" />
+                    <ListItem alignItems="flex-start">
+                        <ListItemText
+                            primary="Otros:"
+                            secondary={
+                            <React.Fragment>
+                                {medicalRecord.others==='Si'?`${medicalRecord.othersD}`:`No`}
+                            </React.Fragment>
+                            }
+                        />
+                    </ListItem>
+                </List> 
+            </div>
+        )
+    } else {
+        return(
+            <Typography variant='h2' component='h5'>
+                No tiene registro médico
+            </Typography>
+        )
+    }
 }
 
 export default UserMedRec;
