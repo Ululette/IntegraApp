@@ -31,20 +31,16 @@ import supabase from '../../../supabase.config';
 
 const useStyles = makeStyles({
     root: {
-        marginTop: 550,
+        display:'flex',
+        justifyContent:'space-around',
         minWidth: 300,
-    },
-    bullet: {
-      display: 'inline-block',
-      margin: '0 2px',
-      transform: 'scale(0.8)',
     },
     title: {
       fontSize: 14,
     },
     pos: {
         
-        marginBottom: 12,
+        // marginBottom: 12,
     },
   });
 
@@ -73,66 +69,122 @@ function UserMedRec() {
     console.log('Medical record:',medicalRecord)
 
     return (
-        <div className={styles.container}>
+        // <div className={styles.container}>
             <Card className={classes.root}>
                 <CardContent>
-                    <Typography variant="h6" component="h3">
-                        {medicalRecord.allergies==='Si'?`Alergias:${medicalRecord.allergiesD}`:`Alergias:No`}
+                    <Typography variant="h5" component="h3">
+                        Alergias:
                     </Typography>
                     <Typography variant="h6" component="h3">
-                        {medicalRecord.asthma==='Si'?`Asma:${medicalRecord.asthmaD}`:`Asma:No`}
+                        {medicalRecord.allergies==='Si'?`${medicalRecord.allergiesD}`:`No`}
+                    </Typography>
+                    <Typography variant="h5" component="h3">
+                        Asma:
                     </Typography>
                     <Typography variant="h6" component="h3">
-                        {medicalRecord.diabetes==='Si'?`Diabetes:${medicalRecord.diabetesD}`:`Diabetes:No`}
+                        {medicalRecord.asthma==='Si'?`${medicalRecord.asthmaD}`:`No`}
+                    </Typography>
+                    <Typography variant="h5" component="h3">
+                        Diabetes:
                     </Typography>
                     <Typography variant="h6" component="h3">
-                        {medicalRecord.fainting==='Si'?`Desmayos:${medicalRecord.faintingD}`:`Desmayos:No`}
+                        {medicalRecord.diabetes==='Si'?`${medicalRecord.diabetesD}`:`No`}
+                    </Typography>
+                    <Typography variant="h5" component="h3">
+                        Desmayos:
                     </Typography>
                     <Typography variant="h6" component="h3">
-                        {medicalRecord.hearing==='Si'?`Patologias auditivas:${medicalRecord.hearingD}`:`Patologias auditivas:No`}
+                        {medicalRecord.fainting==='Si'?`${medicalRecord.faintingD}`:`No`}
+                    </Typography>
+                    <Typography variant="h5" component="h3">
+                        Patologias auditivas:
                     </Typography>
                     <Typography variant="h6" component="h3">
-                        {medicalRecord.heart==='Si'?`Patologias cardiacas:${medicalRecord.heartD}`:`Patologias cardiacas:No`}
+                        {medicalRecord.hearing==='Si'?`${medicalRecord.hearingD}`:`No`}
+                    </Typography>
+                    <Typography variant="h5" component="h3">
+                        Patologias cardiacas:
                     </Typography>
                     <Typography variant="h6" component="h3">
-                        {medicalRecord.hernia==='Si'?`Hernias:${medicalRecord.herniaD}`:`Hernias:No`}
+                        {medicalRecord.heart==='Si'?`${medicalRecord.heartD}`:`No`}
+                    </Typography>
+                    <Typography variant="h5" component="h3">
+                        Hernias:
                     </Typography>
                     <Typography variant="h6" component="h3">
-                        {medicalRecord.hypertension==='Si'?`Hipertensión:${medicalRecord.hypertensionD}`:`Hipertensión:No`}
+                        {medicalRecord.hernia==='Si'?`${medicalRecord.herniaD}`:`No`}
+                    </Typography>
+                    <Typography variant="h5" component="h3">
+                        Hipertensión:
                     </Typography>
                     <Typography variant="h6" component="h3">
-                        {medicalRecord.hypotension==='Si'?`Hipotensión :${medicalRecord.hypotensionD}`:`Hipotensión :No`}
+                        {medicalRecord.hypertension==='Si'?`${medicalRecord.hypertensionD}`:`No`}
+                    </Typography>
+                    <Typography variant="h5" component="h3">
+                        Hipotensión:
                     </Typography>
                     <Typography variant="h6" component="h3">
-                        {medicalRecord.medicines==='Si'?`Medicinas:${medicalRecord.medicinesD}`:`Medicinas:No`}
+                        {medicalRecord.hypotension==='Si'?`${medicalRecord.hypotensionD}`:`No`}
+                    </Typography>
+                </CardContent>
+                <CardContent>
+                    <Typography variant="h5" component="h3">
+                        Medicinas:
                     </Typography>
                     <Typography variant="h6" component="h3">
-                        {medicalRecord.psychiatric==='Si'?`Problemas psiquiátricos:${medicalRecord.psychiatricD}`:`Problemas psiquiátricos:No`}
+                        {medicalRecord.medicines==='Si'?`${medicalRecord.medicinesD}`:`No`}
+                    </Typography>
+                    <Typography variant="h5" component="h3">
+                        Problemas psiquiátricos:
                     </Typography>
                     <Typography variant="h6" component="h3">
-                        {medicalRecord.psychological==='Si'?`Problemas psicológicos:${medicalRecord.psychologicalD}`:`Problemas psicológicos:No`}
+                        {medicalRecord.psychiatric==='Si'?`${medicalRecord.psychiatricD}`:`No`}
+                    </Typography>
+                    <Typography variant="h5" component="h3">
+                        Problemas psicológicos:
                     </Typography>
                     <Typography variant="h6" component="h3">
-                        {medicalRecord.seizures==='Si'?`Convulsiones:${medicalRecord.seizuresD}`:`Convulsiones:No`}
+                        {medicalRecord.psychological==='Si'?`${medicalRecord.psychologicalD}`:`No`}
+                    </Typography>
+                    <Typography variant="h5" component="h3">
+                        Convulsiones:
                     </Typography>
                     <Typography variant="h6" component="h3">
-                        {medicalRecord.sinusitis==='Si'?`Sinusitis:${medicalRecord.sinusitisD}`:`Sinusitis:No`}
+                        {medicalRecord.seizures==='Si'?`${medicalRecord.seizuresD}`:`No`}
+                    </Typography>
+                    <Typography variant="h5" component="h3">
+                        Sinusitis:
                     </Typography>
                     <Typography variant="h6" component="h3">
-                        {medicalRecord.spine==='Si'?`Problemas de columna:${medicalRecord.spineD}`:`Problemas de columna:No`}
+                        {medicalRecord.sinusitis==='Si'?`${medicalRecord.sinusitisD}`:`No`}
+                    </Typography>
+                    <Typography variant="h5" component="h3">
+                        Problemas de columna:
                     </Typography>
                     <Typography variant="h6" component="h3">
-                        {medicalRecord.surgeryProt==='Si'?`Protesis:${medicalRecord.surgeryProtD}`:`Protesis:No`}
+                        {medicalRecord.spine==='Si'?`${medicalRecord.spineD}`:`No`}
+                    </Typography>
+                    <Typography variant="h5" component="h3">
+                        Protesis:
                     </Typography>
                     <Typography variant="h6" component="h3">
-                        {medicalRecord.visual==='Si'?`Problemas de visión:${medicalRecord.visualD}`:`Problemas de visión:No`}
+                        {medicalRecord.surgeryProt==='Si'?`${medicalRecord.surgeryProtD}`:`No`}
+                    </Typography>
+                    <Typography variant="h5" component="h3">
+                        Problemas de visión:
                     </Typography>
                     <Typography variant="h6" component="h3">
-                        {medicalRecord.others==='Si'?`Otros:${medicalRecord.othersD}`:`Otros:No`}
+                        {medicalRecord.visual==='Si'?`${medicalRecord.visualD}`:`No`}
+                    </Typography>
+                    <Typography variant="h5" component="h3">
+                        Otros:
+                    </Typography>
+                    <Typography variant="h6" component="h3">
+                        {medicalRecord.others==='Si'?`${medicalRecord.othersD}`:`No`}
                     </Typography>
                 </CardContent>
                 </Card>
-        </div>
+        // </div>
     );
 }
 
