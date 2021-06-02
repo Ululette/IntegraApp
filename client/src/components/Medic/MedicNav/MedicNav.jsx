@@ -33,6 +33,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import MedicHome from '../MedicHome/MedicHome.jsx';
 import MedicPatients from '../MedicPatients/MedicPatients.jsx';
 import PrescriptionsAndOrders from '../PrescriptionsAndOrders/PrescriptionsAndOrders.jsx';
+import ConsultsTable from '../ConsultsTable/ConsultsTable.jsx';
 
 import styles from './MedicNav.module.css';
 import NotFound from '../../Status/NotFound.jsx';
@@ -156,11 +157,16 @@ function AdminNav({ firebase, window: windowMui }) {
                         <ListItemText primary='Mis pacientes' />
                     </ListItem>
                 </NavLink>
-
-                <ListItem button>
-                    <AssignmentIcon />
-                    <ListItemText primary='Mis consultas' />
-                </ListItem>
+                <NavLink
+                    to={`/${userData.dni}/medic/myConsults`}
+                    className={styles.link}
+                    activeClassName={styles.activeLink}
+                >
+                    <ListItem button>
+                        <AssignmentIcon />
+                        <ListItemText primary='Mis consultas' />
+                    </ListItem>
+                </NavLink>
 
                 <NavLink
                     to={`/${userData.dni}/medic/prescriptions&orders`}
@@ -282,6 +288,9 @@ function AdminNav({ firebase, window: windowMui }) {
                 ) : window.location.pathname ===
                   `/${userData.dni}/medic/prescriptions&orders` ? (
                     <PrescriptionsAndOrders />
+                ) : window.location.pathname ===
+                  `/${userData.dni}/medic/myConsults` ? (
+                    <ConsultsTable />
                 ) : (
                     <NotFound />
                 )}
