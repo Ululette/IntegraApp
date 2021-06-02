@@ -16,9 +16,12 @@ import Tooltip from "@material-ui/core/Tooltip";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import DeleteIcon from "@material-ui/icons/Delete";
+import blue from '@material-ui/core/colors/blue'
 
 import CreateIcon from "@material-ui/icons/Create";
 import { Button } from "@material-ui/core";
+
+import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -47,15 +50,22 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
+  { id: "action", numeric: false, disablePadding: false, label: "ACCIONES" },
   {
     id: "name",
     numeric: false,
     disablePadding: true,
-    label: "Name",
+    label: "NOMBRE",
   },
-  { id: "price", numeric: true, disablePadding: false, label: "Price" },
-  { id: "detail", numeric: false, disablePadding: false, label: "Details" },
-  { id: "action", numeric: false, disablePadding: false, label: "Actions" },
+  { id: "price", numeric: true, disablePadding: false, label: "PRECIO" },
+  { id: "detail", numeric: false, disablePadding: false, label: "DETALLES" },
+  {
+    id: "users",
+    numeric: false,
+    disablePadding: false,
+    label: "USUARIOS",
+  },
+  { id: "state", numeric: true, disablePadding: false, label: "ESTADO" },
 ];
 
 function EnhancedTableHead(props) {
@@ -65,7 +75,7 @@ function EnhancedTableHead(props) {
   };
 
   return (
-    <TableHead>
+    <TableHead className={classes.title}>
       <TableRow>
         {headCells.map((headCell) => (
           <TableCell
@@ -103,30 +113,106 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
+// const useToolbarStyles = makeStyles((theme) => ({
+//   root: {
+//     paddingLeft: theme.spacing(2),
+//     paddingRight: theme.spacing(1),
+//   },
+//   highlight:
+//     theme.palette.type === "light"
+//       ? {
+//           color: theme.palette.secondary.main,
+//           backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+//         }
+//       : {
+//           color: theme.palette.text.primary,
+//           backgroundColor: theme.palette.secondary.dark,
+//         },
+//   title: {
+//     flex: "1 1 100%",
+//   },
+// }));
+
+//------------------------makeStyle1---------------------------------------------------------------------------------------
 const useToolbarStyles = makeStyles((theme) => ({
   root: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
+
+      backgroundColor: lighten('#34a7a1', 0.3),
+      padding: '0px 0px 0px 0px',
+      //color barra superior '
   },
   highlight:
-    theme.palette.type === "light"
-      ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-        }
-      : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark,
-        },
+      theme.palette.type === 'light'
+          ? {
+              color: '#fafafa',
+              backgroundColor: lighten(blue[500], 0.5),//color barra superior cuando selecciono item
+              fontWeight: 'bold',
+              fontSize: '30px'
+          }
+          : {
+              color: theme.palette.text.primary,
+              backgroundColor: lighten('#34a7a1', 0.3),
+
+          },
   title: {
-    flex: "1 1 100%",
+      flex: '1 1 100%',
+      fontWeight: 'bold',
+      fontSize: '1.4rem',
+      color: '#fafafa',
+      textAlign: 'center'
   },
+  filters: {
+      display: 'flex'
+  },
+  iconFilter: {
+      color: '#fafafa',
+      fontWeight: 'bold',
+      '&:hover': {
+          backgroundColor: '#34a7a1',
+      }
+  },
+  iconBlock: {
+      color: '#fafafa',
+      fontWeight: 'bold',
+      '&:hover': {
+          backgroundColor: lighten('#34a7a1', 0.8),
+      }
+  },
+  p: {
+      fontWeight: 'bold',
+      fontSize: '1.4rem',
+      color: '#fafafa',
+      textAlign: 'rigth'
+  },
+  popup: {
+      color: '#fafafa',
+      backgroundColor: '#2c7f7b',
+      fontWeight: 'bold',
+      fontSize: '30px'
+  },
+  popupBtn: {
+      color: '#fafafa',
+      padding: theme.spacing(0.5),
+      border: '3px solid #2c7f7b',
+      backgroundColor: '#2c7f7b',
+      fontWeight: 'bold',
+      fontSize: '15px',
+      '&:hover': {
+          backgroundColor: lighten('#fafafa', 0.2),
+          color: '#2c7f7b',
+          padding: theme.spacing(0.5),
+      }
+  },
+  formControl : {
+      width: '177px'
+  }
+
 }));
 
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
   return (
-    <Toolbar>
+    <Toolbar className={classes.root}>
       <Typography
         className={classes.title}
         variant="h6"
@@ -134,7 +220,7 @@ const EnhancedTableToolbar = (props) => {
         component="div"
         align="center"
       >
-        Plans
+        PLANES
       </Typography>
     </Toolbar>
   );
@@ -144,28 +230,73 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     width: "100%",
+//   },
+//   paper: {
+//     width: "100%",
+//     marginBottom: theme.spacing(2),
+//   },
+//   table: {
+//     minWidth: 750,
+//   },
+//   visuallyHidden: {
+//     border: 0,
+//     clip: "rect(0 0 0 0)",
+//     height: 1,
+//     margin: -1,
+//     overflow: "hidden",
+//     padding: 0,
+//     position: "absolute",
+//     top: 20,
+//     width: 1,
+//   },
+// }));
+
+//-------------------- EnhancedTableToolbar Style
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: "100%",
+      width: '100%',
+      padding: '0px 0px 0px 0px',
   },
   paper: {
-    width: "100%",
-    marginBottom: theme.spacing(2),
+      width: '100%',
+      marginBottom: theme.spacing(2),
   },
   table: {
-    minWidth: 750,
+      minWidth: 750,
+
   },
   visuallyHidden: {
-    border: 0,
-    clip: "rect(0 0 0 0)",
-    height: 1,
-    margin: -1,
-    overflow: "hidden",
-    padding: 0,
-    position: "absolute",
-    top: 20,
-    width: 1,
+      border: 0,
+      clip: 'rect(0 0 0 0)',
+      height: 1,
+      margin: -1,
+      overflow: 'hidden',
+      padding: 0,
+      position: 'absolute',
+      top: 20,
+      width: 1
   },
+  title: {
+      color: '#212121',
+      fontWeight: 'bold',
+      backgroundColor: lighten('#34a7a1', 0.6)
+  },
+  rowColor: {
+      backgroundColor: lighten('#e0e0e0', 0.3),
+      ':checked': {
+          color: blue[500]
+      }
+  },
+  iconFilter: {
+      color: 'rgba(0, 0, 0, 0.47)',
+      fontWeight: 'bold',
+      '&:hover': {
+          backgroundColor: lighten('#34a7a1', 0.8),
+      }
+  }
 }));
 
 export default function PlansTable({
@@ -173,13 +304,14 @@ export default function PlansTable({
   handleOpenModalModify,
   handleOpenModalDelete,
   handleOpenModalDetails,
+  handleOpenModalState,
 }) {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
+  //const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const rows = plans;
@@ -208,9 +340,9 @@ export default function PlansTable({
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
+  /* const handleChangeDense = (event) => {
     setDense(event.target.checked);
-  };
+  }; */
 
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -223,7 +355,7 @@ export default function PlansTable({
           <Table
             className={classes.table}
             aria-labelledby="tableTitle"
-            size={dense ? "small" : "medium"}
+            size= "small"
             aria-label="enhanced table"
           >
             <EnhancedTableHead
@@ -242,32 +374,35 @@ export default function PlansTable({
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
                     <TableRow>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="default"
-                      >
-                        {row.name}
-                      </TableCell>
-                      <TableCell align="left">${row.price}</TableCell>
-                      <TableCell align="left">
-                        <Button
-                          onClick={() => handleOpenModalDetails(row)}
-                          variant="outlined"
-                          size="small"
-                        >
-                          View
-                        </Button>
-                      </TableCell>
-                      <TableCell padding="default">
+                      <TableCell /* padding="default" */ align='left' className={index % 2 === 1 ? classes.rowColor : null}>
                         <Tooltip
+                          className={classes.iconFilter}
                           title="Editar plan"
                           onClick={() => handleOpenModalModify(row)}
                         >
                           <CreateIcon />
                         </Tooltip>
+                        {row.active ? (
+                          <Tooltip
+                            className={classes.iconFilter}
+                            title="Desactivar"
+                            aria-label="deactivate"
+                            onClick={() => handleOpenModalState(row)}
+                          >
+                            <PowerSettingsNewIcon />
+                          </Tooltip>
+                        ) : (
+                          <Tooltip
+                          className={classes.iconFilter}
+                            title="Activar"
+                            aria-label="activate"
+                            onClick={() => handleOpenModalState(row)}
+                          >
+                            <PowerSettingsNewIcon />
+                          </Tooltip>
+                        )}
                         <Tooltip
+                          className={classes.iconFilter}
                           title="Eliminar plan"
                           aria-label="delete"
                           onClick={() => handleOpenModalDelete(row)}
@@ -275,11 +410,43 @@ export default function PlansTable({
                           <DeleteIcon />
                         </Tooltip>
                       </TableCell>
+                      <TableCell
+                        className={index % 2 === 1 ? classes.rowColor : null}
+                        component="th"
+                        id={labelId}
+                        scope="row"
+                        padding="default"
+                      >
+                        {row.name}
+                      </TableCell>
+                      <TableCell align="left" className={index % 2 === 1 ? classes.rowColor : null}>
+                        ${row.price}
+                      </TableCell>
+                      <TableCell align="left" className={index % 2 === 1 ? classes.rowColor : null}>
+                        <Button
+                        className={classes.iconFilter}
+                          onClick={() => handleOpenModalDetails(row)}
+                          variant="outlined"
+                          size="small"
+                        >
+                          Ver
+                        </Button>
+                      </TableCell>
+                      <TableCell padding="default"
+                      className={index % 2 === 1 ? classes.rowColor : null}
+                      >
+                        {row.users}
+                        </TableCell>
+                      <TableCell padding="default"
+                      className={index % 2 === 1 ? classes.rowColor : null}
+                      >
+                        {row.active ? "Activo" : "Inactivo"}
+                      </TableCell>
                     </TableRow>
                   );
                 })}
               {emptyRows > 0 && (
-                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                <TableRow >
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
@@ -296,10 +463,6 @@ export default function PlansTable({
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
     </div>
   );
 }

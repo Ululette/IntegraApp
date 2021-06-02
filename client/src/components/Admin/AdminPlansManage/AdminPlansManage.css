@@ -1,0 +1,10 @@
+/* .cont1{padding: 0;} */
+.tabs{
+  padding: 0;
+width: 100%;
+background-color: #27978b;
+display: flex;
+flex-direction: column;
+align-items: center;/* | */
+justify-content: center; /* -- */
+}

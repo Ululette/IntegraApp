@@ -187,6 +187,7 @@ const useToolbarStyles = makeStyles((theme) => ({
         fontWeight: 'bold',
         fontSize: '30px',
     },
+
     popupBtn: {
         color: '#fafafa',
         padding: theme.spacing(0.5),
@@ -381,7 +382,6 @@ const EnhancedTableToolbar = (props) => {
                             </IconButton>
                         </Tooltip>
                     </div>
-
                     <Dialog
                         disableBackdropClick
                         disableEscapeKeyDown
@@ -529,6 +529,7 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 'bold',
         backgroundColor: lighten('#34a7a1', 0.6),
     },
+
     rowColor: {
         backgroundColor: lighten('#e0e0e0', 0.3),
         ':checked': {

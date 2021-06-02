@@ -161,56 +161,7 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
 };
 
-// const useToolbarStyles = makeStyles((theme) => ({
-//     root: {
-//         paddingLeft: theme.spacing(2),
-//         paddingRight: theme.spacing(1),
-//     },
-//     highlight:
-//         theme.palette.type === 'light'
-//             ? {
-//                   color: theme.palette.secondary.main,
-//                   backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-//               }
-//             : {
-//                   color: theme.palette.text.primary,
-//                   backgroundColor: theme.palette.secondary.dark,
-//               },
-//     title: {
-//         flex: '1 1 100%',
-//     },
-// }));
-
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//         width: '100%',
-//         display: 'flex',
-//         justifyContent: 'flex-end',
-//         alignItems: 'flex-start',
-//         marginTop: '2rem',
-//         height: '80vh',
-//     },
-//     paper: {
-//         width: '100%',
-//         marginBottom: theme.spacing(2),
-//     },
-//     table: {
-//         width: '100%',
-//     },
-//     visuallyHidden: {
-//         border: 0,
-//         clip: 'rect(0 0 0 0)',
-//         height: 1,
-//         overflow: 'hidden',
-//         padding: 0,
-//         position: 'absolute',
-//         top: 20,
-//         width: 1,
-//     },
-// }));
-
 //------------------------makeStyle1---------------------------------------------------------------------------------------
-//eslint-disable-next-line
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
         paddingLeft: theme.spacing(2),
@@ -373,6 +324,7 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 'bold',
         fontSize: '15px',
     },
+
     iconFilter: {
         color: 'rgba(0, 0, 0, 0.47)',
         fontWeight: 'bold',
@@ -1000,7 +952,6 @@ function AdminAffiliate() {
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                 />
             </Paper>
-
             <div>
                 <Dialog
                     open={open.edit}

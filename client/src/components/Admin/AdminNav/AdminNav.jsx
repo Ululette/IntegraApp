@@ -40,7 +40,10 @@ import ClearIcon from '@material-ui/icons/Clear';
 // OUR COMPONENTS
 import AdminHome from '../AdminHome/AdminHome.jsx';
 import AdminPlans from '../AdminPlans/AdminPlans.jsx';
-// import NewPlanP from '../NewPlanP/NewPlanP.jsx';
+import AdminPlansManage from '../AdminPlansManage/AdminPlansManage.jsx';
+
+import AdminProfile from '../AdminProfile/AdminProfile.jsx';
+
 import AdminMedicTabs from '../MedicsTable/AdminTabs.jsx';
 import AdminAffiliate from '../AdminAffiliate/AdminAffiliate.jsx';
 import FormSpecialities from '../Speciality/FormSpecialities.jsx';
@@ -84,19 +87,18 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('sm')]: {
             display: 'none',
         },
-    },
-    // necessary for content to be below app bar
-    toolbar: theme.mixins.toolbar,
-    drawerPaper: {
-        width: drawerWidth,
-        zIndex: 0,
-    },
-    content: {
-        flexGrow: 1,
-        padding: theme.spacing(3),
-    },
-    badge: {
-        color: 'white',
+        badge: {
+            color: 'white',
+        },
+        toolbar: theme.mixins.toolbar,
+        drawerPaper: {
+            width: drawerWidth,
+            zIndex: 0,
+        },
+        content: {
+            flexGrow: 1,
+            padding: theme.spacing(3),
+        },
     },
 }));
 
@@ -207,10 +209,16 @@ function AdminNav({ firebase, window: windowMui }) {
                         <ListItemText primary='Inicio' />
                     </ListItem>
                 </NavLink>
-                <ListItem button>
-                    <FaceIcon />
-                    <ListItemText primary='Mi cuenta' />
-                </ListItem>
+                <NavLink
+                    to={`/${userData.dni}/admin/profile`}
+                    className={styles.link}
+                    activeClassName={styles.activeLink}
+                >
+                    <ListItem button>
+                        <FaceIcon />
+                        <ListItemText primary='Mi cuenta' />
+                    </ListItem>
+                </NavLink>
                 <NavLink
                     to={`/${userData.dni}/admin/aplications`}
                     className={styles.link}
@@ -469,6 +477,9 @@ function AdminNav({ firebase, window: windowMui }) {
                 ) : window.location.pathname ===
                   `/${userData.dni}/admin/medics` ? (
                     <AdminMedicTabs />
+                ) : window.location.pathname ===
+                  `/${userData.dni}/admin/profile` ? (
+                    <AdminProfile />
                 ) : window.location.pathname ===
                   `/${userData.dni}/admin/specialities` ? (
                     <FormSpecialities />
