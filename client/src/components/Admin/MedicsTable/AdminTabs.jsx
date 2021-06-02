@@ -74,8 +74,6 @@ const useStyles = makeStyles(() => ({
     },
     prueba: {
         backgroundColor: 'rgba(255, 255, 255, 0)',
-
-        //backgroundColor: 'rgb(217 222 222 / 56%)',
         margin: '0px',
         padding: '0px',
         boxShadow: 'none',

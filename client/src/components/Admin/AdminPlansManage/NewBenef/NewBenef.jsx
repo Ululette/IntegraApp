@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import supabase from '../../../../supabase.config';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles, lighten } from '@material-ui/core/styles';
 // import { Autocomplete } from '@material-ui/lab';
 import { TextField, Button } from '@material-ui/core';
 import './NewBenef.css';
@@ -33,8 +33,17 @@ const useStyles = makeStyles((theme) => ({
     color: '#676161de',
   },
   saveButton: {
-    backgroundColor: '#27978b',
-    color: '#f0f0f0',
+    color: '#fafafa',
+        padding: theme.spacing(0.5),
+        border: '3px solid #2c7f7b',
+        backgroundColor: '#2c7f7b',
+        fontWeight: 'bold',
+        fontSize: '15px',
+        '&:hover': {
+            backgroundColor: lighten('#fafafa', 0.2),
+            color: '#2c7f7b',
+            padding: theme.spacing(0.5),
+        }
   }
 }));
 
@@ -242,7 +251,7 @@ export default function NewBenef() {
           )} */}
 
         </div>
-        <div width='100%' align="right">
+        <div  width='100%' align="right">
           <Button
             id='savebtn'
             disabled={!validate()}

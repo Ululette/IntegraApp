@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import supabase from '../../../../supabase.config';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles, lighten } from '@material-ui/core/styles';
 import { Autocomplete } from '@material-ui/lab';
 import { TextField, Button, Box } from '@material-ui/core';
 import './NewPlan.css';
@@ -36,13 +36,23 @@ const useStyles = makeStyles((theme) => ({
     width: '500px',
     marginBottom: 15,
     backgroundColor: '#ffffff',
+    
   },
   activo: {
     color: '#676161de',
   },
   saveButton: {
-    backgroundColor: '#27978b',
-    color: '#f0f0f0',
+    color: '#fafafa',
+        padding: theme.spacing(0.5),
+        border: '3px solid #2c7f7b',
+        backgroundColor: '#2c7f7b',
+        fontWeight: 'bold',
+        fontSize: '15px',
+        '&:hover': {
+            backgroundColor: lighten('#fafafa', 0.2),
+            color: '#2c7f7b',
+            padding: theme.spacing(0.5),
+        }
   }
 }));
 
@@ -62,7 +72,6 @@ const AntSwitch = withStyles((theme) => ({
       '& + $track': {
         opacity: 1,
         backgroundColor: '#27978b',
-        // backgroundColor: theme.palette.primary.main,
         borderColor: theme.palette.primary.main,
       },
     },
@@ -314,7 +323,7 @@ export default function NewPlan() {
                 variant='outlined'
                 error={error.sbenefits}
                 helperText={error.sbenefits}
-
+                className={classes.textField}
                 inputProps={{
                   ...params.inputProps,
                   autoComplete:
