@@ -195,6 +195,7 @@ const DatosTitular = () => {
                 ),
             }));
         }
+        //eslint-disable-next-line
     }, []);
 
     function saveInLocalStorage() {
@@ -296,6 +297,7 @@ const DatosTitular = () => {
     const localities =
         allLocalities &&
         allLocalities
+            //eslint-disable-next-line
             .filter((l) => l.state_id == selectInputs.state.split('-')[0])
             .map((l) => {
                 return <option value={`${l.id}-${l.name}`}>{l.name}</option>;
