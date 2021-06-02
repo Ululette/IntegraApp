@@ -15,6 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
+import blue from '@material-ui/core/colors/blue';
 import Tooltip from '@material-ui/core/Tooltip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
@@ -49,17 +50,17 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-    { id: 'date', numeric: false, disablePadding: true, label: 'Fecha' },
-    { id: 'lastname', numeric: false, disablePadding: false, label: 'Medico' },
+    { id: 'date', numeric: false, disablePadding: true, label: 'FECHA' },
+    { id: 'lastname', numeric: false, disablePadding: false, label: 'MEDICO' },
     {
         id: 'lastname',
         numeric: false,
         disablePadding: false,
-        label: 'Paciente',
+        label: 'PACEINTE',
     },
-    { id: 'dni', numeric: true, disablePadding: false, label: 'DNI paciente' },
-    { id: 'status', numeric: false, disablePadding: false, label: 'Estado' },
-    { id: 'view', numeric: false, disablePadding: false, label: 'Ver' },
+    { id: 'dni', numeric: true, disablePadding: false, label: 'DNI SOCIO' },
+    { id: 'status', numeric: false, disablePadding: false, label: 'ESTADO' },
+    { id: 'view', numeric: false, disablePadding: false, label: 'VER' },
 ];
 
 function EnhancedTableHead(props) {
@@ -77,7 +78,7 @@ function EnhancedTableHead(props) {
     };
 
     return (
-        <TableHead>
+        <TableHead className={classes.title}>
             <TableRow>
                 <TableCell padding='checkbox'>
                     <Checkbox
@@ -92,11 +93,12 @@ function EnhancedTableHead(props) {
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
-                        align='center'
+                        align='left'
                         padding={headCell.disablePadding ? 'none' : 'default'}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
                         <TableSortLabel
+                            className={classes.title}
                             active={orderBy === headCell.id}
                             direction={orderBy === headCell.id ? order : 'asc'}
                             onClick={createSortHandler(headCell.id)}
@@ -127,23 +129,87 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
 };
 
+// const useToolbarStyles = makeStyles((theme) => ({
+//     root: {
+//         paddingLeft: theme.spacing(2),
+//         paddingRight: theme.spacing(1),
+//     },
+//     highlight:
+//         theme.palette.type === 'light'
+//             ? {
+//                   color: theme.palette.secondary.main,
+//                   backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+//               }
+//             : {
+//                   color: theme.palette.text.primary,
+//                   backgroundColor: theme.palette.secondary.dark,
+//               },
+//     title: {
+//         flex: '1 1 100%',
+//     },
+// }));
+
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(1),
+        backgroundColor: lighten('#34a7a1', 0.3),
     },
     highlight:
         theme.palette.type === 'light'
             ? {
-                  color: theme.palette.secondary.main,
-                  backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-              }
+                color: '#fafafa',
+                backgroundColor: lighten(blue[500], 0.5), //color barra superior cuando selecciono item
+                fontWeight: 'bold',
+                fontSize: '30px',
+            }
             : {
-                  color: theme.palette.text.primary,
-                  backgroundColor: theme.palette.secondary.dark,
-              },
+                color: theme.palette.text.primary,
+                backgroundColor: lighten('#34a7a1', 0.3),
+            },
     title: {
         flex: '1 1 100%',
+        fontWeight: 'bold',
+        fontSize: '1.4rem',
+        color: '#fafafa',
+        textAlign: 'center',
+    },
+    filters: {
+        display: 'flex',
+    },
+    iconFilter: {
+        color: '#fafafa',
+        fontWeight: 'bold',
+        '&:hover': {
+            backgroundColor: '#34a7a1',
+        },
+    },
+    iconBlock: {
+        color: '#fafafa',
+        fontWeight: 'bold',
+        '&:hover': {
+            backgroundColor: blue[500],
+        },
+    },
+    popup: {
+        color: '#fafafa',
+        backgroundColor: '#2c7f7b',
+        fontWeight: 'bold',
+        fontSize: '30px',
+    },
+
+    popupBtn: {
+        color: '#fafafa',
+        padding: theme.spacing(0.5),
+        border: '3px solid #2c7f7b',
+        backgroundColor: '#2c7f7b',
+        fontWeight: 'bold',
+        fontSize: '15px',
+        '&:hover': {
+            backgroundColor: lighten('#fafafa', 0.2),
+            color: '#2c7f7b',
+            padding: theme.spacing(0.5),
+        },
     },
 }));
 
@@ -173,19 +239,24 @@ const EnhancedTableToolbar = (props) => {
                     id='tableTitle'
                     component='div'
                 >
-                    Autorizaciones
+                    AUTORIZACIONES
                 </Typography>
             )}
 
             {numSelected > 0 ? (
                 <Tooltip title='Delete'>
-                    <IconButton aria-label='delete'>
+                    <IconButton 
+                    className={classes.iconBlock}
+                    aria-label='delete'>
                         <DeleteIcon />
                     </IconButton>
                 </Tooltip>
             ) : (
-                <Tooltip title='Filter list'>
-                    <IconButton aria-label='filter list'>
+                <Tooltip title='Filtro'>
+                    <IconButton 
+                    aria-label='filter list'
+                    className={classes.iconFilter}
+                    >
                         <FilterListIcon />
                     </IconButton>
                 </Tooltip>
@@ -198,6 +269,31 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
+// const useStyles = makeStyles((theme) => ({
+//     root: {
+//         width: '100%',
+//     },
+//     paper: {
+//         width: '100%',
+//         marginBottom: theme.spacing(2),
+//     },
+//     table: {
+//         minWidth: 750,
+//     },
+//     visuallyHidden: {
+//         border: 0,
+//         clip: 'rect(0 0 0 0)',
+//         height: 1,
+//         margin: -1,
+//         overflow: 'hidden',
+//         padding: 0,
+//         position: 'absolute',
+//         top: 20,
+//         width: 1,
+//     },
+// }));
+
+//-------------------- Style Table Users
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -220,6 +316,18 @@ const useStyles = makeStyles((theme) => ({
         top: 20,
         width: 1,
     },
+    title: {
+        color: '#212121',
+        fontWeight: 'bold',
+        backgroundColor: lighten('#34a7a1', 0.6),
+    },
+
+    rowColor: {
+        backgroundColor: lighten('#e0e0e0', 0.3),
+        ':checked': {
+            color: blue[500],
+        },
+    },
 }));
 
 export default function AdminOrders() {
@@ -238,7 +346,7 @@ export default function AdminOrders() {
             .select(
                 'date, status, partners (dni, name, lastname), medics(dni, name, lastname)'
             );
-        console.log(orders);
+        //console.log(orders);
         orders && setRows(orders);
         console.log(rows, 'rows');
     };
@@ -292,9 +400,9 @@ export default function AdminOrders() {
         setPage(0);
     };
 
-    const handleChangeDense = (event) => {
+    /* const handleChangeDense = (event) => {
         setDense(event.target.checked);
-    };
+    }; */
 
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
@@ -309,7 +417,7 @@ export default function AdminOrders() {
                     <Table
                         className={classes.table}
                         aria-labelledby='tableTitle'
-                        size={dense ? 'small' : 'medium'}
+                        size='small' 
                         aria-label='enhanced table'
                     >
                         <EnhancedTableHead
@@ -343,8 +451,16 @@ export default function AdminOrders() {
                                             key={row.name}
                                             selected={isItemSelected}
                                         >
-                                            <TableCell padding='checkbox'>
+                                            <TableCell 
+                                                padding='checkbox'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
                                                 <Checkbox
+                                                    className={classes.rowColor}
                                                     checked={isItemSelected}
                                                     inputProps={{
                                                         'aria-labelledby':
@@ -357,20 +473,53 @@ export default function AdminOrders() {
                                                 id={labelId}
                                                 scope='row'
                                                 padding='none'
-                                                align='center'
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
                                             >
                                                 {row.date}
                                             </TableCell>
-                                            <TableCell align='center'>
-                                                {row.medics.lastname}
+                                            <TableCell 
+                                            align='left'
+                                            className={
+                                                index % 2 === 1
+                                                    ? classes.rowColor
+                                                    : null
+                                            }
+                                            >
+                                                {`${row.medics.lastname}, ${row.medics.name} ` }
                                             </TableCell>
-                                            <TableCell align='center'>
-                                                {row.partners.lastname}
+                                            <TableCell 
+                                            align='left'
+                                            className={
+                                                index % 2 === 1
+                                                    ? classes.rowColor
+                                                    : null
+                                            }
+                                            >
+                                                {`${row.partners.lastname}, ${row.partners.name} `}
                                             </TableCell>
-                                            <TableCell align='center'>
+                                            <TableCell 
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                                >
                                                 {row.partners.dni}
                                             </TableCell>
-                                            <TableCell align='center'>
+                                            <TableCell 
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
                                                 {row.status}
                                             </TableCell>
                                         </TableRow>
@@ -379,7 +528,7 @@ export default function AdminOrders() {
                             {emptyRows > 0 && (
                                 <TableRow
                                     style={{
-                                        height: (dense ? 33 : 53) * emptyRows,
+                                        height: 33 * emptyRows,
                                     }}
                                 >
                                     <TableCell colSpan={6} />
@@ -389,6 +538,7 @@ export default function AdminOrders() {
                     </Table>
                 </TableContainer>
                 <TablePagination
+
                     rowsPerPageOptions={[5, 10, 25]}
                     component='div'
                     count={rows.length}
@@ -398,12 +548,7 @@ export default function AdminOrders() {
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                 />
             </Paper>
-            <FormControlLabel
-                control={
-                    <Switch checked={dense} onChange={handleChangeDense} />
-                }
-                label='Dense padding'
-            />
+            
         </div>
     );
 }
