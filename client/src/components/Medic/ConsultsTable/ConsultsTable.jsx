@@ -212,15 +212,14 @@ const EnhancedTableToolbar = (props) => {
             .from('medical_consultations')
             .select('*,partners:partner_dni(dni,name,lastname)')
             .eq('medic_dni',userDni)
-            setToShowRows(
-                consults.filter(
-                    (co) => co.partners.dni.toString().includes(dni)
-                )
-            );
+            let array = consults.filter(
+                (co) => co.partners.dni.toString().includes(dni)
+            )
+            setToShowRows(array);
 
-            console.log(consults)
+            console.log(array)
             console.error('error fetch:',errorFetch)
-            // setToShowRows(consults);
+            setToShowRows(array);
         }
     };
 
@@ -240,7 +239,7 @@ const EnhancedTableToolbar = (props) => {
                 [classes.highlight]: numSelected > 0,
             })}
         >
-            {/* <TextField
+            <TextField
                 className={classes.input}
                 type='text'
                 size='small'
@@ -249,7 +248,7 @@ const EnhancedTableToolbar = (props) => {
                 variant='outlined'
                 onChange={handleInputSearch}
                 value={inputSearch}
-            /> */}
+            />
             <Typography
                 className={classes.title}
                 variant='h6'
@@ -294,6 +293,13 @@ const useStyles = makeStyles((theme) => ({
         color: '#212121',
         fontWeight: 'bold',
         backgroundColor: lighten('#34a7a1', 0.6),
+    },
+    titleDos: {
+        flex: '1 1 100%',
+        fontWeight: 'bold',
+        fontSize: '1.4rem',
+        color: '#D9DCDF',
+        textAlign: 'center',
     },
     rowColor: {
         backgroundColor: lighten('#e0e0e0', 0.3),
@@ -356,6 +362,7 @@ export default function ConsultsTable() {
                     numSelected={selected.length}
                     setToShowRows={setToShowRows}
                 />
+                {toShowRows.length !== 0 ? (
                 <TableContainer>
                     <Table
                         className={classes.table}
@@ -394,25 +401,6 @@ export default function ConsultsTable() {
                                             key={row.name}
                                             selected={isItemSelected}
                                         >
-                                            {/* <TableCell
-                                                align='left'
-                                                className={
-                                                    index % 2 === 1
-                                                        ? classes.rowColor
-                                                        : null
-                                                }
-                                            >
-                                                <Tooltip
-                                                    title='Resultados'
-                                                    className={
-                                                        classes.iconFilter
-                                                    }
-                                                >
-                                                    <IconButton aria-label='Resultados'>
-                                                        <InfoIcon />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </TableCell> */}
                                             <TableCell
                                                 align='left'
                                                 className={
@@ -487,6 +475,18 @@ export default function ConsultsTable() {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                ) : (
+                    <TableContainer>
+                        <Typography
+                            className={classes.titleDos}
+                            variant='h6'
+                            id='tableTitle'
+                            component='div'
+                        >
+                            No Tiene consultas realizadas
+                        </Typography>
+                    </TableContainer>
+                )}
                 <TablePagination
                     className={classes.root}
                     rowsPerPageOptions={[5, 10, 15, 20]}

@@ -711,24 +711,6 @@ export default function SearchDoctors() {
         rowsPerPage -
         Math.min(rowsPerPage, toShowRows.length - page * rowsPerPage);
 
-    // if (toShowRows.length === 0){
-    //     return(
-    //         <div>
-    //             <TableRow
-    //                 hover
-    //                 // onClick={(event) => handleClick(event, row.name)}
-    //                 role='checkbox'
-    //                 aria-checked={isItemSelected}
-    //                 tabIndex={-1}
-    //                 key={row.name}
-    //                 selected={isItemSelected}
-    //             >
-
-    //             </TableRow>
-
-    //         </div>
-    //     )
-    // }
     const rows = listMedics;
 
     return (

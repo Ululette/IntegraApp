@@ -18,6 +18,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import InfoIcon from '@material-ui/icons/Info';
 import blue from '@material-ui/core/colors/blue';
+import Swal from 'sweetalert2';
 import 'firebase/auth';
 import supabase from '../../../supabase.config';
 
@@ -235,7 +236,6 @@ const EnhancedTableToolbar = (props) => {
 
     useEffect(() => {
         fetchOrders();
-        //eslint-disable-next-line
     }, []);
 
     return (
@@ -298,6 +298,13 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 'bold',
         backgroundColor: lighten('#34a7a1', 0.6),
     },
+    titleDos: {
+        flex: '1 1 100%',
+        fontWeight: 'bold',
+        fontSize: '1.4rem',
+        color: '#D9DCDF',
+        textAlign: 'center',
+    },
     rowColor: {
         backgroundColor: lighten('#e0e0e0', 0.3),
         ':checked': {
@@ -346,6 +353,28 @@ export default function MyOrders() {
         setPage(0);
     };
 
+    const handleInfo = (row) => {
+        if(row.results){
+            let resultsSplitted = row.results.results.results.split('|').map(p=>`<p align="left">${p}</p>`)
+            Swal.fire({
+                position: 'center',
+                width: '50%',
+                title: `Resultados:`,
+                html:
+                    `<h3>Paciente: ${row.partners.name} ${row.partners.lastname}</h3>` +
+                    `<h3>DNI:${row.partners.dni}</h3>` +
+                    `${resultsSplitted.join('')}`,
+            });
+        } else {
+            Swal.fire({
+                width: '50%',
+                icon: 'error',
+                title: 'Lo sentimos',
+                text: 'No se encontraron los resultados',
+            })
+        }
+    };
+
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
     const emptyRows =
@@ -359,6 +388,7 @@ export default function MyOrders() {
                     numSelected={selected.length}
                     setToShowRows={setToShowRows}
                 />
+                {toShowRows.length !== 0 ? (
                 <TableContainer>
                     <Table
                         className={classes.table}
@@ -414,7 +444,13 @@ export default function MyOrders() {
                                                     }
                                                 >
                                                     <IconButton aria-label='Resultados'>
-                                                        <InfoIcon />
+                                                        <InfoIcon 
+                                                            onClick={() =>
+                                                                handleInfo(
+                                                                    row
+                                                                )
+                                                            }
+                                                        />
                                                     </IconButton>
                                                 </Tooltip>
                                             </TableCell>
@@ -492,6 +528,18 @@ export default function MyOrders() {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                ) : (
+                    <TableContainer>
+                        <Typography
+                            className={classes.titleDos}
+                            variant='h6'
+                            id='tableTitle'
+                            component='div'
+                        >
+                            No tiene autorizaciones
+                        </Typography>
+                    </TableContainer>
+                )}
                 <TablePagination
                     className={classes.root}
                     rowsPerPageOptions={[5, 10, 15, 20]}
