@@ -39,11 +39,8 @@ import ClearIcon from '@material-ui/icons/Clear';
 
 // OUR COMPONENTS
 import AdminHome from '../AdminHome/AdminHome.jsx';
-import AdminPlans from '../AdminPlans/AdminPlans.jsx';
-import AdminPlansManage from '../AdminPlansManage/AdminPlansManage.jsx';
-
-import AdminProfile from '../AdminProfile/AdminProfile.jsx';
-
+import AdminPlansManage from '../AdminPlansManage/AdminPlansManage';
+import AdminProfile from '../AdminProfile/AdminProfile';
 import AdminMedicTabs from '../MedicsTable/AdminTabs.jsx';
 import AdminAffiliate from '../AdminAffiliate/AdminAffiliate.jsx';
 import FormSpecialities from '../Speciality/FormSpecialities.jsx';
@@ -87,18 +84,19 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('sm')]: {
             display: 'none',
         },
-        badge: {
-            color: 'white',
-        },
-        toolbar: theme.mixins.toolbar,
-        drawerPaper: {
-            width: drawerWidth,
-            zIndex: 0,
-        },
-        content: {
-            flexGrow: 1,
-            padding: theme.spacing(3),
-        },
+    },
+    // necessary for content to be below app bar
+    toolbar: theme.mixins.toolbar,
+    drawerPaper: {
+        width: drawerWidth,
+        zIndex: 0,
+    },
+    content: {
+        flexGrow: 1,
+        padding: theme.spacing(3),
+    },
+    badge: {
+        color: 'white',
     },
 }));
 
@@ -488,7 +486,7 @@ function AdminNav({ firebase, window: windowMui }) {
                     <AdminAffiliate firebase={firebase} />
                 ) : window.location.pathname ===
                   `/${userData.dni}/admin/plans` ? (
-                    <AdminPlans firebase={firebase} />
+                    <AdminPlansManage firebase={firebase} />
                 ) : window.location.pathname ===
                   `/${userData.dni}/admin/newadmin` ? (
                     <AdminRegistration firebase={firebase} />
