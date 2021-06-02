@@ -16,10 +16,20 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import InfoIcon from '@material-ui/icons/Info';
 import blue from '@material-ui/core/colors/blue';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { useTheme } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+
 import 'firebase/auth';
 import supabase from '../../../supabase.config';
+import { Cancel, DoneAll, HourglassEmptyOutlined } from '@material-ui/icons';
+import { Divider } from '@material-ui/core';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -311,6 +321,9 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor: lighten('#34a7a1', 0.8),
         },
     },
+    buttonClose: {
+        color: '#00897B',
+    },
 }));
 
 export default function MyOrders() {
@@ -321,6 +334,19 @@ export default function MyOrders() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [toShowRows, setToShowRows] = React.useState([]);
+    const [currentStudy, setCurrentStudy] = React.useState(false);
+    console.log(currentStudy);
+    const [open, setOpen] = React.useState(false);
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+    const handleClickOpen = (study) => {
+        setOpen(true);
+        setCurrentStudy(study);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -392,7 +418,6 @@ export default function MyOrders() {
                                     return (
                                         <TableRow
                                             hover
-                                            // onClick={(event) => handleClick(event, row.name)}
                                             role='checkbox'
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
@@ -407,16 +432,47 @@ export default function MyOrders() {
                                                         : null
                                                 }
                                             >
-                                                <Tooltip
-                                                    title='Resultados'
-                                                    className={
-                                                        classes.iconFilter
-                                                    }
-                                                >
-                                                    <IconButton aria-label='Resultados'>
-                                                        <InfoIcon />
-                                                    </IconButton>
-                                                </Tooltip>
+                                                {row.status.name ===
+                                                'realizada' ? (
+                                                    <Tooltip
+                                                        title='Resultados'
+                                                        className={
+                                                            classes.iconFilter
+                                                        }
+                                                        onClick={() => {
+                                                            handleClickOpen(
+                                                                row
+                                                            );
+                                                        }}
+                                                    >
+                                                        <IconButton aria-label='Resultados'>
+                                                            <DoneAll />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                ) : row.status.name ===
+                                                  'rechazada' ? (
+                                                    <Tooltip
+                                                        title='Rechazada'
+                                                        className={
+                                                            classes.iconFilter
+                                                        }
+                                                    >
+                                                        <IconButton aria-label='Rechazada'>
+                                                            <Cancel />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                ) : (
+                                                    <Tooltip
+                                                        title='En proceso...'
+                                                        className={
+                                                            classes.iconFilter
+                                                        }
+                                                    >
+                                                        <IconButton aria-label='En proceso...'>
+                                                            <HourglassEmptyOutlined />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                )}
                                             </TableCell>
                                             <TableCell
                                                 align='left'
@@ -492,6 +548,42 @@ export default function MyOrders() {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <Dialog
+                    fullScreen={fullScreen}
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby='responsive-dialog-title'
+                >
+                    <DialogTitle id='responsive-dialog-title'>
+                        {`${currentStudy.results.name} de ${currentStudy.partners.name} ${currentStudy.partners.lastname}`}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            {`Estudio realizado el dia: ${currentStudy.results.results.date}`}
+                        </DialogContentText>
+                        <Divider />
+                        <DialogContentText>
+                            {`Estudio realizado por: ${currentStudy.results.results.medic_name}`}
+                        </DialogContentText>
+                        <Divider />
+                        <DialogContentText>{`Resultados:`}</DialogContentText>
+                        <DialogContentText style={{ whiteSpace: 'pre' }}>
+                            {`${currentStudy.results.results.results.replace(
+                                /\|/g,
+                                '\n'
+                            )}`}
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            onClick={handleClose}
+                            className={classes.buttonClose}
+                            autoFocus
+                        >
+                            Cerrar
+                        </Button>
+                    </DialogActions>
+                </Dialog>
                 <TablePagination
                     className={classes.root}
                     rowsPerPageOptions={[5, 10, 15, 20]}
