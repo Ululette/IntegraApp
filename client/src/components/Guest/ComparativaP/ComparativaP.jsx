@@ -58,6 +58,9 @@ export default function ComparativaP() {
             )}
           />
         </div>
+        <a href='/#contact'>
+          <button className="buttonRegister">Asociate</button>
+        </a>
         <AcccessibleTable plans={plans} />
       </div>)}
     </div>
