@@ -117,19 +117,19 @@ export default function NewPlan() {
 
   // Estado de errores para poder guardar el plan
   let [error, setError] = useState({
-    title: 'No puede quedar incompleto o en blanco.',
-    price: 'Debe ser un número de 4 a 6 cifras',
-    sbenefits: 'Debe tener al menos un beneficio.',
+    title: '',
+    price: '',
+    sbenefits: '',
     active: '',
   });
 
   useEffect(() => {
-    setError({
-      title: 'No puede quedar incompleto o en blanco.',
-      price: 'Debe ser un número de 4 a 6 cifras',
-      sbenefits: 'Debe tener al menos un beneficio.',
-      active: '',
-    });
+    // setError({
+    //   title: 'No puede quedar incompleto o en blanco.',
+    //   price: 'Debe ser un número de 4 a 6 cifras',
+    //   sbenefits: 'Debe tener al menos un beneficio.',
+    //   active: '',
+    // });
   }, []);
 
   // Cambios en los inputs (excepto en beneficio)
@@ -285,6 +285,7 @@ export default function NewPlan() {
           />
           <TextField
             id='importeInput'
+            type='number'
             name='price'
             className={classes.importe}
             label='Importe'

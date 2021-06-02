@@ -78,17 +78,18 @@ export default function NewBenef() {
 
   // Estado de errores para poder guardar el beneficio
   let [error, setError] = useState({
-    title: 'No puede quedar incompleto o en blanco.',
+    title: '',
+    // title: 'No puede quedar incompleto o en blanco.',
     // description: 'No puede quedar incompleto o en blanco.',
     // category: 'Debe pertenecer al menos a una categoría.',
   });
 
   useEffect(() => {
-    setError({
-      title: 'No puede quedar incompleto o en blanco.',
-      // description: 'No puede quedar incompleto o en blanco.',
-      // category: 'Debe pertenecer al menos a una categoría.',
-    });
+    // setError({
+    //   title: 'No puede quedar incompleto o en blanco.',
+    //   // description: 'No puede quedar incompleto o en blanco.',
+    //   // category: 'Debe pertenecer al menos a una categoría.',
+    // });
   }, []);
 
   useEffect(() => {
