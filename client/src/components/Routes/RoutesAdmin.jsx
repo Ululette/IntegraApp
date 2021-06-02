@@ -14,15 +14,15 @@ function RoutesAdmin() {
     const firebase = useFirebaseApp();
     return (
         <>
-            <Route
+        {/*     <Route
                 path='/:id/admin'
                 render={() => <AdminNav firebase={firebase} />}
-            />
+            /> 
             <Route
                 exact
                 path='/:id/admin'
                 render={() => <AdminHome firebase={firebase} />}
-            />
+            />*/}
             <Route exact path='/:id/admin/medics' component={AdminMedicTabs} />
             <Route
                 exact

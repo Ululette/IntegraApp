@@ -1,28 +1,47 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import { lighten, makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import supabase from '../../../supabase.config';
+import React from "react";
+import PropTypes from "prop-types";
+import clsx from "clsx";
+import { lighten, makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
+import TableSortLabel from "@material-ui/core/TableSortLabel";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import Paper from "@material-ui/core/Paper";
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
+import DeleteIcon from "@material-ui/icons/Delete";
+import FilterListIcon from "@material-ui/icons/FilterList";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import ClearAllIcon from "@material-ui/icons/ClearAll";
+import EditIcon from "@material-ui/icons/Edit";
+import "firebase/auth";
+import AdminMedicAdd from "../AdminMedics/AdminMedicAdd";
+import AdminOrdersEdit from "./AdminOrdersEdit";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import PopUp from './AdminOrderPop';
 
-
+import {
+  Avatar,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  FormControl,
+  InputLabel,
+  Select,
+  Input,
+  DialogActions,
+  TextField,
+} from "@material-ui/core";
+import { Button } from "@material-ui/core";
+import calculateAge from "../../../functions/calculateAge";
+import supabase from "../../../supabase.config";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -35,7 +54,7 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-  return order === 'desc'
+  return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
@@ -51,16 +70,24 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'date', numeric: true, disablePadding: true, label: 'Fecha' },
-  { id: 'lastname', numeric: false, disablePadding: false, label: 'Medico' },
-  { id: 'lastname', numeric: false, disablePadding: false, label: 'Paciente' },
-  { id: 'dni', numeric: true, disablePadding: false, label: 'DNI paciente'},
-  { id: 'status', numeric: false, disablePadding: false, label: 'Estado' },
-  { id: 'view', numeric: false, disablePadding: false, label: 'Ver' },
+  { id: "date", numeric: true, disablePadding: true, label: "Fecha" },
+  { id: "lastname", numeric: false, disablePadding: false, label: "Medico" },
+  { id: "lastname", numeric: false, disablePadding: false, label: "Paciente" },
+  { id: "dni", numeric: true, disablePadding: false, label: "DNI paciente" },
+  { id: "status", numeric: false, disablePadding: false, label: "Estado" },
+  { id: "view", numeric: false, disablePadding: false, label: "Ver" },
 ];
 
 function EnhancedTableHead(props) {
-  const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+  const {
+    classes,
+    onSelectAllClick,
+    order,
+    orderBy,
+    numSelected,
+    rowCount,
+    onRequestSort,
+  } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -69,29 +96,29 @@ function EnhancedTableHead(props) {
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-          <Checkbox
+          {/*           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
             inputProps={{ 'aria-label': 'select all desserts' }}
-          />
+          /> */}
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'default'}
+            align={headCell.numeric ? "right" : "left"}
+            padding={headCell.disablePadding ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
+              direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
                 <span className={classes.visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  {order === "desc" ? "sorted descending" : "sorted ascending"}
                 </span>
               ) : null}
             </TableSortLabel>
@@ -107,7 +134,7 @@ EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
 };
@@ -118,7 +145,7 @@ const useToolbarStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(1),
   },
   highlight:
-    theme.palette.type === 'light'
+    theme.palette.type === "light"
       ? {
           color: theme.palette.secondary.main,
           backgroundColor: lighten(theme.palette.secondary.light, 0.85),
@@ -128,13 +155,75 @@ const useToolbarStyles = makeStyles((theme) => ({
           backgroundColor: theme.palette.secondary.dark,
         },
   title: {
-    flex: '1 1 100%',
+    flex: "1 1 100%",
+  },
+  dialog: {
+    zIndex: "-6",
   },
 }));
 
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
-  const { numSelected } = props;
+  const { numSelected, setToShowRows, toShowRows, rows, setRows } = props;
+  const [open, setOpen] = React.useState(false);
+  const [selectedOption, setSelectedOption] = React.useState("");
+  const [selectedState, setSelectedState] = React.useState("activo");
+
+  const handleChange = (event) => {
+    event.target.name === "state"
+      ? setSelectedState(event.target.value) &&
+        setSelectedOption(event.target.value)
+      : setSelectedOption(event.target.value);
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setToShowRows(rows);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    selectedOption === "state"
+      ? filter(e.target[0].value, e.target[1].value)
+      : filter(e.target[0].value, e.target[2].value);
+  };
+
+  const filter = (value) => {
+let show = []
+    setToShowRows(rows); 
+    if (value === "autorizada") {
+      value
+      ? setToShowRows(
+       show = rows.filter( r => r.order_status.name === "autorizada")
+        )
+      : setToShowRows(rows);
+ 
+    } else if (value === "rechazada") {
+      value
+      ? setToShowRows(
+       show = rows.filter( r => r.order_status.name === "rechazada")
+        )
+      : setToShowRows(rows);
+    } else if (value === "en proceso") {
+      value
+      ? setToShowRows(
+       show = rows.filter( r => r.order_status.name === "en proceso")
+        )
+      : setToShowRows(rows);
+     
+    } else if (value === "recibida") {
+      value
+      ? setToShowRows(
+       show = rows.filter( r => r.order_status.name === "recibida")
+        )
+      : setToShowRows(rows);
+    } else setToShowRows(rows);
+    setOpen(false);
+  };
 
   return (
     <Toolbar
@@ -142,29 +231,58 @@ const EnhancedTableToolbar = (props) => {
         [classes.highlight]: numSelected > 0,
       })}
     >
-      {numSelected > 0 ? (
-        <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-          Nutrition
-        </Typography>
-      )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton aria-label="filter list">
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
+      <Typography
+        className={classes.title}
+        variant="h6"
+        id="tableTitle"
+        component="div"
+      >
+        Autorizaciones
+      </Typography>
+      <Tooltip title="Clear" onClick={handleClose}>
+        <IconButton aria-label="reset">
+          <ClearAllIcon />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Filter list" onClick={handleClickOpen}>
+        <IconButton aria-label="filter list">
+          <FilterListIcon />
+        </IconButton>
+      </Tooltip>
+      <Dialog
+        disableBackdropClick
+        disableEscapeKeyDown
+        open={open}
+        onClose={handleClose}
+        className={classes.dialog}
+      >
+        <form className={classes.container} onSubmit={handleSubmit}>
+          <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="demo-dialog-native">Filtrar por</InputLabel>
+            <Select
+              native
+              value={selectedOption}
+              onChange={handleChange}
+              input={<Input id="demo-dialog-native" />}
+            >
+              <option aria-label="None" value="" />
+              <option value="autorizada">Autorizada</option>
+              <option value="rechazada">Rechazada</option>
+              <option value="en proceso">En proceso</option>
+              <option value="recibida">Recibida</option>
+            </Select>
+          </FormControl>
+          {/*     </DialogContent> */}
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button color="primary" type="submit">
+              Ok
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
     </Toolbar>
   );
 };
@@ -175,10 +293,10 @@ EnhancedTableToolbar.propTypes = {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%',
+    width: "100%",
   },
   paper: {
-    width: '100%',
+    width: "100%",
     marginBottom: theme.spacing(2),
   },
   table: {
@@ -186,12 +304,12 @@ const useStyles = makeStyles((theme) => ({
   },
   visuallyHidden: {
     border: 0,
-    clip: 'rect(0 0 0 0)',
+    clip: "rect(0 0 0 0)",
     height: 1,
     margin: -1,
-    overflow: 'hidden',
+    overflow: "hidden",
     padding: 0,
-    position: 'absolute',
+    position: "absolute",
     top: 20,
     width: 1,
   },
@@ -199,33 +317,103 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EnhancedTable() {
   const classes = useStyles();
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
+  const [status, setStatus] = React.useState([]);
+  const [order, setOrder] = React.useState("asc");
+  const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rows, setRows] = React.useState([])
-  
-
+  const [rows, setRows] = React.useState([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [listMedics, setListMedics] = React.useState([]);
+  const [medicSpecialities, setMedicSpecialities] = React.useState([]);
+  const [editActive, setEditActive] = React.useState(false);
+  const [data, setData] = React.useState(null);
+  const [toShowRows, setToShowRows] = React.useState([]);
+  const MySwal = withReactContent(Swal);
+  const [row, setRow] = React.useState({
+    date: '',
+    study_name: '',
+    partners: {
+      name: '', 
+      lastname: '',
+      dni: '',
+    }, 
+    medics: {
+      name: '', 
+      lastname: '',
+    },
+    medical_consultations: {
+      id: ''
+    }, 
+    order_status: {
+      name:'',
+    }, 
+    results: {
+      results : {
+        results: ''
+      }
+    },
+      order_status: {
+        name:''
+      }
+  
+    
+  })  
+  const [open, setOpen] = React.useState(false);
+
+
+
+  const handleClickOpen = (row) => {
+    setRow(row)
+    setOpen(true);
+  };
+
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+
+
+
+
   const fetchOrders = async () => {
     const { data: orders, error: errorFetchOrders } = await supabase
-        .from('orders')
-        .select(
-            'date, status, partners (dni, name, lastname), medics(dni, name, lastname)' 
-        );
-        console.log(orders)
-            orders && setRows(orders)
-        console.log(rows, 'rows')
-};
+      .from("orders")
+      .select(
+        "id, date, results, study_name, order_status(name), partners(dni, name, lastname), medics(dni, name, lastname), medical_consultations(id) "
+      );
+      console.log(orders, 'hola')
 
-React.useEffect(() => {
-    fetchOrders();
-}, []); 
+   orders &&  setRows(orders);
+  };
+
+  const fetchOrder_status = async () => {
+    const { data: statusDB, error: errorStatus } = await supabase
+      .from("order_status")
+      .select('*' );
+    setStatus(statusDB)
+  };
+
+  React.useEffect(() => {
+    fetchOrder_status();
+        fetchOrders();
+    }, []); 
+    React.useEffect(() => {
+      setToShowRows(rows);
+      }, [rows]); 
+
+  const handleEdit = (data) => {
+    setData(data);
+    setEditActive(true);
+/*     console.log("Click en edit"); */
+    if (editActive) setEditActive(false);
+  };
 
   const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
@@ -251,7 +439,7 @@ React.useEffect(() => {
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
+        selected.slice(selectedIndex + 1)
       );
     }
 
@@ -267,23 +455,28 @@ React.useEffect(() => {
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
+ 
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-
+  const emptyRows =
+    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+/*     setToShowRows(rows)
+ */
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          setToShowRows={setToShowRows}
+          toShowRows={toShowRows}
+          rows={rows}
+        />
         <TableContainer>
           <Table
             className={classes.table}
             aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
+            size={dense ? "small" : "medium"}
             aria-label="enhanced table"
           >
             <EnhancedTableHead
@@ -296,7 +489,7 @@ React.useEffect(() => {
               rowCount={rows.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(toShowRows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
@@ -306,28 +499,33 @@ React.useEffect(() => {
                     <TableRow
                       hover
                       onClick={(event) => handleClick(event, row.name)}
-                      role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.name}
                       selected={isItemSelected}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          inputProps={{ 'aria-labelledby': labelId }}
-                        />
+                      <TableCell align="left">
+                        <EditIcon onClick={() => handleEdit(row)} />
                       </TableCell>
-                      <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {row.date}
+
+                      <TableCell align="left">{row.date}</TableCell>
+                      <TableCell align="left">
+                        {row.medics.name} {row.medics.lastname}
                       </TableCell>
-                      <TableCell align="right">{row.medics.lastname}</TableCell>
-                      <TableCell align="right">{row.partners.lastname}</TableCell>
-                      <TableCell align="right">{row.partners.dni}</TableCell>
-                      <TableCell align="right">{row.status}</TableCell>
+                      <TableCell align="left">
+                        {row.partners.name} {row.partners.lastname}
+                      </TableCell>
+                      <TableCell align="left">{row.partners.dni}</TableCell>
+                      <TableCell align="left">{row.order_status.name}</TableCell>
+                     
+                      <TableCell align="left"><Button variant="outlined" color="primary" onClick={ () => handleClickOpen(row)}>
+                          📝
+      </Button></TableCell>
+      
                     </TableRow>
                   );
                 })}
+
               {emptyRows > 0 && (
                 <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
                   <TableCell colSpan={6} />
@@ -336,6 +534,7 @@ React.useEffect(() => {
             </TableBody>
           </Table>
         </TableContainer>
+    
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
@@ -346,12 +545,25 @@ React.useEffect(() => {
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
+      {editActive ? (
+                <AdminOrdersEdit
+                
+                    status={status}
+                 /*    medicSpecialities={medicSpecialities} */
+                    setEditActive={setEditActive}
+                    editActive={editActive}
+                />
+            ) : null}
+          {/*   <AdminOrderAdd medicSpecialities={medicSpecialities} /> */}
+         
+                <PopUp
+                rows={row}
+                    handleClose={handleClose}
+                    open={open}
+                />
+           
     </div>
   );
 }
 
-
+//recibe l autorizada como value pero no uestra las seleccionadas
