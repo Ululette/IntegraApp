@@ -384,7 +384,6 @@ export default function EnhancedTable() {
       .select(
         "id, date, results, study_name, order_status(name), partners(dni, name, lastname), medics(dni, name, lastname), medical_consultations(id) "
       );
-      console.log(orders, 'hola')
 
    orders &&  setRows(orders);
   };
@@ -392,7 +391,7 @@ export default function EnhancedTable() {
   const fetchOrder_status = async () => {
     const { data: statusDB, error: errorStatus } = await supabase
       .from("order_status")
-      .select('*' );
+      .select('*');
     setStatus(statusDB)
   };
 
