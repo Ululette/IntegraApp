@@ -47,6 +47,8 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-around',
+        zIndex: 0,
+        marginTop: '3.49px',
     },
     tab: {
         position: 'relative',
@@ -54,6 +56,7 @@ const useStyles = makeStyles(() => ({
         backgroundColor: '#4ca1a3',
         display: 'flex',
         justifyContent: 'center',
+        zIndex: 0,
     },
 }));
 

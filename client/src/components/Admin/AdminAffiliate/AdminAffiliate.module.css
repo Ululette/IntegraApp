@@ -8,29 +8,34 @@
     margin-bottom: 10rem;
     /* margin: theme.spacing(2), */
     background-color: #2c7f7b;
-    font-size:35px;
-    border:3px solid #2c7f7b;
+    font-size: 35px;
+    border: 3px solid #2c7f7b;
 }
-.addButton:hover{
+.addButton:hover {
     background-color: '#2c7f7b';
-    border:3px solid #fafafa;
+    border: 3px solid #fafafa;
 }
 
 .filters {
     display: flex;
     flex-direction: column;
-    width: 40%;
-    justify-content:space-between;
-    align-items:center;
+    width: 25%;
+    justify-content: space-between;
+    align-items: center;
+}
 
-
+.filterTitle {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    margin-left: 2.5rem;
+    padding-bottom: 0.5rem;
 }
 
 .filtersSelector {
     width: 50%;
     display: flex;
     justify-content: space-around;
-   
 }
 
 .filtersSelect {
@@ -43,5 +48,5 @@
 .filtersinput {
     width: 177px;
     background-color: white;
-    border-radius:5px;
+    border-radius: 5px;
 }

@@ -50,9 +50,10 @@ function a11yProps(index) {
 
 const useStyles = makeStyles(() => ({
     root: {
-        width:'88%',
-        margin:'0px',
-        padding:'0px 0px 0px 0px',
+        width: '100%',
+        margin: '0px',
+        padding: '0px 0px 0px 0px',
+        marginTop: '10px',
         alignItems: 'left',
         display: 'flex',
         flexDirection: 'column',
@@ -60,29 +61,29 @@ const useStyles = makeStyles(() => ({
         backgroundColor: '#ffffff',
     },
     tab: {
-        width:'100%',
-        margin:'0px',
-        padding:'0px',
-        color:'#212121',
+        width: '100%',
+        margin: '0px',
+        padding: '0px',
+        color: '#212121',
         position: 'relative',
         alignItems: 'left',
         backgroundColor: '#fafafa',
         display: 'flex',
         justifyContent: 'center',
-        overflow:'auto'
+        overflow: 'auto',
     },
-    prueba:{
-        backgroundColor: '#ffffff',
-        
+    prueba: {
+        backgroundColor: 'rgba(255, 255, 255, 0)',
+
         //backgroundColor: 'rgb(217 222 222 / 56%)',
-        margin:'0px',
-        padding:'0px',
-        boxShadow:'none'
+        margin: '0px',
+        padding: '0px',
+        boxShadow: 'none',
     },
-    prueba2:{
+    prueba2: {
         backgroundColor: 'rgb(112, 193, 189)',
-        fontWeight:'bold'
-    }
+        fontWeight: 'bold',
+    },
 }));
 
 export default function AdminMedicTabs() {
@@ -96,17 +97,25 @@ export default function AdminMedicTabs() {
     return (
         <div className={classes.root}>
             <AppBar bgcolor='background.paper' className={classes.tab}>
-                <Tabs 
+                <Tabs
                     className={classes.prueba}
                     value={value}
                     onChange={handleChange}
                     aria-label='simple tabs example'
                 >
-                    <Tab label='Medicos' {...a11yProps(0) } className={classes.prueba2}/>
-                    <Tab label='Especialidades' {...a11yProps(1)} className={classes.prueba2}/>
+                    <Tab
+                        label='Medicos'
+                        {...a11yProps(0)}
+                        className={classes.prueba2}
+                    />
+                    <Tab
+                        label='Especialidades'
+                        {...a11yProps(1)}
+                        className={classes.prueba2}
+                    />
                 </Tabs>
             </AppBar>
-            <TabPanel value={value} index={0} >
+            <TabPanel value={value} index={0}>
                 <MedicsTable />
             </TabPanel>
             <TabPanel value={value} index={1}>

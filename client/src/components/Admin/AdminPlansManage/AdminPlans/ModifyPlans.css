@@ -1,0 +1,12 @@
+.soyelchip div div {
+    background-color: #3db7b1;
+    color: white;
+}
+
+.MuiAutocomplete-endAdornment {
+    background-color: white !important;
+}
+
+.MuiAutocomplete-endAdornment svg {
+    color: black !important;
+}

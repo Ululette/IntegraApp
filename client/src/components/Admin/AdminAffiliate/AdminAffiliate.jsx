@@ -162,14 +162,12 @@ EnhancedTableHead.propTypes = {
 };
 
 //------------------------makeStyle1---------------------------------------------------------------------------------------
+//eslint-disable-next-line
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(1),
         backgroundColor: lighten('#34a7a1', 0.3),
-        // display:'flex',
-        // justifyContent:'space-arpund'
-        //color barra superior '
     },
     highlight:
         theme.palette.type === 'light'
@@ -235,7 +233,7 @@ const useToolbarStyles = makeStyles((theme) => ({
 //-------------------- EnhancedTableToolbar Style
 const useStyles = makeStyles((theme) => ({
     root: {
-        width: '63%',
+        width: '86.4vw',
     },
     paper: {
         width: '100%',
@@ -669,7 +667,7 @@ function AdminAffiliate() {
                         SOCIOS
                     </Typography>
                     <section className={styles.filters}>
-                        <div>
+                        <div className={styles.filterTitle}>
                             <InputLabel
                                 id='filter-select'
                                 className={classes.p}
