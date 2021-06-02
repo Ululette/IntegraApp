@@ -20,6 +20,7 @@ import IconButton from '@material-ui/core/IconButton';
 import BlockIcon from '@material-ui/icons/Block';
 import ClearAllIcon from '@material-ui/icons/ClearAll';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import blue from '@material-ui/core/colors/blue';
 import Swal from 'sweetalert2';
 import supabase from '../../../supabase.config.js';
 import { getAllUsers } from '../../../actions/users.action.js';
@@ -31,7 +32,7 @@ import {
     FormControl,
     Select,
     DialogActions,
-    TextField,
+    TextField
 } from '@material-ui/core';
 
 function descendingComparator(a, b, orderBy) {
@@ -66,9 +67,11 @@ function stableSort(array, comparator) {
 const headCells = [
     { id: 'dni', numeric: false, disablePadding: true, label: 'DNI' },
     { id: 'email', numeric: false, disablePadding: false, label: 'EMAIL' },
-    { id: 'role', numeric: false, disablePadding: false, label: 'ROLE' },
-    { id: 'account', numeric: false, disablePadding: false, label: 'ACCOUNT' },
+    { id: 'role', numeric: false, disablePadding: false, label: 'TIPO' },
+    { id: 'account', numeric: false, disablePadding: false, label: 'CUENTA' },
 ];
+
+
 
 function EnhancedTableHead(props) {
     const {
@@ -85,10 +88,10 @@ function EnhancedTableHead(props) {
     };
 
     return (
-        <TableHead>
-            <TableRow>
-                <TableCell padding='checkbox'>
-                    <Checkbox
+        <TableHead className={classes.title}>
+            <TableRow >
+                <TableCell padding='checkbox' >
+                    <Checkbox defaultChecked color="primary"
                         indeterminate={
                             numSelected > 0 && numSelected < rowCount
                         }
@@ -105,6 +108,7 @@ function EnhancedTableHead(props) {
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
                         <TableSortLabel
+                            className={classes.title}
                             active={orderBy === headCell.id}
                             direction={orderBy === headCell.id ? order : 'asc'}
                             onClick={createSortHandler(headCell.id)}
@@ -134,25 +138,69 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired,
 };
-
+//------------------------EnhancedTableToolbar Style ---------------------------------------------------------------------------------------
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(1),
+        backgroundColor: lighten('#34a7a1', 0.3),
     },
     highlight:
         theme.palette.type === 'light'
             ? {
-                  color: theme.palette.secondary.main,
-                  backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-              }
+                color: '#fafafa',
+                backgroundColor: lighten(blue[500], 0.5),//color barra superior cuando selecciono item
+                fontWeight:'bold',
+                fontSize:'30px'
+            }
             : {
-                  color: theme.palette.text.primary,
-                  backgroundColor: theme.palette.secondary.dark,
-              },
+                color: theme.palette.text.primary,
+                backgroundColor: lighten('#34a7a1', 0.3),
+                
+            },
     title: {
         flex: '1 1 100%',
+        fontWeight:'bold',
+        fontSize:'1.4rem',
+        color: '#fafafa',
+        textAlign:'center'
     },
+    filters:{
+        display:'flex'
+    },
+    iconFilter:{
+        color:'#fafafa',
+        fontWeight:'bold',
+        '&:hover':{
+            backgroundColor: '#34a7a1',
+        }
+    },
+    iconBlock:{
+        color:'#fafafa',
+        fontWeight:'bold',
+        '&:hover':{
+            backgroundColor: blue[500],
+        }
+    },
+    popup:{
+        color: '#fafafa',
+        backgroundColor: '#2c7f7b',
+        fontWeight:'bold',
+        fontSize:'30px'
+    },
+    popupBtn:{
+        color: '#fafafa',
+        padding: theme.spacing(0.5),
+        border: '3px solid #2c7f7b',
+        backgroundColor:'#2c7f7b',
+        fontWeight:'bold',
+        fontSize:'15px',
+        '&:hover':{
+            backgroundColor: lighten('#fafafa', 0.2),
+            color:'#2c7f7b',
+            padding: theme.spacing(0.5),
+        }
+    }
 }));
 
 const EnhancedTableToolbar = (props) => {
@@ -167,9 +215,10 @@ const EnhancedTableToolbar = (props) => {
     const [listFilter, setListFilter] = React.useState([]);
 
     const handleClickOpen = () => {
+        sendFilter('reset');
         setOpen(true);
         setListFilter(list);
-        console.log(list);
+
     };
     const hanldeReset = () => {
         sendFilter('reset');
@@ -230,7 +279,6 @@ const EnhancedTableToolbar = (props) => {
             let wanted;
             switch (option) {
                 case 'dni':
-                    //eslint-disable-next-line
                     wanted = listFilter.find((user) => user.dni == value);
                     if (wanted) {
                         res.push(wanted);
@@ -241,7 +289,6 @@ const EnhancedTableToolbar = (props) => {
                     } else alert(`no existe`);
                     break;
                 case 'email':
-                    //eslint-disable-next-line
                     wanted = listFilter.find((user) => user.email == value);
                     if (wanted) {
                         res.push(wanted);
@@ -252,17 +299,19 @@ const EnhancedTableToolbar = (props) => {
                     } else alert(`no existe`);
                     break;
                 case 'role':
-                    //eslint-disable-next-line
+                    console.log(listFilter)
                     res = listFilter.filter((user) => user.role == value);
-                    res.length > 0
-                        ? sendFilter(res)
-                        : alert(`no se encontraron resultados`);
+                    
+                    if(res.length > 0) sendFilter(res)
+                    else{
+                        sendFilter('reset');
+                        alert(`no se encontraron resultados`);
+                    }    
                     setSelectedRole('');
                     setOptionSelected('');
                     setOpen(false);
                     break;
                 default:
-                    //eslint-disable-next-line
                     res = listFilter.filter((user) => user.account == value);
                     res.length > 0
                         ? sendFilter(res)
@@ -297,46 +346,47 @@ const EnhancedTableToolbar = (props) => {
                     id='tableTitle'
                     component='div'
                 >
-                    Users
+                    USUARIOS
                 </Typography>
             )}
 
             {numSelected > 0 ? (
-                <Tooltip title='Actions' onClick={handleBlock}>
-                    <IconButton aria-label='Edit'>
+                <Tooltip title='Activar/Desactivar Usuarios' onClick={handleBlock}>
+                    <IconButton aria-label='Edit' className={classes.iconBlock}>
                         <BlockIcon />
                     </IconButton>
                 </Tooltip>
             ) : (
                 <div>
-                    <Tooltip title='Filter' onClick={handleClickOpen}>
-                        <IconButton aria-label='filter list'>
+                    <div className={classes.filters}>
+                        <Tooltip title='Filtro' onClick={handleClickOpen} >
+                        <IconButton aria-label='filter list' className={classes.iconFilter}>
                             <FilterListIcon />
                         </IconButton>
-                    </Tooltip>
-                    <Tooltip title='Clear Filter' onClick={hanldeReset}>
-                        <IconButton aria-label='reset'>
-                            <ClearAllIcon />
-                        </IconButton>
-                    </Tooltip>
+                        </Tooltip>
+                        <Tooltip title='Borrar Filtro' onClick={hanldeReset}>
+                            <IconButton aria-label='reset' className={classes.iconFilter}>
+                                <ClearAllIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </div>
+                    
                     <Dialog
+                        
                         disableBackdropClick
                         disableEscapeKeyDown
                         open={open}
                         onClose={handleClose}
                     >
-                        <DialogTitle>Filter By:</DialogTitle>
+                        <DialogTitle className={classes.popup}>FILTRADO POR:</DialogTitle>
                         <form
-                            /* className={classes.container}>*/ onSubmit={
+                            onSubmit={
                                 handleSubmit
                             }
                         >
-                            <DialogContent>
-                                <FormControl /* className={classes.formControl} */
+                            <DialogContent >
+                                <FormControl 
                                 >
-                                    {/* <InputLabel htmlFor='demo-dialog-native'>
-                                Filter By
-                            </InputLabel> */}
                                     <Select
                                         inputProps={{
                                             style: { width: '177px' },
@@ -366,7 +416,7 @@ const EnhancedTableToolbar = (props) => {
                                         onChange={(e) => handleInput(e)}
                                     />
                                 ) : optionSelected === 'role' ? (
-                                    <FormControl /* className={classes.formControl} */
+                                    <FormControl 
                                     >
                                         <Select
                                             inputProps={{
@@ -392,7 +442,7 @@ const EnhancedTableToolbar = (props) => {
                                         </Select>
                                     </FormControl>
                                 ) : optionSelected === 'account' ? (
-                                    <FormControl /* className={classes.formControl} */
+                                    <FormControl 
                                     >
                                         <Select
                                             inputProps={{
@@ -421,11 +471,11 @@ const EnhancedTableToolbar = (props) => {
                                 ) : optionSelected === '' ? null : null}
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={handleClose} color='primary'>
-                                    Cancel
+                                <Button onClick={handleClose}  className={classes.popupBtn}>
+                                    Cancelar
                                 </Button>
-                                <Button color='primary' type='submit'>
-                                    Ok
+                                <Button type='submit' className={classes.popupBtn}>
+                                    Filtrar
                                 </Button>
                             </DialogActions>
                         </form>
@@ -440,6 +490,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
+//-------------------- Style Table Users
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -450,6 +501,7 @@ const useStyles = makeStyles((theme) => ({
     },
     table: {
         minWidth: 750,
+        
     },
     visuallyHidden: {
         border: 0,
@@ -460,11 +512,22 @@ const useStyles = makeStyles((theme) => ({
         padding: 0,
         position: 'absolute',
         top: 20,
-        width: 1,
+        width: 1
     },
+    title:{
+        color:'#212121',
+        fontWeight: 'bold',
+        backgroundColor: lighten('#34a7a1', 0.6)
+    },
+    rowColor:{
+        backgroundColor: lighten('#e0e0e0', 0.3),
+        ':checked':{
+            color:blue[500]
+        }
+    }
 }));
 
-export default function TableUsers({ rows, handleFilter }) {
+export default function TableUsers({ rows, handleFilter,allUsers }) {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('account');
@@ -615,7 +678,7 @@ export default function TableUsers({ rows, handleFilter }) {
                 <EnhancedTableToolbar
                     numSelected={selected.length}
                     handleBlock={handleBlock}
-                    list={rows}
+                    list={allUsers}
                     sendFilter={sendFilter}
                 />
                 <TableContainer>
@@ -655,8 +718,9 @@ export default function TableUsers({ rows, handleFilter }) {
                                             key={row.dni}
                                             selected={isItemSelected}
                                         >
-                                            <TableCell padding='checkbox'>
-                                                <Checkbox
+                                            <TableCell padding='checkbox' className={index%2 ===1 ? classes.rowColor :null}>
+                                                <Checkbox defaultChecked color="primary"
+                                                className= {classes.rowColor}
                                                     checked={isItemSelected}
                                                     inputProps={{
                                                         'aria-labelledby':
@@ -664,16 +728,16 @@ export default function TableUsers({ rows, handleFilter }) {
                                                     }}
                                                 />
                                             </TableCell>
-                                            <TableCell align='left'>
+                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null} >
                                                 {row.dni}
                                             </TableCell>
-                                            <TableCell align='left'>
+                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
                                                 {row.email}
                                             </TableCell>
-                                            <TableCell align='left'>
+                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
                                                 {row.role}
                                             </TableCell>
-                                            <TableCell align='left'>
+                                            <TableCell align='left' className={index%2 ===1 ? classes.rowColor :null}>
                                                 {row.account}
                                             </TableCell>
                                         </TableRow>
@@ -688,6 +752,7 @@ export default function TableUsers({ rows, handleFilter }) {
                     </Table>
                 </TableContainer>
                 <TablePagination
+                    className={classes.root}
                     rowsPerPageOptions={[5, 10, 25]}
                     component='div'
                     count={rows.length}

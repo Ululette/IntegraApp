@@ -31,6 +31,7 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import blue from '@material-ui/core/colors/blue';
 import List from '@material-ui/core/List';
 import ListItemText from '@material-ui/core/ListItemText';
 
@@ -67,6 +68,11 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
+    /* {
+        id: 'action',
+        numeric: true,
+        label: 'ACCIONES',
+    }, */
     {
         id: 'dni',
         numeric: true,
@@ -75,37 +81,37 @@ const headCells = [
     {
         id: 'lastname',
         numeric: false,
-        label: 'Apellido/s',
+        label: 'APELLIDO',
     },
-    { id: 'name', numeric: false, disablePadding: false, label: 'Nombre/s' },
-    { id: 'age', numeric: true, disablePadding: false, label: 'Edad' },
+    { id: 'name', numeric: false, disablePadding: false, label: 'NOMBRE' },
+    { id: 'age', numeric: true, disablePadding: false, label: 'EDAD' },
     {
         id: 'plan',
         numeric: false,
-        label: 'Plan',
+        label: 'PLAN',
     },
-    { id: 'gender', numeric: false, disablePadding: false, label: 'Genero' },
+    { id: 'gender', numeric: false, disablePadding: false, label: 'GENERO' },
     {
         id: 'phoneNumber',
         numeric: false,
-        label: 'Contacto',
+        label: 'TELEFONO',
     },
-    { id: 'email', numeric: false, disablePadding: false, label: 'Email' },
-    { id: 'titular', numeric: false, disablePadding: false, label: 'Titular' },
+    { id: 'email', numeric: false, disablePadding: false, label: 'EMAIL' },
+    { id: 'titular', numeric: false, disablePadding: false, label: 'TITULAR' },
     {
         id: 'familyBond',
         numeric: false,
-        label: 'Rol familiar',
+        label: 'PARENTEZCO',
     },
     {
         id: 'groupFamily',
         numeric: true,
-        label: 'Grupo Familiar',
+        label: 'G.FAMILIAR',
     },
     {
         id: 'state',
         numeric: false,
-        label: 'Estado',
+        label: 'ESTADO',
     },
 ];
 
@@ -116,17 +122,18 @@ function EnhancedTableHead(props) {
     };
 
     return (
-        <TableHead>
+        <TableHead className={classes.title}>
             <TableRow>
                 <TableCell padding='checkbox'></TableCell>
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
-                        align={'center'}
-                        padding={headCell.disablePadding ? 'none' : 'default'}
+                        align='left'
+                        padding= 'default'
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
                         <TableSortLabel
+                            className={classes.title}
                             active={orderBy === headCell.id}
                             direction={orderBy === headCell.id ? order : 'asc'}
                             onClick={createSortHandler(headCell.id)}
@@ -155,52 +162,229 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
 };
 
+// const useToolbarStyles = makeStyles((theme) => ({
+//     root: {
+//         paddingLeft: theme.spacing(2),
+//         paddingRight: theme.spacing(1),
+//     },
+//     highlight:
+//         theme.palette.type === 'light'
+//             ? {
+//                   color: theme.palette.secondary.main,
+//                   backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+//               }
+//             : {
+//                   color: theme.palette.text.primary,
+//                   backgroundColor: theme.palette.secondary.dark,
+//               },
+//     title: {
+//         flex: '1 1 100%',
+//     },
+// }));
+
+// const useStyles = makeStyles((theme) => ({
+//     root: {
+//         width: '100%',
+//         display: 'flex',
+//         justifyContent: 'flex-end',
+//         alignItems: 'flex-start',
+//         marginTop: '2rem',
+//         height: '80vh',
+//     },
+//     paper: {
+//         width: '100%',
+//         marginBottom: theme.spacing(2),
+//     },
+//     table: {
+//         width: '100%',
+//     },
+//     visuallyHidden: {
+//         border: 0,
+//         clip: 'rect(0 0 0 0)',
+//         height: 1,
+//         overflow: 'hidden',
+//         padding: 0,
+//         position: 'absolute',
+//         top: 20,
+//         width: 1,
+//     },
+// }));
+
+//------------------------makeStyle1---------------------------------------------------------------------------------------
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(1),
+        backgroundColor: lighten('#34a7a1', 0.3),
+        // display:'flex',
+        // justifyContent:'space-arpund'
+        //color barra superior '
     },
     highlight:
         theme.palette.type === 'light'
             ? {
-                  color: theme.palette.secondary.main,
-                  backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-              }
+                color: '#fafafa',
+                backgroundColor: lighten(blue[500], 0.5),//color barra superior cuando selecciono item
+                fontWeight:'bold',
+                fontSize:'30px'
+            }
             : {
-                  color: theme.palette.text.primary,
-                  backgroundColor: theme.palette.secondary.dark,
-              },
+                color: theme.palette.text.primary,
+                backgroundColor: lighten('#34a7a1', 0.3),
+                
+            },
     title: {
-        flex: '1 1 100%',
+        //flex: '1 1 auto',
+        fontWeight:'bold',
+        fontSize:'1.4rem',
+        color: '#fafafa',
+        textAlign:'rigth',
     },
+    filters:{
+        display:'flex'
+    },
+    iconFilter:{
+        color:'#fafafa',
+        fontWeight:'bold',
+        '&:hover':{
+            backgroundColor: '#34a7a1',
+        }
+    },
+    iconBlock:{
+        color:'#fafafa',
+        fontWeight:'bold',
+        '&:hover':{
+            backgroundColor: blue[500],
+        }
+    },
+    popup:{
+        color: '#fafafa',
+        backgroundColor: '#2c7f7b',
+        fontWeight:'bold',
+        fontSize:'30px'
+    },
+    popupBtn:{
+        color: '#fafafa',
+        padding: theme.spacing(0.5),
+        border: '3px solid #2c7f7b',
+        backgroundColor:'#2c7f7b',
+        fontWeight:'bold',
+        fontSize:'15px',
+        '&:hover':{
+            backgroundColor: lighten('#fafafa', 0.2),
+            color:'#2c7f7b',
+            padding: theme.spacing(0.5),
+        }
+    },
+    list:{
+        fontWeight:'bold',
+        fontSize:'15px',
+    }
 }));
 
+//-------------------- EnhancedTableToolbar Style
 const useStyles = makeStyles((theme) => ({
     root: {
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'flex-end',
-        alignItems: 'flex-start',
-        marginTop: '2rem',
-        height: '80vh',
+        width: '63%',
     },
     paper: {
         width: '100%',
-        marginBottom: theme.spacing(2),
+        
     },
     table: {
-        width: '100%',
+        minWidth: '750px',
+        
+    },
+    toolBar:{
+        backgroundColor: lighten('#34a7a1', 0.3),
+        display:'flex',
+        justifyContent:'space-between',
+        padding:'10px 10px 10px 10px',
+        alignItems:'center'
     },
     visuallyHidden: {
         border: 0,
         clip: 'rect(0 0 0 0)',
         height: 1,
+        margin: -1,
         overflow: 'hidden',
         padding: 0,
         position: 'absolute',
         top: 20,
-        width: 1,
+        width: 1
     },
+    title:{
+        width:'60%',
+        color:'#212121',
+        fontWeight: 'bold',
+        backgroundColor: lighten('#34a7a1', 0.6),
+        textAlign:'center',
+
+    },
+    rowColor:{
+        backgroundColor: lighten('#e0e0e0', 0.3),
+        ':checked':{
+            color:blue[500]
+        }
+    },
+    fab: {
+        margin: theme.spacing(2),
+        backgroundColor: '#2c7f7b',
+        fontSize:'35px',
+        border:'3px solid #2c7f7b',
+        '&:hover':{
+            backgroundColor: '#2c7f7b',
+            border:'3px solid #fafafa'
+        }
+    },
+    p:{
+        fontWeight:'bold',
+        fontSize:'1.1rem',
+        color: '#fafafa',
+        textAlign:'left',
+        width:'100%'
+    },
+    titleFilter: {
+        
+        fontWeight:'bold',
+        fontSize:'1.6rem',
+        color: '#fafafa',
+        textAlign:'center'
+    },
+    filters:{
+        display:'flex',
+        justifyContent:'space-around'
+    },
+    popup:{
+        color: '#fafafa',
+        backgroundColor: '#2c7f7b',
+        fontWeight:'bold',
+        fontSize:'30px'
+    },
+    popupBtn:{
+        color: '#fafafa',
+        padding: theme.spacing(0.5),
+        border: '3px solid #2c7f7b',
+        backgroundColor:'#2c7f7b',
+        fontWeight:'bold',
+        fontSize:'15px',
+        '&:hover':{
+            backgroundColor: lighten('#fafafa', 0.2),
+            color:'#2c7f7b',
+            padding: theme.spacing(0.5),
+        }
+    },
+    list:{
+        fontWeight:'bold',
+        fontSize:'15px',
+    },
+    iconFilter:{
+        color:'rgba(0, 0, 0, 0.47)',
+        fontWeight:'bold',
+        '&:hover':{
+            backgroundColor: lighten('#34a7a1', 0.8),
+        }
+    }
 }));
 
 function AdminAffiliate({ firebase }) {
@@ -500,26 +684,40 @@ function AdminAffiliate({ firebase }) {
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
-                <Toolbar>
+                <Toolbar className={classes.toolBar}>
+                <Fab
+                onClick={handleOpenDialogAdd}
+                color='primary'
+                aria-label='add'
+                className={classes.fab}
+                >
+                    <AddIcon />
+                </Fab>
                     <Typography
-                        className={classesFilter.title}
+                        className={classes.titleFilter}
                         variant='h6'
                         id='tableTitle'
                         component='div'
                     >
-                        Lista de socios
+                        SOCIOS
                     </Typography>
                     <section className={styles.filters}>
-                        <div className={styles.filtersSelector}>
-                            <InputLabel id='filter-select'>
-                                Filtrar por
+                        <div>
+                            <InputLabel id='filter-select'  className={classes.p}>
+                                Filtrar por:
                             </InputLabel>
-                            <Select
+                        </div>
+                        
+                        <div className={styles.filtersSelector}>
+                            <div>
+                                <Select
                                 className={styles.filtersSelect}
                                 labelId='filter-select'
                                 name='select'
                                 onChange={handleChangeFilters}
                                 value={inputFilters.select}
+                                variant='outlined'
+                                
                             >
                                 <MenuItem value='dni'>DNI</MenuItem>
                                 <MenuItem value='age'>Edad</MenuItem>
@@ -538,15 +736,22 @@ function AdminAffiliate({ firebase }) {
                                 <MenuItem value='state'>Estado</MenuItem>
                                 <MenuItem value='titular'>Titularidad</MenuItem>
                             </Select>
-                        </div>
-                        <TextField
+                            </div>
+                            <div>
+                            <TextField
                             className={styles.filtersinput}
                             label='Filtro'
                             type='text'
                             name='text'
+                            variant='outlined'
+                            size='small'
                             value={inputFilters.text}
                             onChange={handleChangeFilters}
                         />
+                            </div>
+                            
+                        </div>
+                        
                     </section>
                 </Toolbar>
                 <TableContainer>
@@ -576,20 +781,23 @@ function AdminAffiliate({ firebase }) {
                                             hover
                                             tabIndex={-1}
                                             key={row.dni}
+                                            
                                         >
-                                            <TableCell padding='checkbox'>
+                                            <TableCell padding='checkbox' className={index%2 ===1 ? classes.rowColor :null}>
                                                 <div className={styles.toolbar}>
                                                     <Tooltip
+                                                        className={classes.iconFilter}
                                                         title='Editar'
                                                         onClick={() =>
                                                             handleEdit(row)
                                                         }
                                                     >
-                                                        <IconButton aria-label='edit'>
+                                                        <IconButton aria-label='edit' >
                                                             <EditIcon />
                                                         </IconButton>
                                                     </Tooltip>
                                                     <Tooltip
+                                                        className={classes.iconFilter}
                                                         title='Eliminar'
                                                         onClick={() =>
                                                             openDialogDelete(
@@ -604,78 +812,90 @@ function AdminAffiliate({ firebase }) {
                                                 </div>
                                             </TableCell>
                                             <TableCell
+                                                className={index%2 ===1 ? classes.rowColor :null}
                                                 value={row.dni}
                                                 component='th'
                                                 id={labelId}
                                                 scope='row'
                                                 padding='none'
-                                                align='center'
+                                                align='left'
                                             >
                                                 {row.dni}
                                             </TableCell>
                                             <TableCell
+                                                className={index%2 ===1 ? classes.rowColor :null}
                                                 value={row.lastname}
-                                                align='center'
+                                                align='left'
                                             >
                                                 {row.lastname}
                                             </TableCell>
                                             <TableCell
+                                                className={index%2 ===1 ? classes.rowColor :null}
                                                 value={row.name}
-                                                align='center'
+                                                align='left'
                                             >
                                                 {row.name}
                                             </TableCell>
                                             <TableCell
+                                                className={index%2 ===1 ? classes.rowColor :null}
                                                 value={row.age}
-                                                align='center'
+                                                align='left'
                                             >
                                                 {row.age}
                                             </TableCell>
                                             <TableCell
+                                                className={index%2 ===1 ? classes.rowColor :null}
                                                 value={row.plan}
-                                                align='center'
+                                                align='left'
                                             >
                                                 {row.plan}
                                             </TableCell>
                                             <TableCell
+                                                className={index%2 ===1 ? classes.rowColor :null}
                                                 value={row.gender}
-                                                align='center'
+                                                align='left'
                                             >
                                                 {row.gender}
                                             </TableCell>
                                             <TableCell
+                                                className={index%2 ===1 ? classes.rowColor :null}
                                                 value={row.contact}
-                                                align='center'
+                                                align='left'
                                             >
                                                 {row.contact}
                                             </TableCell>
                                             <TableCell
+                                                className={index%2 ===1 ? classes.rowColor :null}
                                                 value={row.email}
                                                 align='left'
                                             >
                                                 {row.email}
                                             </TableCell>
                                             <TableCell
+                                                className={index%2 ===1 ? classes.rowColor :null}
                                                 value={row.titular}
-                                                align='center'
+                                                align='left'
                                             >
                                                 {row.titular}
                                             </TableCell>
                                             <TableCell
+                                                className={index%2 ===1 ? classes.rowColor :null}
                                                 value={row.familyBond}
-                                                align='center'
+                                                align='left'
                                             >
                                                 {row.familyBond}
                                             </TableCell>
                                             <TableCell
+                                                className={index%2 ===1 ? classes.rowColor :null}
                                                 value={row.familyGroup}
-                                                align='center'
+                                                align='left'
                                             >
                                                 {row.familyGroup}
                                             </TableCell>
                                             <TableCell
+                                                className={index%2 ===1 ? classes.rowColor :null}
                                                 value={row.state}
-                                                align='center'
+                                                align='left'
                                             >
                                                 {row.state}
                                             </TableCell>
@@ -700,23 +920,23 @@ function AdminAffiliate({ firebase }) {
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                 />
             </Paper>
-            <Fab
+            {/* <Fab
                 onClick={handleOpenDialogAdd}
                 color='primary'
                 aria-label='add'
                 className={styles.addButton}
             >
                 <AddIcon />
-            </Fab>
+            </Fab> */}
             <div>
                 <Dialog
                     open={open.edit}
                     onClose={() => handleClose('edit')}
                     aria-labelledby='form-dialog-title'
                 >
-                    <DialogTitle id='form-dialog-title'>
-                        Editar socio
-                    </DialogTitle>
+                    <DialogTitle id='form-dialog-title' className={classes.popup}>
+                        EDITAR SOCIO
+                    </DialogTitle >
                     <DialogContent>
                         <TextField
                             autoFocus
@@ -771,6 +991,7 @@ function AdminAffiliate({ firebase }) {
                         <InputLabel>Genero</InputLabel>
 
                         <Select
+                            className={styles.filtersSelect}
                             autoFocus
                             margin='dense'
                             label='Genero'
@@ -786,6 +1007,7 @@ function AdminAffiliate({ firebase }) {
                         </Select>
                         <InputLabel>Es titular?</InputLabel>
                         <Select
+                            className={styles.filtersSelect}
                             autoFocus
                             margin='dense'
                             label='Titular'
@@ -800,6 +1022,7 @@ function AdminAffiliate({ firebase }) {
                         </Select>
                         <InputLabel>Plan</InputLabel>
                         <Select
+                            className={styles.filtersSelect}
                             autoFocus
                             margin='dense'
                             label='Plan'
@@ -821,6 +1044,7 @@ function AdminAffiliate({ firebase }) {
                         </Select>
                         <InputLabel>Estado</InputLabel>
                         <Select
+                            className={styles.filtersSelect}
                             autoFocus
                             margin='dense'
                             label='Estado'
@@ -839,12 +1063,13 @@ function AdminAffiliate({ firebase }) {
                     </DialogContent>
                     <DialogActions>
                         <Button
+                            className={classes.popupBtn}
                             onClick={() => handleClose('edit')}
                             color='primary'
                         >
                             Cancelar
                         </Button>
-                        <Button onClick={handleUpdate} color='primary'>
+                        <Button onClick={handleUpdate} color='primary' className={classes.popupBtn}>
                             Actualizar
                         </Button>
                     </DialogActions>
@@ -856,12 +1081,12 @@ function AdminAffiliate({ firebase }) {
                     onClose={() => handleClose('delete')}
                     aria-labelledby='form-dialog-title'
                 >
-                    <DialogTitle id='form-dialog-title'>
-                        Eliminar socio
+                    <DialogTitle id='form-dialog-title' className={classes.popup}>
+                        ELIMINAR
                     </DialogTitle>
                     <DialogContent>
                         <List>
-                            <ListItemText
+                            <ListItemText 
                                 primary={`DNI: ${input.dni}`}
                                 fullWidth
                             />
@@ -886,7 +1111,7 @@ function AdminAffiliate({ firebase }) {
                                 fullWidth
                             />
                             <ListItemText
-                                primary={`Titular?: ${input.titular}`}
+                                primary={`Titular? ${input.titular ? 'NO' : 'SI'}`}
                                 fullWidth
                             />
                             <ListItemText
@@ -901,12 +1126,14 @@ function AdminAffiliate({ firebase }) {
                     </DialogContent>
                     <DialogActions>
                         <Button
+                            className={classes.popupBtn}
                             onClick={() => handleClose('delete')}
                             color='primary'
                         >
                             Cancelar
                         </Button>
                         <Button
+                            className={classes.popupBtn}
                             onClick={() => {
                                 MySwal.fire({
                                     title: 'Esta seguro de borrar este socio? (ESTA ACCION NO ES REVERSIBLE)',
@@ -925,7 +1152,7 @@ function AdminAffiliate({ firebase }) {
                     </DialogActions>
                 </Dialog>
                 <Dialog open={open.add} onClose={() => handleClose('add')}>
-                    <DialogTitle>Agregar Socio</DialogTitle>
+                    <DialogTitle className={classes.popup}>AGREGAR SOCIO</DialogTitle>
                     <DialogContent>
                         <TextField
                             autoFocus
@@ -1033,6 +1260,7 @@ function AdminAffiliate({ firebase }) {
                         />
                         <InputLabel htmlFor='state'>Estado</InputLabel>
                         <Select
+                            className={styles.filtersSelect}
                             value={inputAdd.state}
                             name='state'
                             onChange={handleChangeAdd}
@@ -1045,6 +1273,7 @@ function AdminAffiliate({ firebase }) {
                         </Select>
                         <InputLabel htmlFor='plan'>Plan</InputLabel>
                         <Select
+                            className={styles.filtersSelect}
                             value={inputAdd.plan}
                             name='plan'
                             onChange={handleChangeAdd}
@@ -1058,12 +1287,14 @@ function AdminAffiliate({ firebase }) {
                     </DialogContent>
                     <DialogActions>
                         <Button
+                            className={classes.popupBtn}
                             onClick={() => handleClose('add')}
                             color='primary'
                         >
                             Cancelar
                         </Button>
                         <Button
+                            className={classes.popupBtn}
                             onClick={handleAdd}
                             type='submit'
                             color='primary'

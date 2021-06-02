@@ -17,11 +17,13 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import blue from '@material-ui/core/colors/blue';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
 import PopUpEdit from '../Speciality/PopUpEdit';
 import supabase from '../../../supabase.config.js';
+import InputSpecialities from './InputSpecialities';
 
 //crear tabla  OK
 //traer especialidades de base >> redux
@@ -55,9 +57,9 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-    { id: 'id', numeric: false, disablePadding: true, label: 'ID' },
-    { id: 'name', numeric: false, disablePadding: true, label: 'Especialidad' },
-    { id: 'actions', numeric: false, disablePadding: true, label: 'Acciones' },
+    { id: 'actions', numeric: false, disablePadding: true, label: 'ACCIONES' },
+    { id: 'name', numeric: false, disablePadding: true, label: 'ESPECIALIDAD' },
+    { id: 'id', numeric: false, disablePadding: true, label: 'ID' }
 ];
 
 function EnhancedTableHead(props) {
@@ -67,16 +69,17 @@ function EnhancedTableHead(props) {
     };
 
     return (
-        <TableHead>
-            <TableRow>
+        <TableHead className={classes.title}>
+            <TableRow >
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
-                        align={headCell.numeric ? 'right' : 'left'}
-                        padding={headCell.disablePadding ? 'none' : 'default'}
+                        align= 'left'
+                        padding='default'
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
                         <TableSortLabel
+                            className={classes.title}
                             active={orderBy === headCell.id}
                             direction={orderBy === headCell.id ? order : 'asc'}
                             onClick={createSortHandler(headCell.id)}
@@ -107,29 +110,62 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
 };
 
+//------------------------makeStyle1---------------------------------------------------------------------------------------
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(1),
+        padding:'4px 4px 4px 4 px',
+        paddingLeft: theme.spacing(0),
+        paddingRight: theme.spacing(0),
+        backgroundColor: lighten('#34a7a1', 0.3)
+        //color barra superior '
     },
     highlight:
         theme.palette.type === 'light'
             ? {
-                  color: theme.palette.secondary.main,
-                  backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-              }
+                color: '#fafafa',
+                backgroundColor: lighten(blue[500], 0.5),//color barra superior cuando selecciono item
+                fontWeight:'bold',
+                fontSize:'30px',
+            }
             : {
-                  color: theme.palette.text.primary,
-                  backgroundColor: theme.palette.secondary.dark,
-              },
+                color: theme.palette.text.primary,
+                backgroundColor: lighten('#34a7a1', 0.3),
+                
+            },
     title: {
-        flex: '1 1 100%',
+        flex: '1 1 50%',
+        fontWeight:'bold',
+        fontSize:'1.4rem',
+        color: '#fafafa',
+        textAlign:'left',
+        marginLeft:'10%'
     },
+    filters:{
+        display:'flex'
+    },
+    iconFilter:{
+        color:'#fafafa',
+        fontWeight:'bold',
+        '&:hover':{
+            backgroundColor: '#34a7a1',
+        }
+    },
+    iconBlock:{
+        color:'#fafafa',
+        fontWeight:'bold',
+        '&:hover':{
+            backgroundColor: blue[500],
+        }
+    }
 }));
 
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
-    const { numSelected } = props;
+    const { numSelected,addClick2 } = props;
+
+    const addClick = (value)=>{
+        addClick2(value);
+    }
 
     return (
         <Toolbar
@@ -137,31 +173,15 @@ const EnhancedTableToolbar = (props) => {
                 [classes.highlight]: numSelected > 0,
             })}
         >
-            {numSelected > 0 ? (
-                <Typography
-                    className={classes.title}
-                    color='inherit'
-                    variant='subtitle1'
-                    component='div'
-                >
-                    {numSelected} selected
-                </Typography>
-            ) : (
+            <InputSpecialities addClick={addClick}/>
                 <Typography
                     className={classes.title}
                     variant='h6'
                     id='tableTitle'
                     component='div'
                 >
-                    Lista de especialidades
+                    ESPECIALIDADES
                 </Typography>
-            )}
-
-            {/* <Tooltip title='Filter list'>
-                <IconButton aria-label='filter list'>
-                    <FilterListIcon />
-                </IconButton>
-            </Tooltip> */}
         </Toolbar>
     );
 };
@@ -170,9 +190,11 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
+//-------------------- EnhancedTableToolbar Style
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
+        //padding:theme.spacing(1),
     },
     paper: {
         width: '100%',
@@ -188,10 +210,31 @@ const useStyles = makeStyles((theme) => ({
         margin: -1,
         overflow: 'hidden',
         padding: 0,
+        position: 'absolute',
+        top: 20,
+        width: 1
     },
+    title:{
+        //padding:'6px 24px 6px 16px;',
+        color:'#212121',
+        fontWeight: 'bold',
+        backgroundColor: lighten('#34a7a1', 0.6)
+    },
+    rowColor:{
+        backgroundColor: lighten('#e0e0e0', 0.3),
+        ':checked':{
+            color:blue[500]
+        }
+    },
+    iconFilter:{
+        color:'rgba(0, 0, 0, 0.47)',
+        fontWeight:'bold',
+        '&:hover':{
+            backgroundColor: lighten('#34a7a1', 0.8),
+        }
+    }
 }));
-
-export default function EnhancedTable({ rows }) {
+export default function EnhancedTable({ rows,handlerButtonClick }) {
     const classes = useStyles();
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('specialities');
@@ -201,6 +244,10 @@ export default function EnhancedTable({ rows }) {
     const [nameSpeciality, setNameSpeciality] = useState('');
     const MySwal = withReactContent(Swal);
 
+
+    const addClick2 = (value)=>{
+        handlerButtonClick(value);
+    }
     //---HANDLERS-----
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -243,7 +290,7 @@ export default function EnhancedTable({ rows }) {
                         title: `La espcialidad ${name.toUpperCase()} se ha eliminado con exito.`,
                         icon: 'success',
                         timer: 2000,
-                    }).then(() => window.location.reload());
+                    })
             }
             // deleteMedicsSpeciality(id);
             // deleteSpeciality (id);
@@ -269,7 +316,7 @@ export default function EnhancedTable({ rows }) {
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
-                <EnhancedTableToolbar />
+                <EnhancedTableToolbar addClick2={addClick2}/>
                 <TableContainer>
                     <Table
                         className={classes.table}
@@ -299,31 +346,16 @@ export default function EnhancedTable({ rows }) {
                                             role='checkbox'
                                             tabIndex={-1}
                                             key={row.name}
-                                        >
+                                        >   
                                             <TableCell
+                                                className={index%2 ===1 ? classes.rowColor :null}
                                                 component='th'
                                                 id={labelId}
                                                 scope='row'
                                                 padding='none'
                                             >
-                                                {row.id}
-                                            </TableCell>
-                                            <TableCell
-                                                component='th'
-                                                id={labelId}
-                                                scope='row'
-                                                padding='none'
-                                            >
-                                                {row.name}
-                                            </TableCell>
-                                            <TableCell
-                                                component='th'
-                                                id={labelId}
-                                                scope='row'
-                                                padding='none'
-                                            >
-                                                <Tooltip title='Delete'>
-                                                    <IconButton aria-label='delete'>
+                                                <Tooltip title='Delete' className={classes.iconFilter}>
+                                                    <IconButton aria-label='delete' >
                                                         <DeleteIcon
                                                             onClick={() =>
                                                                 handleDelete(
@@ -334,7 +366,8 @@ export default function EnhancedTable({ rows }) {
                                                         />
                                                     </IconButton>
                                                 </Tooltip>
-                                                <Tooltip title='Edit'>
+                                                <Tooltip title='Edit' className={classes.iconFilter}>
+                                                    
                                                     <IconButton aria-label='Edit'>
                                                         <EditIcon
                                                             onClick={() => {
@@ -343,9 +376,30 @@ export default function EnhancedTable({ rows }) {
                                                                     row.name
                                                                 );
                                                             }}
+                                                            
                                                         />
                                                     </IconButton>
                                                 </Tooltip>
+                                            </TableCell>
+                                            <TableCell
+                                                className={index%2 ===1 ? classes.rowColor :null}
+                                                component='th'
+                                                id={labelId}
+                                                scope='row'
+                                                padding='default'
+                                                align='left'
+                                            >
+                                                {row.name}
+                                            </TableCell>
+                                            <TableCell
+                                                className={index%2 ===1 ? classes.rowColor :null}
+                                                component='th'
+                                                id={labelId}
+                                                scope='row'
+                                                padding='default'
+                                                align='left'
+                                            >
+                                                {row.id}
                                             </TableCell>
                                         </TableRow>
                                     );
