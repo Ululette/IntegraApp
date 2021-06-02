@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import GuestsAplications from './GuestsAplications';
 import PartnersAplications from './PartnersAplications';
+import PartnersAffiliationRequests from './PartnersAffiliationRequests';
 
 function TabPanel(props) {
     const { children, value, index } = props;
@@ -73,8 +74,9 @@ export default function AplicationsTabs() {
                     onChange={handleChange}
                     aria-label='simple tabs example'
                 >
-                    <Tab label='Solicitudes de Alta' {...a11yProps(0)} />
+                    <Tab label='Solicitudes de Contacto' {...a11yProps(0)} />
                     <Tab label='Solicitudes Baja' {...a11yProps(1)} />
+                    <Tab label='Solicitudes Afiliación' {...a11yProps(2)} />
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
@@ -82,6 +84,9 @@ export default function AplicationsTabs() {
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <PartnersAplications />
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+                <PartnersAffiliationRequests />
             </TabPanel>
         </div>
     );

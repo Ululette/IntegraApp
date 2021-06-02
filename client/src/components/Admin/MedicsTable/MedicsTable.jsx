@@ -402,10 +402,7 @@ const EnhancedTableToolbar = (props) => {
                                 />
                             )}
                         </FormControl>
-                        <FormControl /* className={classes.formControl} */>
-                            {/* <InputLabel htmlFor='demo-dialog-native'>
-                                POR:
-                            </InputLabel> */}
+                        <FormControl>
                             <Select
                                 native
                                 value={selectedOption}
