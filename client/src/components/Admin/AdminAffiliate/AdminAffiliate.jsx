@@ -67,11 +67,12 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-    /* {
+    {
         id: 'action',
         numeric: true,
+        disablePadding: false,
         label: 'ACCIONES',
-    }, */
+    },
     {
         id: 'dni',
         numeric: true,
@@ -123,7 +124,6 @@ function EnhancedTableHead(props) {
     return (
         <TableHead className={classes.title}>
             <TableRow>
-                <TableCell padding='checkbox'></TableCell>
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
@@ -772,7 +772,7 @@ function AdminAffiliate() {
                                                             handleEdit(row)
                                                         }
                                                     >
-                                                        <IconButton aria-label='edit'>
+                                                        <IconButton size='small' aria-label='edit'>
                                                             <EditIcon />
                                                         </IconButton>
                                                     </Tooltip>
@@ -787,7 +787,7 @@ function AdminAffiliate() {
                                                             )
                                                         }
                                                     >
-                                                        <IconButton aria-label='delete'>
+                                                        <IconButton size='small' aria-label='delete'>
                                                             <DeleteIcon />
                                                         </IconButton>
                                                     </Tooltip>

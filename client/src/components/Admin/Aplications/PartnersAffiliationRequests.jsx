@@ -26,9 +26,11 @@ import {
     DialogContent,
     DialogActions,
     Toolbar,
+    DialogTitle,
 } from '@material-ui/core';
 import DescriptionRoundedIcon from '@material-ui/icons/DescriptionRounded';
 import SaveIcon from '@material-ui/icons/Save';
+import blue from '@material-ui/core/colors/blue';
 import calculateAge from '../../../functions/calculateAge';
 import supabase from '../../../supabase.config';
 import getSome from '../../../actions/elgetter';
@@ -67,38 +69,39 @@ const headCells = [
         id: 'actions',
         numeric: false,
         disablePadding: false,
-        label: 'Acciones',
+        label: 'ACCIONES',
     },
     {
         id: 'name',
         numeric: false,
         disablePadding: true,
-        label: 'Nombre',
+        label: 'NOMBRE',
     },
     {
         id: 'lastname',
         numeric: false,
         disablePadding: false,
-        label: 'Apellido',
+        label: 'APELLIDO',
     },
     {
         id: 'dni',
         numeric: false,
         disablePadding: false,
-        label: 'DNI del titular',
+        label: 'DNI TITULAR',
     },
     {
         id: 'birthdate',
         numeric: true,
         disablePadding: false,
-        label: 'Edad',
+        label: 'EDAD',
     },
-    { id: 'state', numeric: false, disablePadding: false, label: 'Estado' },
+    { id: 'state', numeric: false, disablePadding: false, label: 'ESTADO' },
 ];
 
-function EnhancedTableHead() {
+function EnhancedTableHead(props) {
+    const { classes } = props;
     return (
-        <TableHead>
+        <TableHead className={classes.title}>
             <TableRow>
                 {headCells.map((headCell, index) => (
                     <TableCell
@@ -126,21 +129,27 @@ EnhancedTableHead.propTypes = {
 
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(1),
+        backgroundColor: lighten('#34a7a1', 0.3),
+        padding: '0px 0px 0px 0px',
     },
     highlight:
         theme.palette.type === 'light'
             ? {
-                  color: theme.palette.secondary.main,
-                  backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+                  color: '#fafafa',
+                  backgroundColor: lighten(blue[500], 0.5), //color barra superior cuando selecciono item
+                  fontWeight: 'bold',
+                  fontSize: '30px',
               }
             : {
                   color: theme.palette.text.primary,
-                  backgroundColor: theme.palette.secondary.dark,
+                  backgroundColor: lighten('#34a7a1', 0.3),
               },
     title: {
         flex: '1 1 100%',
+        fontWeight: 'bold',
+        fontSize: '1.4rem',
+        color: '#fafafa',
+        textAlign: 'center',
     },
     dialog: {
         zIndex: '-6',
@@ -163,7 +172,7 @@ const EnhancedTableToolbar = (props) => {
                 id='tableTitle'
                 component='div'
             >
-                Solicitudes
+                SOLICITUDES
             </Typography>
         </Toolbar>
     );
@@ -337,6 +346,7 @@ const ViewDoc = ({ aplication }) => {
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
+        padding: '0px 0px 0px 0px',
     },
     paper: {
         width: '100%',
@@ -346,9 +356,52 @@ const useStyles = makeStyles((theme) => ({
         minWidth: 750,
     },
     visuallyHidden: {
+        border: 0,
         clip: 'rect(0 0 0 0)',
+        height: 1,
+        margin: -1,
         overflow: 'hidden',
         padding: 0,
+        position: 'absolute',
+        top: 20,
+        width: 1,
+    },
+    title: {
+        color: '#212121',
+        fontWeight: 'bold',
+        backgroundColor: lighten('#34a7a1', 0.6),
+    },
+    rowColor: {
+        backgroundColor: lighten('#e0e0e0', 0.3),
+        ':checked': {
+            color: blue[500],
+        },
+    },
+    iconFilter: {
+        color: 'rgba(0, 0, 0, 0.47)',
+        fontWeight: 'bold',
+        '&:hover': {
+            backgroundColor: lighten('#34a7a1', 0.8),
+        },
+    },
+    popup: {
+        color: '#fafafa',
+        backgroundColor: '#2c7f7b',
+        fontWeight: 'bold',
+        fontSize: '30px',
+    },
+    popupBtn: {
+        color: '#fafafa',
+        padding: theme.spacing(0.5),
+        border: '3px solid #2c7f7b',
+        backgroundColor: '#2c7f7b',
+        fontWeight: 'bold',
+        fontSize: '15px',
+        '&:hover': {
+            backgroundColor: lighten('#fafafa', 0.2),
+            color: '#2c7f7b',
+            padding: theme.spacing(0.5),
+        },
     },
 }));
 
@@ -477,11 +530,15 @@ export default function PartnersAffiliationRequests({ firebase }) {
     return (
         <div className={classes.root}>
             <Dialog open={!!medicalRecord} className={classes.dialog}>
+                <DialogTitle className={classes.popup}>
+                    DECLARACION JURADA
+                </DialogTitle>
                 <DialogContent>
                     {medicalRecord && <ViewDoc aplication={medicalRecord} />}
                 </DialogContent>
                 <DialogActions>
                     <Button
+                        className={classes.popupBtn}
                         type='close'
                         onClick={(e) => {
                             e.preventDefault();
@@ -536,9 +593,21 @@ export default function PartnersAffiliationRequests({ firebase }) {
                                             key={row.name}
                                             selected={isItemSelected}
                                         >
-                                            <TableCell align='center'>
+                                            <TableCell
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                                align='left'
+                                            >
                                                 <Tooltip
                                                     title='Guardar'
+                                                    className={
+                                                        index % 2 === 1
+                                                            ? classes.rowColor
+                                                            : null
+                                                    }
                                                     onClick={() =>
                                                         handleSave(row, index)
                                                     }
@@ -548,7 +617,10 @@ export default function PartnersAffiliationRequests({ firebase }) {
                                                         )
                                                     }
                                                 >
-                                                    <IconButton aria-label='save'>
+                                                    <IconButton
+                                                        size='small'
+                                                        aria-label='Guardar'
+                                                    >
                                                         <SaveIcon
                                                             color={
                                                                 !indexOnChange.includes(
@@ -561,12 +633,23 @@ export default function PartnersAffiliationRequests({ firebase }) {
                                                     </IconButton>
                                                 </Tooltip>
                                                 <Tooltip
+                                                    className={
+                                                        index % 2 === 1
+                                                            ? classes.iconFilter
+                                                            : null
+                                                    }
+                                                    size='small'
                                                     title='Declaración'
                                                     onClick={() =>
                                                         setMedicalRecord(row)
                                                     }
                                                 >
-                                                    <IconButton aria-label='save'>
+                                                    <IconButton
+                                                        className={
+                                                            classes.iconFilter
+                                                        }
+                                                        aria-label='Guardar'
+                                                    >
                                                         <DescriptionRoundedIcon />
                                                     </IconButton>
                                                 </Tooltip>

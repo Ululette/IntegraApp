@@ -14,6 +14,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import DeleteIcon from '@material-ui/icons/Delete';
+import blue from '@material-ui/core/colors/blue';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import 'firebase/auth';
 import Swal from 'sweetalert2';
@@ -53,13 +54,13 @@ const headCells = [
         id: 'actions',
         numeric: false,
         disablePadding: false,
-        label: 'Procesar',
+        label: 'ACCIONES',
     },
     {
         id: 'name',
         numeric: false,
         disablePadding: false,
-        label: 'Nombre',
+        label: 'NOMBRE',
     },
     {
         id: 'dni',
@@ -71,30 +72,30 @@ const headCells = [
         id: 'age',
         numeric: true,
         disablePadding: true,
-        label: 'Edad',
+        label: 'EDAD',
     },
     {
         id: 'phone_number',
         numeric: true,
         disablePadding: true,
-        label: 'Teléfono',
+        label: 'TELEFONO',
     },
     {
         id: 'email',
         numeric: false,
         disablePadding: false,
-        label: 'E-Mail',
+        label: 'EMAIL',
     },
 ];
 
 function EnhancedTableHead(props) {
-    const { order, orderBy, onRequestSort } = props;
+    const { classes,order, orderBy, onRequestSort } = props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
 
     return (
-        <TableHead>
+        <TableHead className={classes.title}>
             <TableRow>
                 {headCells.map((headCell, index) => (
                     <TableCell
@@ -104,6 +105,7 @@ function EnhancedTableHead(props) {
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
                         <TableSortLabel
+                            className={classes.title}
                             active={orderBy === headCell.id}
                             direction={orderBy === headCell.id ? order : 'asc'}
                             onClick={createSortHandler(headCell.id)}
@@ -129,25 +131,28 @@ EnhancedTableHead.propTypes = {
 
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(1),
+        backgroundColor: lighten('#34a7a1', 0.3),
+        padding: '0px 0px 0px 0px',
     },
     highlight:
         theme.palette.type === 'light'
             ? {
-                  color: theme.palette.secondary.main,
-                  backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+                  color: '#fafafa',
+                  backgroundColor: lighten(blue[500], 0.5), //color barra superior cuando selecciono item
+                  fontWeight: 'bold',
+                  fontSize: '30px',
               }
             : {
                   color: theme.palette.text.primary,
-                  backgroundColor: theme.palette.secondary.dark,
+                  backgroundColor: lighten('#34a7a1', 0.3),
               },
     title: {
         flex: '1 1 100%',
-    },
-    dialog: {
-        zIndex: '-6',
-    },
+        fontWeight: 'bold',
+        fontSize: '1.4rem',
+        color: '#fafafa',
+        textAlign: 'center',
+    }
 }));
 
 const EnhancedTableToolbar = (props) => {
@@ -166,7 +171,7 @@ const EnhancedTableToolbar = (props) => {
                 id='tableTitle'
                 component='div'
             >
-                Solicitudes
+                SOLICITUDES
             </Typography>
         </Toolbar>
     );
@@ -179,6 +184,7 @@ EnhancedTableToolbar.propTypes = {
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
+        padding: '0px 0px 0px 0px',
     },
     paper: {
         width: '100%',
@@ -188,10 +194,34 @@ const useStyles = makeStyles((theme) => ({
         minWidth: 750,
     },
     visuallyHidden: {
+        border: 0,
         clip: 'rect(0 0 0 0)',
+        height: 1,
+        margin: -1,
         overflow: 'hidden',
         padding: 0,
+        position: 'absolute',
+        top: 20,
+        width: 1,
     },
+    title: {
+        color: '#212121',
+        fontWeight: 'bold',
+        backgroundColor: lighten('#34a7a1', 0.6),
+    },
+    rowColor: {
+        backgroundColor: lighten('#e0e0e0', 0.3),
+        ':checked': {
+            color: blue[500],
+        },
+    },
+    iconFilter: {
+        color: 'rgba(0, 0, 0, 0.47)',
+        fontWeight: 'bold',
+        '&:hover': {
+            backgroundColor: lighten('#34a7a1', 0.8),
+        },
+    }
 }));
 
 export default function GuestsAplications() {
@@ -314,10 +344,23 @@ export default function GuestsAplications() {
                                             key={row.name}
                                             selected={isItemSelected}
                                         >
-                                            <TableCell align='center'>
+                                            <TableCell
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
                                                 <Tooltip title='Borrar'>
-                                                    <IconButton aria-label='delete'>
+                                                    <IconButton 
+                                                        aria-label='delete'
+                                                        className={
+                                                            classes.iconFilter
+                                                        }
+                                                        >
                                                         <DeleteIcon
+                                                            size='small' aria-label='Delete'
                                                             onClick={() =>
                                                                 handleDelete(
                                                                     row
@@ -327,7 +370,14 @@ export default function GuestsAplications() {
                                                     </IconButton>
                                                 </Tooltip>
                                             </TableCell>
-                                            <TableCell align='left'>
+                                            <TableCell 
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                                >
                                                 {row.name}
                                             </TableCell>
                                             <TableCell
@@ -335,16 +385,42 @@ export default function GuestsAplications() {
                                                 id={labelId}
                                                 scope='row'
                                                 padding='default'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
                                             >
                                                 {row.dni}
                                             </TableCell>
-                                            <TableCell align='center'>
+                                            <TableCell 
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
                                                 {row.age}
                                             </TableCell>
-                                            <TableCell align='right'>
+                                            <TableCell 
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                                >
                                                 {row.phone_number}
                                             </TableCell>
-                                            <TableCell align='left'>
+                                            <TableCell 
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                                >
                                                 {row.email}
                                             </TableCell>
                                         </TableRow>

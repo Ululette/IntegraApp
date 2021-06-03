@@ -4,15 +4,15 @@ import { useFirebaseApp } from 'reactfire';
 import AdminNav from '../Admin/AdminNav/AdminNav';
 
 function RoutesAdmin() {
-  const firebase = useFirebaseApp();
-  return (
-    <>
-      <Route
-        path='/:id/admin'
-        render={() => <AdminNav firebase={firebase} />}
-      />
-    </>
-  );
+    const firebase = useFirebaseApp();
+    return (
+        <>
+            <Route
+                path='/:id/admin'
+                render={() => <AdminNav firebase={firebase} />}
+            /> 
+        </>
+    );
 }
 
 export default RoutesAdmin;

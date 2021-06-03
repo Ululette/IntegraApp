@@ -9,6 +9,7 @@ import Box from '@material-ui/core/Box';
 import MedicsTable from './MedicsTable';
 import FormSpecialities from '../Speciality/FormSpecialities';
 
+
 //----FALTA CORREGIR
 /*
 1-ubicar tabla paralela linea tab izquierda
@@ -16,18 +17,22 @@ import FormSpecialities from '../Speciality/FormSpecialities';
 3-quitarle el fondo a las tab y resaltar las seleccionadas
 
 */
+
+
 function TabPanel(props) {
+    
     const { children, value, index } = props;
 
     return (
         <div
+            className='HOLA MUNDO'
             role='tabpanel'
             hidden={value !== index}
             id={`simple-tabpanel-${index}`}
             aria-labelledby={`wrapped-tab-${index}`}
         >
             {value === index && (
-                <Box p={3} padding='2px 2px 2px 0px'>
+                <Box p={3} padding='0px '>
                     <Typography>{children}</Typography>
                 </Box>
             )}
@@ -49,7 +54,7 @@ function a11yProps(index) {
 }
 
 const useStyles = makeStyles(() => ({
-    root: {
+    rootPadre: {
         width: '100%',
         margin: '0px',
         padding: '0px 0px 0px 0px',
@@ -62,8 +67,8 @@ const useStyles = makeStyles(() => ({
     },
     tab: {
         width: '100%',
-        margin: '0px',
-        padding: '0px',
+        margin: '0px 0px 0px 0px',
+        padding: '0px 0px 0px 0px',
         color: '#212121',
         position: 'relative',
         alignItems: 'left',
@@ -74,10 +79,8 @@ const useStyles = makeStyles(() => ({
     },
     prueba: {
         backgroundColor: 'rgba(255, 255, 255, 0)',
-
-        //backgroundColor: 'rgb(217 222 222 / 56%)',
         margin: '0px',
-        padding: '0px',
+        padding: '0px 0px 0px 0px',
         boxShadow: 'none',
     },
     prueba2: {
@@ -95,7 +98,7 @@ export default function AdminMedicTabs() {
     };
 
     return (
-        <div className={classes.root}>
+        <div className={classes.rootPadre}>
             <AppBar bgcolor='background.paper' className={classes.tab}>
                 <Tabs
                     className={classes.prueba}

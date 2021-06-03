@@ -13,6 +13,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
+import blue from '@material-ui/core/colors/blue';
 import Tooltip from '@material-ui/core/Tooltip';
 import SaveIcon from '@material-ui/icons/Save';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -55,48 +56,51 @@ const headCells = [
         id: 'actions',
         numeric: false,
         disablePadding: false,
-        label: 'Acciones',
+        label: 'ACCIONES',
     },
     {
         id: 'familiar_name',
         numeric: false,
         disablePadding: true,
-        label: 'Nombre',
+        label: 'NOMBRE',
     },
     {
         id: 'familiar_lastname',
         numeric: false,
         disablePadding: false,
-        label: 'Apellido',
+        label: 'APELLIDO',
     },
     { id: 'familiar_dni', numeric: true, disablePadding: false, label: 'DNI' },
     {
         id: 'titular_dni',
         numeric: false,
         disablePadding: false,
-        label: 'DNI del titular',
+        label: 'DNI TITULAR',
     },
     {
         id: 'reason',
         numeric: false,
         disablePadding: false,
-        label: 'Motivo',
+        label: 'MOTIVO',
     },
     {
         id: 'familiar_birthdate',
         numeric: true,
         disablePadding: false,
-        label: 'Edad',
+        label: 'EDAD',
     },
-    { id: 'status', numeric: false, disablePadding: false, label: 'Estado' },
+    { id: 'status', numeric: false, disablePadding: false, label: 'ESTADO' },
 ];
 
-function EnhancedTableHead() {
+function EnhancedTableHead(props) {
+    const { classes} = props;
+    
     return (
-        <TableHead>
+        <TableHead className={classes.title}>
             <TableRow>
                 {headCells.map((headCell, index) => (
                     <TableCell
+                        className={classes.title}
                         key={`${headCell.id}-${index}`}
                         align='left'
                         padding='default'
@@ -121,21 +125,27 @@ EnhancedTableHead.propTypes = {
 
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(1),
+        backgroundColor: lighten('#34a7a1', 0.3),
+        padding: '0px 0px 0px 0px',
     },
     highlight:
         theme.palette.type === 'light'
             ? {
-                  color: theme.palette.secondary.main,
-                  backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+                  color: '#fafafa',
+                  backgroundColor: lighten(blue[500], 0.5), //color barra superior cuando selecciono item
+                  fontWeight: 'bold',
+                  fontSize: '30px',
               }
             : {
                   color: theme.palette.text.primary,
-                  backgroundColor: theme.palette.secondary.dark,
+                  backgroundColor: lighten('#34a7a1', 0.3),
               },
     title: {
         flex: '1 1 100%',
+        fontWeight: 'bold',
+        fontSize: '1.4rem',
+        color: '#fafafa',
+        textAlign: 'center',
     },
     dialog: {
         zIndex: '-6',
@@ -158,7 +168,7 @@ const EnhancedTableToolbar = (props) => {
                 id='tableTitle'
                 component='div'
             >
-                Solicitudes
+                SOLICITUDES
             </Typography>
         </Toolbar>
     );
@@ -218,6 +228,7 @@ const StatusSelector = ({
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
+        padding: '0px 0px 0px 0px',
     },
     paper: {
         width: '100%',
@@ -227,10 +238,34 @@ const useStyles = makeStyles((theme) => ({
         minWidth: 750,
     },
     visuallyHidden: {
+        border: 0,
         clip: 'rect(0 0 0 0)',
+        height: 1,
+        margin: -1,
         overflow: 'hidden',
         padding: 0,
+        position: 'absolute',
+        top: 20,
+        width: 1,
     },
+    title: {
+        color: '#212121',
+        fontWeight: 'bold',
+        backgroundColor: lighten('#34a7a1', 0.6),
+    },
+    rowColor: {
+        backgroundColor: lighten('#e0e0e0', 0.3),
+        ':checked': {
+            color: blue[500],
+        },
+    },
+    iconFilter: {
+        color: 'rgba(0, 0, 0, 0.47)',
+        fontWeight: 'bold',
+        '&:hover': {
+            backgroundColor: lighten('#34a7a1', 0.8),
+        },
+    }
 }));
 
 export default function PartnersAplications() {
@@ -383,7 +418,13 @@ export default function PartnersAplications() {
                                             key={row.name}
                                             selected={isItemSelected}
                                         >
-                                            <TableCell align='center'>
+                                            <TableCell 
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
                                                 <Tooltip
                                                     title='Guardar'
                                                     onClick={() =>
@@ -395,8 +436,15 @@ export default function PartnersAplications() {
                                                         )
                                                     }
                                                 >
-                                                    <IconButton aria-label='save'>
+                                                    <IconButton 
+                                                        aria-label='save'
+                                                        className={
+                                                            classes.iconFilter
+                                                        }
+                                                        size='small'
+                                                        >
                                                         <SaveIcon
+                                                            aria-label='Guardar'
                                                             color={
                                                                 !indexOnChange.includes(
                                                                     index
@@ -413,27 +461,72 @@ export default function PartnersAplications() {
                                                 id={labelId}
                                                 scope='row'
                                                 padding='default'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
                                             >
                                                 {row.familiar_name}
                                             </TableCell>
-                                            <TableCell align='right'>
+                                            <TableCell 
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                                align='left'>
                                                 {row.familiar_lastname}
                                             </TableCell>
-                                            <TableCell align='right'>
+                                            <TableCell 
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                                align='left'>
                                                 {row.familiar_dni}
                                             </TableCell>
-                                            <TableCell align='right'>
+                                            <TableCell 
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                                align='left'
+                                            >
                                                 {row.titular_dni}
                                             </TableCell>
-                                            <TableCell align='right'>
+                                            <TableCell 
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                                align='left'
+                                            >
                                                 {row.reason}
                                             </TableCell>
-                                            <TableCell align='right'>
+                                            <TableCell 
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                                align='left'
+                                            >
                                                 {calculateAge(
                                                     row.familiar_birthdate
                                                 )}
                                             </TableCell>
-                                            <TableCell align='center'>
+                                            <TableCell 
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                                align='left'
+                                            >
                                                 <StatusSelector
                                                     current={row.status}
                                                     setNewSatus={setNewSatus}

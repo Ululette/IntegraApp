@@ -1,0 +1,3 @@
+PLANES 
+-falta acomodar tabla planes a esquina superior izquierda
+-falta cambair color de chips nuevo plane

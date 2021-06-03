@@ -170,11 +170,8 @@ EnhancedTableHead.propTypes = {
 //------------------------makeStyle1---------------------------------------------------------------------------------------
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
-        // paddingLeft: theme.spacing(0),
-        // paddingRight: theme.spacing(0),
         backgroundColor: lighten('#34a7a1', 0.3),
         padding: '0px 0px 0px 0px',
-        //color barra superior '
     },
     highlight:
         theme.palette.type === 'light'
@@ -655,7 +652,7 @@ export default function MedicsTable() {
                                                         classes.iconFilter
                                                     }
                                                 >
-                                                    <IconButton aria-label='Edit'>
+                                                    <IconButton size='small' aria-label='Edit'>
                                                         <EditIcon
                                                             onClick={() =>
                                                                 handleEdit(row)
@@ -669,7 +666,7 @@ export default function MedicsTable() {
                                                         classes.iconFilter
                                                     }
                                                 >
-                                                    <IconButton aria-label='Delete'>
+                                                    <IconButton size='small' aria-label='Delete'>
                                                         <DeleteIcon
                                                             onClick={() =>
                                                                 handleDelete(

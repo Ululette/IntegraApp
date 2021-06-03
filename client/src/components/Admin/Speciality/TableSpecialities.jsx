@@ -355,7 +355,7 @@ export default function EnhancedTable({ rows,handlerButtonClick }) {
                                                 padding='none'
                                             >
                                                 <Tooltip title='Delete' className={classes.iconFilter}>
-                                                    <IconButton aria-label='delete' >
+                                                    <IconButton size='small' aria-label='delete' >
                                                         <DeleteIcon
                                                             onClick={() =>
                                                                 handleDelete(
@@ -368,7 +368,7 @@ export default function EnhancedTable({ rows,handlerButtonClick }) {
                                                 </Tooltip>
                                                 <Tooltip title='Edit' className={classes.iconFilter}>
                                                     
-                                                    <IconButton aria-label='Edit'>
+                                                    <IconButton size='small' aria-label='Edit'>
                                                         <EditIcon
                                                             onClick={() => {
                                                                 setOpen(true);

@@ -13,9 +13,11 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Tooltip from '@material-ui/core/Tooltip';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import blue from '@material-ui/core/colors/blue';
-
+import IconButton from '@material-ui/core/IconButton';
 import CreateIcon from '@material-ui/icons/Create';
 import { Button } from '@material-ui/core';
 
@@ -83,6 +85,7 @@ function EnhancedTableHead(props) {
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
                         <TableSortLabel
+                            className={classes.title}
                             active={orderBy === headCell.id}
                             direction={orderBy === headCell.id ? order : 'asc'}
                             onClick={createSortHandler(headCell.id)}
@@ -112,26 +115,6 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired,
 };
-
-// const useToolbarStyles = makeStyles((theme) => ({
-//   root: {
-//     paddingLeft: theme.spacing(2),
-//     paddingRight: theme.spacing(1),
-//   },
-//   highlight:
-//     theme.palette.type === "light"
-//       ? {
-//           color: theme.palette.secondary.main,
-//           backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-//         }
-//       : {
-//           color: theme.palette.text.primary,
-//           backgroundColor: theme.palette.secondary.dark,
-//         },
-//   title: {
-//     flex: "1 1 100%",
-//   },
-// }));
 
 //------------------------makeStyle1---------------------------------------------------------------------------------------
 const useToolbarStyles = makeStyles((theme) => ({
@@ -227,30 +210,6 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-// const useStyles = makeStyles((theme) => ({
-//   root: {
-//     width: "100%",
-//   },
-//   paper: {
-//     width: "100%",
-//     marginBottom: theme.spacing(2),
-//   },
-//   table: {
-//     minWidth: 750,
-//   },
-//   visuallyHidden: {
-//     border: 0,
-//     clip: "rect(0 0 0 0)",
-//     height: 1,
-//     margin: -1,
-//     overflow: "hidden",
-//     padding: 0,
-//     position: "absolute",
-//     top: 20,
-//     width: 1,
-//   },
-// }));
-
 //-------------------- EnhancedTableToolbar Style
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -307,7 +266,6 @@ export default function PlansTable({
     const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
-    //const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
     const rows = plans;
@@ -392,7 +350,12 @@ export default function PlansTable({
                                                         )
                                                     }
                                                 >
-                                                    <CreateIcon />
+                                                    <IconButton
+                                                        size='small'
+                                                        aria-label='Edit'
+                                                    >
+                                                        <CreateIcon />
+                                                    </IconButton>
                                                 </Tooltip>
                                                 {row.active ? (
                                                     <Tooltip
@@ -407,7 +370,12 @@ export default function PlansTable({
                                                             )
                                                         }
                                                     >
-                                                        <PowerSettingsNewIcon />
+                                                        <IconButton
+                                                            size='small'
+                                                            aria-label='Edit'
+                                                        >
+                                                            <PowerSettingsNewIcon />
+                                                        </IconButton>
                                                     </Tooltip>
                                                 ) : (
                                                     <Tooltip
@@ -422,7 +390,12 @@ export default function PlansTable({
                                                             )
                                                         }
                                                     >
-                                                        <PowerSettingsNewIcon />
+                                                        <IconButton
+                                                            size='small'
+                                                            aria-label='Edit'
+                                                        >
+                                                            <PowerSettingsNewIcon />
+                                                        </IconButton>
                                                     </Tooltip>
                                                 )}
                                                 <Tooltip
@@ -437,7 +410,12 @@ export default function PlansTable({
                                                         )
                                                     }
                                                 >
-                                                    <DeleteIcon />
+                                                    <IconButton
+                                                        size='small'
+                                                        aria-label='Edit'
+                                                    >
+                                                        <DeleteIcon />
+                                                    </IconButton>
                                                 </Tooltip>
                                             </TableCell>
                                             <TableCell

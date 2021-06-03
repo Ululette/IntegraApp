@@ -1,6 +1,7 @@
 .container {
-    padding:12px 0px 0px 0px;
-    align-items: center;
+    padding:0px 0px 0px 0px;
+    margin: 0%;
+    align-items:flex-start;
     display: flex;
     flex-direction: column;
     height: auto;

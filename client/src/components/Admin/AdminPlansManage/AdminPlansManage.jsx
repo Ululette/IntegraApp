@@ -46,34 +46,40 @@ function a11yProps(index) {
   };
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
-    flexGrow: 1,
-    backgroundColor: '#fafafa',
-    padding: 0,
+      width: '100%',
+      margin: '0px',
+      padding: '0px 0px 0px 0px',
+      marginTop: '10px',
+      alignItems: 'left',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-around',
+      backgroundColor: '#ffffff',
   },
-  tabshead: {
-    width: '600px',
-    display: 'flex',
-    flexdirection: 'row',
-    alignItems: 'center',/* -- */
-    justifyContent: 'center', /* | */
+  tab: {
+      width: '100%',
+      margin: '0px',
+      padding: '0px',
+      color: '#212121',
+      position: 'relative',
+      alignItems: 'left',
+      backgroundColor: '#fafafa',
+      display: 'flex',
+      justifyContent: 'center',
+      overflow: 'auto',
   },
-  tabs: {
-    margin: 0,
-    padding: 0,
-    width: '100%',
-    backgroundColor: '#27978b',
-    display: 'flex',
-    flexdirection: 'column',
-    alignItems: 'center',/* | */
-    justifyContent: 'center', /* -- */
+  prueba: {
+      backgroundColor: 'rgba(255, 255, 255, 0)',
+      margin: '0px',
+      padding: '0px',
+      boxShadow: 'none',
   },
-  overflow: {
-    flexdirection: 'column',
-    alignItems: 'center',/* | */
-    justifyContent: 'center', /* -- */
-  }
+  prueba2: {
+      backgroundColor: 'rgb(112, 193, 189)',
+      fontWeight: 'bold',
+  },
 }));
 
 export default function AdminPlansManage() {
@@ -86,16 +92,16 @@ export default function AdminPlansManage() {
 
   return (
     <div className={classes.root}  >
-      <AppBar position='static' className={classes.tabshead} display="flex" alignItems="center" justifyContent="center">
+      <AppBar position='static' className={classes.tab} /* display="flex" alignItems="center" justifyContent="center" */>
         <Tabs
-          className={classes.tabs}
+          className={classes.prueba}
           value={value}
           onChange={handleChange}
           aria-label='simple tabs example'
         >
-          <Tab label='Planes' {...a11yProps(0)} />
-          <Tab label='Nuevo plan' {...a11yProps(1)} />
-          <Tab label='Nuevo beneficio' {...a11yProps(2)} />
+          <Tab label='Planes' {...a11yProps(0)} className={classes.prueba2}/>
+          <Tab label='Nuevo plan' {...a11yProps(1)} className={classes.prueba2}/>
+          <Tab label='Nuevo beneficio' {...a11yProps(2)} className={classes.prueba2}/>
         </Tabs>
       </AppBar>
       <TabPanel  value={value} index={0}>
