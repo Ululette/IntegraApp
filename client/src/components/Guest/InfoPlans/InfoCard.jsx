@@ -35,10 +35,10 @@ export default function InfoCard({ plan }) {
                         primary={`✔${plan.benefits[0].title}`}
                     />
                     <ListItemText
-                        primary={`✔${plan.benefits[0].title}`}
+                        primary={`✔${plan.benefits[1].description}`}
                     />
                     <ListItemText
-                        primary={`✔${plan.benefits[0].title}`}
+                        primary={`✔${plan.benefits[2].description}`}
                     />
                 </List>
             </CardContent>

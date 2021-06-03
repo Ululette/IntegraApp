@@ -1,28 +1,42 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { lighten, makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
+import {
+    lighten,
+    makeStyles,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Typography,
+    IconButton,
+    Tooltip,
+    FormControl,
+    Select,
+    Input,
+    Card,
+    CardActions,
+    CardContent,
+    CircularProgress,
+    Paper,
+    Button,
+    TablePagination,
+    Dialog,
+    DialogContent,
+    DialogActions,
+    Toolbar,
+    ListItem
+} from '@material-ui/core';
+import DescriptionRoundedIcon from '@material-ui/icons/DescriptionRounded';
 import SaveIcon from '@material-ui/icons/Save';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import 'firebase/auth';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
-import { FormControl, Select, Input } from '@material-ui/core';
 import calculateAge from '../../../functions/calculateAge';
 import supabase from '../../../supabase.config';
 import getSome from '../../../actions/elgetter';
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
+import 'firebase/auth';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -58,37 +72,30 @@ const headCells = [
         label: 'Acciones',
     },
     {
-        id: 'familiar_name',
+        id: 'name',
         numeric: false,
         disablePadding: true,
         label: 'Nombre',
     },
     {
-        id: 'familiar_lastname',
+        id: 'lastname',
         numeric: false,
         disablePadding: false,
         label: 'Apellido',
     },
-    { id: 'familiar_dni', numeric: true, disablePadding: false, label: 'DNI' },
     {
-        id: 'titular_dni',
+        id: 'dni',
         numeric: false,
         disablePadding: false,
         label: 'DNI del titular',
     },
     {
-        id: 'reason',
-        numeric: false,
-        disablePadding: false,
-        label: 'Motivo',
-    },
-    {
-        id: 'familiar_birthdate',
+        id: 'birthdate',
         numeric: true,
         disablePadding: false,
         label: 'Edad',
     },
-    { id: 'status', numeric: false, disablePadding: false, label: 'Estado' },
+    { id: 'state', numeric: false, disablePadding: false, label: 'Estado' },
 ];
 
 function EnhancedTableHead() {
@@ -127,13 +134,13 @@ const useToolbarStyles = makeStyles((theme) => ({
     highlight:
         theme.palette.type === 'light'
             ? {
-                  color: theme.palette.secondary.main,
-                  backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-              }
+                color: theme.palette.secondary.main,
+                backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+            }
             : {
-                  color: theme.palette.text.primary,
-                  backgroundColor: theme.palette.secondary.dark,
-              },
+                color: theme.palette.text.primary,
+                backgroundColor: theme.palette.secondary.dark,
+            },
     title: {
         flex: '1 1 100%',
     },
@@ -207,13 +214,124 @@ const StatusSelector = ({
                 label='value2'
             >
                 <option aria-label='None' value='' />
-                <option value='aceptada'>Aceptada</option>
-                <option value='rechazada'>Rechazada</option>
-                <option value='pendiente'>Pendiente</option>
+                <option value='aceptado'>Aceptada</option>
+                <option value='rechazado'>Rechazada</option>
+                <option value='revision pendiente'>Revisión Pendiente</option>
             </Select>
         </FormControl>
     );
 };
+
+const ViewDoc = ({ aplication }) => {
+
+    const medicalRecord = JSON.parse(aplication.declaration);
+
+    const useStyles = makeStyles({
+        root: {
+            minWidth: 500,
+        },
+        bullet: {
+            display: 'inline-block',
+            margin: '0 2px',
+            transform: 'scale(0.8)',
+        },
+        title: {
+            fontSize: 14,
+        },
+        pos: {
+            marginBottom: 12,
+            display: 'flex',
+            flexWrap: 'wrap'
+        },
+    });
+    const classes = useStyles();
+
+    const patologies = (record) => {
+        let dic = {
+            accept: 'Declaró bajo juramento',
+            allergies: 'Alergias',
+            asthma: 'Asma',
+            completeName: 'Nombre Completo',
+            diabetes: 'Diabetes',
+            fainting: 'Desmayos',
+            hearing: 'Auditivo',
+            heart: 'Cardíaco',
+            hernia: 'Hernia',
+            hypertension: 'Hipertensión',
+            hypotension: 'Hipotención',
+            medicines: 'Medicamentos',
+            others: 'Otros',
+            psychiatric: 'Psiquiátricos',
+            psychological: 'Psicológicos',
+            seizures: 'Combulsiones',
+            sinusitis: 'Sinusitis',
+            spine: 'Espinales',
+            surgeryProt: 'Protesis Quirúrgica',
+            visual: 'Visuales',
+            allergiesD: 'Detalle',
+            asthmaD: 'Detalle',
+            diabetesD: 'Detalle',
+            faintingD: 'Detalle',
+            hearingD: 'Detalle',
+            heartD: 'Detalle',
+            herniaD: 'Detalle',
+            hypertensionD: 'Detalle',
+            hypotensionD: 'Detalle',
+            medicinesD: 'Detalle',
+            othersD: 'Detalle',
+            psychiatricD: 'Detalle',
+            psychologicalD: 'Detalle',
+            seizuresD: 'Detalle',
+            sinusitisD: 'Detalle',
+            spineD: 'Detalle',
+            surgeryProtD: 'Detalle',
+            visualD: 'Detalle',
+        }
+
+        let items = [];
+
+        const ordered = Object.keys(record).sort().reduce(
+            (obj, key) => {
+                obj[key] = record[key];
+                return obj;
+            },
+            {}
+        );
+
+        for (const pat in ordered) {
+            let item = pat !== 'accept' ?
+                <Typography color="textSecondary">
+                    {`${dic[pat]} : ${ordered[pat]}`}
+                </Typography>
+                :
+                <Typography color="textSecondary">
+                    {ordered[pat] ? `${dic[pat]} : ✔` : `${dic[pat]} : X`}
+                </Typography>
+            items.push(item)
+        }
+        return items.map(e => {
+            return e
+        })
+
+    }
+
+    return (
+        <Card className={classes.root}>
+            { aplication ?
+                <CardContent>
+                    <Typography variant="h5" component="h2">
+                        Aplicante : {`${aplication.partners.name} ${aplication.partners.lastname}`}
+                    </Typography>
+                    <Typography className={classes.title} color="textPrimary" gutterBottom>
+                        Declaración de Salud
+                        </Typography>
+                    {patologies(medicalRecord)}
+                </CardContent>
+                :
+                null}
+        </Card>
+    );
+}
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -233,7 +351,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function PartnersAplications() {
+export default function PartnersAffiliationRequests({ firebase }) {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('familiar_name');
@@ -246,12 +364,15 @@ export default function PartnersAplications() {
     const MySwal = withReactContent(Swal);
     const [newStatus, setNewSatus] = React.useState('');
     const [indexOnChange, setIndexOnChange] = React.useState([]);
+    const [medicalRecord, setMedicalRecord] = React.useState(null);
 
     const fetchRequests = () => {
-        getSome('familiar_downs_request').then(
+        getSome('medical_records', '*, partners(*)').then(
             (r) => {
-                setListRequests(r);
-                setToShowRows(r);
+                let newR = r.filter(e=> e.partners.state === 'revision pendiente')
+                console.log(newR)
+                setListRequests(newR);
+                setToShowRows(newR);
             },
             (err) => console.error(err.message)
         );
@@ -261,15 +382,10 @@ export default function PartnersAplications() {
         fetchRequests();
     }, []);
 
-    const handleSave = async (request) => {
-        const statusState = {
-            aceptada: 'dado de baja',
-            pendiente: 'revision pendiente',
-            rechazada: 'aceptado',
-        };
+    const handleSave = async (request, index) => {
 
         MySwal.fire({
-            title: `Desea guardar como ${newStatus} la solucitud de baja de ${request.familiar_name} de la obra social?`,
+            title: `Desea guardar como ${newStatus} a ${request.partners.name} ${request.partners.lastname} en la obra social?`,
             showCloseButton: true,
             showCancelButton: true,
             icon: 'question',
@@ -277,28 +393,44 @@ export default function PartnersAplications() {
             if (res.isConfirmed) {
                 try {
                     await supabase
-                        .from('familiar_downs_request')
-                        .update({ status: newStatus })
-                        .eq('familiar_dni', request.familiar_dni);
+                        .from('partners')
+                        .update({ state: newStatus })
+                        .eq('dni', request.partner_dni);
                 } catch (error) {
                     console.log(error);
-                } finally {
-                    await supabase
-                        .from('partners')
-                        .update({ state: statusState[newStatus] })
-                        .eq('dni', parseInt(request.familiar_dni))
-                        .then((r) => {
-                            if (r.body[0].state === statusState[newStatus]) {
-                                MySwal.fire({
-                                    title: `El socio ${request.familiar_name} ${request.familiar_lastname}
-                                    ahora está ${statusState[newStatus]}.
-                                        La solicitud ha sido actualizada!`,
-                                    icon: 'success',
-                                    timer: 3000,
-                                }).then(() => window.location.reload());
-                            }
-                        });
                 }
+                try {
+                    const {error: userError } = await supabase.from('users').insert([
+                        {
+                            dni: request.partner_dni,
+                            role: 'affiliate',
+                            email: request.partners.email,
+                            account: 'active'
+                        },
+                    ]);
+
+                    await firebase
+                        .auth()
+                        .createUserWithEmailAndPassword(request.partners.email, String(request.partner_dni));
+
+                    await firebase.auth().sendPasswordResetEmail(request.partners.email);
+
+                    MySwal.fire({
+                        title: 'Usuario Socio creado con exito!',
+                        text: 'Debera resetear su password. Le llegará el link por mail.',
+                        icon: 'success',
+                    });
+
+                    setIndexOnChange(indexOnChange.filter((e) => e != index));
+
+                } catch (error) {
+                    MySwal.fire({
+                        title: 'Usuario Socio no pudo ser creado.',
+                        text: `Mensaje de error ${error}`,
+                        icon: 'error',
+                    });
+                }
+
             }
         });
     };
@@ -339,6 +471,17 @@ export default function PartnersAplications() {
 
     return (
         <div className={classes.root}>
+            <Dialog
+                open={!!medicalRecord}
+                className={classes.dialog}
+            >
+                <DialogContent>
+                    {medicalRecord && <ViewDoc aplication={medicalRecord} />}
+                </DialogContent>
+                <DialogActions>
+                    <Button type='close' onClick={(e) => { e.preventDefault(); setMedicalRecord(null) }}>Cerrar</Button>
+                </DialogActions>
+            </Dialog>
             <Paper className={classes.paper}>
                 <EnhancedTableToolbar
                     numSelected={selected.length}
@@ -407,6 +550,14 @@ export default function PartnersAplications() {
                                                         />
                                                     </IconButton>
                                                 </Tooltip>
+                                                <Tooltip
+                                                    title='Declaración'
+                                                    onClick={() => setMedicalRecord(row)}
+                                                >
+                                                    <IconButton aria-label='save'>
+                                                        <DescriptionRoundedIcon />
+                                                    </IconButton>
+                                                </Tooltip>
                                             </TableCell>
                                             <TableCell
                                                 component='th'
@@ -414,28 +565,22 @@ export default function PartnersAplications() {
                                                 scope='row'
                                                 padding='default'
                                             >
-                                                {row.familiar_name}
+                                                {row.partners.name}
                                             </TableCell>
                                             <TableCell align='right'>
-                                                {row.familiar_lastname}
+                                                {row.partners.lastname}
                                             </TableCell>
                                             <TableCell align='right'>
-                                                {row.familiar_dni}
-                                            </TableCell>
-                                            <TableCell align='right'>
-                                                {row.titular_dni}
-                                            </TableCell>
-                                            <TableCell align='right'>
-                                                {row.reason}
+                                                {row.partner_dni}
                                             </TableCell>
                                             <TableCell align='right'>
                                                 {calculateAge(
-                                                    row.familiar_birthdate
+                                                    row.partners.birthdate
                                                 )}
                                             </TableCell>
                                             <TableCell align='center'>
                                                 <StatusSelector
-                                                    current={row.status}
+                                                    current={row.partners.state}
                                                     setNewSatus={setNewSatus}
                                                     index={index}
                                                     indexOnChange={
