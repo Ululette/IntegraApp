@@ -1,5 +1,5 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles,lighten, makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
@@ -15,13 +15,7 @@ const styles = (theme) => ({
   root: {
     margin: 0,
     padding: theme.spacing(2),
-  },
-  closeButton: {
-    position: "absolute",
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500],
-  },
+  }
 });
 
 const DialogTitle = withStyles(styles)((props) => {
@@ -55,23 +49,46 @@ const DialogActions = withStyles((theme) => ({
   },
 }))(MuiDialogActions);
 
-export default function CustomizedDialogs({open, handleClose, rows}) {
- 
 
+const useStyles = makeStyles((theme) => ({
+  popup: {
+      color: '#fafafa',
+      backgroundColor: '#2c7f7b',
+      fontWeight: 'bold',
+      fontSize: '30px',
+  },
+  popupBtn: {
+      color: '#fafafa',
+      padding: theme.spacing(0.5),
+      border: '3px solid #2c7f7b',
+      backgroundColor: '#2c7f7b',
+      fontWeight: 'bold',
+      fontSize: '15px',
+      '&:hover': {
+          backgroundColor: lighten('#fafafa', 0.2),
+          color: '#2c7f7b',
+          padding: theme.spacing(0.5),
+      },
+  },
+}));
+
+export default function CustomizedDialogs({open, handleClose, rows}) {
+  const classes = useStyles();
   return (
     <div>
-  
       <Dialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
         open={open}
       >
-        <DialogTitle id="form-dialog-title">{`Autorización para el paciente: ${rows.partners.name} ${rows.partners.lastname}`}</DialogTitle>
+        <DialogTitle 
+        className={classes.popup}
+        id="form-dialog-title">{`Autorización para el paciente: ${rows.partners.name.toUpperCase()} ${rows.partners.lastname.toUpperCase()}`}</DialogTitle>
         <DialogContent>
           <List>
-       <ListItemText primary={`Fecha: ${rows.date}`} fullWidth />
-       <ListItemText primary={`Nombre del estudio o medicamento: ${rows.study_name}`} fullWidth />
-       <ListItemText primary={`Estado: ${rows.order_status.name}`} fullWidth />
+        <ListItemText primary={`Fecha: ${rows.date}`} fullWidth />
+        <ListItemText primary={`Nombre del estudio o medicamento: ${rows.study_name}`} fullWidth />
+        <ListItemText primary={`Estado: ${rows.order_status.name}`} fullWidth />
             <ListItemText
               primary={`Nombre y apellido del paciente: ${rows.partners.name} ${rows.partners.lastname}`}
               fullWidth
@@ -97,8 +114,11 @@ export default function CustomizedDialogs({open, handleClose, rows}) {
           </List>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose} color="primary">
-Cerrar          </Button>
+          <Button 
+          className={classes.popupBtn}
+          autoFocus onClick={handleClose} color="primary">
+            Cerrar
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

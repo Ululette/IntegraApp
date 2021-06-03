@@ -20,6 +20,7 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import ClearAllIcon from "@material-ui/icons/ClearAll";
 import EditIcon from "@material-ui/icons/Edit";
+import blue from '@material-ui/core/colors/blue';
 import "firebase/auth";
 import AdminMedicAdd from "../AdminMedics/AdminMedicAdd";
 import AdminOrdersEdit from "./AdminOrdersEdit";
@@ -70,6 +71,7 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
+    { id: 'actions', numeric: false, disablePadding: true, label: 'ACIONES' },
     { id: 'date', numeric: false, disablePadding: true, label: 'FECHA' },
     { id: 'lastname', numeric: false, disablePadding: false, label: 'MEDICO' },
     {
@@ -100,13 +102,11 @@ function EnhancedTableHead(props) {
     return (
         <TableHead className={classes.title}>
             <TableRow>
-                <TableCell padding='checkbox'>
-                </TableCell>
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
                         align='left'
-                        padding={headCell.disablePadding ? 'none' : 'default'}
+                        padding='default'
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
                         <TableSortLabel
@@ -141,25 +141,6 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
 };
 
-// const useToolbarStyles = makeStyles((theme) => ({
-//     root: {
-//         paddingLeft: theme.spacing(2),
-//         paddingRight: theme.spacing(1),
-//     },
-//     highlight:
-//         theme.palette.type === 'light'
-//             ? {
-//                   color: theme.palette.secondary.main,
-//                   backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-//               }
-//             : {
-//                   color: theme.palette.text.primary,
-//                   backgroundColor: theme.palette.secondary.dark,
-//               },
-//     title: {
-//         flex: '1 1 100%',
-//     },
-// }));
 
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
@@ -208,6 +189,8 @@ const useToolbarStyles = makeStyles((theme) => ({
         backgroundColor: '#2c7f7b',
         fontWeight: 'bold',
         fontSize: '30px',
+        marginBottom:'2rem'
+
     },
     popupBtn: {
         color: '#fafafa',
@@ -222,8 +205,9 @@ const useToolbarStyles = makeStyles((theme) => ({
             padding: theme.spacing(0.5),
         },
     },
-  dialog: {
-    zIndex: "-6",
+  select:{
+    width: '100%',
+    marginBottom:'2rem'
   }
 }));
 
@@ -292,9 +276,7 @@ let show = []
 
   return (
     <Toolbar
-      className={clsx(classes.root, {
-        [classes.highlight]: numSelected > 0,
-      })}
+      className={classes.root}
     >
       <Typography
         className={classes.title}
@@ -302,33 +284,44 @@ let show = []
         id="tableTitle"
         component="div"
       >
-        Autorizaciones
+        AUATORIZACIONES
       </Typography>
       <Tooltip title="Clear" onClick={handleClose}>
-        <IconButton aria-label="reset">
+        <IconButton 
+            aria-label="reset"
+            className={classes.iconFilter}>
           <ClearAllIcon />
         </IconButton>
       </Tooltip>
       <Tooltip title="Filter list" onClick={handleClickOpen}>
-        <IconButton aria-label="filter list">
+        <IconButton 
+            aria-label="filter list"
+            className={classes.iconFilter}
+            >
           <FilterListIcon />
         </IconButton>
       </Tooltip>
+      
       <Dialog
         disableBackdropClick
         disableEscapeKeyDown
         open={open}
         onClose={handleClose}
-        className={classes.dialog}
       >
-        <form className={classes.container} onSubmit={handleSubmit}>
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="demo-dialog-native">Filtrar por</InputLabel>
+        <DialogTitle className={classes.popup}>
+                FILTRADO POR ESTADO:
+        </DialogTitle>  
+        <form  onSubmit={handleSubmit} >
+        <DialogContent >  
+          <FormControl className={classes.select}>
+            {/* <InputLabel htmlFor="demo-dialog-native">Filtrar por</InputLabel> */}
             <Select
-              native
-              value={selectedOption}
-              onChange={handleChange}
-              input={<Input id="demo-dialog-native" />}
+                variant='outlined'
+                size='medium'
+                native
+                value={selectedOption}
+                onChange={handleChange}
+                input={<Input id="demo-dialog-native" />}
             >
               <option aria-label="None" value="" />
               <option value="autorizada">Autorizada</option>
@@ -337,13 +330,13 @@ let show = []
               <option value="recibida">Recibida</option>
             </Select>
           </FormControl>
-          {/*     </DialogContent> */}
+        </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              Cancel
+            <Button onClick={handleClose} className={classes.popupBtn}>
+              Cancelar
             </Button>
-            <Button color="primary" type="submit">
-              Ok
+            <Button  type="submit" className={classes.popupBtn}>
+              Filtrar
             </Button>
           </DialogActions>
         </form>
@@ -356,53 +349,47 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//         width: '100%',
-//     },
-//     paper: {
-//         width: '100%',
-//         marginBottom: theme.spacing(2),
-//     },
-//     table: {
-//         minWidth: 750,
-//     },
-//     visuallyHidden: {
-//         border: 0,
-//         clip: 'rect(0 0 0 0)',
-//         height: 1,
-//         margin: -1,
-//         overflow: 'hidden',
-//         padding: 0,
-//         position: 'absolute',
-//         top: 20,
-//         width: 1,
-//     },
-// }));
-
-//-------------------- Style Table Users
+//-------------------- Style Table Orders
 const useStyles = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-  },
-  paper: {
-    width: "100%",
-    marginBottom: theme.spacing(2),
-  },
-  table: {
-    minWidth: 750,
-  },
-  visuallyHidden: {
-    border: 0,
-    clip: "rect(0 0 0 0)",
-    height: 1,
-    margin: -1,
-    overflow: "hidden",
-    padding: 0,
-    position: "absolute",
-    top: 20,
-    width: 1,
-  },
+    root: {
+        width: '100%',
+    },
+    paper: {
+        width: '100%',
+        marginBottom: theme.spacing(2),
+    },
+    table: {
+        minWidth: 750,
+    },
+    visuallyHidden: {
+        border: 0,
+        clip: 'rect(0 0 0 0)',
+        height: 1,
+        margin: -1,
+        overflow: 'hidden',
+        padding: 0,
+        position: 'absolute',
+        top: 20,
+        width: 1,
+    },
+    title: {
+        color: '#212121',
+        fontWeight: 'bold',
+        backgroundColor: lighten('#34a7a1', 0.6),
+    },
+    rowColor: {
+        backgroundColor: lighten('#e0e0e0', 0.3),
+        ':checked': {
+            color: blue[500],
+        },
+    },
+    iconFilter: {
+        color: 'rgba(0, 0, 0, 0.47)',
+        fontWeight: 'bold',
+        '&:hover': {
+            backgroundColor: lighten('#34a7a1', 0.8),
+        },
+    }
 }));
 
 export default function EnhancedTable() {
@@ -412,7 +399,6 @@ export default function EnhancedTable() {
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
   const [rows, setRows] = React.useState([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [listMedics, setListMedics] = React.useState([]);
@@ -547,7 +533,7 @@ export default function EnhancedTable() {
 
  
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
+  /* const isSelected = (name) => selected.indexOf(name) !== -1; */
 
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -566,7 +552,7 @@ export default function EnhancedTable() {
           <Table
             className={classes.table}
             aria-labelledby="tableTitle"
-            size={dense ? "small" : "medium"}
+            size="small" 
             aria-label="enhanced table"
           >
             <EnhancedTableHead
@@ -582,49 +568,103 @@ export default function EnhancedTable() {
               {stableSort(toShowRows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
-                  const labelId = `enhanced-table-checkbox-${index}`;
-
+                  /* const isItemSelected = isSelected(row.name);
+                  const labelId = `enhanced-table-checkbox-${index}`; */
                   return (
                     <TableRow
                       hover
                       onClick={(event) => handleClick(event, row.name)}
-                      aria-checked={isItemSelected}
+                      /* aria-checked={isItemSelected} */
                       tabIndex={-1}
                       key={row.name}
-                      selected={isItemSelected}
+                      /* selected={isItemSelected} */
                     >
-                      <TableCell align="left">
-                        <EditIcon onClick={() => handleEdit(row)} />
+                      <TableCell 
+                        className={
+                            index % 2 === 1
+                                ? classes.rowColor
+                                : null
+                        }
+                        align="left">
+                        <Tooltip
+                            title='Edit'
+                            className={
+                                classes.iconFilter
+                            }
+                        >
+                            <IconButton size='small' aria-label='Edit'>
+                                <EditIcon onClick={() => handleEdit(row)} />
+                            </IconButton>
+                            
+                        </Tooltip>
+                        
                       </TableCell>
-
-                      <TableCell align="left">{row.date}</TableCell>
-                      <TableCell align="left">
+                      <TableCell 
+                        className={
+                            index % 2 === 1
+                                ? classes.rowColor
+                                : null
+                        }
+                        align="left">{row.date}</TableCell>
+                      <TableCell 
+                        className={
+                            index % 2 === 1
+                                ? classes.rowColor
+                                : null
+                        }
+                        align="left">
                         {row.medics.name} {row.medics.lastname}
                       </TableCell>
-                      <TableCell align="left">
+                      <TableCell 
+                        className={
+                            index % 2 === 1
+                                ? classes.rowColor
+                                : null
+                        }
+                        align="left"
+                        key={index}
+                        >
                         {row.partners.name} {row.partners.lastname}
                       </TableCell>
-                      <TableCell align="left">{row.partners.dni}</TableCell>
-                      <TableCell align="left">{row.order_status.name}</TableCell>
-                     
-                      <TableCell align="left"><Button variant="outlined" color="primary" onClick={ () => handleClickOpen(row)}>
+                      <TableCell 
+                        className={
+                            index % 2 === 1
+                                ? classes.rowColor
+                                : null
+                        }
+                        align="left">{row.partners.dni}</TableCell>
+                      <TableCell 
+                        className={
+                            index % 2 === 1
+                                ? classes.rowColor
+                                : null
+                        }
+                        align="left">{row.order_status.name}</TableCell>
+                      <TableCell 
+                        className={
+                            index % 2 === 1
+                                ? classes.rowColor
+                                : null
+                        }
+                        align="left">
+                        <Button 
+                        className={classes.iconFilter}
+                        variant="outlined" 
+                        onClick={ () => handleClickOpen(row)}>
                           📝
-      </Button></TableCell>
-      
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
-
               {emptyRows > 0 && (
-                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                <TableRow style={{ height:  33  * emptyRows }}>
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
             </TableBody>
           </Table>
         </TableContainer>
-    
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
@@ -637,21 +677,16 @@ export default function EnhancedTable() {
       </Paper>
       {editActive ? (
                 <AdminOrdersEdit
-                
                     status={status}
-                 /*    medicSpecialities={medicSpecialities} */
                     setEditActive={setEditActive}
                     editActive={editActive}
                 />
-            ) : null}
-          {/*   <AdminOrderAdd medicSpecialities={medicSpecialities} /> */}
-         
+            ) : null}         
                 <PopUp
                 rows={row}
                     handleClose={handleClose}
                     open={open}
                 />
-           
     </div>
   );
 }
