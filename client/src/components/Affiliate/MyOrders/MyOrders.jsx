@@ -548,42 +548,44 @@ export default function MyOrders() {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <Dialog
-                    fullScreen={fullScreen}
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby='responsive-dialog-title'
-                >
-                    <DialogTitle id='responsive-dialog-title'>
-                        {`${currentStudy.results.name} de ${currentStudy.partners.name} ${currentStudy.partners.lastname}`}
-                    </DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            {`Estudio realizado el dia: ${currentStudy.results.results.date}`}
-                        </DialogContentText>
-                        <Divider />
-                        <DialogContentText>
-                            {`Estudio realizado por: ${currentStudy.results.results.medic_name}`}
-                        </DialogContentText>
-                        <Divider />
-                        <DialogContentText>{`Resultados:`}</DialogContentText>
-                        <DialogContentText style={{ whiteSpace: 'pre' }}>
-                            {`${currentStudy.results.results.results.replace(
-                                /\|/g,
-                                '\n'
-                            )}`}
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button
-                            onClick={handleClose}
-                            className={classes.buttonClose}
-                            autoFocus
-                        >
-                            Cerrar
-                        </Button>
-                    </DialogActions>
-                </Dialog>
+                {!currentStudy ? null : (
+                    <Dialog
+                        fullScreen={fullScreen}
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby='responsive-dialog-title'
+                    >
+                        <DialogTitle id='responsive-dialog-title'>
+                            {`${currentStudy.results.name} de ${currentStudy.partners.name} ${currentStudy.partners.lastname}`}
+                        </DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                {`Estudio realizado el dia: ${currentStudy.results.results.date}`}
+                            </DialogContentText>
+                            <Divider />
+                            <DialogContentText>
+                                {`Estudio realizado por: ${currentStudy.results.results.medic_name}`}
+                            </DialogContentText>
+                            <Divider />
+                            <DialogContentText>{`Resultados:`}</DialogContentText>
+                            <DialogContentText style={{ whiteSpace: 'pre' }}>
+                                {`${currentStudy.results.results.results.replace(
+                                    /\|/g,
+                                    '\n'
+                                )}`}
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button
+                                onClick={handleClose}
+                                className={classes.buttonClose}
+                                autoFocus
+                            >
+                                Cerrar
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                )}
                 <TablePagination
                     className={classes.root}
                     rowsPerPageOptions={[5, 10, 15, 20]}
