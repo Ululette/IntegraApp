@@ -22,6 +22,7 @@ function Login({ firebase }) {
     const [input, setInput] = useState({ doc: '', pass: '' });
     const [errors, setErrors] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [picName, setPicName] = useState('');
     const userFire = useUser();
 
     const userData = JSON.parse(localStorage.getItem('userdata'));
@@ -179,12 +180,20 @@ function Login({ firebase }) {
                 .signInWithEmailAndPassword(users[0].email, input.pass);
 
             const userUid = await firebase.auth().currentUser.uid;
-            let imgSrc = null;
+            let downloadUrl = null;
             if (userUid) {
                 try {
-                    imgSrc = await firebase
+                    await firebase
                         .storage()
-                        .ref(`users/${userUid}/profile.jpg`)
+                        .ref(`users`)
+                        .child(`${userUid}`)
+                        .listAll()
+                        .then((el) => {
+                            setPicName(el.items[0].name);
+                        });
+                    downloadUrl = await firebase
+                        .storage()
+                        .ref(`users/${userUid}/${picName}`)
                         .getDownloadURL();
                 } catch (error) {
                     console.log(error.message);
@@ -195,7 +204,7 @@ function Login({ firebase }) {
                 dni: users[0].dni,
                 email: users[0].email,
                 role: users[0].role,
-                avatar_url: imgSrc || null,
+                avatar_url: downloadUrl || null,
             };
 
             localStorage.setItem('userdata', JSON.stringify(dataUser));
