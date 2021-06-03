@@ -680,6 +680,7 @@ export default function EnhancedTable() {
                     status={status}
                     setEditActive={setEditActive}
                     editActive={editActive}
+                    data={data}
                 />
             ) : null}         
                 <PopUp

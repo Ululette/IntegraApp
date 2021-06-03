@@ -206,7 +206,6 @@ const useToolbarStyles = makeStyles((theme) => ({
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
     const { numSelected, handleBlock, list, sendFilter } = props;
-
     const [open, setOpen] = React.useState(false);
     const [input, setInput] = React.useState('');
     const [optionSelected, setOptionSelected] = React.useState(''); //que opcion elige de filtrado

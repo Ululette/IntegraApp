@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { InputLabel, MenuItem, Select } from '@material-ui/core';
+import { InputLabel, MenuItem, Select, FormControl } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
 import Paper from '@material-ui/core/Paper';
@@ -41,13 +41,16 @@ const useStyles = makeStyles((theme) => ({
 
 function AdminMedicEdit({
     status,
- data,
+    data,
     setEditActive,
     editActive,
 }) {
     const classes = useStyles();
     const MySwal = withReactContent(Swal);
-    let [input, setInput] = React.useState('');
+    let [input, setInput] = React.useState({
+        id:'',
+        status:''
+    });
 
 
     const handleClose = () => {
@@ -57,9 +60,8 @@ function AdminMedicEdit({
   
 
     const handleChange = (e) => {
-        const name = e.target.name;
-        const value = e.target.value;
-        setInput({ ...input, [name]: value });
+        const value = e.target.value;//autorizada
+        setInput({id:value.id,status:value.name} );
     };
 
     const handleSubmit = async (e) => {
@@ -78,7 +80,7 @@ function AdminMedicEdit({
                 try  {
                     await supabase
                     .from('orders')
-                    .update({ status: input.status.id })
+                    .update({ status: input.id })
                     .eq('id', data.id)
                     MySwal.fire({
                         title: 'Se edito el estado con exito!',
@@ -106,18 +108,26 @@ function AdminMedicEdit({
              {/*    <DialogContentText>
                     Formulario para editar medico.
                 </DialogContentText> */}
-                <InputLabel htmlFor='status'>Estado</InputLabel>
-                <Select
+                <InputLabel id='demo-simple-select'>Estado</InputLabel>
+                
+                <FormControl>
+                    <Select
                     name='status'
                     onChange={handleChange}
-                    value={input}
+                    value={input.status}
+                    id="demo-simple-select"
+                    labelId="demo-simple-select-label"
+                    
+                
                >
                     {status.map((el, index) => (
-                        <MenuItem key={`state-${index}`} value={el.name}>
+                        <MenuItem key={`state-${index}`} value={el}>
                             {el.name}
                         </MenuItem>
                     ))}
                 </Select>
+                </FormControl>
+                
   
 
             </DialogContent>
