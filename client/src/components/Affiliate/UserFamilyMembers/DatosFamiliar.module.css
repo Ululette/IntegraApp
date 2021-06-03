@@ -1,0 +1,28 @@
+.form {
+    display: flex;
+    flex-direction: row;
+    /* align-items: center; */
+    justify-content: space-around;
+    margin: 20px;
+    width: 80%;
+    height: 470px;
+}
+
+.personalData {
+    margin-left: 80px;
+    display: flex;
+    flex-direction: row;
+    /* justify-content: space-around; */
+}
+
+.addressData {
+    margin-right: 80px;
+}
+
+.secondColumn {
+    padding-top: 24px;
+}
+
+.input {
+    margin: 10px;
+}
