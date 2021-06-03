@@ -120,7 +120,7 @@ function MedicPatients() {
                 icon: 'error',
             });
         }
-        setListPatients(patients);
+        setListPatients(patients.filter((el) => el.state === 'aceptado'));
     };
 
     const fetchStudies = async (current) => {
