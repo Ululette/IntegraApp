@@ -41,6 +41,11 @@ const useStyles = makeStyles({
         marginBottom: 15,
         background: 'white',
     },
+    picUpload: {
+        color: '#fff',
+        width: '150px',
+        height: '150px',
+    },
 });
 
 export default function UserProfile({ firebase }) {
@@ -393,17 +398,17 @@ export default function UserProfile({ firebase }) {
     };
 
     const picUpload = async (file) => {
-        console.log(file);
+        const extension = file.name.slice(file.name.lastIndexOf('.'));
         const userUid = firebase.auth().currentUser.uid;
         try {
             await firebase
                 .storage()
-                .ref(`users/${userUid}/profile.${file.name.slice(-3)}`)
+                .ref(`users/${userUid}/profile${extension}`)
                 .put(file);
             console.log('Se subio exitosamente.');
             let imgSrc = await firebase
                 .storage()
-                .ref(`users/${userUid}/profile.jpg`)
+                .ref(`users/${userUid}/profile${extension}`)
                 .getDownloadURL();
             let newLS = { ...userDni, avatar_url: imgSrc };
 
@@ -439,11 +444,13 @@ export default function UserProfile({ firebase }) {
                                             />
                                             <label htmlFor='icon-button-file'>
                                                 <IconButton
-                                                    color='primary'
+                                                    className={
+                                                        classes.picUpload
+                                                    }
                                                     aria-label='upload picture'
                                                     component='span'
                                                 >
-                                                    <PhotoCamera className='iconUpload' />
+                                                    Cambiar Imagen
                                                 </IconButton>
                                             </label>
                                         </div>

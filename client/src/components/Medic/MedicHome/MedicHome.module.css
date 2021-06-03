@@ -1,4 +1,30 @@
-.background {
+.sectionContainer {
+    display: flex;
+    flex-direction: row;
     width: 100%;
-    background-color: aliceblue;
+    height: 60vh;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.directAccess {
+    width: 50%;
+}
+
+.directAccess ul a {
+    color: #000;
+}
+
+.directAccess ul a div div svg {
+    color: #00897b;
+}
+
+.patientCount {
+    width: 50%;
+}
+
+.patientCount ul div div svg {
+    color: #00897b;
 }
