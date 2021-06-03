@@ -14,9 +14,6 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import InfoIcon from '@material-ui/icons/Info';
 import blue from '@material-ui/core/colors/blue';
 import 'firebase/auth';
 import supabase from '../../../supabase.config';
@@ -190,35 +187,32 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
-    const [partner,setPartner]=useState();
     const { numSelected, setToShowRows } = props;
     const [inputSearch, setInputSearch] = useState('');
-    let userDni = JSON.parse(
-        localStorage.getItem('userdata')
-    ).dni;
+    let userDni = JSON.parse(localStorage.getItem('userdata')).dni;
 
     const fetchConsult = async (dni) => {
-        if(!dni){
-            const { data: consults , error:errorFetch} = await supabase
-            .from('medical_consultations')
-            .select('*,partners:partner_dni(dni,name,lastname)')
-            .eq('medic_dni',userDni)
+        if (!dni) {
+            const { data: consults, error: errorFetch } = await supabase
+                .from('medical_consultations')
+                .select('*,partners:partner_dni(dni,name,lastname)')
+                .eq('medic_dni', userDni);
 
-            console.log(consults)
-            console.error('error fetch:',errorFetch)
+            console.log(consults);
+            console.error('error fetch:', errorFetch);
             setToShowRows(consults);
         } else {
-            const { data: consults , error:errorFetch} = await supabase
-            .from('medical_consultations')
-            .select('*,partners:partner_dni(dni,name,lastname)')
-            .eq('medic_dni',userDni)
-            let array = consults.filter(
-                (co) => co.partners.dni.toString().includes(dni)
-            )
+            const { data: consults, error: errorFetch } = await supabase
+                .from('medical_consultations')
+                .select('*,partners:partner_dni(dni,name,lastname)')
+                .eq('medic_dni', userDni);
+            let array = consults.filter((co) =>
+                co.partners.dni.toString().includes(dni)
+            );
             setToShowRows(array);
 
-            console.log(array)
-            console.error('error fetch:',errorFetch)
+            console.log(array);
+            console.error('error fetch:', errorFetch);
             setToShowRows(array);
         }
     };
@@ -363,118 +357,122 @@ export default function ConsultsTable() {
                     setToShowRows={setToShowRows}
                 />
                 {toShowRows.length !== 0 ? (
-                <TableContainer>
-                    <Table
-                        className={classes.table}
-                        aria-labelledby='tableTitle'
-                        size='small'
-                        aria-label='enhanced table'
-                    >
-                        <EnhancedTableHead
-                            classes={classes}
-                            numSelected={selected.length}
-                            order={order}
-                            orderBy={orderBy}
-                            onSelectAllClick={handleSelectAllClick}
-                            onRequestSort={handleRequestSort}
-                            rowCount={toShowRows.length}
-                        />
-                        <TableBody>
-                            {stableSort(
-                                toShowRows,
-                                getComparator(order, orderBy)
-                            )
-                                .slice(
-                                    page * rowsPerPage,
-                                    page * rowsPerPage + rowsPerPage
+                    <TableContainer>
+                        <Table
+                            className={classes.table}
+                            aria-labelledby='tableTitle'
+                            size='small'
+                            aria-label='enhanced table'
+                        >
+                            <EnhancedTableHead
+                                classes={classes}
+                                numSelected={selected.length}
+                                order={order}
+                                orderBy={orderBy}
+                                onSelectAllClick={handleSelectAllClick}
+                                onRequestSort={handleRequestSort}
+                                rowCount={toShowRows.length}
+                            />
+                            <TableBody>
+                                {stableSort(
+                                    toShowRows,
+                                    getComparator(order, orderBy)
                                 )
-                                .map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
-                                    const labelId = `enhanced-table-checkbox-${index}`;
-                                    let patientName = `${row.partners.name} ${row.partners.lastname}`;
-                                    return (
-                                        <TableRow
-                                            hover
-                                            role='checkbox'
-                                            aria-checked={isItemSelected}
-                                            tabIndex={-1}
-                                            key={row.name}
-                                            selected={isItemSelected}
-                                        >
-                                            <TableCell
-                                                align='left'
-                                                className={
-                                                    index % 2 === 1
-                                                        ? classes.rowColor
-                                                        : null
-                                                }
+                                    .slice(
+                                        page * rowsPerPage,
+                                        page * rowsPerPage + rowsPerPage
+                                    )
+                                    .map((row, index) => {
+                                        const isItemSelected = isSelected(
+                                            row.name
+                                        );
+                                        const labelId = `enhanced-table-checkbox-${index}`;
+                                        let patientName = `${row.partners.name} ${row.partners.lastname}`;
+                                        return (
+                                            <TableRow
+                                                hover
+                                                role='checkbox'
+                                                aria-checked={isItemSelected}
+                                                tabIndex={-1}
+                                                key={row.name}
+                                                selected={isItemSelected}
                                             >
-                                                {row.date}
-                                            </TableCell>
-                                            <TableCell
-                                                className={
-                                                    index % 2 === 1
-                                                        ? classes.rowColor
-                                                        : null
-                                                }
-                                                component='th'
-                                                id={labelId}
-                                                scope='row'
-                                                padding='default'
-                                            >
-                                                {row.partners.dni}
-                                            </TableCell>
-                                            <TableCell
-                                                align='left'
-                                                className={
-                                                    index % 2 === 1
-                                                        ? classes.rowColor
-                                                        : null
-                                                }
-                                            >
-                                                {patientName}
-                                            </TableCell>
-                                            <TableCell
-                                                align='left'
-                                                className={
-                                                    index % 2 === 1
-                                                        ? classes.rowColor
-                                                        : null
-                                                }
-                                            >
-                                                {row.reason}
-                                            </TableCell>
-                                            <TableCell
-                                                align='left'
-                                                className={
-                                                    index % 2 === 1
-                                                        ? classes.rowColor
-                                                        : null
-                                                }
-                                            >
-                                                {row.diagnosis}
-                                            </TableCell>
-                                            <TableCell
-                                                align='left'
-                                                className={
-                                                    index % 2 === 1
-                                                        ? classes.rowColor
-                                                        : null
-                                                }
-                                            >
-                                                {row.observations}
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                            {emptyRows > 0 && (
-                                <TableRow style={{ height: 33 * emptyRows }}>
-                                    <TableCell colSpan={10} />
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                                                <TableCell
+                                                    align='left'
+                                                    className={
+                                                        index % 2 === 1
+                                                            ? classes.rowColor
+                                                            : null
+                                                    }
+                                                >
+                                                    {row.date}
+                                                </TableCell>
+                                                <TableCell
+                                                    className={
+                                                        index % 2 === 1
+                                                            ? classes.rowColor
+                                                            : null
+                                                    }
+                                                    component='th'
+                                                    id={labelId}
+                                                    scope='row'
+                                                    padding='default'
+                                                >
+                                                    {row.partners.dni}
+                                                </TableCell>
+                                                <TableCell
+                                                    align='left'
+                                                    className={
+                                                        index % 2 === 1
+                                                            ? classes.rowColor
+                                                            : null
+                                                    }
+                                                >
+                                                    {patientName}
+                                                </TableCell>
+                                                <TableCell
+                                                    align='left'
+                                                    className={
+                                                        index % 2 === 1
+                                                            ? classes.rowColor
+                                                            : null
+                                                    }
+                                                >
+                                                    {row.reason}
+                                                </TableCell>
+                                                <TableCell
+                                                    align='left'
+                                                    className={
+                                                        index % 2 === 1
+                                                            ? classes.rowColor
+                                                            : null
+                                                    }
+                                                >
+                                                    {row.diagnosis}
+                                                </TableCell>
+                                                <TableCell
+                                                    align='left'
+                                                    className={
+                                                        index % 2 === 1
+                                                            ? classes.rowColor
+                                                            : null
+                                                    }
+                                                >
+                                                    {row.observations}
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                {emptyRows > 0 && (
+                                    <TableRow
+                                        style={{ height: 33 * emptyRows }}
+                                    >
+                                        <TableCell colSpan={10} />
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                 ) : (
                     <TableContainer>
                         <Typography

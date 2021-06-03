@@ -14,11 +14,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import InfoIcon from '@material-ui/icons/Info';
 import blue from '@material-ui/core/colors/blue';
-import Swal from 'sweetalert2';
 import 'firebase/auth';
 import supabase from '../../../supabase.config';
 
@@ -383,48 +379,50 @@ export default function MyOrders() {
                     setToShowRows={setToShowRows}
                 />
                 {toShowRows.length !== 0 ? (
-                <TableContainer>
-                    <Table
-                        className={classes.table}
-                        aria-labelledby='tableTitle'
-                        size='small'
-                        aria-label='enhanced table'
-                    >
-                        <EnhancedTableHead
-                            classes={classes}
-                            numSelected={selected.length}
-                            order={order}
-                            orderBy={orderBy}
-                            onSelectAllClick={handleSelectAllClick}
-                            onRequestSort={handleRequestSort}
-                            rowCount={toShowRows.length}
-                        />
-                        <TableBody>
-                            {stableSort(
-                                toShowRows,
-                                getComparator(order, orderBy)
-                            )
-                                .slice(
-                                    page * rowsPerPage,
-                                    page * rowsPerPage + rowsPerPage
+                    <TableContainer>
+                        <Table
+                            className={classes.table}
+                            aria-labelledby='tableTitle'
+                            size='small'
+                            aria-label='enhanced table'
+                        >
+                            <EnhancedTableHead
+                                classes={classes}
+                                numSelected={selected.length}
+                                order={order}
+                                orderBy={orderBy}
+                                onSelectAllClick={handleSelectAllClick}
+                                onRequestSort={handleRequestSort}
+                                rowCount={toShowRows.length}
+                            />
+                            <TableBody>
+                                {stableSort(
+                                    toShowRows,
+                                    getComparator(order, orderBy)
                                 )
-                                .map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
-                                    let patientName = `${row.partners.name} ${row.partners.lastname}`;
-                                    let drugName = row.drug_name_2
-                                        ? `${row.drug_name} - ${row.drug_name_2}`
-                                        : `${row.drug_name}`;
-                                    return (
-                                        <TableRow
-                                            hover
-                                            // onClick={(event) => handleClick(event, row.name)}
-                                            role='checkbox'
-                                            aria-checked={isItemSelected}
-                                            tabIndex={-1}
-                                            key={row.name}
-                                            selected={isItemSelected}
-                                        >
-                                            {/* <TableCell
+                                    .slice(
+                                        page * rowsPerPage,
+                                        page * rowsPerPage + rowsPerPage
+                                    )
+                                    .map((row, index) => {
+                                        const isItemSelected = isSelected(
+                                            row.name
+                                        );
+                                        let patientName = `${row.partners.name} ${row.partners.lastname}`;
+                                        let drugName = row.drug_name_2
+                                            ? `${row.drug_name} - ${row.drug_name_2}`
+                                            : `${row.drug_name}`;
+                                        return (
+                                            <TableRow
+                                                hover
+                                                // onClick={(event) => handleClick(event, row.name)}
+                                                role='checkbox'
+                                                aria-checked={isItemSelected}
+                                                tabIndex={-1}
+                                                key={row.name}
+                                                selected={isItemSelected}
+                                            >
+                                                {/* <TableCell
                                                 align='left'
                                                 className={
                                                     index % 2 === 1
@@ -447,57 +445,59 @@ export default function MyOrders() {
                                                     </IconButton>
                                                 </Tooltip>
                                             </TableCell> */}
-                                            <TableCell
-                                                align='left'
-                                                className={
-                                                    index % 2 === 1
-                                                        ? classes.rowColor
-                                                        : null
-                                                }
-                                            >
-                                                {row.date}
-                                            </TableCell>
-                                            <TableCell
-                                                align='left'
-                                                className={
-                                                    index % 2 === 1
-                                                        ? classes.rowColor
-                                                        : null
-                                                }
-                                            >
-                                                {drugName}
-                                            </TableCell>
-                                            <TableCell
-                                                align='left'
-                                                className={
-                                                    index % 2 === 1
-                                                        ? classes.rowColor
-                                                        : null
-                                                }
-                                            >
-                                                {patientName}
-                                            </TableCell>
-                                            <TableCell
-                                                align='left'
-                                                className={
-                                                    index % 2 === 1
-                                                        ? classes.rowColor
-                                                        : null
-                                                }
-                                            >
-                                                {row.partners.dni}
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                            {emptyRows > 0 && (
-                                <TableRow style={{ height: 33 * emptyRows }}>
-                                    <TableCell colSpan={10} />
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                                                <TableCell
+                                                    align='left'
+                                                    className={
+                                                        index % 2 === 1
+                                                            ? classes.rowColor
+                                                            : null
+                                                    }
+                                                >
+                                                    {row.date}
+                                                </TableCell>
+                                                <TableCell
+                                                    align='left'
+                                                    className={
+                                                        index % 2 === 1
+                                                            ? classes.rowColor
+                                                            : null
+                                                    }
+                                                >
+                                                    {drugName}
+                                                </TableCell>
+                                                <TableCell
+                                                    align='left'
+                                                    className={
+                                                        index % 2 === 1
+                                                            ? classes.rowColor
+                                                            : null
+                                                    }
+                                                >
+                                                    {patientName}
+                                                </TableCell>
+                                                <TableCell
+                                                    align='left'
+                                                    className={
+                                                        index % 2 === 1
+                                                            ? classes.rowColor
+                                                            : null
+                                                    }
+                                                >
+                                                    {row.partners.dni}
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                {emptyRows > 0 && (
+                                    <TableRow
+                                        style={{ height: 33 * emptyRows }}
+                                    >
+                                        <TableCell colSpan={10} />
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                 ) : (
                     <TableContainer>
                         <Typography

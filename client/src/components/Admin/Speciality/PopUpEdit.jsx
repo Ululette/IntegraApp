@@ -7,21 +7,19 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { lighten, makeStyles } from '@material-ui/core/styles';
-import blue from '@material-ui/core/colors/blue';
 
 const useStyles = makeStyles((theme) => ({
-   
     p: {
         fontWeight: 'bold',
         fontSize: '1rem',
         color: '#2c7f7b',
-        textAlign: 'rigth'
+        textAlign: 'rigth',
     },
     popup: {
         color: '#fafafa',
         backgroundColor: '#2c7f7b',
         fontWeight: 'bold',
-        fontSize: '30px'
+        fontSize: '30px',
     },
     popupBtn: {
         color: '#fafafa',
@@ -34,12 +32,11 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor: lighten('#fafafa', 0.2),
             color: '#2c7f7b',
             padding: theme.spacing(0.5),
-        }
+        },
     },
-    formControl : {
-        width: '177px'
-    }
-
+    formControl: {
+        width: '177px',
+    },
 }));
 export default function FormDialog({ open, handleClose, handleEdit }) {
     const classes = useStyles();
@@ -51,7 +48,10 @@ export default function FormDialog({ open, handleClose, handleEdit }) {
                 aria-labelledby='form-dialog-title'
             >
                 <form onSubmit={(e) => handleEdit(e)}>
-                    <DialogTitle id='form-dialog-title' className={classes.popup}>
+                    <DialogTitle
+                        id='form-dialog-title'
+                        className={classes.popup}
+                    >
                         EDITAR ESPECIALIDAD
                     </DialogTitle>
                     <DialogContent>
@@ -60,7 +60,6 @@ export default function FormDialog({ open, handleClose, handleEdit }) {
             De lo contrario presione cancelar.`}
                         </DialogContentText>
                         <TextField
-                            
                             autoFocus
                             margin='dense'
                             id='name'
@@ -70,7 +69,10 @@ export default function FormDialog({ open, handleClose, handleEdit }) {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose} className={classes.popupBtn}>
+                        <Button
+                            onClick={handleClose}
+                            className={classes.popupBtn}
+                        >
                             Cancelar
                         </Button>
                         <Button type='submit' className={classes.popupBtn}>

@@ -17,7 +17,6 @@ import {
     Select,
     Input,
     Card,
-    CardActions,
     CardContent,
     CircularProgress,
     Paper,
@@ -27,7 +26,6 @@ import {
     DialogContent,
     DialogActions,
     Toolbar,
-    ListItem
 } from '@material-ui/core';
 import DescriptionRoundedIcon from '@material-ui/icons/DescriptionRounded';
 import SaveIcon from '@material-ui/icons/Save';
@@ -134,13 +132,13 @@ const useToolbarStyles = makeStyles((theme) => ({
     highlight:
         theme.palette.type === 'light'
             ? {
-                color: theme.palette.secondary.main,
-                backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-            }
+                  color: theme.palette.secondary.main,
+                  backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+              }
             : {
-                color: theme.palette.text.primary,
-                backgroundColor: theme.palette.secondary.dark,
-            },
+                  color: theme.palette.text.primary,
+                  backgroundColor: theme.palette.secondary.dark,
+              },
     title: {
         flex: '1 1 100%',
     },
@@ -223,7 +221,6 @@ const StatusSelector = ({
 };
 
 const ViewDoc = ({ aplication }) => {
-
     const medicalRecord = JSON.parse(aplication.declaration);
 
     const useStyles = makeStyles({
@@ -241,7 +238,7 @@ const ViewDoc = ({ aplication }) => {
         pos: {
             marginBottom: 12,
             display: 'flex',
-            flexWrap: 'wrap'
+            flexWrap: 'wrap',
         },
     });
     const classes = useStyles();
@@ -286,52 +283,56 @@ const ViewDoc = ({ aplication }) => {
             spineD: 'Detalle',
             surgeryProtD: 'Detalle',
             visualD: 'Detalle',
-        }
+        };
 
         let items = [];
 
-        const ordered = Object.keys(record).sort().reduce(
-            (obj, key) => {
+        const ordered = Object.keys(record)
+            .sort()
+            .reduce((obj, key) => {
                 obj[key] = record[key];
                 return obj;
-            },
-            {}
-        );
+            }, {});
 
         for (const pat in ordered) {
-            let item = pat !== 'accept' ?
-                <Typography color="textSecondary">
-                    {`${dic[pat]} : ${ordered[pat]}`}
-                </Typography>
-                :
-                <Typography color="textSecondary">
-                    {ordered[pat] ? `${dic[pat]} : ✔` : `${dic[pat]} : X`}
-                </Typography>
-            items.push(item)
+            let item =
+                pat !== 'accept' ? (
+                    <Typography color='textSecondary'>
+                        {`${dic[pat]} : ${ordered[pat]}`}
+                    </Typography>
+                ) : (
+                    <Typography color='textSecondary'>
+                        {ordered[pat] ? `${dic[pat]} : ✔` : `${dic[pat]} : X`}
+                    </Typography>
+                );
+            items.push(item);
         }
-        return items.map(e => {
-            return e
-        })
-
-    }
+        return items.map((e) => {
+            return e;
+        });
+    };
 
     return (
         <Card className={classes.root}>
-            { aplication ?
+            {aplication ? (
                 <CardContent>
-                    <Typography variant="h5" component="h2">
-                        Aplicante : {`${aplication.partners.name} ${aplication.partners.lastname}`}
+                    <Typography variant='h5' component='h2'>
+                        Aplicante :{' '}
+                        {`${aplication.partners.name} ${aplication.partners.lastname}`}
                     </Typography>
-                    <Typography className={classes.title} color="textPrimary" gutterBottom>
+                    <Typography
+                        className={classes.title}
+                        color='textPrimary'
+                        gutterBottom
+                    >
                         Declaración de Salud
-                        </Typography>
+                    </Typography>
                     {patologies(medicalRecord)}
                 </CardContent>
-                :
-                null}
+            ) : null}
         </Card>
     );
-}
+};
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -369,8 +370,10 @@ export default function PartnersAffiliationRequests({ firebase }) {
     const fetchRequests = () => {
         getSome('medical_records', '*, partners(*)').then(
             (r) => {
-                let newR = r.filter(e=> e.partners.state === 'revision pendiente')
-                console.log(newR)
+                let newR = r.filter(
+                    (e) => e.partners.state === 'revision pendiente'
+                );
+                console.log(newR);
                 setListRequests(newR);
                 setToShowRows(newR);
             },
@@ -383,7 +386,6 @@ export default function PartnersAffiliationRequests({ firebase }) {
     }, []);
 
     const handleSave = async (request, index) => {
-
         MySwal.fire({
             title: `Desea guardar como ${newStatus} a ${request.partners.name} ${request.partners.lastname} en la obra social?`,
             showCloseButton: true,
@@ -400,29 +402,33 @@ export default function PartnersAffiliationRequests({ firebase }) {
                     console.log(error);
                 }
                 try {
-                    const {error: userError } = await supabase.from('users').insert([
+                    await supabase.from('users').insert([
                         {
                             dni: request.partner_dni,
                             role: 'affiliate',
                             email: request.partners.email,
-                            account: 'active'
+                            account: 'active',
                         },
                     ]);
 
                     await firebase
                         .auth()
-                        .createUserWithEmailAndPassword(request.partners.email, String(request.partner_dni));
+                        .createUserWithEmailAndPassword(
+                            request.partners.email,
+                            String(request.partner_dni)
+                        );
 
-                    await firebase.auth().sendPasswordResetEmail(request.partners.email);
+                    await firebase
+                        .auth()
+                        .sendPasswordResetEmail(request.partners.email);
 
                     MySwal.fire({
                         title: 'Usuario Socio creado con exito!',
                         text: 'Debera resetear su password. Le llegará el link por mail.',
                         icon: 'success',
                     });
-
+                    //eslint-disable-next-line
                     setIndexOnChange(indexOnChange.filter((e) => e != index));
-
                 } catch (error) {
                     MySwal.fire({
                         title: 'Usuario Socio no pudo ser creado.',
@@ -430,7 +436,6 @@ export default function PartnersAffiliationRequests({ firebase }) {
                         icon: 'error',
                     });
                 }
-
             }
         });
     };
@@ -471,15 +476,20 @@ export default function PartnersAffiliationRequests({ firebase }) {
 
     return (
         <div className={classes.root}>
-            <Dialog
-                open={!!medicalRecord}
-                className={classes.dialog}
-            >
+            <Dialog open={!!medicalRecord} className={classes.dialog}>
                 <DialogContent>
                     {medicalRecord && <ViewDoc aplication={medicalRecord} />}
                 </DialogContent>
                 <DialogActions>
-                    <Button type='close' onClick={(e) => { e.preventDefault(); setMedicalRecord(null) }}>Cerrar</Button>
+                    <Button
+                        type='close'
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setMedicalRecord(null);
+                        }}
+                    >
+                        Cerrar
+                    </Button>
                 </DialogActions>
             </Dialog>
             <Paper className={classes.paper}>
@@ -552,7 +562,9 @@ export default function PartnersAffiliationRequests({ firebase }) {
                                                 </Tooltip>
                                                 <Tooltip
                                                     title='Declaración'
-                                                    onClick={() => setMedicalRecord(row)}
+                                                    onClick={() =>
+                                                        setMedicalRecord(row)
+                                                    }
                                                 >
                                                     <IconButton aria-label='save'>
                                                         <DescriptionRoundedIcon />
