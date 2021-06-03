@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
 import TextField from '@material-ui/core/TextField';
+import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -18,7 +18,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import InfoIcon from '@material-ui/icons/Info';
 import blue from '@material-ui/core/colors/blue';
-import Swal from 'sweetalert2';
 import 'firebase/auth';
 import supabase from '../../../supabase.config';
 
@@ -49,12 +48,6 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-    // {
-    //     id: 'download',
-    //     numeric: false,
-    //     disablePadding: false,
-    //     label: 'Descargar',
-    // },
     {
         id: 'date',
         numeric: false,
@@ -62,18 +55,35 @@ const headCells = [
         label: 'Fecha',
     },
     {
-        id: 'drugs',
-        numeric: false,
+        id: 'partnerDni',
+        numeric: true,
         disablePadding: false,
-        label: 'Medicamentos',
+        label: 'DNI paciente',
     },
     {
-        id: 'namePartner',
+        id: 'patient',
+        numeric: false,
+        disablePadding: false,
+        label: 'Nombre del paciente',
+    },
+    {
+        id: 'reason',
+        numeric: false,
+        disablePadding: false,
+        label: 'Razón',
+    },
+    {
+        id: 'diagnosis',
         numeric: false,
         disablePadding: true,
-        label: 'Paciente',
+        label: 'Diagnóstico',
     },
-    { id: 'dni', numeric: false, disablePadding: true, label: 'DNI' },
+    {
+        id: 'observations',
+        numeric: false,
+        disablePadding: false,
+        label: 'Observaciones',
+    },
 ];
 
 function EnhancedTableHead(props) {
@@ -171,9 +181,8 @@ const useToolbarStyles = makeStyles((theme) => ({
     },
     input: {
         margin: theme.spacing(1),
-        minWidth: '160px',
         size: 'small',
-        width: '18%',
+        width: '50%',
         backgroundColor: '#ffffff',
         borderRadius: '5px',
     },
@@ -181,49 +190,46 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
+    const [partner,setPartner]=useState();
     const { numSelected, setToShowRows } = props;
-    let userFamilyGroup = JSON.parse(
-        localStorage.getItem('affiliatedata')
-    ).family_group;
+    const [inputSearch, setInputSearch] = useState('');
+    let userDni = JSON.parse(
+        localStorage.getItem('userdata')
+    ).dni;
 
-    async function fetchPrescriptions(date) {
-        if (date) {
-            try {
-                const { data: prescriptions } = await supabase
-                    .from('prescriptions')
-                    .select(`*, partners(dni, name, lastname, family_group)`)
-                    .eq('date', date);
-                setToShowRows(
-                    prescriptions.filter(
-                        (el) => el.partners.family_group === userFamilyGroup
-                    )
-                );
-            } catch (err) {
-                return err;
-            }
+    const fetchConsult = async (dni) => {
+        if(!dni){
+            const { data: consults , error:errorFetch} = await supabase
+            .from('medical_consultations')
+            .select('*,partners:partner_dni(dni,name,lastname)')
+            .eq('medic_dni',userDni)
+
+            console.log(consults)
+            console.error('error fetch:',errorFetch)
+            setToShowRows(consults);
         } else {
-            try {
-                const { data: prescriptions } = await supabase
-                    .from('prescriptions')
-                    .select(`*, partners(dni, name, lastname, family_group)`);
+            const { data: consults , error:errorFetch} = await supabase
+            .from('medical_consultations')
+            .select('*,partners:partner_dni(dni,name,lastname)')
+            .eq('medic_dni',userDni)
+            let array = consults.filter(
+                (co) => co.partners.dni.toString().includes(dni)
+            )
+            setToShowRows(array);
 
-                setToShowRows(
-                    prescriptions.filter(
-                        (el) => el.partners.family_group === userFamilyGroup
-                    )
-                );
-            } catch (err) {
-                return err;
-            }
+            console.log(array)
+            console.error('error fetch:',errorFetch)
+            setToShowRows(array);
         }
-    }
+    };
 
-    const handleDate = (e) => {
-        fetchPrescriptions(e.target.value);
+    const handleInputSearch = (e) => {
+        setInputSearch(e.target.value);
+        fetchConsult(inputSearch);
     };
 
     useEffect(() => {
-        fetchPrescriptions();
+        fetchConsult();
         //eslint-disable-next-line
     }, []);
 
@@ -234,16 +240,14 @@ const EnhancedTableToolbar = (props) => {
             })}
         >
             <TextField
-                id='date'
-                label='Buscar por fecha'
-                type='date'
-                size='small'
-                defaultValue='2021-01-01'
-                onChange={handleDate}
                 className={classes.input}
-                InputLabelProps={{
-                    shrink: true,
-                }}
+                type='text'
+                size='small'
+                id='outlined-basic'
+                label='DNI paciente'
+                variant='outlined'
+                onChange={handleInputSearch}
+                value={inputSearch}
             />
             <Typography
                 className={classes.title}
@@ -251,7 +255,7 @@ const EnhancedTableToolbar = (props) => {
                 id='tableTitle'
                 component='div'
             >
-                Mis recetas
+                Mis consultas
             </Typography>
         </Toolbar>
     );
@@ -312,7 +316,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function MyOrders() {
+export default function ConsultsTable() {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -344,30 +348,6 @@ export default function MyOrders() {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
-
-    // const handleInfo = (row) => {
-    //     console.log(row);
-    //     if(row){
-    //         Swal.fire({
-    //             position: 'center',
-    //             width: '50%',
-    //             title: `Receta:`,
-    //             html:
-    //                 `<h5 align="left">Fecha:${row.date}</h5>` +
-    //                 `<h3>Paciente: ${row.partners.name} ${row.partners.lastname}</h3>` +
-    //                 `<h4>DNI:${row.partners.dni}</h4>` +
-    //                 `<h4>Medicamento 1:${row.drug_name}</h4>` +
-    //                 `<h4>Medicamento 2:${row.drug_name_2?row.drug_name_2:'No'}</h4>`,
-    //         });
-    //     } else {
-    //         Swal.fire({
-    //             width: '50%',
-    //             icon: 'error',
-    //             title: 'Lo sentimos',
-    //             text: 'No se encontraron los resultados',
-    //         })
-    //     }
-    // };
 
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
@@ -410,43 +390,17 @@ export default function MyOrders() {
                                 )
                                 .map((row, index) => {
                                     const isItemSelected = isSelected(row.name);
+                                    const labelId = `enhanced-table-checkbox-${index}`;
                                     let patientName = `${row.partners.name} ${row.partners.lastname}`;
-                                    let drugName = row.drug_name_2
-                                        ? `${row.drug_name} - ${row.drug_name_2}`
-                                        : `${row.drug_name}`;
                                     return (
                                         <TableRow
                                             hover
-                                            // onClick={(event) => handleClick(event, row.name)}
                                             role='checkbox'
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
                                             key={row.name}
                                             selected={isItemSelected}
                                         >
-                                            {/* <TableCell
-                                                align='left'
-                                                className={
-                                                    index % 2 === 1
-                                                        ? classes.rowColor
-                                                        : null
-                                                }
-                                            >
-                                                <Tooltip
-                                                    title='Resultados'
-                                                    className={
-                                                        classes.iconFilter
-                                                    }
-                                                >
-                                                    <IconButton aria-label='Resultados'>
-                                                        <InfoIcon
-                                                        onClick={() =>
-                                                            handleInfo(row)
-                                                        }
-                                                        />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </TableCell> */}
                                             <TableCell
                                                 align='left'
                                                 className={
@@ -458,14 +412,17 @@ export default function MyOrders() {
                                                 {row.date}
                                             </TableCell>
                                             <TableCell
-                                                align='left'
                                                 className={
                                                     index % 2 === 1
                                                         ? classes.rowColor
                                                         : null
                                                 }
+                                                component='th'
+                                                id={labelId}
+                                                scope='row'
+                                                padding='default'
                                             >
-                                                {drugName}
+                                                {row.partners.dni}
                                             </TableCell>
                                             <TableCell
                                                 align='left'
@@ -485,7 +442,27 @@ export default function MyOrders() {
                                                         : null
                                                 }
                                             >
-                                                {row.partners.dni}
+                                                {row.reason}
+                                            </TableCell>
+                                            <TableCell
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
+                                                {row.diagnosis}
+                                            </TableCell>
+                                            <TableCell
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
+                                                {row.observations}
                                             </TableCell>
                                         </TableRow>
                                     );
@@ -506,7 +483,7 @@ export default function MyOrders() {
                             id='tableTitle'
                             component='div'
                         >
-                            No tiene recetas
+                            No Tiene consultas realizadas
                         </Typography>
                     </TableContainer>
                 )}
