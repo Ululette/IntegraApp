@@ -107,7 +107,7 @@ export default function CustomizedDialogs({open, handleClose, rows}) {
             />
        <ListItemText
               primary={`Resultados: ${
-                rows.results.results.results ? rows.results.results.results : "Aun no hay resultados"
+                rows.results? rows.results.results.results : "Aun no hay resultados"
               }`}
               fullWidth
             />  
