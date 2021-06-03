@@ -51,7 +51,12 @@ import FormUsers from '../AdminsUsers/FormUsers.jsx';
 
 import styles from './AdminNav.module.css';
 import AdminOrders from '../AdminOrders/AdminOrders.jsx';
-import { ContactSupport, Send, ThumbDown } from '@material-ui/icons';
+import {
+    ContactSupport,
+    PermIdentity,
+    Send,
+    ThumbDown,
+} from '@material-ui/icons';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
 const drawerWidth = 260;
@@ -265,7 +270,7 @@ function AdminNav({ firebase, window: windowMui }) {
                     activeClassName={styles.activeLink}
                 >
                     <ListItem button>
-                        <GroupIcon />
+                        <PermIdentity />
                         <ListItemText primary='Usuarios' />
                     </ListItem>
                 </NavLink>
@@ -478,7 +483,7 @@ function AdminNav({ firebase, window: windowMui }) {
                     <AdminMedicTabs />
                 ) : window.location.pathname ===
                   `/${userData.dni}/admin/profile` ? (
-                    <AdminProfile firebase={ firebase }/>
+                    <AdminProfile firebase={firebase} />
                 ) : window.location.pathname ===
                   `/${userData.dni}/admin/specialities` ? (
                     <FormSpecialities />
