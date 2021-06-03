@@ -159,6 +159,7 @@ function UserHome() {
                                 <ListItemText primary='Historial de atenciones' />
                                 <ListItemIcon>
                                     <ArrowForwardIos
+                                        className={styles.arrowForward}
                                         style={{ color: '00897b' }}
                                     />
                                 </ListItemIcon>
@@ -215,6 +216,7 @@ function UserHome() {
                                 <ListItemText primary='Pago Online' />
                                 <ListItemIcon>
                                     <ArrowForwardIos
+                                        className={styles.arrowForward}
                                         style={{ color: '00897b' }}
                                     />
                                 </ListItemIcon>
@@ -268,6 +270,7 @@ function UserHome() {
                                 </span>
                                 .
                             </strong>
+                            <Divider />
                         </p>
                     </article>
                     <article className={styles.lastAuths}>
@@ -279,46 +282,54 @@ function UserHome() {
                                 <ListItemText primary='Autorizaciones' />
                                 <ListItemIcon>
                                     <ArrowForwardIos
+                                        className={styles.arrowForward}
                                         style={{ color: '00897b' }}
                                     />
                                 </ListItemIcon>
                             </ListItem>
+                            <Divider />
                             {authorizations.length > 0 ? (
                                 authorizations.map((el) => (
-                                    <ListItem button>
-                                        <ListItemText
-                                            primary={el.date}
-                                            secondary={
-                                                <>
-                                                    <Typography component='p'>
-                                                        Familiar:{' '}
-                                                        {
-                                                            familyGroup.find(
-                                                                (fam) =>
-                                                                    el.partner_dni ===
-                                                                    fam.dni
-                                                            ).name
-                                                        }{' '}
-                                                        {
-                                                            familyGroup.find(
-                                                                (fam) =>
-                                                                    el.partner_dni ===
-                                                                    fam.dni
-                                                            ).lastname
-                                                        }
-                                                    </Typography>
-                                                    <Typography component='p'>
-                                                        Estudio: {el.study_name}
-                                                    </Typography>
-                                                    <Typography component='p'>
-                                                        Estado:{' '}
-                                                        {el.order_status.name}
-                                                    </Typography>
-                                                    <Divider />
-                                                </>
-                                            }
-                                        />
-                                    </ListItem>
+                                    <>
+                                        <ListItem button>
+                                            <ListItemText
+                                                primary={el.date}
+                                                secondary={
+                                                    <>
+                                                        <Typography component='p'>
+                                                            Familiar:{' '}
+                                                            {
+                                                                familyGroup.find(
+                                                                    (fam) =>
+                                                                        el.partner_dni ===
+                                                                        fam.dni
+                                                                ).name
+                                                            }{' '}
+                                                            {
+                                                                familyGroup.find(
+                                                                    (fam) =>
+                                                                        el.partner_dni ===
+                                                                        fam.dni
+                                                                ).lastname
+                                                            }
+                                                        </Typography>
+                                                        <Typography component='p'>
+                                                            Estudio:{' '}
+                                                            {el.study_name}
+                                                        </Typography>
+                                                        <Typography component='p'>
+                                                            Estado:{' '}
+                                                            {
+                                                                el.order_status
+                                                                    .name
+                                                            }
+                                                        </Typography>
+                                                    </>
+                                                }
+                                            />
+                                        </ListItem>
+                                        <Divider />
+                                    </>
                                 ))
                             ) : (
                                 <p className={styles.noOne}>
@@ -338,6 +349,7 @@ function UserHome() {
                                 <ListItemText primary='Estudios realizados' />
                                 <ListItemIcon>
                                     <ArrowForwardIos
+                                        className={styles.arrowForward}
                                         style={{ color: '00897b' }}
                                     />
                                 </ListItemIcon>
@@ -345,37 +357,39 @@ function UserHome() {
                             <Divider />
                             {lastStudies.length > 0 ? (
                                 lastStudies.map((el) => (
-                                    <ListItem button>
-                                        <ListItemText
-                                            primary={el.date}
-                                            secondary={
-                                                <>
-                                                    <Typography component='p'>
-                                                        Familiar:{' '}
-                                                        {
-                                                            familyGroup.find(
-                                                                (fam) =>
-                                                                    el.partner_dni ===
-                                                                    fam.dni
-                                                            ).name
-                                                        }{' '}
-                                                        {
-                                                            familyGroup.find(
-                                                                (fam) =>
-                                                                    el.partner_dni ===
-                                                                    fam.dni
-                                                            ).lastname
-                                                        }
-                                                    </Typography>
-                                                    <Typography component='p'>
-                                                        Estudio:{' '}
-                                                        {el.results.name}
-                                                    </Typography>
-                                                </>
-                                            }
-                                        />
+                                    <>
+                                        <ListItem button>
+                                            <ListItemText
+                                                primary={el.date}
+                                                secondary={
+                                                    <>
+                                                        <Typography component='p'>
+                                                            Familiar:{' '}
+                                                            {
+                                                                familyGroup.find(
+                                                                    (fam) =>
+                                                                        el.partner_dni ===
+                                                                        fam.dni
+                                                                ).name
+                                                            }{' '}
+                                                            {
+                                                                familyGroup.find(
+                                                                    (fam) =>
+                                                                        el.partner_dni ===
+                                                                        fam.dni
+                                                                ).lastname
+                                                            }
+                                                        </Typography>
+                                                        <Typography component='p'>
+                                                            Estudio:{' '}
+                                                            {el.results.name}
+                                                        </Typography>
+                                                    </>
+                                                }
+                                            />
+                                        </ListItem>
                                         <Divider />
-                                    </ListItem>
+                                    </>
                                 ))
                             ) : (
                                 <p className={styles.noOne}>
@@ -393,30 +407,37 @@ function UserHome() {
                                 <ListItemText primary='Favoritos de cartilla' />
                                 <ListItemIcon>
                                     <ArrowForwardIos
+                                        className={styles.arrowForward}
                                         style={{ color: '00897b' }}
                                     />
                                 </ListItemIcon>
                             </ListItem>
+                            <Divider />
                             {favorites.length > 0 ? (
                                 favorites.map((el) => (
-                                    <ListItem button>
-                                        <ListItemText
-                                            primary={`${el.medics.name} ${el.medics.lastname}`}
-                                            secondary={
-                                                el.medics.medical_specialities
-                                                    .length > 0
-                                                    ? el.medics.medical_specialities.map(
-                                                          (spec) => (
-                                                              <Typography component='p'>
-                                                                  {spec.name}
-                                                              </Typography>
+                                    <>
+                                        <ListItem button>
+                                            <ListItemText
+                                                primary={`${el.medics.name} ${el.medics.lastname}`}
+                                                secondary={
+                                                    el.medics
+                                                        .medical_specialities
+                                                        .length > 0
+                                                        ? el.medics.medical_specialities.map(
+                                                              (spec) => (
+                                                                  <Typography component='p'>
+                                                                      {
+                                                                          spec.name
+                                                                      }
+                                                                  </Typography>
+                                                              )
                                                           )
-                                                      )
-                                                    : null
-                                            }
-                                        />
+                                                        : null
+                                                }
+                                            />
+                                        </ListItem>
                                         <Divider />
-                                    </ListItem>
+                                    </>
                                 ))
                             ) : (
                                 <p className={styles.noOne}>
@@ -434,48 +455,53 @@ function UserHome() {
                                 <ListItemText primary='Ultimas recetas' />
                                 <ListItemIcon>
                                     <ArrowForwardIos
+                                        className={styles.arrowForward}
                                         style={{ color: '00897b' }}
                                     />
                                 </ListItemIcon>
                             </ListItem>
+                            <Divider />
                             {lastPrescriptions.length > 0 ? (
                                 lastPrescriptions.map((el) => (
-                                    <ListItem button>
-                                        <ListItemText
-                                            primary={el.date}
-                                            secondary={
-                                                <>
-                                                    <Typography component='p'>
-                                                        Familiar:{' '}
-                                                        {
-                                                            familyGroup.find(
-                                                                (fam) =>
-                                                                    el.partner_dni ===
-                                                                    fam.dni
-                                                            ).name
-                                                        }{' '}
-                                                        {
-                                                            familyGroup.find(
-                                                                (fam) =>
-                                                                    el.partner_dni ===
-                                                                    fam.dni
-                                                            ).lastname
-                                                        }
-                                                    </Typography>
-                                                    <Typography component='p'>
-                                                        Medicamento:{' '}
-                                                        {el.drug_name}
-                                                    </Typography>
-                                                    {el.drug_name_2 ? (
+                                    <>
+                                        <ListItem button>
+                                            <ListItemText
+                                                primary={el.date}
+                                                secondary={
+                                                    <>
                                                         <Typography component='p'>
-                                                            Medicamento 2:{' '}
-                                                            {el.drug_name_2}
+                                                            Familiar:{' '}
+                                                            {
+                                                                familyGroup.find(
+                                                                    (fam) =>
+                                                                        el.partner_dni ===
+                                                                        fam.dni
+                                                                ).name
+                                                            }{' '}
+                                                            {
+                                                                familyGroup.find(
+                                                                    (fam) =>
+                                                                        el.partner_dni ===
+                                                                        fam.dni
+                                                                ).lastname
+                                                            }
                                                         </Typography>
-                                                    ) : null}
-                                                </>
-                                            }
-                                        />
-                                    </ListItem>
+                                                        <Typography component='p'>
+                                                            Medicamento:{' '}
+                                                            {el.drug_name}
+                                                        </Typography>
+                                                        {el.drug_name_2 ? (
+                                                            <Typography component='p'>
+                                                                Medicamento 2:{' '}
+                                                                {el.drug_name_2}
+                                                            </Typography>
+                                                        ) : null}
+                                                    </>
+                                                }
+                                            />
+                                        </ListItem>
+                                        <Divider />
+                                    </>
                                 ))
                             ) : (
                                 <p className={styles.noOne}>

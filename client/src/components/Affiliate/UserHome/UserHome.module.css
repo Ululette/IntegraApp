@@ -120,3 +120,34 @@
     color: #00897b;
     text-align: center;
 }
+
+@media (max-width: 500px) {
+    .titles,
+    .name {
+        text-align: center;
+    }
+
+    .arrowForward {
+        display: none;
+    }
+
+    .dashContainer {
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .leftSide,
+    .rightSide {
+        width: 100%;
+    }
+
+    .payments,
+    .favorites,
+    .lastAuths,
+    .lastConsults,
+    .lastPrescriptions,
+    .lastStudies {
+        min-height: 0px;
+    }
+}

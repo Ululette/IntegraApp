@@ -34,7 +34,6 @@ import {
 //Icons
 import PhoneIcon from '@material-ui/icons/Phone';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import HomeIcon from '@material-ui/icons/Home';
 import FaceIcon from '@material-ui/icons/Face';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
@@ -390,8 +389,6 @@ function AdminNav({ firebase, window: windowMui }) {
                                     height='45px'
                                 />
                             )}
-
-                            <ExpandMoreIcon className={styles.expandMore} />
                         </Button>
                         <Menu
                             id='simple-menu'
