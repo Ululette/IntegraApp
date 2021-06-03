@@ -44,6 +44,7 @@ function PlanState({ open, handleSubmit, handleCloseModal, planState }) {
   
   const changeState = async (e, plan) => {
     e.preventDefault();
+    console.log('plan.active',plan.active)
     if (plan.active) {
       const { data, error } = await supabase
         .from("plans")
