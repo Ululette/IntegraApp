@@ -369,7 +369,7 @@ export default function MedicProfile({ firebase }) {
             //Update admins table (si modifico email o teléfono)
             let modifyAdminsT = async (user, modInfo) => {
                 await supabase
-                    .from('admins')
+                    .from('medics')
                     .update({
                         phone_number: modInfo.phone,
                         email: modInfo.email,
@@ -389,7 +389,7 @@ export default function MedicProfile({ firebase }) {
                         department: modInfo.department || '',
                         locality_id: modInfo.locality_id,
                     })
-                    .eq('admin_dni', user.dni);
+                    .eq('medic_id', user.dni);
                 if (error) console.log(error);
             };
             modifyAddressT(user, modInfo);
