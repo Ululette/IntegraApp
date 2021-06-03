@@ -426,11 +426,9 @@ export default function PartnersAffiliationRequests({ firebase }) {
                 let newR = r.filter(
                     (e) => e.partners.state === 'revision pendiente'
                 );
-                console.log(newR);
                 setListRequests(newR);
                 setToShowRows(newR);
             },
-            (err) => console.error(err.message)
         );
     };
 
@@ -452,7 +450,7 @@ export default function PartnersAffiliationRequests({ firebase }) {
                         .update({ state: newStatus, plan_id: 8 })
                         .eq('dni', request.partner_dni);
                 } catch (error) {
-                    console.log(error);
+                    throw new TypeError(error);
                 }
                 try {
                     await supabase.from('users').insert([
