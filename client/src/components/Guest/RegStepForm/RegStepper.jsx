@@ -195,7 +195,6 @@ export default function RegStepper() {
                     family_group: lastId,
                     state: 'revision pendiente',
                     email: datosTitular.email,
-                    plan_id: 8,
                     company_id: idCompany,
                     gender: datosTitular.gender,
                 },

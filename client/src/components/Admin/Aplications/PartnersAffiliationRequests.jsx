@@ -449,7 +449,7 @@ export default function PartnersAffiliationRequests({ firebase }) {
                 try {
                     await supabase
                         .from('partners')
-                        .update({ state: newStatus })
+                        .update({ state: newStatus, plan_id: 8 })
                         .eq('dni', request.partner_dni);
                 } catch (error) {
                     console.log(error);
@@ -479,7 +479,7 @@ export default function PartnersAffiliationRequests({ firebase }) {
                         title: 'Usuario Socio creado con exito!',
                         text: 'Debera resetear su password. Le llegará el link por mail.',
                         icon: 'success',
-                    });
+                    }).then(async (res) => {if (res) window.location.reload()})
                     //eslint-disable-next-line
                     setIndexOnChange(indexOnChange.filter((e) => e != index));
                 } catch (error) {
