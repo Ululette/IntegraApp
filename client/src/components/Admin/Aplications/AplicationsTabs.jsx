@@ -58,7 +58,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-export default function AplicationsTabs() {
+export default function AplicationsTabs({firebase}) {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 
@@ -74,9 +74,9 @@ export default function AplicationsTabs() {
                     onChange={handleChange}
                     aria-label='simple tabs example'
                 >
-                    <Tab label='Solicitudes de Contacto' {...a11yProps(0)} />
+                    <Tab label='Solicitudes de Afiliación' {...a11yProps(0)} />
                     <Tab label='Solicitudes Baja' {...a11yProps(1)} />
-                    <Tab label='Solicitudes Afiliación' {...a11yProps(2)} />
+                    <Tab label='Afiliaciones' {...a11yProps(2)} />
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
@@ -86,7 +86,7 @@ export default function AplicationsTabs() {
                 <PartnersAplications />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <PartnersAffiliationRequests />
+                <PartnersAffiliationRequests firebase={firebase} />
             </TabPanel>
         </div>
     );

@@ -26,7 +26,8 @@ import {
     Dialog,
     DialogContent,
     DialogActions,
-    Toolbar
+    Toolbar,
+    ListItem
 } from '@material-ui/core';
 import DescriptionRoundedIcon from '@material-ui/icons/DescriptionRounded';
 import SaveIcon from '@material-ui/icons/Save';
@@ -221,13 +222,13 @@ const StatusSelector = ({
     );
 };
 
-const ViewDoc = ({ doc }) => {
+const ViewDoc = ({ aplication }) => {
 
-    const medicalRecord = JSON.parse(doc);
+    const medicalRecord = JSON.parse(aplication.declaration);
 
     const useStyles = makeStyles({
         root: {
-            minWidth: 275,
+            minWidth: 500,
         },
         bullet: {
             display: 'inline-block',
@@ -239,29 +240,92 @@ const ViewDoc = ({ doc }) => {
         },
         pos: {
             marginBottom: 12,
+            display: 'flex',
+            flexWrap: 'wrap'
         },
     });
     const classes = useStyles();
-    const bull = <span className={classes.bullet}>•</span>;
+
+    const patologies = (record) => {
+        let dic = {
+            accept: 'Declaró bajo juramento',
+            allergies: 'Alergias',
+            asthma: 'Asma',
+            completeName: 'Nombre Completo',
+            diabetes: 'Diabetes',
+            fainting: 'Desmayos',
+            hearing: 'Auditivo',
+            heart: 'Cardíaco',
+            hernia: 'Hernia',
+            hypertension: 'Hipertensión',
+            hypotension: 'Hipotención',
+            medicines: 'Medicamentos',
+            others: 'Otros',
+            psychiatric: 'Psiquiátricos',
+            psychological: 'Psicológicos',
+            seizures: 'Combulsiones',
+            sinusitis: 'Sinusitis',
+            spine: 'Espinales',
+            surgeryProt: 'Protesis Quirúrgica',
+            visual: 'Visuales',
+            allergiesD: 'Detalle',
+            asthmaD: 'Detalle',
+            diabetesD: 'Detalle',
+            faintingD: 'Detalle',
+            hearingD: 'Detalle',
+            heartD: 'Detalle',
+            herniaD: 'Detalle',
+            hypertensionD: 'Detalle',
+            hypotensionD: 'Detalle',
+            medicinesD: 'Detalle',
+            othersD: 'Detalle',
+            psychiatricD: 'Detalle',
+            psychologicalD: 'Detalle',
+            seizuresD: 'Detalle',
+            sinusitisD: 'Detalle',
+            spineD: 'Detalle',
+            surgeryProtD: 'Detalle',
+            visualD: 'Detalle',
+        }
+
+        let items = [];
+
+        const ordered = Object.keys(record).sort().reduce(
+            (obj, key) => {
+                obj[key] = record[key];
+                return obj;
+            },
+            {}
+        );
+
+        for (const pat in ordered) {
+            let item = pat !== 'accept' ?
+                <Typography color="textSecondary">
+                    {`${dic[pat]} : ${ordered[pat]}`}
+                </Typography>
+                :
+                <Typography color="textSecondary">
+                    {ordered[pat] ? `${dic[pat]} : ✔` : `${dic[pat]} : X`}
+                </Typography>
+            items.push(item)
+        }
+        return items.map(e => {
+            return e
+        })
+
+    }
 
     return (
         <Card className={classes.root}>
-            { medicalRecord ?
+            { aplication ?
                 <CardContent>
-                    <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        Diabetes : {medicalRecord.diabetes}
-                    </Typography>
                     <Typography variant="h5" component="h2">
-                        be{bull}nev{bull}o{bull}lent
-            </Typography>
-                    <Typography className={classes.pos} color="textSecondary">
-                        adjective
-            </Typography>
-                    <Typography variant="body2" component="p">
-                        well meaning and kindly.
-              <br />
-                        {'"a benevolent smile"'}
+                        Aplicante : {`${aplication.partners.name} ${aplication.partners.lastname}`}
                     </Typography>
+                    <Typography className={classes.title} color="textPrimary" gutterBottom>
+                        Declaración de Salud
+                        </Typography>
+                    {patologies(medicalRecord)}
                 </CardContent>
                 :
                 null}
@@ -287,7 +351,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function PartnersAffiliationRequests() {
+export default function PartnersAffiliationRequests({ firebase }) {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('familiar_name');
@@ -305,9 +369,10 @@ export default function PartnersAffiliationRequests() {
     const fetchRequests = () => {
         getSome('medical_records', '*, partners(*)').then(
             (r) => {
-                console.log(r)
-                setListRequests(r);
-                setToShowRows(r);
+                let newR = r.filter(e=> e.partners.state === 'revision pendiente')
+                console.log(newR)
+                setListRequests(newR);
+                setToShowRows(newR);
             },
             (err) => console.error(err.message)
         );
@@ -317,15 +382,10 @@ export default function PartnersAffiliationRequests() {
         fetchRequests();
     }, []);
 
-    const handleSave = async (request) => {
-        const statusState = {
-            aceptada: 'dado de baja',
-            pendiente: 'revision pendiente',
-            rechazada: 'aceptado',
-        };
+    const handleSave = async (request, index) => {
 
         MySwal.fire({
-            title: `Desea guardar como ${newStatus} la solucitud de baja de ${request.familiar_name} de la obra social?`,
+            title: `Desea guardar como ${newStatus} a ${request.partners.name} ${request.partners.lastname} en la obra social?`,
             showCloseButton: true,
             showCancelButton: true,
             icon: 'question',
@@ -333,28 +393,44 @@ export default function PartnersAffiliationRequests() {
             if (res.isConfirmed) {
                 try {
                     await supabase
-                        .from('familiar_downs_request')
-                        .update({ status: newStatus })
-                        .eq('familiar_dni', request.familiar_dni);
+                        .from('partners')
+                        .update({ state: newStatus })
+                        .eq('dni', request.partner_dni);
                 } catch (error) {
                     console.log(error);
-                } finally {
-                    await supabase
-                        .from('partners')
-                        .update({ state: statusState[newStatus] })
-                        .eq('dni', parseInt(request.familiar_dni))
-                        .then((r) => {
-                            if (r.body[0].state === statusState[newStatus]) {
-                                MySwal.fire({
-                                    title: `El socio ${request.familiar_name} ${request.familiar_lastname}
-                                    ahora está ${statusState[newStatus]}.
-                                        La solicitud ha sido actualizada!`,
-                                    icon: 'success',
-                                    timer: 3000,
-                                }).then(() => window.location.reload());
-                            }
-                        });
                 }
+                try {
+                    const {error: userError } = await supabase.from('users').insert([
+                        {
+                            dni: request.partner_dni,
+                            role: 'affiliate',
+                            email: request.partners.email,
+                            account: 'active'
+                        },
+                    ]);
+
+                    await firebase
+                        .auth()
+                        .createUserWithEmailAndPassword(request.partners.email, String(request.partner_dni));
+
+                    await firebase.auth().sendPasswordResetEmail(request.partners.email);
+
+                    MySwal.fire({
+                        title: 'Usuario Socio creado con exito!',
+                        text: 'Debera resetear su password. Le llegará el link por mail.',
+                        icon: 'success',
+                    });
+
+                    setIndexOnChange(indexOnChange.filter((e) => e != index));
+
+                } catch (error) {
+                    MySwal.fire({
+                        title: 'Usuario Socio no pudo ser creado.',
+                        text: `Mensaje de error ${error}`,
+                        icon: 'error',
+                    });
+                }
+
             }
         });
     };
@@ -400,7 +476,7 @@ export default function PartnersAffiliationRequests() {
                 className={classes.dialog}
             >
                 <DialogContent>
-                    <ViewDoc doc={medicalRecord} />
+                    {medicalRecord && <ViewDoc aplication={medicalRecord} />}
                 </DialogContent>
                 <DialogActions>
                     <Button type='close' onClick={(e) => { e.preventDefault(); setMedicalRecord(null) }}>Cerrar</Button>
@@ -475,8 +551,8 @@ export default function PartnersAffiliationRequests() {
                                                     </IconButton>
                                                 </Tooltip>
                                                 <Tooltip
-                                                    title='Info'
-                                                    onClick={() => setMedicalRecord(row.declaration)}
+                                                    title='Declaración'
+                                                    onClick={() => setMedicalRecord(row)}
                                                 >
                                                     <IconButton aria-label='save'>
                                                         <DescriptionRoundedIcon />
@@ -495,7 +571,7 @@ export default function PartnersAffiliationRequests() {
                                                 {row.partners.lastname}
                                             </TableCell>
                                             <TableCell align='right'>
-                                                {row.partners.dni}
+                                                {row.partner_dni}
                                             </TableCell>
                                             <TableCell align='right'>
                                                 {calculateAge(
