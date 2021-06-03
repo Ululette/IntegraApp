@@ -18,6 +18,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import InfoIcon from '@material-ui/icons/Info';
 import blue from '@material-ui/core/colors/blue';
+import Swal from 'sweetalert2';
 import 'firebase/auth';
 import supabase from '../../../supabase.config';
 
@@ -48,12 +49,12 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-    {
-        id: 'download',
-        numeric: false,
-        disablePadding: false,
-        label: 'Descargar',
-    },
+    // {
+    //     id: 'download',
+    //     numeric: false,
+    //     disablePadding: false,
+    //     label: 'Descargar',
+    // },
     {
         id: 'date',
         numeric: false,
@@ -170,6 +171,7 @@ const useToolbarStyles = makeStyles((theme) => ({
     },
     input: {
         margin: theme.spacing(1),
+        minWidth: '160px',
         size: 'small',
         width: '18%',
         backgroundColor: '#ffffff',
@@ -288,6 +290,13 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 'bold',
         backgroundColor: lighten('#34a7a1', 0.6),
     },
+    titleDos: {
+        flex: '1 1 100%',
+        fontWeight: 'bold',
+        fontSize: '1.4rem',
+        color: '#D9DCDF',
+        textAlign: 'center',
+    },
     rowColor: {
         backgroundColor: lighten('#e0e0e0', 0.3),
         ':checked': {
@@ -336,6 +345,30 @@ export default function MyOrders() {
         setPage(0);
     };
 
+    // const handleInfo = (row) => {
+    //     console.log(row);
+    //     if(row){
+    //         Swal.fire({
+    //             position: 'center',
+    //             width: '50%',
+    //             title: `Receta:`,
+    //             html:
+    //                 `<h5 align="left">Fecha:${row.date}</h5>` +
+    //                 `<h3>Paciente: ${row.partners.name} ${row.partners.lastname}</h3>` +
+    //                 `<h4>DNI:${row.partners.dni}</h4>` +
+    //                 `<h4>Medicamento 1:${row.drug_name}</h4>` +
+    //                 `<h4>Medicamento 2:${row.drug_name_2?row.drug_name_2:'No'}</h4>`,
+    //         });
+    //     } else {
+    //         Swal.fire({
+    //             width: '50%',
+    //             icon: 'error',
+    //             title: 'Lo sentimos',
+    //             text: 'No se encontraron los resultados',
+    //         })
+    //     }
+    // };
+
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
     const emptyRows =
@@ -349,6 +382,7 @@ export default function MyOrders() {
                     numSelected={selected.length}
                     setToShowRows={setToShowRows}
                 />
+                {toShowRows.length !== 0 ? (
                 <TableContainer>
                     <Table
                         className={classes.table}
@@ -378,7 +412,7 @@ export default function MyOrders() {
                                     const isItemSelected = isSelected(row.name);
                                     let patientName = `${row.partners.name} ${row.partners.lastname}`;
                                     let drugName = row.drug_name_2
-                                        ? `${row.drug_name}-${row.drug_name_2}`
+                                        ? `${row.drug_name} - ${row.drug_name_2}`
                                         : `${row.drug_name}`;
                                     return (
                                         <TableRow
@@ -390,7 +424,7 @@ export default function MyOrders() {
                                             key={row.name}
                                             selected={isItemSelected}
                                         >
-                                            <TableCell
+                                            {/* <TableCell
                                                 align='left'
                                                 className={
                                                     index % 2 === 1
@@ -406,13 +440,13 @@ export default function MyOrders() {
                                                 >
                                                     <IconButton aria-label='Resultados'>
                                                         <InfoIcon
-                                                        // onClick={() =>
-                                                        //     handleInfo(row)
-                                                        // }
+                                                        onClick={() =>
+                                                            handleInfo(row)
+                                                        }
                                                         />
                                                     </IconButton>
                                                 </Tooltip>
-                                            </TableCell>
+                                            </TableCell> */}
                                             <TableCell
                                                 align='left'
                                                 className={
@@ -464,6 +498,18 @@ export default function MyOrders() {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                ) : (
+                    <TableContainer>
+                        <Typography
+                            className={classes.titleDos}
+                            variant='h6'
+                            id='tableTitle'
+                            component='div'
+                        >
+                            No tiene recetas
+                        </Typography>
+                    </TableContainer>
+                )}
                 <TablePagination
                     className={classes.root}
                     rowsPerPageOptions={[5, 10, 15, 20]}

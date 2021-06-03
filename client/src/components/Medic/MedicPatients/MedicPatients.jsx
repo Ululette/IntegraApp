@@ -7,7 +7,11 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
 // Material-UI components
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { useTheme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
@@ -36,6 +40,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const useStyles = makeStyles((theme) => ({
     appBar: {
         position: 'relative',
+        background: '#00897B',
     },
     title: {
         marginLeft: theme.spacing(2),
@@ -46,6 +51,20 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'space-evenly',
         alignItems: 'center',
         width: '100%',
+        border: '1px solid #00897B',
+        color: '#00897B',
+    },
+    closeButton: {
+        color: '#00897B',
+        border: '1px solid #00897B',
+        height: '42px',
+    },
+    newButton: {
+        color: '#fff',
+        background: '#00897B',
+    },
+    closeStudy: {
+        color: '#00897B',
     },
 }));
 
@@ -56,11 +75,24 @@ function MedicPatients() {
     const [currentPatient, setCurrentPatient] = useState('');
     const [searchDni, setSearchDni] = useState('');
     const [listStudies, setListStudies] = useState([]);
-    // const [listMedicsStudies, setListMedicsStudies] = useState([]);
+    const [openStudy, setOpenStudy] = useState(false);
+    const [studyDetails, setStudyDetails] = useState('');
+
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     const medicData = JSON.parse(localStorage.getItem('medicdata'));
     const dniPatients = medicData.my_patients.map((el) => el.partner_dni);
     const MySwal = withReactContent(Swal);
+
+    const handleOpenStudy = (study) => {
+        setStudyDetails(study);
+        setOpenStudy(true);
+    };
+
+    const handleCloseStudy = () => {
+        setOpenStudy(false);
+    };
 
     const fetchPatients = async () => {
         let hasError = false;
@@ -94,7 +126,9 @@ function MedicPatients() {
     const fetchStudies = async (current) => {
         const { data: studiesList, error: errorFetchStudies } = await supabase
             .from('orders')
-            .select('study_name, date, medical_consultations(medic_dni)')
+            .select(
+                'study_name, date, results, medical_consultations(medic_dni), order_status(name)'
+            )
             .eq('partner_dni', current.dni);
         if (errorFetchStudies) {
             return MySwal.fire({
@@ -113,8 +147,6 @@ function MedicPatients() {
         }
         // eslint-disable-next-line
     }, [currentPatient]);
-
-    // if (listPatients.length === 0) return <h1>Cargando...</h1>;
 
     const handleClickOpen = (indexPatient) => {
         setCurrentPatient(listPatients[indexPatient]);
@@ -159,8 +191,7 @@ function MedicPatients() {
                     <div key={`div-${idx}`} className={styles.eachPatient}>
                         <Button
                             variant='outlined'
-                            color='primary'
-                            className={styles.buttonPatient}
+                            className={classes.buttonPatient}
                             key={`patient-${idx}`}
                             onClick={() => handleClickOpen(idx)}
                         >
@@ -308,12 +339,28 @@ function MedicPatients() {
                                             />
                                         </ListItem>
                                         <ListItem className={styles.listColumn}>
-                                            <a
-                                                href='#!'
-                                                className={styles.studyDetails}
-                                            >
-                                                Ver detalles del estudio
-                                            </a>
+                                            {study.order_status.name ===
+                                            'realizada' ? (
+                                                <a
+                                                    href='#!'
+                                                    onClick={() =>
+                                                        handleOpenStudy(study)
+                                                    }
+                                                    className={
+                                                        styles.studyDetails
+                                                    }
+                                                >
+                                                    Ver detalles del estudio
+                                                </a>
+                                            ) : (
+                                                <p
+                                                    className={
+                                                        styles.studyDetailsParagraph
+                                                    }
+                                                >
+                                                    En proceso...
+                                                </p>
+                                            )}
                                         </ListItem>
                                     </article>
                                 ))
@@ -322,7 +369,11 @@ function MedicPatients() {
                     </List>
                 </DialogContent>
                 <DialogActions className={styles.buttonsDialog}>
-                    <Button autoFocus onClick={handleClose} color='primary'>
+                    <Button
+                        autoFocus
+                        onClick={handleClose}
+                        className={classes.closeButton}
+                    >
                         Cerrar
                     </Button>
                     <a
@@ -333,7 +384,7 @@ function MedicPatients() {
                         <Button
                             variant='contained'
                             size='large'
-                            color='primary'
+                            className={classes.newButton}
                             onClick={handleClose}
                             autoFocus
                         >
@@ -342,6 +393,48 @@ function MedicPatients() {
                     </a>
                 </DialogActions>
             </Dialog>
+            {studyDetails === '' ? null : (
+                <Dialog
+                    fullScreen={fullScreen}
+                    open={openStudy}
+                    onClose={handleCloseStudy}
+                    aria-labelledby='responsive-dialog-title'
+                >
+                    <DialogTitle
+                        id='responsive-dialog-title'
+                        style={{ textTransform: 'capitalize' }}
+                    >
+                        {`${studyDetails.study_name} de ${currentPatient.name} ${currentPatient.lastname}`}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            {`${studyDetails.results.name}`}
+                        </DialogContentText>
+                        <DialogContentText>
+                            {`Realizado y evaluado por: ${studyDetails.results.results.medic_name}`}
+                        </DialogContentText>
+                        <DialogContentText>
+                            {`Realizado el dia, mes y año: ${studyDetails.results.results.date}`}
+                        </DialogContentText>
+                        <DialogContentText>{`Resultados:`}</DialogContentText>
+                        <DialogContentText style={{ whiteSpace: 'pre' }}>
+                            {`${studyDetails.results.results.results.replace(
+                                /\|/g,
+                                '\n'
+                            )}`}
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            onClick={handleCloseStudy}
+                            className={classes.closeStudy}
+                            autoFocus
+                        >
+                            Cerrar
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            )}
         </div>
     );
 }

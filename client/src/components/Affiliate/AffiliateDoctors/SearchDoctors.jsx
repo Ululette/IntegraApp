@@ -327,14 +327,17 @@ const EnhancedTableToolbar = (props) => {
                 let { data: medics } = await supabase
                     .from('medics')
                     .select(
-                        'dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name))))'
-                    );
+                        'dni, name, lastname, medic_license, email, state, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name))))'
+                    )
+                    .eq('state', 'activo');
                 setMedicsToShow(medics);
             } catch (err) {
                 console.error(err);
             }
         }
     };
+
+    console.log(medicsToShow);
 
     const getSpecialities = async () => {
         const { data: specialitiesData, error: errorFetchSpecialities } =
@@ -513,13 +516,13 @@ const EnhancedTableToolbar = (props) => {
                             onClick={handleCancel}
                             className={classes.popupBtn}
                         >
-                            Cancel
+                            Cancelar
                         </Button>
                         <Button
                             onClick={handleSubmit}
                             className={classes.popupBtn}
                         >
-                            Ok
+                            Aceptar
                         </Button>
                     </DialogActions>
                 </form>
@@ -602,7 +605,8 @@ export default function SearchDoctors() {
             .from('medics')
             .select(
                 'dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name)))'
-            );
+            )
+            .eq('state', 'activo');
         if (errorFetchMedics) return console.log(errorFetchMedics);
         setToShowRows(medics);
         setListMedics(medics);
@@ -711,24 +715,6 @@ export default function SearchDoctors() {
         rowsPerPage -
         Math.min(rowsPerPage, toShowRows.length - page * rowsPerPage);
 
-    // if (toShowRows.length === 0){
-    //     return(
-    //         <div>
-    //             <TableRow
-    //                 hover
-    //                 // onClick={(event) => handleClick(event, row.name)}
-    //                 role='checkbox'
-    //                 aria-checked={isItemSelected}
-    //                 tabIndex={-1}
-    //                 key={row.name}
-    //                 selected={isItemSelected}
-    //             >
-
-    //             </TableRow>
-
-    //         </div>
-    //     )
-    // }
     const rows = listMedics;
 
     return (

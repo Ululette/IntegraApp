@@ -11,6 +11,12 @@ import Button from '@material-ui/core/Button';
 export default function InfoCard({ plan }) {
     const newName = `integra-${plan.name.toLowerCase().substring(8)}`;
 
+    function handleTab(e) {
+        // Función que me abre una nueva pestaña con la comparativa de planes
+        const win = window.open('/plandetails', "_blank");
+        win.focus();
+      }
+
     return (
         <Card className={styles.root}>
             <div className={`${styles.media} ${newName}`}>
@@ -26,26 +32,27 @@ export default function InfoCard({ plan }) {
                 </Typography>
                 <List>
                     <ListItemText
-                        primary={`✔${plan.benefits[0].description}`}
+                        primary={`✔${plan.benefits[0].title}`}
                     />
                     <ListItemText
-                        primary={`✔${plan.benefits[0].description}`}
+                        primary={`✔${plan.benefits[1].description}`}
                     />
                     <ListItemText
-                        primary={`✔${plan.benefits[0].description}`}
+                        primary={`✔${plan.benefits[2].description}`}
                     />
                 </List>
             </CardContent>
             <CardContent>
-                <a href='/plandetails'>
+                {/* <a href='/plandetails'> */}
                     <Button
                         variant='outlined'
                         color='secondary'
                         className={styles.buttonInfo}
+                        onClick={handleTab}
                     >
                         Mas informacion
                     </Button>
-                </a>
+                {/* </a> */}
             </CardContent>
         </Card>
     );

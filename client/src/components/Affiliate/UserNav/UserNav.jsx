@@ -324,13 +324,6 @@ function AdminNav({ firebase, window: windowMui }) {
                     />
                 </a>
                 <section className={styles.userData}>
-                    <Badge
-                        badgeContent={2}
-                        color='secondary'
-                        className={styles.navIcon}
-                    >
-                        <NotificationsIcon />
-                    </Badge>
                     <PhoneIcon
                         className={styles.navIcon}
                         onClick={handleClickOpen}

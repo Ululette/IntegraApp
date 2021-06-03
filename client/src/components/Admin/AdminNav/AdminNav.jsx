@@ -502,7 +502,7 @@ function AdminNav({ firebase, window: windowMui }) {
                     <AdminHome />
                 ) : window.location.pathname ===
                   `/${userData.dni}/admin/aplications` ? (
-                    <AplicationsTabs />
+                    <AplicationsTabs firebase={firebase} />
                 ) : (
                     <NotFound />
                 )}
