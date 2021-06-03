@@ -1,6 +1,6 @@
 import React from 'react';
 import { useUser } from 'reactfire';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import 'firebase/auth';
 import PlanPayments from '../Payment/PlanPayments';
 import supabase from '../../../supabase.config.js';
@@ -198,8 +198,9 @@ function AdminNav({ firebase, window: windowMui }) {
             <div className={classes.toolbar} />
             <List className={styles.listitems}>
                 <NavLink
-                    to={`/${userData.dni}/affiliate`}
+                    to={`/${userData.dni}/affiliate/dashboard`}
                     className={styles.link}
+                    activeClassName={styles.activeLink}
                 >
                     <ListItem button>
                         <HomeIcon />
@@ -314,7 +315,7 @@ function AdminNav({ firebase, window: windowMui }) {
                         <MenuIcon />
                     </IconButton>
                 </Toolbar>
-                <a href={`/${userDataFirebase.uid}/admin/`}>
+                <a href={`/${userData.dni}/affiliate/dashboard`}>
                     <img
                         src='../../assets/images/logo.png'
                         alt='Integra icon.'
@@ -458,8 +459,12 @@ function AdminNav({ firebase, window: windowMui }) {
             </nav>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-                {window.location.pathname === `/${userData.dni}/affiliate` ? (
+                {window.location.pathname ===
+                `/${userData.dni}/affiliate/dashboard` ? (
                     <UserHome firebase={firebase} />
+                ) : window.location.pathname ===
+                  `/${userData.dni}/affiliate` ? (
+                    <Redirect to={`/${userData.dni}/affiliate/dashboard`} />
                 ) : window.location.pathname ===
                   `/${userData.dni}/affiliate/familymembers` ? (
                     <FamilyMembers />
