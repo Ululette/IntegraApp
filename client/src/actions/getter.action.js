@@ -3,8 +3,7 @@ import {
     GET_BENEFITS,
     GET_AFFILIATES,
     GET_STATES,
-    GET_LOCALITIES
-
+    GET_LOCALITIES,
 } from './constants.actions';
 import supabase from '../supabase.config';
 
@@ -13,7 +12,9 @@ function getPlans() {
         try {
             const { data: plans } = await supabase
                 .from('plans')
-                .select('id, name, price, benefits (title, description)');
+                .select(
+                    'id, name, price, active, benefits (title, description)'
+                );
             dispatch({ type: GET_PLANS_BENEFITS, payload: plans });
         } catch (err) {
             console.log(err);
@@ -49,29 +50,29 @@ function getAffiliates() {
 }
 function getStates() {
     return async (dispatch) => {
-      try {
-        const { data: states } = await supabase
-          .from("states")
-          .select("id,name");
-        dispatch({ type: GET_STATES, payload: states });
-      } catch (err) {
-        console.error(err);
-      }
-    };
-  }
-  
-  function getLocalities(idState) {
-    return async (dispatch) => {
-      if(!idState){
         try {
-          const { data: localities } = await supabase
-            .from("localities")
-            .select("*");
-          dispatch({ type: GET_LOCALITIES, payload: localities });
+            const { data: states } = await supabase
+                .from('states')
+                .select('id,name');
+            dispatch({ type: GET_STATES, payload: states });
         } catch (err) {
-          console.error(err);
+            console.error(err);
         }
-      }
     };
-  }
-export { getPlans, getBenefits, getAffiliates,getStates,getLocalities };
+}
+
+function getLocalities(idState) {
+    return async (dispatch) => {
+        if (!idState) {
+            try {
+                const { data: localities } = await supabase
+                    .from('localities')
+                    .select('*');
+                dispatch({ type: GET_LOCALITIES, payload: localities });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    };
+}
+export { getPlans, getBenefits, getAffiliates, getStates, getLocalities };
