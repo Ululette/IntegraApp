@@ -12,6 +12,7 @@ const Options = (props) => {
     { text: "Preguntas frecuentes",  handler: props.actionProvider.handleFAQList, id: 3 },
     { text: "Asociate",  handler: props.actionProvider.handleFormList, id: 4 },
     { text: "Provincias con cobertura",  handler: props.actionProvider.handleStatesList, id: 5 },
+    { text: "Mi plan",  handler: props.actionProvider.handleMyPlan, id: 6 },
   ];
 
   const optionsMarkup = options.map((option) => (

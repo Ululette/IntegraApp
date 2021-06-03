@@ -1,22 +1,31 @@
 import supabase from '../../../supabase.config';
 class ActionProvider {
     constructor(createChatBotMessage, setStateFunc, props) {
-        console.log(props, 'hola')
       this.createChatBotMessage = createChatBotMessage;
       this.setState = setStateFunc;
       this.states= []
       this.number = []
+      this.dni = []
       this.fetchState()
       this.fetchInstitutions()
+      this.fetchDNI()
     }
   fetchState = async () => {
         let { data } = await supabase.from('states').select('*');
         this.states.push(data)  };
     fetchInstitutions= async () => {
             let { data } = await supabase.from('institutions').select('*');
-            console.log(data, 'data')
             this.number.push(data)  };
-  
+
+            fetchDNI= async () => {
+              let { data } = await supabase
+              .from('partners')
+              .select('dni, name, birthdate, plans(id, name, price)');
+              this.dni.push(data)  
+              console.log(this.dni, 'data')
+
+            };
+
     thanks() {
       const message = this.createChatBotMessage("👍¡De nada! Espero haberte ayudado. ¿Te gustaría saber algo mas?", {
         widget: "options", 
@@ -45,6 +54,32 @@ class ActionProvider {
     
         this.updateChatbotState(message);
       };
+      handleMyPlan = () => {
+        const message = this.createChatBotMessage(
+          "¿Cual es tu DNI?",
+        );
+    
+        this.updateChatbotState(message);
+      };
+
+      handleDni = (dni) => {
+        console.log(this.dni, 'this.dni')
+        let allDni = []
+       allDni =  this.dni.map(d => (d.dni))
+       console.log(allDni, 'all')
+        if(allDni.includes(dni)){
+        let message = this.createChatBotMessage(
+          `Tu plan es: ${dni}`,
+        );
+        this.updateChatbotState(message);
+        }
+        else{
+          let message = 'tu plan no se encontro'
+          this.updateChatbotState(message);
+        }
+        
+      };
+
       handleFAQList = () => {
         const message = this.createChatBotMessage(
           "✔️Aca podes encontrar las preguntas mas frecuentes entre nuestros usuarios:",
