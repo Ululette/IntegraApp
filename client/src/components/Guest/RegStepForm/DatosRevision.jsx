@@ -2,7 +2,6 @@ import React from 'react';
 import * as styles from './DatosRevision.module.css';
 import Pdf from 'react-to-pdf';
 import { Divider, Button, makeStyles } from '@material-ui/core';
-import Declaration from './Declaration';
 const ref = React.createRef();
 
 const useStyles = makeStyles(() => ({

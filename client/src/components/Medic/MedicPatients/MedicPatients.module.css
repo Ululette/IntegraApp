@@ -1,4 +1,4 @@
-.container{ 
+.container {
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -65,6 +65,7 @@
 
 .buttonPatient {
     width: 100%;
+    color: rgb(29, 114, 104);
 }
 
 .buttonPatient span {
@@ -94,7 +95,7 @@
 .listColumn {
     display: flex;
     flex-direction: column;
-    align-items:center;
+    align-items: center;
 }
 
 .pathologies {
@@ -129,15 +130,19 @@
     justify-content: center;
     align-items: center;
     color: #fff;
-    background-color: #3F51B5;
+    background-color: #00897b;
     font-size: 1.2rem;
 }
 
 .studyDetails:hover {
-    transition: all .5s ease-in-out;
-    background-color: #222e75;
+    transition: all 0.5s ease-in-out;
+    background-color: #003b35;
 }
 
 .listContact {
     text-align: right !important;
+}
+
+.studyDetailsParagraph {
+    font-size: 1.2rem;
 }

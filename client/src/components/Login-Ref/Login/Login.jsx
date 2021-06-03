@@ -178,11 +178,24 @@ function Login({ firebase }) {
                 .auth()
                 .signInWithEmailAndPassword(users[0].email, input.pass);
 
+            const userUid = await firebase.auth().currentUser.uid;
+            let imgSrc = null;
+            if (userUid) {
+                try {
+                    imgSrc = await firebase
+                        .storage()
+                        .ref(`users/${userUid}/profile.jpg`)
+                        .getDownloadURL();
+                } catch (error) {
+                    console.log(error.message);
+                }
+            }
+
             const dataUser = {
                 dni: users[0].dni,
                 email: users[0].email,
                 role: users[0].role,
-                avatar_url: users[0].avatar_url,
+                avatar_url: imgSrc || null,
             };
 
             localStorage.setItem('userdata', JSON.stringify(dataUser));
