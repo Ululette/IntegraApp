@@ -104,6 +104,10 @@ const useStyles = makeStyles((theme) => ({
     badge: {
         color: 'white',
     },
+    notifications: {
+        maxHeight: '200px',
+        overflowY: 'scroll',
+    },
 }));
 
 function AdminNav({ firebase, window: windowMui }) {
@@ -351,7 +355,7 @@ function AdminNav({ firebase, window: windowMui }) {
                                 horizontal: 'center',
                             }}
                         >
-                            <List>
+                            <List className={classes.notifications}>
                                 {notifications.map((el, idx) => (
                                     <ListItem
                                         button
