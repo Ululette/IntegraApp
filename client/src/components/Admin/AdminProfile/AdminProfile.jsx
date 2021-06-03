@@ -4,7 +4,9 @@ import supabase from '../../../supabase.config';
 import './AdminProfile.css';
 import Swal from 'sweetalert2';
 import { Autocomplete } from '@material-ui/lab';
-import { Button, TextField } from '@material-ui/core';
+import { Button, TextField, IconButton } from '@material-ui/core';
+import { AccountCircleRounded, PhotoCamera } from '@material-ui/icons';
+
 
 // Estilos usados en componentes de MUI.
 const useStyles = makeStyles({
@@ -40,7 +42,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function AdminProfile() {
+export default function AdminProfile({ firebase }) {
   // Estilos para MUI.
   let classes = useStyles();
 
@@ -82,9 +84,10 @@ export default function AdminProfile() {
   // Al cargar la página por primera vez, se trae del localStorage
   // el dni del usuario y carga en user los datos que se trae
   // de la base de datos.
+  const userDni = JSON.parse(localStorage.getItem('userdata'));
   useEffect(() => {
-    let userDni = JSON.parse(localStorage.getItem('userdata')).dni;
-    fetchUserData(userDni);
+    fetchUserData(userDni.dni);
+    //eslint-disable-next-line
   }, []);
 
   // Función que calcula la edad en base a la F.Nac.
@@ -325,12 +328,6 @@ export default function AdminProfile() {
   };
 
   // Cada vez que se modifica modInfo renderiza.
-  useEffect(() => {
-
-    if (modInfo) {
-      console.log(modInfo);
-    }
-  }, [modInfo, error]);
 
   // Ciudades a cargar en el selector.
   let [showCities, setShowCities] = useState(null);
@@ -358,13 +355,7 @@ export default function AdminProfile() {
     if (modInfo) {
       getCities(modInfo.state_id);
     }
-  }, [modInfo]); 
-
-  useEffect(() => {
-    if (showCities) {
-      // console.log('show', showCities);
-    }
-  }, [showCities]);
+  }, [modInfo]);
 
   //----------------------------------------------------
   async function handlesubmit() {
@@ -390,8 +381,8 @@ export default function AdminProfile() {
           .update({
             street: modInfo.street,
             street_number: modInfo.street_number,
-            floor: modInfo.floor||'',
-            department: modInfo.department||'',
+            floor: modInfo.floor || '',
+            department: modInfo.department || '',
             locality_id: modInfo.locality_id,
           })
           .eq('admin_dni', user.dni);
@@ -417,6 +408,35 @@ export default function AdminProfile() {
   }
   //----------------------------------------------------
 
+  const handleFile = (e) => {
+    const file = e.target.files[0];
+    picUpload(file);
+  };
+
+  const picUpload = async (file) => {
+    console.log(file);
+    const userUid = firebase.auth().currentUser.uid;
+    try {
+      await firebase
+        .storage()
+        .ref(`users/${userUid}/profile.${file.name.slice(-3)}`)
+        .put(file);
+      console.log('Se subio exitosamente.');
+      let imgSrc = await firebase
+        .storage()
+        .ref(`users/${userUid}/profile.jpg`)
+        .getDownloadURL();
+      let newLS = { ...userDni, avatar_url: imgSrc };
+
+      localStorage.setItem('userdata', JSON.stringify(newLS));
+      window.location.reload();
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+
+
   return (
     <div className='ProfilePage_Cont'>
       {user && (
@@ -425,7 +445,56 @@ export default function AdminProfile() {
             // Si no modifica usa los datos de user.
             <div className='input_info'>
               <h1 className='title'>Mi Perfil</h1>
-
+              <div className='on_line_cont'>
+                {userDni.avatar_url ? (
+                  <div className='one_info_cont imgContainer'>
+                    <img
+                      src={`${userDni.avatar_url}`}
+                      alt='Profile pic.'
+                    />
+                    <div className='changeImg'>
+                      <input
+                        accept='image/*'
+                        className='picUpload'
+                        id='icon-button-file'
+                        type='file'
+                        onChange={handleFile}
+                      />
+                      <label htmlFor='icon-button-file'>
+                        <IconButton
+                          color='primary'
+                          aria-label='upload picture'
+                          component='span'
+                        >
+                          <PhotoCamera className='iconUpload' />
+                        </IconButton>
+                      </label>
+                    </div>
+                  </div>
+                ) : (
+                  <div className='one_info_cont imgContainer'>
+                    <AccountCircleRounded />
+                    <div className='changeImg'>
+                      <input
+                        accept='image/*'
+                        className='picUpload'
+                        id='icon-button-file'
+                        type='file'
+                        onChange={handleFile}
+                      />
+                      <label htmlFor='icon-button-file'>
+                        <IconButton
+                          color='primary'
+                          aria-label='upload picture'
+                          component='span'
+                        >
+                          <PhotoCamera className='iconUpload' />
+                        </IconButton>
+                      </label>
+                    </div>
+                  </div>
+                )}
+              </div>
               <div className='on_line_cont'>
                 <div className='one_info_cont'>
                   <p className='profile_title'>Nombre:</p>

@@ -478,7 +478,7 @@ function AdminNav({ firebase, window: windowMui }) {
                     <AdminMedicTabs />
                 ) : window.location.pathname ===
                   `/${userData.dni}/admin/profile` ? (
-                    <AdminProfile />
+                    <AdminProfile firebase={ firebase }/>
                 ) : window.location.pathname ===
                   `/${userData.dni}/admin/specialities` ? (
                     <FormSpecialities />

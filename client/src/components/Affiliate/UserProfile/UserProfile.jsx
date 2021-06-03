@@ -150,7 +150,7 @@ export default function UserProfile({ firebase }) {
     }, [modify]);
 
     // Renderiza el selector de provincias cuando se carga allstates.
-    useEffect(() => {}, [allstates]);
+    useEffect(() => { }, [allstates]);
 
     // Estado local donde guarda los datos modificables del perfil del usuario.
     let [modInfo, setModInfo] = useState(null);
