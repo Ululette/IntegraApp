@@ -607,6 +607,8 @@ export default function SearchDoctors() {
     const [listMedics, setListMedics] = React.useState([]);
     const [medicSpecialities, setMedicSpecialities] = React.useState([]);
     //eslint-disable-next-line
+    const [myFavorites, setMyFavorites] = React.useState([]);
+    //eslint-disable-next-line
     const [medicData, setMedicData] = React.useState(null);
     const [toShowRows, setToShowRows] = React.useState([]);
     let userDni = JSON.parse(localStorage.getItem('userdata')).dni;
@@ -619,6 +621,14 @@ export default function SearchDoctors() {
             )
             .eq('state', 'activo');
         if (errorFetchMedics) return console.log(errorFetchMedics);
+
+        const { data: favs } = await supabase
+            .from('favorites')
+            .select('medics (dni, name, lastname, medical_specialities (name))')
+            .eq('partner_dni', userDni);
+        if (favs && favs.length > 0) {
+            setMyFavorites(favs);
+        }
         setToShowRows(
             medics.filter((el) =>
                 el.plans.find((plan) => plan.id === affiliateData.plan_id)
@@ -642,6 +652,7 @@ export default function SearchDoctors() {
         fetchSpecialities();
         fetchMedics();
         fetchSpecialities();
+        //eslint-disable-next-line
     }, []);
 
     const fetchFavs = async (medicDni) => {
@@ -820,11 +831,11 @@ export default function SearchDoctors() {
                                                     >
                                                         <IconButton aria-label='Mas info.'>
                                                             <FavoriteIcon
-                                                                onClick={() =>
+                                                                onClick={() => {
                                                                     handleFav(
                                                                         row
-                                                                    )
-                                                                }
+                                                                    );
+                                                                }}
                                                             />
                                                         </IconButton>
                                                     </Tooltip>
