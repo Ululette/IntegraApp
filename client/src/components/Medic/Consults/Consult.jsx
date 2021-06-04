@@ -19,8 +19,6 @@ import Medicines from './Medicines/Medicines.jsx';
 import PrintMeds from './PrintMeds/PrintMeds.jsx';
 import Orders from './Orders/Orders.jsx';
 import PrintOrders from './PrintOrders/PrintOrders.jsx';
-// import NewOrderDialog from './NewOrderDialog/NewOrderDialog.jsx';
-// import NewOrder from './NewOrderDialog/NewOrder';
 import supabase from '../../../supabase.config.js';
 import Swal from 'sweetalert2';
 import styles from './Consult.module.css';
