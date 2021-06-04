@@ -131,13 +131,6 @@ export default function Consult({ firebase }) {
         //eslint-disable-next-line
     }, [patient]);
 
-    const getAge = () =>
-
-        Math.floor(
-            // (new Date() - new Date(patient.birthdate).getTime()) / 3.15576e10
-            2.3
-        );
-
     function sendEmailConsult(props) {
         emailjs
             .send(
