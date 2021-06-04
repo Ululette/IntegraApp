@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import clsx from 'clsx';
+import { lighten} from '@material-ui/core/styles';
+import blue from '@material-ui/core/colors/blue';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 
 import supabase from '../../../supabase.config';
@@ -14,11 +20,199 @@ import { Button, CircularProgress } from '@material-ui/core';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
-const useStyles = makeStyles({
-    table: {
-        minWidth: 650,
+const headCells = [
+    { id: 'name', numeric: false, disablePadding: true, label: 'NOMBRE' },
+    {
+        id: 'lastname',
+        numeric: false,
+        disablePadding: false,
+        label: 'APELLIDO',
     },
-});
+    {
+        id: 'birthdate',
+        numeric: false,
+        disablePadding: false,
+        label: 'FECHA DE NACIMIENTO',
+    },
+    {
+        id: 'family-bond',
+        numeric: false,
+        disablePadding: false,
+        label: 'PARENTESCO',
+    },
+    {
+        id: 'gender',
+        numeric: false,
+        disablePadding: false,
+        label: 'SEXO',
+    },
+    {
+        id: 'dni',
+        numeric: true,
+        disablePadding: false,
+        label: 'DNI',
+    },
+    {
+        id: 'email',
+        numeric: true,
+        disablePadding: false,
+        label: 'E-MAIL',
+    },
+    {
+        id: 'phone-number',
+        numeric: true,
+        disablePadding: false,
+        label: 'PHONE NUMBER',
+    },
+    {
+        id: 'ACTIONS',
+        numeric: true,
+        disablePadding: false,
+        label: 'actions',
+    },
+];
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        position: 'relative',
+    },
+    paper: {
+        width: '100%',
+        marginBottom: theme.spacing(2),
+    },
+    table: {
+        minWidth: 750,
+    },
+    visuallyHidden: {
+        border: 0,
+        clip: 'rect(0 0 0 0)',
+        height: 1,
+        margin: -1,
+        overflow: 'hidden',
+        padding: 0,
+        position: 'absolute',
+        top: 20,
+        width: 1,
+    },
+    title: {
+        color: '#212121',
+        fontWeight: 'bold',
+        backgroundColor: lighten('#34a7a1', 0.6),
+    },
+    titleDos: {
+        flex: '1 1 100%',
+        fontWeight: 'bold',
+        fontSize: '1.4rem',
+        color: '#D9DCDF',
+        textAlign: 'center',
+    },
+    rowColor: {
+        backgroundColor: lighten('#e0e0e0', 0.3),
+        ':checked': {
+            color: blue[500],
+        },
+    },
+    iconFilter: {
+        color: 'rgba(0, 0, 0, 0.47)',
+        fontWeight: 'bold',
+        '&:hover': {
+            backgroundColor: lighten('#34a7a1', 0.8),
+        },
+    },
+}));
+
+function EnhancedTableHead(props) {
+    const { classes, order, orderBy, onRequestSort } = props;
+
+    return (
+        <TableHead className={classes.title}>
+            <TableRow>
+                {headCells.map((headCell, index) => (
+                    <TableCell
+                        key={`${headCell.id}-${index}`}
+                        align='left'
+                        padding='default'
+                        sortDirection={orderBy === headCell.id ? order : false}
+                    >
+                        {headCell.label}
+                        {orderBy === headCell.id ? (
+                            <span className={classes.visuallyHidden}>
+                                {order === 'desc'
+                                    ? 'sorted descending'
+                                    : 'sorted ascending'}
+                            </span>
+                        ) : null}
+                    </TableCell>
+                ))}
+            </TableRow>
+        </TableHead>
+    );
+}
+
+EnhancedTableHead.propTypes = {
+    classes: PropTypes.object.isRequired,
+    numSelected: PropTypes.number.isRequired,
+    onRequestSort: PropTypes.func.isRequired,
+    onSelectAllClick: PropTypes.func.isRequired,
+    order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+    orderBy: PropTypes.string.isRequired,
+    rowCount: PropTypes.number.isRequired,
+};
+
+const useToolbarStyles = makeStyles((theme) => ({
+    root: {
+        // paddingLeft: theme.spacing(0),
+        // paddingRight: theme.spacing(0),
+        backgroundColor: lighten('#34a7a1', 0.3),
+        padding: '0px 0px 0px 0px',
+        //color barra superior '
+    },
+    highlight:
+        theme.palette.type === 'light'
+            ? {
+                  color: '#fafafa',
+                  backgroundColor: lighten(blue[500], 0.5), //color barra superior cuando selecciono item
+                  fontWeight: 'bold',
+                  fontSize: '30px',
+              }
+            : {
+                  color: theme.palette.text.primary,
+                  backgroundColor: lighten('#34a7a1', 0.3),
+              },
+    title: {
+        flex: '1 1 100%',
+        fontWeight: 'bold',
+        fontSize: '1.4rem',
+        color: '#fafafa',
+        textAlign: 'center',
+    },
+}));
+
+const EnhancedTableToolbar = (props) => {
+    const classes = useToolbarStyles();
+    const { numSelected, setToShowRows, rows } = props;
+    return (
+        <Toolbar
+            className={clsx(classes.root, {
+                [classes.highlight]: numSelected > 0,
+            })}
+        >
+            <Typography
+                className={classes.title}
+                variant='h6'
+                id='tableTitle'
+                component='div'
+            >
+                GRUPO FAMILIAR
+            </Typography>
+        </Toolbar>
+    );
+};
+
+EnhancedTableToolbar.propTypes = {
+    numSelected: PropTypes.number.isRequired,
+};
 
 export default function FamilyMembersList() {
     const classes = useStyles();
@@ -130,55 +324,48 @@ export default function FamilyMembersList() {
         return <p>Solo el titular puede verificar esta información</p>;
 
     return (
-        <TableContainer component={Paper}>
-            <Table
-                className={classes.table}
-                size='small'
-                aria-label='a dense table'
-            >
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Name</TableCell>
-                        <TableCell align='right'>Last Name</TableCell>
-                        <TableCell align='right'>Birthdate</TableCell>
-                        <TableCell align='right'>Family Bond</TableCell>
-                        <TableCell align='right'>Gender</TableCell>
-                        <TableCell align='right'>DNI</TableCell>
-                        <TableCell align='right'>E-Mail</TableCell>
-                        <TableCell align='right'>Phone Number</TableCell>
-                        <TableCell align='right'>Actions</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {familyGroup.map((row, idx) => (
-                        <TableRow key={`${row.name}-${idx}`}>
-                            <TableCell component='th' scope='row'>
-                                {row.name}
-                            </TableCell>
-                            <TableCell align='right'>{row.lastname}</TableCell>
-                            <TableCell align='right'>{row.birthdate}</TableCell>
-                            <TableCell align='right'>
-                                {row.family_bond}
-                            </TableCell>
-                            <TableCell align='right'>{row.gender}</TableCell>
-                            <TableCell align='right'>{row.dni}</TableCell>
-                            <TableCell align='right'>{row.email}</TableCell>
-                            <TableCell align='right'>
-                                {row.phone_number}
-                            </TableCell>
-                            <TableCell align='right'>
-                                <Button
-                                    variant='outlined'
-                                    size='small'
-                                    onClick={() => handleDownFamiliar(row)}
-                                >
-                                    Dar de baja
-                                </Button>
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <>
+            <EnhancedTableToolbar/>
+            <TableContainer component={Paper}>
+                <Table
+                    className={classes.table}
+                    size='small'
+                    aria-label='a dense table'
+                >
+                    <EnhancedTableHead
+                        classes={classes}
+                    />
+                    <TableBody>
+                        {familyGroup.map((row, idx) => (
+                            <TableRow key={`${row.name}-${idx}`}>
+                                <TableCell component='th' scope='row'>
+                                    {row.name}
+                                </TableCell>
+                                <TableCell align='left'>{row.lastname}</TableCell>
+                                <TableCell align='left'>{row.birthdate}</TableCell>
+                                <TableCell align='left'>
+                                    {row.family_bond}
+                                </TableCell>
+                                <TableCell align='left'>{row.gender}</TableCell>
+                                <TableCell align='left'>{row.dni}</TableCell>
+                                <TableCell align='left'>{row.email}</TableCell>
+                                <TableCell align='left'>
+                                    {row.phone_number}
+                                </TableCell>
+                                <TableCell align='left'>
+                                    <Button
+                                        variant='outlined'
+                                        size='small'
+                                        onClick={() => handleDownFamiliar(row)}
+                                    >
+                                        Dar de baja
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </>
     );
 }
