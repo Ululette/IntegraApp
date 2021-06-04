@@ -26,6 +26,9 @@ const NavBar = () => {
                 <NavLink to='/login' className={styles.navL}>
                     <button className={styles.login}>Entrar</button>
                 </NavLink>
+                <NavLink to='/about' className={styles.navL}>
+                    <button className={styles.login}>About</button>
+                </NavLink>
             </div>
         </nav>
     );
