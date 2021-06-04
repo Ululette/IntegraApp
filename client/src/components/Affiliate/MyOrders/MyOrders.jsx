@@ -240,13 +240,17 @@ const EnhancedTableToolbar = (props) => {
 
     const handleInputSearch = (e) => {
         setInputSearch(e.target.value);
-        fetchOrders(inputSearch);
+        // fetchOrders(inputSearch);
     };
 
     useEffect(() => {
         fetchOrders();
         //eslint-disable-next-line
     }, []);
+    useEffect(() => {
+        fetchOrders(inputSearch);
+        //eslint-disable-next-line
+    }, [inputSearch]);
 
     return (
         <Toolbar
