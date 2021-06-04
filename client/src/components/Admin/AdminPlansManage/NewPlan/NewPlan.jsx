@@ -4,13 +4,15 @@ import { makeStyles, withStyles, lighten } from '@material-ui/core/styles';
 import { Autocomplete } from '@material-ui/lab';
 import { TextField, Button, Box } from '@material-ui/core';
 import './NewPlan.css';
+import Swal from 'sweetalert2';
 
 //Switch
 import { FormGroup, Switch, Grid, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     container: {
-        padding: 0,
+        paddingTop: 25,
+        paddingLeft: 25,
         backgroundColor: '#fafafa',
     },
     root: {
@@ -244,14 +246,24 @@ export default function NewPlan() {
         }
         await addPlanBenef(idplan, state.sbenefits);
 
-        alert('listo');
+        await Swal.fire({
+            title: 'Exito!',
+            text: 'Sus datos fueron guardados',
+            icon: 'success',
+            confirmButtonText: 'OK',
+        });
+
         // Luego limpia
         setState({ title: '', price: '', sbenefits: [], active: true });
         setError({
-            title: 'No puede quedar incompleto o en blanco.',
-            price: 'Debe ser un número de 4 a 6 cifras',
-            sbenefits: 'Debe tener al menos un beneficio.',
+            title: '',
+            price: '',
+            sbenefits: '',
             active: '',
+            // title: 'No puede quedar incompleto o en blanco.',
+            // price: 'Debe ser un número de 4 a 6 cifras',
+            // sbenefits: 'Debe tener al menos un beneficio.',
+            // active: '',
         });
     }
 
@@ -290,6 +302,7 @@ export default function NewPlan() {
                         className={classes.importe}
                         label='Importe'
                         variant='outlined'
+                        inputProps={{ min: 0 }}
                         value={state.price}
                         onChange={handlechange}
                         error={error.price}
