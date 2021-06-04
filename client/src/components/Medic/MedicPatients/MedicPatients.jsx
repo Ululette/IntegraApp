@@ -53,12 +53,12 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         border: '1px solid #2c7f7b',
         color: '#fafafa',
-        fontWeight:'bold',
-        backgroundColor:'#2c7f7b',
-        '&hover':{
-            backgroundColor:'red',
-            color:'red',
-        }
+        fontWeight: 'bold',
+        backgroundColor: '#2c7f7b',
+        '&hover': {
+            backgroundColor: 'red',
+            color: 'red',
+        },
     },
     closeButton: {
         color: '#00897B',
@@ -72,9 +72,7 @@ const useStyles = makeStyles((theme) => ({
     closeStudy: {
         color: '#00897B',
     },
-    nuevo:{
-        
-    }
+    nuevo: {},
 }));
 
 function MedicPatients() {
@@ -204,8 +202,11 @@ function MedicPatients() {
                             key={`patient-${idx}`}
                             onClick={() => handleClickOpen(idx)}
                         >
-                            <ListItem >
-                                <ListItemText className={classes.nuevo} primary={`${pat.dni}`} />
+                            <ListItem>
+                                <ListItemText
+                                    className={classes.nuevo}
+                                    primary={`${pat.dni}`}
+                                />
                             </ListItem>
                             <ListItem>
                                 <ListItemText
@@ -349,7 +350,7 @@ function MedicPatients() {
                                         </ListItem>
                                         <ListItem className={styles.listColumn}>
                                             {study.order_status.name ===
-                                            'realizada' ? (
+                                            'Realizada' ? (
                                                 <a
                                                     href='#!'
                                                     onClick={() =>
