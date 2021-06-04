@@ -12,6 +12,8 @@ import {
 } from '@material-ui/core';
 import 'firebase/auth';
 import { makeStyles } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
 import Medicines from './Medicines/Medicines.jsx';
 import PrintMeds from './PrintMeds/PrintMeds.jsx';
 import Orders from './Orders/Orders.jsx';
@@ -27,16 +29,39 @@ const useStyles = makeStyles((theme) => ({
         margin: `5px 0 0 ${theme.spacing(9)}px`,
     },
     card: {
-        maxWidth: '90%',
+        // maxWidth: '90%',
+        width:'100%',
     },
     textField: {
-        width: '90%',
+        width: '84%',
     },
     largeAvatar: {
         width: theme.spacing(7),
         height: theme.spacing(7),
     },
+    divider:{
+        listStyleType:'none',
+    },
+    title:{
+        color:'#fafafa',
+    },
+    mainButton:{
+        color:'#fafafa',
+    }
 }));
+
+const theme = createMuiTheme({
+    palette: {
+        primary: {
+            // Purple and green play nicely together.
+            main: '#41aea9',
+        },
+        secondary: {
+            // This is green.A700 as hex.
+            main: '#11cb5f',
+        },
+    },
+});
 
 export default function Consult({ firebase }) {
     let classes = useStyles();
@@ -315,265 +340,279 @@ export default function Consult({ firebase }) {
     }, [orders]);
 
     return (
-        <Card className={classes.card}>
-            <List>
-                {medic && (
-                    <div className={styles.medicData}>
-                        <div className={styles.medicFirstColumn}>
-                            <div>
-                                <ListItem>
-                                    <Avatar
-                                        alt={medic.name}
-                                        src={medic.profilePic}
-                                        className={classes.largeAvatar}
+        <ThemeProvider theme={theme}>
+            <div className={styles.cardContainer}>
+                <section className={styles.section}>
+                    <h2>Consulta</h2>
+                </section>
+                <div className={styles.formContainer}>
+                    <Card className={classes.card}>
+                        {/* <List> */}
+                            {medic && (
+                                <div className={styles.medicData}>
+                                    <div className={styles.medicFirstColumn}>
+                                        <div>
+                                            <ListItem>
+                                                <Avatar
+                                                    alt={medic.name}
+                                                    src={medic.profilePic}
+                                                    className={classes.largeAvatar}
+                                                />
+                                            </ListItem>
+                                        </div>
+                                        <div>
+                                            <ListItem>
+                                                <Typography
+                                                    gutterBottom
+                                                    variant='h5'
+                                                    component='h2'
+                                                >
+                                                    {medic.name} {medic.lastname}
+                                                </Typography>
+                                            </ListItem>
+                                        </div>
+                                    </div>
+                                    <div className={styles.medicSecondColumn}>
+                                        <div>
+                                            <ListItem>
+                                                <Typography
+                                                    gutterBottom
+                                                    variant='subtitle1'
+                                                    component='h2'
+                                                >
+                                                    {medic.medic_license}
+                                                </Typography>
+                                            </ListItem>
+                                        </div>
+                                        <div>
+                                            <ListItem>
+                                                <Typography
+                                                    gutterBottom
+                                                    variant='subtitle1'
+                                                    component='h2'
+                                                >
+                                                    {medic.medical_specialities[0].name}
+                                                </Typography>
+                                            </ListItem>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            <Divider component='li' className={classes.divider}/>
+                            {patient && (
+                                <div className={styles.patientData}>
+                                    <div className={styles.patientFirstColumn}>
+                                        <div>
+                                            <ListItem>
+                                                <Typography
+                                                    gutterBottom
+                                                    variant='h6'
+                                                    component='h2'
+                                                >
+                                                    Paciente:
+                                                </Typography>
+                                            </ListItem>
+                                        </div>
+                                        <div>
+                                            <ListItem>
+                                                <Typography
+                                                    gutterBottom
+                                                    variant='h5'
+                                                    component='h2'
+                                                >
+                                                    {patient.name} {patient.lastname}
+                                                </Typography>
+                                            </ListItem>
+                                        </div>
+                                    </div>
+                                    <div className={styles.patientSecondColumn}>
+                                        <div>
+                                            <ListItem>
+                                                <Typography
+                                                    gutterBottom
+                                                    variant='subtitle1'
+                                                    component='h2'
+                                                >
+                                                    DNI: {patient.dni}
+                                                </Typography>
+                                            </ListItem>
+                                        </div>
+                                        <div>
+                                            <ListItem>
+                                                <Typography
+                                                    gutterBottom
+                                                    variant='subtitle1'
+                                                    component='h2'
+                                                >
+                                                    Edad: {getAge()}
+                                                </Typography>
+                                            </ListItem>
+                                        </div>
+                                        <div>
+                                            <ListItem>
+                                                <Typography
+                                                    gutterBottom
+                                                    variant='subtitle1'
+                                                    component='h2'
+                                                >
+                                                    Sexo: {patient.gender}
+                                                </Typography>
+                                            </ListItem>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            <Divider component='li' className={classes.divider} />
+                            <div className={styles.form}>
+                                <div className={styles.input}>
+                                    <TextField
+                                        id='reason-input'
+                                        name='reason'
+                                        label='Razón de consulta'
+                                        variant='outlined'
+                                        multiline
+                                        value={input.reason}
+                                        rows={6}
+                                        className={classes.textField}
+                                        onChange={handleInputChange}
                                     />
-                                </ListItem>
+                                </div>
+                                <div className={styles.input}>
+                                    <TextField
+                                        id='diagnosis-input'
+                                        name='diagnosis'
+                                        className={classes.textField}
+                                        label='Diagnóstico'
+                                        variant='outlined'
+                                        // value={input.diagnosis}
+                                        multiline
+                                        rows={6}
+                                        className={classes.textField}
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
+                                <div className={styles.input}>
+                                    <TextField
+                                        id='ovservations-input'
+                                        name='observations'
+                                        label='Observaciones'
+                                        variant='outlined'
+                                        value={input.observations}
+                                        multiline
+                                        rows={6}
+                                        className={classes.textField}
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
                             </div>
-                            <div>
-                                <ListItem>
-                                    <Typography
-                                        gutterBottom
-                                        variant='h5'
-                                        component='h2'
+                            <Divider component='li' className={classes.divider} />
+                            <div className={styles.medicines}>
+                                <div className={styles.mydiv} autoFocus>
+                                    <p className={styles.mydivt}>Medicación indicada:</p>
+                                    {medicines && (
+                                        <div>
+                                            <ul>
+                                                {!!medicines.length &&
+                                                    medicines.map((med, index) => (
+                                                        <li
+                                                            className={styles.limed}
+                                                            key={index}
+                                                        >
+                                                            {med}
+                                                        </li>
+                                                    ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                    <div className={styles.onelinebtns}>
+                                        <Medicines handleEvent={getterMed} />
+                                        {patient && <PrintMeds info={infObj} />}
+                                    </div>
+                                </div>
+                                <div className={styles.mydiv2} autoFocus>
+                                    <p className={styles.mydivt2}>
+                                        Posología y administración:
+                                    </p>
+                                    <input
+                                        id='posologia-input'
+                                        name='posology'
+                                        className={styles.posinput}
+                                        onChange={handleInputChange}
+                                    />
+                                    <Button
+                                        name='guardar'
+                                        className={styles.btnprint}
+                                        size='small'
+                                        variant='outlined'
+                                        color='primary'
                                     >
-                                        {medic.name} {medic.lastname}
-                                    </Typography>
-                                </ListItem>
+                                        Imprimir
+                                    </Button>
+                                </div>
                             </div>
-                        </div>
-                        <div className={styles.medicSecondColumn}>
-                            <div>
-                                <ListItem>
-                                    <Typography
-                                        gutterBottom
-                                        variant='subtitle1'
-                                        component='h2'
+                            <Divider component='li' className={classes.divider} />
+                            <div className={styles.orders}>
+                                <div className={styles.mydiv} autoFocus>
+                                    <p className={styles.mydivt}>Estudios solicitados:</p>
+                                    {orders && (
+                                        <div>
+                                            <ul>
+                                                {!!orders.length &&
+                                                    orders.map((med, index) => (
+                                                        <li
+                                                            className={styles.limed}
+                                                            key={index}
+                                                        >
+                                                            {med}
+                                                        </li>
+                                                    ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                    <div className={styles.onelinebtns}>
+                                        <Orders handleEvent={getterOrder} />
+                                        {patient && <PrintOrders info={infObj} />}
+                                    </div>
+                                </div>
+                                <div className={styles.mydiv2} autoFocus>
+                                    <p className={styles.mydivt2}>
+                                        Indicaciones para la realización de los estudios:
+                                    </p>
+                                    <input
+                                        id='indicaciones-input'
+                                        name='instructions'
+                                        className={styles.posinput}
+                                        onChange={handleInputChange}
+                                    />
+                                    <Button
+                                        name='guardar'
+                                        className={styles.btnprint}
+                                        size='small'
+                                        variant='outlined'
+                                        color='primary'
                                     >
-                                        {medic.medic_license}
-                                    </Typography>
-                                </ListItem>
+                                        Imprimir
+                                    </Button>
+                                </div>
                             </div>
-                            <div>
-                                <ListItem>
-                                    <Typography
-                                        gutterBottom
-                                        variant='subtitle1'
-                                        component='h2'
+                            <Divider component='li' className={classes.divider} />
+                            <div className={styles.buttons}>
+                                <div className={styles.btn}>
+                                    <Button
+                                        className={classes.mainButton}
+                                        variant='contained'
+                                        size='large'
+                                        color='primary'
+                                        onClick={handleSubmit}
                                     >
-                                        {medic.medical_specialities[0].name}
-                                    </Typography>
-                                </ListItem>
+                                        Subir consulta
+                                    </Button>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                )}
-                <Divider component='li' />
-                {patient && (
-                    <div className={styles.patientData}>
-                        <div className={styles.patientFirstColumn}>
-                            <div>
-                                <ListItem>
-                                    <Typography
-                                        gutterBottom
-                                        variant='h6'
-                                        component='h2'
-                                    >
-                                        Paciente:
-                                    </Typography>
-                                </ListItem>
-                            </div>
-                            <div>
-                                <ListItem>
-                                    <Typography
-                                        gutterBottom
-                                        variant='h5'
-                                        component='h2'
-                                    >
-                                        {patient.name} {patient.lastname}
-                                    </Typography>
-                                </ListItem>
-                            </div>
-                        </div>
-                        <div className={styles.patientSecondColumn}>
-                            <div>
-                                <ListItem>
-                                    <Typography
-                                        gutterBottom
-                                        variant='subtitle1'
-                                        component='h2'
-                                    >
-                                        DNI: {patient.dni}
-                                    </Typography>
-                                </ListItem>
-                            </div>
-                            <div>
-                                <ListItem>
-                                    <Typography
-                                        gutterBottom
-                                        variant='subtitle1'
-                                        component='h2'
-                                    >
-                                        Edad: {getAge()}
-                                    </Typography>
-                                </ListItem>
-                            </div>
-                            <div>
-                                <ListItem>
-                                    <Typography
-                                        gutterBottom
-                                        variant='subtitle1'
-                                        component='h2'
-                                    >
-                                        Sexo: {patient.gender}
-                                    </Typography>
-                                </ListItem>
-                            </div>
-                        </div>
-                    </div>
-                )}
-                <Divider component='li' />
-                <div className={styles.form}>
-                    <div className={styles.input}>
-                        <TextField
-                            id='reason-input'
-                            name='reason'
-                            label='Razón de consulta'
-                            variant='outlined'
-                            multiline
-                            value={input.reason}
-                            rows={6}
-                            className={classes.textField}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div className={styles.input}>
-                        <TextField
-                            id='diagnosis-input'
-                            name='diagnosis'
-                            className={classes.textField}
-                            label='Diagnóstico'
-                            variant='outlined'
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <div className={styles.input}>
-                        <TextField
-                            id='ovservations-input'
-                            name='observations'
-                            label='Observaciones'
-                            variant='outlined'
-                            value={input.observations}
-                            multiline
-                            rows={6}
-                            className={classes.textField}
-                            onChange={handleInputChange}
-                        />
-                    </div>
+                        {/* </List> */}
+                    </Card>
                 </div>
-                <Divider component='li' />
-                <div className={styles.medicines}>
-                    <div className={styles.mydiv} autoFocus>
-                        <p className={styles.mydivt}>Medicación indicada:</p>
-                        {medicines && (
-                            <div>
-                                <ul>
-                                    {!!medicines.length &&
-                                        medicines.map((med, index) => (
-                                            <li
-                                                className={styles.limed}
-                                                key={index}
-                                            >
-                                                {med}
-                                            </li>
-                                        ))}
-                                </ul>
-                            </div>
-                        )}
-                        <div className={styles.onelinebtns}>
-                            <Medicines handleEvent={getterMed} />
-                            {patient && <PrintMeds info={infObj} />}
-                        </div>
-                    </div>
-                    <div className={styles.mydiv2} autoFocus>
-                        <p className={styles.mydivt2}>
-                            Posología y administración:
-                        </p>
-                        <input
-                            id='posologia-input'
-                            name='posology'
-                            className={styles.posinput}
-                            onChange={handleInputChange}
-                        />
-                        <Button
-                            name='guardar'
-                            className={styles.btnprint}
-                            size='small'
-                            variant='outlined'
-                            color='primary'
-                        >
-                            Imprimir
-                        </Button>
-                    </div>
-                </div>
-                <Divider component='li' />
-                <div className={styles.orders}>
-                    <div className={styles.mydiv} autoFocus>
-                        <p className={styles.mydivt}>Estudios solicitados:</p>
-                        {orders && (
-                            <div>
-                                <ul>
-                                    {!!orders.length &&
-                                        orders.map((med, index) => (
-                                            <li
-                                                className={styles.limed}
-                                                key={index}
-                                            >
-                                                {med}
-                                            </li>
-                                        ))}
-                                </ul>
-                            </div>
-                        )}
-                        <div className={styles.onelinebtns}>
-                            <Orders handleEvent={getterOrder} />
-                            {patient && <PrintOrders info={infObj} />}
-                        </div>
-                    </div>
-                    <div className={styles.mydiv2} autoFocus>
-                        <p className={styles.mydivt2}>
-                            Indicaciones para la realización de los estudios:
-                        </p>
-                        <input
-                            id='indicaciones-input'
-                            name='instructions'
-                            className={styles.posinput}
-                            onChange={handleInputChange}
-                        />
-                        <Button
-                            name='guardar'
-                            className={styles.btnprint}
-                            size='small'
-                            variant='outlined'
-                            color='primary'
-                        >
-                            Imprimir
-                        </Button>
-                    </div>
-                </div>
-                <Divider component='li' />
-                <div className={styles.buttons}>
-                    <div className={styles.btn}>
-                        <Button
-                            variant='contained'
-                            size='large'
-                            color='primary'
-                            onClick={handleSubmit}
-                        >
-                            Subir consulta
-                        </Button>
-                    </div>
-                </div>
-            </List>
-        </Card>
+            </div>
+        </ThemeProvider>
     );
 }

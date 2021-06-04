@@ -16,13 +16,55 @@ dividerFullWidth: {
     height: theme.spacing(7),
   }, */
 
+.cardContainer{
+    align-items: center;
+    background-color: #fafafa;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    /* height: 100%; */
+    min-height: 700px;
+    /* max-height: 700px; */
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+}
+.section {
+    font-size: 1.2rem;
+    width: 100%;
+    background-color: #41aea9;
+    color: white;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1;
+}
+.formContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+
+    z-index: 0;
+    margin:20px;
+    margin-top:120px;
+}
 .medicData{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    /* margin: 2%; */
-    margin-left: 2%;
-    margin-right: 2%;
+    margin-top: 0.7%;
+    margin-left: 9.5%;
+    margin-right: 9.5%;
+    /* padding:12px; */
+    z-index: 0;
 }
 
 .medicFirstColumn{
@@ -42,8 +84,9 @@ dividerFullWidth: {
     flex-direction: row;
     justify-content: space-between;
     margin-top: 0.7%;
-    margin-left: 2%;
-    margin-right: 2%;
+    margin-left: 9.5%;
+    margin-right: 9.5%;
+    /* padding:12px; */
 }
 
 .patientFirstColumn{
@@ -59,13 +102,18 @@ dividerFullWidth: {
     display:flex;
     flex-direction: column;
     justify-content: center;
-
-    margin-left: 8%;
-    margin-top: 2%;
-    margin-bottom: 2%;
+    padding:12px;
+    /* width: 79.2%; */
+    /* margin-left: 8%; */
+    /* margin-top: 2%;
+    margin-bottom: 2%; */
 }
 .input{
-    margin:2%;
+    /* width: 79.2%; */
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
 .buttons{
@@ -165,4 +213,5 @@ dividerFullWidth: {
     width: 80px;
     height: 30px;
     align-self: flex-end;
+    color:#41aea9;
 }

@@ -32,8 +32,8 @@ export default function PrintMeds({ info }) {
         <div>
             <Button
                 className={styles.addmed}
-                variant='outlined'
                 size='small'
+                variant='outlined'
                 color='primary'
                 onClick={handleClickOpen}
             >
@@ -100,11 +100,19 @@ export default function PrintMeds({ info }) {
                     <Button
                         name='cancelar'
                         onClick={handleClose}
+                        size='small'
+                        variant='outlined'
                         color='primary'
                     >
                         Cancelar
                     </Button>
-                    <Button name='guardar' onClick={handleSave} color='primary'>
+                    <Button 
+                        name='guardar' 
+                        onClick={handleSave} 
+                        size='small'
+                        variant='outlined'
+                        color='primary'
+                    >
                         Imprimir
                     </Button>
                 </DialogActions>

@@ -149,13 +149,20 @@ export default function Medicines({ handleEvent }) {
                     </List>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color='primary'>
+                    <Button 
+                        onClick={handleClose} 
+                        size='small'
+                        variant='outlined'
+                        color='primary'
+                    >
                         Cancelar
                     </Button>
                     {!!medicines.length && (
                         <Button
                             onClick={handleSave}
                             key={'savemed'}
+                            size='small'
+                            variant='outlined'
                             color='primary'
                         >
                             Guardar
