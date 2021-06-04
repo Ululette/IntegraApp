@@ -16,6 +16,8 @@ const GET_STATES = 'GET_STATES';
 const GET_LOCALITIES = 'GET_LOCALITIES';
 //--------USERS------------------------
 const GET_USERS = 'GET_USERS';
+//--------GUEST------------------------
+const GET_REF_CONTACT = 'GET_REF_CONTACT';
 
 export {
     SET_NP_BEN_SEL,
@@ -29,5 +31,6 @@ export {
     GET_AFFILIATES,
     GET_STATES,
     GET_LOCALITIES,
-    GET_USERS
+    GET_USERS,
+    GET_REF_CONTACT,
 };

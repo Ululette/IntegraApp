@@ -2,14 +2,13 @@ import React from 'react';
 import styles from './navBar.module.css';
 import logoNav from '../../../assets/images/logo.png';
 import { NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-const NavBar = ({ history }) => {
+const NavBar = () => {
+    const myRef = useSelector((state) => state.plans.refContact);
+
     const scrollToBottom = () => {
-        window.scroll({
-            top: document.body.offsetHeight - 1150,
-            left: 0,
-            behavior: 'smooth',
-        });
+        myRef.current.scrollIntoView();
     };
 
     return (

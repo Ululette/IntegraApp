@@ -5,7 +5,8 @@ import {
     ADD_NP_BEN,
     SEND_NP_FORM,
     GET_STATES,
-    GET_LOCALITIES
+    GET_LOCALITIES,
+    GET_REF_CONTACT,
 } from '../actions/constants.actions.js';
 
 const initialState = {
@@ -18,8 +19,10 @@ const initialState = {
     //affiliates
     allAffiliates: [],
     //-------FormReg1
-    allStates:[],
-    allLocalities:[]
+    allStates: [],
+    allLocalities: [],
+    //-------ContactGuest
+    refContact: '',
 };
 
 function rootReducer(state = initialState, action) {
@@ -49,22 +52,24 @@ function rootReducer(state = initialState, action) {
                 ...state,
                 sended: action.payload,
             };
-            case GET_STATES:
-                return {
-                    ...state,
-                    allStates: action.payload,
-                };
-            case GET_LOCALITIES:
-                return {
-                    ...state,
-                    allLocalities: action.payload,
-                };
+        case GET_STATES:
+            return {
+                ...state,
+                allStates: action.payload,
+            };
+        case GET_LOCALITIES:
+            return {
+                ...state,
+                allLocalities: action.payload,
+            };
+        case GET_REF_CONTACT:
+            return {
+                ...state,
+                refContact: action.payload,
+            };
         default:
             return state;
     }
 }
 
 export default rootReducer;
-
-
-

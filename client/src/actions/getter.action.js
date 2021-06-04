@@ -4,6 +4,7 @@ import {
     GET_AFFILIATES,
     GET_STATES,
     GET_LOCALITIES,
+    GET_REF_CONTACT,
 } from './constants.actions';
 import supabase from '../supabase.config';
 
@@ -75,4 +76,18 @@ function getLocalities(idState) {
         }
     };
 }
-export { getPlans, getBenefits, getAffiliates, getStates, getLocalities };
+
+function getRefFromContact(payload) {
+    return {
+        type: GET_REF_CONTACT,
+        payload,
+    };
+}
+export {
+    getPlans,
+    getBenefits,
+    getAffiliates,
+    getStates,
+    getLocalities,
+    getRefFromContact,
+};

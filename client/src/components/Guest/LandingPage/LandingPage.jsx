@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styles from './LandingPage.module.css';
 import InfoPlanes from '../InfoPlans/InfoPlanes.jsx';
 import ContactForm from '../ContactForm/ContactForm.jsx';
@@ -12,6 +12,8 @@ import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import { makeStyles } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
+import { useDispatch } from 'react-redux';
+import { getRefFromContact } from '../../../actions/getter.action.js';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,8 +39,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function LandingPage() {
     const classes = useStyles();
+    const dispatch = useDispatch();
+
+    const myRef = useRef(null);
+
     useEffect(() => {
         Aos.init({ duration: 2000 });
+        dispatch(getRefFromContact(myRef));
+        //eslint-disable-next-line
     }, []);
 
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -278,6 +286,7 @@ export default function LandingPage() {
             </section>
             <section
                 id='contact'
+                ref={myRef}
                 data-aos='zoom-out-up'
                 className={styles.contactSection}
             >
