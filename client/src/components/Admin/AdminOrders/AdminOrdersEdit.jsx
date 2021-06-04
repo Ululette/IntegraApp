@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { InputLabel, MenuItem, Select, FormControl } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles,lighten } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
@@ -37,6 +37,25 @@ const useStyles = makeStyles((theme) => ({
     chip: {
         margin: theme.spacing(0.5),
     },
+    popup: {
+        color: '#fafafa',
+        backgroundColor: '#2c7f7b',
+        fontWeight: 'bold',
+        fontSize: '30px',
+    },
+    popupBtn: {
+        color: '#fafafa',
+        padding: theme.spacing(0.5),
+        border: '3px solid #2c7f7b',
+        backgroundColor: '#2c7f7b',
+        fontWeight: 'bold',
+        fontSize: '15px',
+        '&:hover': {
+            backgroundColor: lighten('#fafafa', 0.2),
+            color: '#2c7f7b',
+            padding: theme.spacing(0.5),
+        },
+    }
 }));
 
 function AdminMedicEdit({
@@ -103,7 +122,7 @@ function AdminMedicEdit({
     console.log(status, 'status')
     return (
         <Dialog open={editActive} onClose={handleClose} onSubmit={handleSubmit}>
-            <DialogTitle>Editar estado</DialogTitle>
+            <DialogTitle className={classes.popup}>EDITAR ESTADO</DialogTitle>
             <DialogContent>
              {/*    <DialogContentText>
                     Formulario para editar medico.
@@ -115,15 +134,19 @@ function AdminMedicEdit({
                     name='status'
                     onChange={handleChange}
                     value={input.status}
-                    id="demo-simple-select"
-                    labelId="demo-simple-select-label"
-                    
-                
+                    /* id="demo-simple-select"
+                    labelId="demo-simple-select-label" */
+                    inputProps={{
+                        style: { width: '177px' },
+                    }}
+                    variant='outlined'
+                    size='small'
+                    native
                >
                     {status.map((el, index) => (
-                        <MenuItem key={`state-${index}`} value={el}>
+                        <option key={`state-${index}`} value={el}>
                             {el.name}
-                        </MenuItem>
+                        </option>
                     ))}
                 </Select>
                 </FormControl>
@@ -132,10 +155,10 @@ function AdminMedicEdit({
 
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color='primary'>
+                <Button onClick={handleClose} className={classes.popupBtn}>
                     Cancelar
                 </Button>
-                <Button onClick={handleSubmit} type='submit' color='primary'>
+                <Button onClick={handleSubmit} type='submit' className={classes.popupBtn}>
                     Editar
                 </Button>
             </DialogActions>
