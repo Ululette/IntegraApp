@@ -342,7 +342,6 @@ export default function MyOrders() {
     };
 
     // const handleInfo = (row) => {
-    //     console.log(row);
     //     if(row){
     //         Swal.fire({
     //             position: 'center',

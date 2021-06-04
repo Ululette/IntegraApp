@@ -163,7 +163,6 @@ export default function RegStepper() {
                 .from('companies')
                 .select('id')
                 .eq('cuit', datosEmpresa.company_cuit);
-            console.log(companyData, 'companyData');
 
             if (companyData.length === 0) {
                 const { data: newId, error: errorInsertCompany } =
@@ -175,8 +174,6 @@ export default function RegStepper() {
                             email: datosEmpresa.company_email,
                         },
                     ]);
-                console.log(errorInsertCompany, 'errorInsertCompany');
-                console.log(newId, 'newId');
 
                 idCompany = newId[0].id;
             } else {
@@ -200,9 +197,7 @@ export default function RegStepper() {
                 },
             ]);
 
-            console.log(partner, 'error partner');
-
-            const { error: address } = await supabase.from('address').insert([
+            await supabase.from('address').insert([
                 {
                     street: datosTitular.street_name,
                     street_number: datosTitular.number,
@@ -214,8 +209,6 @@ export default function RegStepper() {
                         datosTitular.apartment && datosTitular.apartment,
                 },
             ]);
-
-            console.log(address);
 
             await supabase.from('medical_records').insert([
                 {

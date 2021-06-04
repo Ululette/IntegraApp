@@ -404,7 +404,6 @@ export default function UserProfile({ firebase }) {
                 .storage()
                 .ref(`users/${userUid}/profile${extension}`)
                 .put(file);
-            console.log('Se subio exitosamente.');
             let imgSrc = await firebase
                 .storage()
                 .ref(`users/${userUid}/profile${extension}`)

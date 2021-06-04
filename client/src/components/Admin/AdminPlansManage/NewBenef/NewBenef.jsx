@@ -128,7 +128,6 @@ export default function NewBenef() {
                 break;
 
             case 'description':
-                console.log(event.target.value);
                 // let descreg =
                 //   /[0-9a-zA-ZÀ-ÿ\u00f1\u00d1\.]+[ ]?[0-9a-z A-ZÀ-ÿ\u00f1\u00d1][:punct:]*$/;
 
@@ -159,7 +158,6 @@ export default function NewBenef() {
 
     async function handlesubmit(e) {
         e.preventDefault();
-        console.log('vas a guardar:', state);
 
         // Agrega el nuevo beneficio en la tabla benefits.
         async function addNewBenef(state) {

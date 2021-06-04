@@ -307,7 +307,6 @@ const EnhancedTableToolbar = (props) => {
         }
 
         if (!result.length) {
-            console.log('no hay resultados');
             setToShowRows(rows);
             MySwal.fire('Sin resultados...', 'No hay coincidencias!', 2000);
         } else {
@@ -526,7 +525,6 @@ export default function MedicsTable() {
     }, []);
 
     const handleEdit = (medicData) => {
-        console.log(medicData, 'medicData Tabs');
         setMedicData(medicData);
         setEditActive(true);
         if (editActive) setEditActive(false);
@@ -652,7 +650,10 @@ export default function MedicsTable() {
                                                         classes.iconFilter
                                                     }
                                                 >
-                                                    <IconButton size='small' aria-label='Edit'>
+                                                    <IconButton
+                                                        size='small'
+                                                        aria-label='Edit'
+                                                    >
                                                         <EditIcon
                                                             onClick={() =>
                                                                 handleEdit(row)
@@ -666,7 +667,10 @@ export default function MedicsTable() {
                                                         classes.iconFilter
                                                     }
                                                 >
-                                                    <IconButton size='small' aria-label='Delete'>
+                                                    <IconButton
+                                                        size='small'
+                                                        aria-label='Delete'
+                                                    >
                                                         <DeleteIcon
                                                             onClick={() =>
                                                                 handleDelete(

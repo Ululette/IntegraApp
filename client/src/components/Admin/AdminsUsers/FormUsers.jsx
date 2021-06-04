@@ -26,7 +26,6 @@ const FormUsers = () => {
     // }, [filter]);
 
     const handleFilter = (filterList) => {
-        //console.log('pase por form user', filterList);
         if (filterList === 'reset') setRows(users);
         else setRows(filterList);
     };

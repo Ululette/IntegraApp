@@ -193,26 +193,20 @@ const EnhancedTableToolbar = (props) => {
 
     const fetchConsult = async (dni) => {
         if (!dni) {
-            const { data: consults, error: errorFetch } = await supabase
+            const { data: consults } = await supabase
                 .from('medical_consultations')
                 .select('*,partners:partner_dni(dni,name,lastname)')
                 .eq('medic_dni', userDni);
 
-            console.log(consults);
-            console.error('error fetch:', errorFetch);
             setToShowRows(consults);
         } else {
-            const { data: consults, error: errorFetch } = await supabase
+            const { data: consults } = await supabase
                 .from('medical_consultations')
                 .select('*,partners:partner_dni(dni,name,lastname)')
                 .eq('medic_dni', userDni);
             let array = consults.filter((co) =>
                 co.partners.dni.toString().includes(dni)
             );
-            setToShowRows(array);
-
-            console.log(array);
-            console.error('error fetch:', errorFetch);
             setToShowRows(array);
         }
     };

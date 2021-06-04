@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { statesMedic } from '../../../functions/states.js';
 /* import styles from './AdminOrdersEdit.css';
- */import supabase from '../../../supabase.config.js';
+ */ import supabase from '../../../supabase.config.js';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
@@ -39,54 +39,43 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function AdminMedicEdit({
-    status,
-    data,
-    setEditActive,
-    editActive,
-}) {
+function AdminMedicEdit({ status, data, setEditActive, editActive }) {
     const classes = useStyles();
     const MySwal = withReactContent(Swal);
     let [input, setInput] = React.useState({
-        id:'',
-        status:''
+        id: '',
+        status: '',
     });
-
 
     const handleClose = () => {
         setEditActive(false);
     };
- 
-  
 
     const handleChange = (e) => {
-        const value = e.target.value;//autorizada
-        setInput({id:value.id,status:value.name} );
+        const value = e.target.value; //autorizada
+        setInput({ id: value.id, status: value.name });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setEditActive(false);
-        console.log(data)
-        console.log(input,'input')
-    MySwal.fire({
+        MySwal.fire({
             title: `Esta seguro que desea actualizar el estado de la orden del paciente: ${data.partners.name} ${data.partners.lastname} con DNI: ${data.partners.dni}?`,
             icon: 'question',
             showCloseButton: true,
             showCancelButton: true,
-        }).then(async (res) => { 
-        if (res.isConfirmed) {
-              
-                try  {
+        }).then(async (res) => {
+            if (res.isConfirmed) {
+                try {
                     await supabase
-                    .from('orders')
-                    .update({ status: input.id })
-                    .eq('id', data.id)
+                        .from('orders')
+                        .update({ status: input.id })
+                        .eq('id', data.id);
                     MySwal.fire({
                         title: 'Se edito el estado con exito!',
                         icon: 'success',
                         timer: 2000,
-                    }).then(() => window.location.reload()); 
+                    }).then(() => window.location.reload());
                 } catch (error) {
                     console.log(error);
                     MySwal.fire({
@@ -96,40 +85,34 @@ function AdminMedicEdit({
                     });
                 }
             }
-        }); 
+        });
     };
 
     if (!data) return <CircularProgress />;
-    console.log(status, 'status')
     return (
         <Dialog open={editActive} onClose={handleClose} onSubmit={handleSubmit}>
             <DialogTitle>Editar estado</DialogTitle>
             <DialogContent>
-             {/*    <DialogContentText>
+                {/*    <DialogContentText>
                     Formulario para editar medico.
                 </DialogContentText> */}
                 <InputLabel id='demo-simple-select'>Estado</InputLabel>
-                
+
                 <FormControl>
                     <Select
-                    name='status'
-                    onChange={handleChange}
-                    value={input.status}
-                    id="demo-simple-select"
-                    labelId="demo-simple-select-label"
-                    
-                
-               >
-                    {status.map((el, index) => (
-                        <MenuItem key={`state-${index}`} value={el}>
-                            {el.name}
-                        </MenuItem>
-                    ))}
-                </Select>
+                        name='status'
+                        onChange={handleChange}
+                        value={input.status}
+                        id='demo-simple-select'
+                        labelId='demo-simple-select-label'
+                    >
+                        {status.map((el, index) => (
+                            <MenuItem key={`state-${index}`} value={el}>
+                                {el.name}
+                            </MenuItem>
+                        ))}
+                    </Select>
                 </FormControl>
-                
-  
-
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} color='primary'>

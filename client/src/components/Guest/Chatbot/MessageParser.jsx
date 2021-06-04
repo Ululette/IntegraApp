@@ -1,54 +1,95 @@
 class MessageParser {
     constructor(actionProvider) {
-      this.actionProvider = actionProvider;
+        this.actionProvider = actionProvider;
     }
-  
+
     parse(message) {
-      console.log(typeof message)
-      const lowerCaseMessage = message.toLowerCase()
-      console.log(message, '2')
-      if (lowerCaseMessage.includes("ja") || lowerCaseMessage.includes("hola") || lowerCaseMessage.includes("buenos dias") ||  lowerCaseMessage.includes("buenas")) {
-        this.actionProvider.greet()
-      }
-      if (lowerCaseMessage.includes("plan") || lowerCaseMessage.includes("mi")) {
-        this.actionProvider.handleMyPlan()
-      }
-         if (/\d/.test(message) === true) {
-        this.actionProvider.handleDni(message)
-      }
-  /*     if (/\d/.test(message) === true && message.length === 3) {
+        const lowerCaseMessage = message.toLowerCase();
+        if (
+            lowerCaseMessage.includes('ja') ||
+            lowerCaseMessage.includes('hola') ||
+            lowerCaseMessage.includes('buenos dias') ||
+            lowerCaseMessage.includes('buenas')
+        ) {
+            this.actionProvider.greet();
+        }
+        if (
+            lowerCaseMessage.includes('plan') ||
+            lowerCaseMessage.includes('mi')
+        ) {
+            this.actionProvider.handleMyPlan();
+        }
+        if (/\d/.test(message) === true) {
+            this.actionProvider.handleDni(message);
+        }
+        /*     if (/\d/.test(message) === true && message.length === 3) {
         this.actionProvider.handlePhoneNumber(message)
       } */
 
-
-      if (lowerCaseMessage.includes("emergencia") || lowerCaseMessage.includes("numeros")) {
-        this.actionProvider.handleEmergencyList()
-      }
-      if (lowerCaseMessage.includes("planes") || lowerCaseMessage.includes("comprar") ||  lowerCaseMessage.includes("familia")) {
-        this.actionProvider.handlePlansList()      
-      }
-      if (lowerCaseMessage.includes("pregunta") || lowerCaseMessage.includes("duda")) {
-        this.actionProvider.handleFAQList() 
-      }
-      if (lowerCaseMessage.includes("cobertura") || lowerCaseMessage.includes("lugar") || lowerCaseMessage.includes("lugares") || lowerCaseMessage.includes("donde")) {
-        this.actionProvider.handleStatesList()
-      }
-      if (lowerCaseMessage.includes("asociarme") || lowerCaseMessage.includes("informacion")|| lowerCaseMessage.includes("contacto")) {
-        this.actionProvider.handleFormList()
-      }
-      if(lowerCaseMessage.includes("gracias")) {
-        this.actionProvider.thanks()
-      }
-     if(lowerCaseMessage && !lowerCaseMessage.includes("gracias") && !lowerCaseMessage.includes("asociarme") &&!lowerCaseMessage.includes("informacion")&&
-     !lowerCaseMessage.includes("contacto") &&!lowerCaseMessage.includes("cobertura") &&!lowerCaseMessage.includes("lugar") &&
-     !lowerCaseMessage.includes("lugares") &&!lowerCaseMessage.includes("donde") &&!lowerCaseMessage.includes("pregunta") &&!lowerCaseMessage.includes("duda")
-     &&!lowerCaseMessage.includes("planes") &&!lowerCaseMessage.includes("comprar") &&!lowerCaseMessage.includes("plan") && !lowerCaseMessage.includes("familia")
-     &&!lowerCaseMessage.includes("emergencia") &&!lowerCaseMessage.includes("numeros")
-     &&!lowerCaseMessage.includes("hola") &&!lowerCaseMessage.includes("buenos dias") && !lowerCaseMessage.includes("buenas")  && !lowerCaseMessage.includes("ja") && !/\d/.test(message) === true) {
-        this.actionProvider.sorry()
-      }  
-     
+        if (
+            lowerCaseMessage.includes('emergencia') ||
+            lowerCaseMessage.includes('numeros')
+        ) {
+            this.actionProvider.handleEmergencyList();
+        }
+        if (
+            lowerCaseMessage.includes('planes') ||
+            lowerCaseMessage.includes('comprar') ||
+            lowerCaseMessage.includes('familia')
+        ) {
+            this.actionProvider.handlePlansList();
+        }
+        if (
+            lowerCaseMessage.includes('pregunta') ||
+            lowerCaseMessage.includes('duda')
+        ) {
+            this.actionProvider.handleFAQList();
+        }
+        if (
+            lowerCaseMessage.includes('cobertura') ||
+            lowerCaseMessage.includes('lugar') ||
+            lowerCaseMessage.includes('lugares') ||
+            lowerCaseMessage.includes('donde')
+        ) {
+            this.actionProvider.handleStatesList();
+        }
+        if (
+            lowerCaseMessage.includes('asociarme') ||
+            lowerCaseMessage.includes('informacion') ||
+            lowerCaseMessage.includes('contacto')
+        ) {
+            this.actionProvider.handleFormList();
+        }
+        if (lowerCaseMessage.includes('gracias')) {
+            this.actionProvider.thanks();
+        }
+        if (
+            lowerCaseMessage &&
+            !lowerCaseMessage.includes('gracias') &&
+            !lowerCaseMessage.includes('asociarme') &&
+            !lowerCaseMessage.includes('informacion') &&
+            !lowerCaseMessage.includes('contacto') &&
+            !lowerCaseMessage.includes('cobertura') &&
+            !lowerCaseMessage.includes('lugar') &&
+            !lowerCaseMessage.includes('lugares') &&
+            !lowerCaseMessage.includes('donde') &&
+            !lowerCaseMessage.includes('pregunta') &&
+            !lowerCaseMessage.includes('duda') &&
+            !lowerCaseMessage.includes('planes') &&
+            !lowerCaseMessage.includes('comprar') &&
+            !lowerCaseMessage.includes('plan') &&
+            !lowerCaseMessage.includes('familia') &&
+            !lowerCaseMessage.includes('emergencia') &&
+            !lowerCaseMessage.includes('numeros') &&
+            !lowerCaseMessage.includes('hola') &&
+            !lowerCaseMessage.includes('buenos dias') &&
+            !lowerCaseMessage.includes('buenas') &&
+            !lowerCaseMessage.includes('ja') &&
+            !/\d/.test(message) === true
+        ) {
+            this.actionProvider.sorry();
+        }
     }
-  }
-  
-  export default MessageParser
+}
+
+export default MessageParser;

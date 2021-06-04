@@ -148,15 +148,15 @@ const useToolbarStyles = makeStyles((theme) => ({
     highlight:
         theme.palette.type === 'light'
             ? {
-                color: '#fafafa',
-                backgroundColor: lighten(blue[500], 0.5), //color barra superior cuando selecciono item
-                fontWeight: 'bold',
-                fontSize: '30px',
-            }
+                  color: '#fafafa',
+                  backgroundColor: lighten(blue[500], 0.5), //color barra superior cuando selecciono item
+                  fontWeight: 'bold',
+                  fontSize: '30px',
+              }
             : {
-                color: theme.palette.text.primary,
-                backgroundColor: lighten('#34a7a1', 0.3),
-            },
+                  color: theme.palette.text.primary,
+                  backgroundColor: lighten('#34a7a1', 0.3),
+              },
     title: {
         flex: '1 1 100%',
         fontWeight: 'bold',
@@ -299,7 +299,6 @@ const EnhancedTableToolbar = (props) => {
                     } else alert(`no existe`);
                     break;
                 case 'role':
-                    console.log(listFilter);
                     //eslint-disable-next-line
                     res = listFilter.filter((user) => user.role == value);
 
@@ -604,7 +603,6 @@ export default function TableUsers({ rows, handleFilter, allUsers }) {
             inputPlaceholder: 'Select an action',
             showCancelButton: true,
             inputValidator: async (res) => {
-                console.log('res', res);
                 if (res) {
                     for (let i = 0; i < selected.length; i++) {
                         //actualizo base

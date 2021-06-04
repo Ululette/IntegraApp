@@ -69,14 +69,12 @@ async function getData(query) {
     let { selection, param } = query;
     let column = selection === 'orders' ? 'study_name' : 'drug_name';
     try {
-        console.log('queryParams', selection, param);
         const { data, error: dataError } = await supabase
             .from(selection)
             .select(
                 `*, medical_consultations(partner: partner_dni(name, lastname))`
             )
             .ilike(`${column}`, `%${param}%`);
-        data && console.log(data);
         dataError && console.log(dataError);
         return data ? data : dataError;
     } catch (err) {

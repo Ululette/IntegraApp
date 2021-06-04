@@ -12,7 +12,6 @@ function handlePostalCode(postalCode) {
         results.concat(info);
     };
     search();
-    console.log(results);
     return results;
 }
 

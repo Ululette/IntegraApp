@@ -358,7 +358,6 @@ const DatosSalud = () => {
         });
     };
     const handleDate = (e) => {
-        console.log('entro el input', e.target.value);
         setDateInputs((prevState) => {
             return {
                 ...prevState,
