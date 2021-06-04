@@ -3,6 +3,12 @@
     margin: 25px auto;
 }
 
+.swal2-container,
+.swal2-center,
+.swal2-backdrop-show {
+    z-index: 600000;
+}
+
 .editMedic {
     visibility: hidden;
     cursor: pointer;
@@ -10,7 +16,7 @@
     border: none;
 }
 
-.medicContainer:hover>.editMedic {
+.medicContainer:hover > .editMedic {
     visibility: visible;
 }
 
@@ -29,22 +35,22 @@
 }
 
 .accepted {
-    background-color: #01FF70;
+    background-color: #01ff70;
     border-radius: 25px;
 }
 
 .pending {
-    background-color: #FF851B;
+    background-color: #ff851b;
     border-radius: 25px;
 }
 
 .rejected {
-    background-color:#FFCCCC;
+    background-color: #ffcccc;
     border-radius: 25px;
 }
 
 .withdrawn {
-    background-color:#aaaaaa;
+    background-color: #aaaaaa;
     border-radius: 25px;
 }
 

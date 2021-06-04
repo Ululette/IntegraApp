@@ -133,10 +133,18 @@ function AdminMedicAdd({ medicSpecialities, firebase }) {
             address.postalCode !== '' &&
             String(address.postalCode).length >= 4
         ) {
-            const { data } = await supabase
+            const { data, error: errorsito } = await supabase
                 .from('localities')
                 .select('name, postal_code, states (name)')
                 .eq('postal_code', address.postalCode);
+            if (errorsito || data.length === 0)
+                return MySwal.fire({
+                    title: 'No existe ese codigo postal.',
+                    icon: 'error',
+                    showCancelButton: false,
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#00897B',
+                });
             setLocalities(data);
             setAddress({ ...address, state: data[0].states.name });
         }
@@ -170,9 +178,8 @@ function AdminMedicAdd({ medicSpecialities, firebase }) {
             MySwal.fire({
                 title: 'Se agregó al médico con éxito.',
                 icon: 'success',
-                timer: 2000
-            })
-
+                timer: 2000,
+            });
         } catch (error) {
             MySwal.fire({
                 title: 'No se pudo agregar al medico.',
@@ -191,25 +198,18 @@ function AdminMedicAdd({ medicSpecialities, firebase }) {
 
         await firebase
             .auth()
-            .createUserWithEmailAndPassword(
-                input.email,
-                String(input.dni)
-            );
+            .createUserWithEmailAndPassword(input.email, String(input.dni));
 
-        await firebase
-            .auth()
-            .sendPasswordResetEmail(input.email);
+        await firebase.auth().sendPasswordResetEmail(input.email);
 
-         try {
+        try {
             MySwal.fire({
                 title: 'Se creó un nuevo usuario médico!.',
                 text: 'Debe resetear su password. Le llegará el link por mail.',
                 icon: 'success',
                 timer: 2000,
-            })
-            .then(()=> window.location.reload())
-            
-        } catch (error){
+            }).then(() => window.location.reload());
+        } catch (error) {
             MySwal.fire({
                 title: 'No se pudo agregar al medico.',
                 text: error.message,
@@ -362,70 +362,70 @@ function AdminMedicAdd({ medicSpecialities, firebase }) {
                         ))}
                     </Paper>
                     <p>Direccion</p>
-                <TextField
-                    autoFocus
-                    value={address.street}
-                    margin='dense'
-                    name='street'
-                    label='Calle'
-                    type='text'
-                    onChange={handleChangeAddress}
-                    fullWidth
-                />
-                <TextField
-                    autoFocus
-                    value={address.number}
-                    margin='dense'
-                    name='number'
-                    label='Numero'
-                    type='text'
-                    onChange={handleChangeAddress}
-                    fullWidth
-                />
-                <TextField
-                    autoFocus
-                    value={address.floor}
-                    margin='dense'
-                    name='floor'
-                    label='Piso'
-                    type='text'
-                    onChange={handleChangeAddress}
-                    fullWidth
-                />
-                <TextField
-                    autoFocus
-                    value={address.postalCode}
-                    margin='dense'
-                    name='postalCode'
-                    label='Codigo postal'
-                    type='text'
-                    onChange={handleChangeAddress}
-                    onBlur={handlePostalCode}
-                    fullWidth
-                />
-                <Select name='locality' onChange={handleChangeAddress}>
-                    {localities.length === 0
-                        ? null
-                        : localities.map((el, index) => (
-                              <MenuItem
-                                  key={`locality-${index}`}
-                                  value={el.name}
-                                  name='locality'
-                              >
-                                  {el.name}
-                              </MenuItem>
-                          ))}
-                </Select>
-                <TextField
-                    autoFocus
-                    margin='dense'
-                    name='state'
-                    label='Provincia'
-                    value={address.state}
-                    disabled
-                    type='text'
-                    fullWidth
-                />
+                    <TextField
+                        autoFocus
+                        value={address.street}
+                        margin='dense'
+                        name='street'
+                        label='Calle'
+                        type='text'
+                        onChange={handleChangeAddress}
+                        fullWidth
+                    />
+                    <TextField
+                        autoFocus
+                        value={address.number}
+                        margin='dense'
+                        name='number'
+                        label='Numero'
+                        type='text'
+                        onChange={handleChangeAddress}
+                        fullWidth
+                    />
+                    <TextField
+                        autoFocus
+                        value={address.floor}
+                        margin='dense'
+                        name='floor'
+                        label='Piso'
+                        type='text'
+                        onChange={handleChangeAddress}
+                        fullWidth
+                    />
+                    <TextField
+                        autoFocus
+                        value={address.postalCode}
+                        margin='dense'
+                        name='postalCode'
+                        label='Codigo postal'
+                        type='text'
+                        onChange={handleChangeAddress}
+                        onBlur={handlePostalCode}
+                        fullWidth
+                    />
+                    <Select name='locality' onChange={handleChangeAddress}>
+                        {localities.length === 0
+                            ? null
+                            : localities.map((el, index) => (
+                                  <MenuItem
+                                      key={`locality-${index}`}
+                                      value={el.name}
+                                      name='locality'
+                                  >
+                                      {el.name}
+                                  </MenuItem>
+                              ))}
+                    </Select>
+                    <TextField
+                        autoFocus
+                        margin='dense'
+                        name='state'
+                        label='Provincia'
+                        value={address.state}
+                        disabled
+                        type='text'
+                        fullWidth
+                    />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCancel} className={classes.popupBtn}>
