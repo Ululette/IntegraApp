@@ -32,13 +32,14 @@ const DatosRevision = () => {
     return (
         <div className={styles.form}>
             <div className={styles.title}>
-                <h1>Revision de Datos </h1>
+                <h1>Revision de Datos <Divider></Divider> </h1>
             </div>
             <div id='lacolumna' className={styles.ajuste}>
                 <div className={styles.datos}>
                     <div className={styles.datosTitular}>
                         <div className={styles.firstColumn}>
                             <h2>Datos del Titular</h2>
+                            <Divider></Divider>
                             <h4>Nombre: {datosTitular.first_name}</h4>
                             <h4>Apellido: {datosTitular.last_name}</h4>
                             <h4>Genero: {datosTitular.gender}</h4>
@@ -66,9 +67,8 @@ const DatosRevision = () => {
                                 Localidad: {datosTitular.locality.split('-')[1]}
                             </h4>
                         </div>
-                        <Divider></Divider>
                         <div className={styles.datosEmpresa}>
-                            <h2>Datos del Empresa</h2>
+                            <h2>Datos del Empresa <Divider></Divider></h2>
 
                             <h4>Razón Social:{datosEmpresa.bussines_name}</h4>
                             <h4>
@@ -85,9 +85,11 @@ const DatosRevision = () => {
                     </div>
 
                     <div ref={ref} id='Declaration' className={styles.salud}>
-                        <h2>Declaracion Jurada de Salud</h2>
-                        <h3>{datosDeclaration.completeName}</h3>
-                        <h4>{datosTitular.dni}</h4>
+                        <h2>Declaracion Jurada de Salud
+                        <Divider></Divider>
+                        </h2>
+                    
+                        <h4>DNI : {datosTitular.dni}</h4>
                         {datosDeclaration.diabetes === 'Si' ? (
                             <h4>
                                 Diabetes<br></br>
@@ -156,21 +158,22 @@ const DatosRevision = () => {
                                 {datosDeclaration.othersD}
                             </h4>
                         ) : null}
-                        <Divider></Divider>
+                        
 
                         {datosDeclaration.surgeryProt === 'Si' ? (
                             <h4>
                                 {' '}
                                 Operaciones/Protesís <br></br>
                                 {datosDeclaration.surgeryProtD}
-                            </h4>
+                                                            </h4>
                         ) : null}
-                        <Divider></Divider>
+                        
 
                         {datosDeclaration.hearing === 'Si' ? (
                             <h4>
                                 {' '}
                                 Dificultades Auditivas<br></br>
+                                
                                 {datosDeclaration.hearingD}
                             </h4>
                         ) : null}
@@ -196,11 +199,12 @@ const DatosRevision = () => {
                                 {datosDeclaration.faintingD}
                             </h4>
                         ) : null}
-                        <Divider></Divider>
+                        
 
                         {datosDeclaration.psychological === 'Si' ? (
                             <h4>
                                 Tratamiento Psicologico<br></br>
+                                
                                 {datosDeclaration.psychologicalD}
                             </h4>
                         ) : null}
@@ -233,7 +237,7 @@ const DatosRevision = () => {
                         Descargar en Pdf
                     </Button>
                 )}
-                {/* // <button onClick={}> probando ese pdf</button>} */}
+              
             </Pdf>
         </div>
     );
