@@ -25,6 +25,8 @@ import PopUpEdit from '../Speciality/PopUpEdit';
 import supabase from '../../../supabase.config.js';
 import InputSpecialities from './InputSpecialities';
 
+
+
 //crear tabla  OK
 //traer especialidades de base >> redux
 //agregar data
@@ -243,7 +245,7 @@ export default function EnhancedTable({ rows,handlerButtonClick }) {
     const [open, setOpen] = useState(false);
     const [nameSpeciality, setNameSpeciality] = useState('');
     const MySwal = withReactContent(Swal);
-
+    const base = rows;
 
     const addClick2 = (value)=>{
         handlerButtonClick(value);
@@ -302,14 +304,27 @@ export default function EnhancedTable({ rows,handlerButtonClick }) {
     };
     const handleEdit = (e, name) => {
         e.preventDefault();
-        const updateSpeciality = async () => {
+        //preguntar si existe antes de actualizar
+        let buscado = base.find(
+            (item) => item.name.toUpperCase() === e.target[0].value.toUpperCase()
+        );
+        if(!buscado){
+            const updateSpeciality = async () => {
             await supabase
                 .from('medical_specialities')
                 .update({ name: e.target[0].value })
                 .match({ name: nameSpeciality });
-        };
-        updateSpeciality(name);
-        handleClose();
+            };
+            updateSpeciality(name);
+            handleClose();
+        }else{
+            // Swal.fire({
+            //     title: `La especialidad ${buscado.name.toUpperCase()} ya existe.`,
+            //     icon: 'info',
+            // });
+           // alert(`La especialidad ${buscado.name.toUpperCase()} ya existe.`)
+        }
+        
     };
     const emptyRows =
         rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);

@@ -18,8 +18,12 @@
     margin-left: 13%;
 }
 .ajuste {
+    width: 100%;
     display: flex;
-    flex-wrap: wrap;
+
+    justify-content:space-around;
+    
+
 }
 
 .datosTitular {
