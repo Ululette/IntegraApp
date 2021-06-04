@@ -23,11 +23,13 @@ const useStyles = makeStyles((theme) => ({
     title2: {
         width: '100%',
         background: lighten('#34a7a1', 0.6),
-        flex: '1 1 100%',
         fontWeight: 'bold',
         fontSize: '1.4rem',
         color: '#fafafa',
         textAlign: 'center',
+        backgroundColor: 'rgb(112, 193, 189)',
+        padding:'10px',
+        
     },
     title: {
         color: '#212121',
@@ -39,30 +41,48 @@ const useStyles = makeStyles((theme) => ({
     },
     table: {
         minWidth: 'min-content',
-        top: theme.spacing(3),
+        top: theme.spacing(0),
     },
     formControl: {
         position: 'relative',
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
+        alignItems: 'flex-end',
+        justifyContent: 'space-around',
         flexDirection: 'row',
-        marginTop: theme.spacing(3),
-        marginBottom: theme.spacing(3),
+        backgroundColor: 'rgb(112, 193, 189)',
+        padding:'0px 0px 0px 0px',
     },
     selectEmpty: {
-        width: '177px',
+        width: '200px',
+        height:'40px',
         position: 'relative',
         display: 'flex',
+        backgroundColor:'white',
+        margin:'10px 0px 0px 0px',
+        borderRadius:'5px',
+        textAlign:'left',
+        padding:"'0px 0px 0px 0px'"
     },
     paper: {
         width: '100%',
         position: 'relative',
+
     },
     root: {
-        top: theme.spacing(3),
+        backgroundColor: 'rgb(112, 193, 189)',
         width: '100%',
     },
+    input:{
+        backgroundColor:'white',
+        borderRadius:'5px',
+    },
+    content:{
+        padding:"'10px 10px 10px 10px'"
+    },
+    selectTitle:{
+        color:'white',
+        fontWeight:'bold'
+    }
 }));
 
 async function getData(query) {
@@ -76,8 +96,6 @@ async function getData(query) {
                 `*, medical_consultations(partner: partner_dni(name, lastname))`
             )
             .ilike(`${column}`, `%${param}%`);
-        data && console.log(data);
-        dataError && console.log(dataError);
         return data ? data : dataError;
     } catch (err) {
         console.error(err);
@@ -132,42 +150,55 @@ export default function PrescriptionsAndOrders() {
     return (
         <div className={classes.root}>
             <div className={classes.formControl}>
-                <FormControl className={classes.selectEmpty}>
-                    <InputLabel htmlFor='demo-simple-select-label'>
+                <FormControl className={classes.formControl}>
+                    <div className={classes.selectTitle}>
+                        <p className={classes.content}>
                         Selección
-                    </InputLabel>
-                    <Select
-                        variant='outlined'
-                        labelId='demo-simple-select-label'
-                        id='demo-simple-select-label'
-                        value={query.selection}
-                        onChange={handleChange}
-                        name='selection'
-                    >
-                        <MenuItem value='orders'>Ordenes</MenuItem>
-                        <MenuItem value='prescriptions'>Recetas</MenuItem>
-                    </Select>
+                        </p>
+                        <Select
+                            className={classes.selectEmpty}
+                            variant='outlined'
+                            /* labelId='demo-simple-select-label'
+                            id='demo-simple-select-label' */
+                            value={query.selection}
+                            onChange={handleChange}
+                            name='selection'
+                            size='small'
+                            type='text'
+                        >
+                            <MenuItem value='orders'>Ordenes</MenuItem>
+                            <MenuItem value='prescriptions'>Recetas</MenuItem>
+                        </Select>
+                    </div>
+                    
                 </FormControl>
-                <FormControl className={classes.selectEmpty}>
-                    <InputLabel htmlFor='demo-simple-select-label-1'>
+                <FormControl className={classes.formControl}>
+                <div className={classes.selectTitle}>
+                    <p className={classes.content}>
                         Paciente
-                    </InputLabel>
+                    </p>
                     <Select
+                        className={classes.selectEmpty}
                         variant='outlined'
-                        labelId='demo-simple-select-label-1'
-                        id='demo-simple-select-label-1'
+                        /*  labelId='demo-simple-select-label-1'
+                        id='demo-simple-select-label-1' */
                         value={name}
                         onChange={handleChangeName}
                         name='name'
+                        size='small'
+                        type='text'
+                        name='selection'
                     >
                         <MenuItem value='Paciente...' aria-label='None' />
                         {allAffiliates.map((e) => (
                             <MenuItem value={e.lastname}>{e.lastname}</MenuItem>
                         ))}
                     </Select>
+                </div>
                 </FormControl>
                 <FormControl className={classes.formControl}>
                     <TextField
+                        className={classes.input}
                         onChange={handleChange}
                         name='param'
                         id='outlined-basic'
@@ -177,40 +208,41 @@ export default function PrescriptionsAndOrders() {
                                 : 'Medicamento...'
                         }
                         variant='outlined'
-                        className={classes.selectEmpty}
+                        size='small'
                     />
                 </FormControl>
             </div>
             <div style={{ display: 'flex' }}>
                 <TableContainer component={Paper} className={classes.paper}>
                     <h3 className={classes.title2}>
-                        {query.selection === 'orders' ? 'Ordenes' : 'Recetas'}
+                        {query.selection === 'orders' ? 'ORDENES' : 'RECETAS'}
                     </h3>
                     <Table className={classes.table} aria-label='simple table'>
                         <TableHead className={classes.title}>
                             <TableRow>
-                                <TableCell>
+                                <TableCell size='small'>
                                     {query.selection === 'orders'
-                                        ? 'Orden Nº'
-                                        : 'Receta Nº'}
+                                        ? 'ORDEN Nº'
+                                        : 'RECETA Nº'}
                                 </TableCell>
-                                <TableCell align='left'>Consulta</TableCell>
-                                <TableCell align='left'>Fecha</TableCell>
-                                <TableCell align='left'>
+                                <TableCell align='left' size='small'>CONSULTA</TableCell>
+                                <TableCell align='left' size='small'>FECHA</TableCell>
+                                <TableCell align='left' size='small'>
                                     {query.selection === 'orders'
-                                        ? 'Estudio'
-                                        : 'Medicamento'}
+                                        ? 'ESTUDIO'
+                                        : 'MEDICAMENTO'}
                                 </TableCell>
                                 {query.selection === 'orders' ? (
-                                    <TableCell align='left'>Estado</TableCell>
+                                    <TableCell align='left' size='small'>ESTADO</TableCell>
                                 ) : null}
-                                <TableCell align='left'>Paciente</TableCell>
+                                <TableCell align='left' size='small'>PACIENTE</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {filteredData.length > 0
                                 ? filteredData.map((row, index) => (
                                       <TableRow
+                                            size='small'
                                           key={row.name}
                                           className={
                                               index % 2 === 1
@@ -218,26 +250,26 @@ export default function PrescriptionsAndOrders() {
                                                   : null
                                           }
                                       >
-                                          <TableCell component='th' scope='row'>
+                                          <TableCell component='th' scope='row' size='small'>
                                               {row.id}
                                           </TableCell>
-                                          <TableCell align='left'>
+                                          <TableCell align='left' size='small'>
                                               {row.medical_consultation_id}
                                           </TableCell>
-                                          <TableCell align='left'>
+                                          <TableCell align='left' size='small'>
                                               {row.date}
                                           </TableCell>
-                                          <TableCell align='left'>
+                                          <TableCell align='left' size='small'>
                                               {query.selection === 'orders'
                                                   ? row.study_name
                                                   : row.drug_name}
                                           </TableCell>
                                           {query.selection === 'orders' ? (
-                                              <TableCell align='left'>
+                                              <TableCell align='left' size='small'>
                                                   {row.status}
                                               </TableCell>
                                           ) : null}
-                                          <TableCell align='left'>
+                                          <TableCell align='left' size='small'>
                                               {row.medical_consultations.partner
                                                   .name +
                                                   ' ' +
