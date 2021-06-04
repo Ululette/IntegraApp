@@ -114,8 +114,8 @@ export default function NewPlan() {
 
     // Estado de información del plan a agregar
     let [state, setState] = useState({
-        title: '',
-        price: '',
+        title: null,
+        price: null,
         sbenefits: [],
         active: true,
     });
@@ -254,7 +254,7 @@ export default function NewPlan() {
         });
 
         // Luego limpia
-        setState({ title: '', price: '', sbenefits: [], active: true });
+        setState({ title: null, price: null, sbenefits: [], active: true });
         setError({
             title: '',
             price: '',
@@ -367,7 +367,7 @@ export default function NewPlan() {
                     </FormGroup>
                 </div>
                 <div width='100%' align='right'>
-                    <Button
+                    {(!!state.title&&!!state.price && !!state.sbenefits.length) && <Button
                         id='savebtn'
                         disabled={!validate()}
                         variant='contained'
@@ -375,7 +375,7 @@ export default function NewPlan() {
                         onClick={handlesubmit}
                     >
                         Guardar
-                    </Button>
+                    </Button>}
                 </div>
             </form>
         </div>

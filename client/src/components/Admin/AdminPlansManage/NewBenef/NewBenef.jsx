@@ -81,7 +81,7 @@ export default function NewBenef() {
     // }, [categories]);
 
     const [state, setState] = React.useState({
-        title: '',
+        title: null,
         description: '',
         // category: null,
     });
@@ -248,7 +248,7 @@ export default function NewBenef() {
           )} */}
                 </div>
                 <div width='100%' align='right'>
-                    <Button
+                    {!!state.title && <Button
                         id='savebtn'
                         disabled={!validate()}
                         variant='contained'
@@ -256,7 +256,7 @@ export default function NewBenef() {
                         onClick={handlesubmit}
                     >
                         Guardar
-                    </Button>
+                    </Button>}
                 </div>
             </form>
         </div>
