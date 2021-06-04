@@ -206,7 +206,7 @@ function AdminNav({ firebase, window: windowMui }) {
                         <MenuIcon />
                     </IconButton>
                 </Toolbar>
-                <a href={`/${userDataFirebase.uid}/admin/`}>
+                <a href={`/${userData.dni}/medic`}>
                     <img
                         src='../../assets/images/logo.png'
                         alt='Integra icon.'
