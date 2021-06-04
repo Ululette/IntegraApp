@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
         margin: `5px 0 0 ${theme.spacing(9)}px`,
     },
     card: {
-        // maxWidth: '90%',
         width:'100%',
     },
     textField: {
@@ -157,7 +156,6 @@ export default function Consult({ firebase }) {
             );
     }
 
-    // let [diagnoses, setDiagnoses] = useState([]);
 
     let [input, setInput] = useState({
         reason: '',
