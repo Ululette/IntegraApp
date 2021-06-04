@@ -1,0 +1,29 @@
+.formConteiner{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.inputs{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.textField{
+    margin:20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.firstColumn{
+    margin:20px;
+}
+.secondColumn{
+    margin-top:75px;
+}
+.logo{
+    width: 300px;
+    height: 105px;
+}

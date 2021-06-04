@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import Styles from '../../Guest/ContactForm/ContactForm.module.css';
+import { makeStyles } from '@material-ui/core/styles';
+import InputLabel from '@material-ui/core/InputLabel';
+import calculateAge from '../../../functions/calculateAge';
+import FormControl from '@material-ui/core/FormControl';
+import styles from './AdminRegistration.module.css';
 import LogoNav from '../../../assets/logo-integra.png';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
@@ -12,7 +16,32 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import 'firebase/auth';
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+      display: 'flex',
+      flexWrap: 'wrap',
+    },
+    margin: {
+      margin: theme.spacing(1),
+    },
+    withoutLabel: {
+      marginTop: theme.spacing(3),
+    },
+    textField: {
+      width: '300px',
+    },
+    formControl: {
+        // margin: theme.spacing(1),
+        minWidth: 120,
+    },
+    button: {
+        backgroundColor: '#27978b',
+        color: '#f0f0f0',
+    }
+}));
+
 function AdminRegistration({ firebase }) {
+    const classes = useStyles();
     const MySwal = withReactContent(Swal);
     const [input, setInput] = useState({
         name: '',
@@ -160,8 +189,8 @@ function AdminRegistration({ firebase }) {
                 break;
             }
             case 'birthdate': {
-              
-                if (!value) {
+                console.log('EDAD',calculateAge(value))
+                if (!value||calculateAge(value)<18) {
                     errors.birthdate = true;
                 } else {
                     errors.birthdate = false;
@@ -197,9 +226,8 @@ function AdminRegistration({ firebase }) {
         }
         return errors;
     }
-
     return (
-        <div className={Styles.conteinerAll}>
+        <div className={styles.conteinerAll}>
             <Snackbar
                 open={errorRequest}
                 autoHideDuration={6000}
@@ -209,171 +237,158 @@ function AdminRegistration({ firebase }) {
                     Error, verifique los datos.
                 </Alert>
             </Snackbar>
-            <div className={Styles.formConteiner}>
-                <div className={Styles.inputs}>
-                    <div className={Styles.imgConteiner}>
-                        <img src={LogoNav} alt='Logo' />
+            <div className={styles.formConteiner}>
+                <div className={styles.imgConteiner}>
+                    <img src={LogoNav} className={styles.logo} alt='Logo' />
+                </div>
+                <div className={styles.inputs}>
+                    <div className={styles.firstColumn}>
+                        <div className={styles.textField}>
+                            <TextField
+                                label='Nombre'
+                                variant='outlined'
+                                id='name-input'
+                                type='text'
+                                name='name'
+                                autoComplete='off'
+                                className={classes.textField}
+                                // size='small'
+                                value={input.name}
+                                onChange={(e) => handleInputChange(e)}
+                                {...(errors.name && {
+                                    error: errors.name,
+                                    helperText: 'Nombre invalido',
+                                })}
+                            />
+                        </div>
+                        <div className={styles.textField}>
+                            <TextField
+                                label='Apellido'
+                                variant='outlined'
+                                id='lastname-input'
+                                type='text'
+                                name='lastname'
+                                autoComplete='off'
+                                className={classes.textField}
+                                // size='small'
+                                value={input.lastname}
+                                onChange={(e) => handleInputChange(e)}
+                                {...(errors.lastname && {
+                                    error: errors.lastname,
+                                    helperText: 'Apellido invalido',
+                                })}
+                            />
+                        </div>
+                        <div className={styles.textField}>
+                            <TextField
+                                label='DNI'
+                                variant='outlined'
+                                id='dni-input'
+                                type='tel'
+                                name='dni'
+                                autoComplete='off'
+                                className={classes.textField}
+                                // size='small'
+                                value={input.dni}
+                                onChange={(e) => handleInputChange(e)}
+                                {...(errors.dni && {
+                                    error: true,
+                                    helperText: 'Dni invalido',
+                                })}
+                                inputProps={{ maxLength: 8 }}
+                            />
+                        </div>
                     </div>
-                    <div className={Styles.textField}>
-                        <TextField
-                            label='Nombre'
-                            variant='outlined'
-                            id='name-input'
-                            type='text'
-                            name='name'
-                            autoComplete='off'
-                            size='small'
-                            value={input.name}
-                            onChange={(e) => handleInputChange(e)}
-                            {...(errors.name && {
-                                error: errors.name,
-                                helperText: 'Nombre invalido',
-                            })}
-                        />
+                    <div className={styles.secondColumn}>
+                        <div className={styles.textField}>
+                            <TextField
+                                label='Fecha de nacimiento'
+                                variant='outlined'
+                                id='date-input'
+                                type='date'
+                                name='birthdate'
+                                autoComplete='off'
+                                className={classes.textField}
+                                // size='small'
+                                value={input.birthdate}
+                                {...(errors.birthdate && {
+                                    error: true,
+                                    helperText: 'Debe ser mayor de edad',
+                                })}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                onChange={(e) => handleInputChange(e)}
+                            />
+                        </div>
+                        <div className={styles.textField}>
+                            <FormControl variant="outlined" className={classes.formControl}>
+                            <InputLabel htmlFor="mail-input">Root</InputLabel>
+                                {/* <label htmlFor='mail-input'>Root?</label> */}
+                                <Select
+                                    label='Root'
+                                    variant='outlined'
+                                    id='mail-input'
+                                    type='text'
+                                    name='root'
+                                    autoComplete='off'
+                                    className={classes.textField}
+                                    // size='small'
+                                    value={input.root}
+                                    InputLabelProps={{
+                                        shrink: false,
+                                    }}
+                                    onChange={(e) => handleInputChange(e)}
+                                >
+                                    <MenuItem value='true'>Si</MenuItem>
+                                    <MenuItem value='false'>No</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </div>
+                        <div className={styles.textField}>
+                            <TextField
+                                label='E-mail'
+                                variant='outlined'
+                                id='mail-input'
+                                type='text'
+                                name='mail'
+                                autoComplete='off'
+                                className={classes.textField}
+                                // size='small'
+                                value={input.mail}
+                                onChange={(e) => handleInputChange(e)}
+                                {...(errors.mail && {
+                                    error: true,
+                                    helperText: 'Mail invalido',
+                                })}
+                            />
+                        </div>
+                        <div className={styles.textField}>
+                            <TextField
+                                label='phone'
+                                variant='outlined'
+                                id='phone-input'
+                                type='number'
+                                name='phone'
+                                autoComplete='off'
+                                // size='small'
+                                value={input.phone}
+                                className={classes.textField}
+                                onChange={(e) => handleInputChange(e)}
+                                {...(errors.phoneNumber && {
+                                    error: true,
+                                    helperText: 'Telefono invalido',
+                                })}
+                            />
+                        </div>
                     </div>
-                    <div className={Styles.textField}>
-                        <TextField
-                            label='Apellido'
-                            variant='outlined'
-                            id='lastname-input'
-                            type='text'
-                            name='lastname'
-                            autoComplete='off'
-                            size='small'
-                            value={input.lastname}
-                            onChange={(e) => handleInputChange(e)}
-                            {...(errors.lastname && {
-                                error: errors.lastname,
-                                helperText: 'Apellido invalido',
-                            })}
-                        />
-                    </div>
-                    <div className={Styles.textField}>
-                        <TextField
-                            label='DNI'
-                            variant='outlined'
-                            id='dni-input'
-                            type='tel'
-                            name='dni'
-                            autoComplete='off'
-                            size='small'
-                            value={input.dni}
-                            onChange={(e) => handleInputChange(e)}
-                            {...(errors.dni && {
-                                error: true,
-                                helperText: 'Dni invalido',
-                            })}
-                            inputProps={{ maxLength: 8 }}
-                        />
-                    </div>
-                    <div className={Styles.textField}>
-                        <TextField
-                            label='Fecha de nacimiento'
-                            variant='outlined'
-                            id='name-input'
-                            type='date'
-                            name='birthdate'
-                            autoComplete='off'
-                            size='small'
-                            value={input.birthdate}
-                            onChange={(e) => handleInputChange(e)}
-                        />
-                    </div>
-                    <div className={Styles.textField}>
-                        <label htmlFor='mail-input'>Root?</label>
-                        <Select
-                            label='Es root?'
-                            variant='outlined'
-                            id='mail-input'
-                            type='text'
-                            name='root'
-                            autoComplete='off'
-                            size='small'
-                            value={input.root}
-                            onChange={(e) => handleInputChange(e)}
-                        >
-                            <MenuItem value='true'>Si</MenuItem>
-                            <MenuItem value='false'>No</MenuItem>
-                        </Select>
-                    </div>
-                    <div className={Styles.textField}>
-                        <TextField
-                            label='E-mail'
-                            variant='outlined'
-                            id='mail-input'
-                            type='text'
-                            name='mail'
-                            autoComplete='off'
-                            size='small'
-                            value={input.mail}
-                            onChange={(e) => handleInputChange(e)}
-                            {...(errors.mail && {
-                                error: true,
-                                helperText: 'Mail invalido',
-                            })}
-                        />
-                    </div>
-
-                    <div className={Styles.textField}>
-                        <TextField
-                            label='phone'
-                            variant='outlined'
-                            id='phone-input'
-                            type='number'
-                            name='phone'
-                            autoComplete='off'
-                            size='small'
-                            value={input.phone}
-                            onChange={(e) => handleInputChange(e)}
-                            {...(errors.phoneNumber && {
-                                error: true,
-                                helperText: 'Telefono invalido',
-                            })}
-                        />
-                    </div>
-              
-                    {/* <div className={Styles.textField}>
-                        <TextField
-                            id='outlined-search'
-                            label='Contraseña'
-                            variant='outlined'
-                            id='password-input'
-                            type='password'
-                            name='password'
-                            autoComplete='off'
-                            size='small'
-                            value={input.password}
-                            onChange={(e) => handleInputChange(e)}
-                            {...(errors.password && {
-                                error: true,
-                                helperText: 'Contraseña invalida',
-                            })}
-                        />
-                    </div>
-                    <div className={Styles.textField}>
-                        <TextField
-                            id='outlined-search'
-                            label='Confirmas contraseña'
-                            variant='outlined'
-                            id='confirm-password-input'
-                            type='password'
-                            name='confirmPassword'
-                            autoComplete='off'
-                            size='small'
-                            value={input.confirmPassword}
-                            onChange={(e) => handleInputChange(e)}
-                            {...(errors.confirmPassword && {
-                                error: true,
-                                helperText: 'Las contraseñas no son iguales',
-                            })}
-                        />
-                    </div> */}
                 </div>
                 <div>
                     <Button
                         variant='contained'
                         color='primary'
-                        style={{ borderRadius: 100, margin: 10 }}
+                        // style={{ borderRadius: 100, margin: 10 }}
+                        className={classes.button}
                         onClick={handleClickOpen}
                     >
                         Agregar Admin
@@ -385,3 +400,322 @@ function AdminRegistration({ firebase }) {
 }
 
 export default AdminRegistration;
+
+// return (
+//     <div className={styles.conteinerAll}>
+//         <Snackbar
+//             open={errorRequest}
+//             autoHideDuration={6000}
+//             onClose={handleClose}
+//         >
+//             <Alert onClose={handleClose} severity='error'>
+//                 Error, verifique los datos.
+//             </Alert>
+//         </Snackbar>
+//         <div className={styles.formConteiner}>
+//             <div className={styles.imgConteiner}>
+//                 <img src={LogoNav} className={styles.logo} alt='Logo' />
+//             </div>
+//             <div className={styles.inputs}>
+//                 <div className={styles.firstColumn}>
+//                     <div className={styles.textField}>
+//                         <TextField
+//                             label='Nombre'
+//                             variant='outlined'
+//                             id='name-input'
+//                             type='text'
+//                             name='name'
+//                             autoComplete='off'
+//                             className={classes.textField}
+//                             // size='small'
+//                             value={input.name}
+//                             onChange={(e) => handleInputChange(e)}
+//                             {...(errors.name && {
+//                                 error: errors.name,
+//                                 helperText: 'Nombre invalido',
+//                             })}
+//                         />
+//                     </div>
+//                     <div className={styles.textField}>
+//                         <TextField
+//                             label='Apellido'
+//                             variant='outlined'
+//                             id='lastname-input'
+//                             type='text'
+//                             name='lastname'
+//                             autoComplete='off'
+//                             className={classes.textField}
+//                             // size='small'
+//                             value={input.lastname}
+//                             onChange={(e) => handleInputChange(e)}
+//                             {...(errors.lastname && {
+//                                 error: errors.lastname,
+//                                 helperText: 'Apellido invalido',
+//                             })}
+//                         />
+//                     </div>
+//                     <div className={styles.textField}>
+//                         <TextField
+//                             label='DNI'
+//                             variant='outlined'
+//                             id='dni-input'
+//                             type='tel'
+//                             name='dni'
+//                             autoComplete='off'
+//                             className={classes.textField}
+//                             // size='small'
+//                             value={input.dni}
+//                             onChange={(e) => handleInputChange(e)}
+//                             {...(errors.dni && {
+//                                 error: true,
+//                                 helperText: 'Dni invalido',
+//                             })}
+//                             inputProps={{ maxLength: 8 }}
+//                         />
+//                     </div>
+//                 </div>
+//                 <div className={styles.secondColumn}>
+//                     <div className={styles.textField}>
+//                         <TextField
+//                             label='Fecha de nacimiento'
+//                             variant='outlined'
+//                             id='date-input'
+//                             type='date'
+//                             name='birthdate'
+//                             autoComplete='off'
+//                             className={classes.textField}
+//                             // size='small'
+//                             value={input.birthdate}
+//                             InputLabelProps={{
+//                                 shrink: true,
+//                             }}
+//                             onChange={(e) => handleInputChange(e)}
+//                         />
+//                     </div>
+//                     <div className={styles.textField}>
+//                         <FormControl variant="outlined" className={classes.formControl}>
+//                         <InputLabel htmlFor="mail-input">Root</InputLabel>
+//                             {/* <label htmlFor='mail-input'>Root?</label> */}
+//                             <Select
+//                                 label='Root'
+//                                 variant='outlined'
+//                                 id='mail-input'
+//                                 type='text'
+//                                 name='root'
+//                                 autoComplete='off'
+//                                 className={classes.textField}
+//                                 // size='small'
+//                                 value={input.root}
+//                                 InputLabelProps={{
+//                                     shrink: false,
+//                                 }}
+//                                 onChange={(e) => handleInputChange(e)}
+//                             >
+//                                 <MenuItem value='true'>Si</MenuItem>
+//                                 <MenuItem value='false'>No</MenuItem>
+//                             </Select>
+//                         </FormControl>
+//                     </div>
+//                     <div className={styles.textField}>
+//                         <TextField
+//                             label='E-mail'
+//                             variant='outlined'
+//                             id='mail-input'
+//                             type='text'
+//                             name='mail'
+//                             autoComplete='off'
+//                             className={classes.textField}
+//                             // size='small'
+//                             value={input.mail}
+//                             onChange={(e) => handleInputChange(e)}
+//                             {...(errors.mail && {
+//                                 error: true,
+//                                 helperText: 'Mail invalido',
+//                             })}
+//                         />
+//                     </div>
+//                     <div className={Styles.textField}>
+//                         <TextField
+//                             label='phone'
+//                             variant='outlined'
+//                             id='phone-input'
+//                             type='number'
+//                             name='phone'
+//                             autoComplete='off'
+//                             // size='small'
+//                             value={input.phone}
+//                             className={classes.textField}
+//                             onChange={(e) => handleInputChange(e)}
+//                             {...(errors.phoneNumber && {
+//                                 error: true,
+//                                 helperText: 'Telefono invalido',
+//                             })}
+//                         />
+//                     </div>
+//                 </div>
+//             </div>
+//             <div>
+//                 <Button
+//                     variant='contained'
+//                     color='primary'
+//                     // style={{ borderRadius: 100, margin: 10 }}
+//                     className={classes.button}
+//                     onClick={handleClickOpen}
+//                 >
+//                     Agregar Admin
+//                 </Button>
+//             </div>
+//         </div>
+//     </div>
+// );
+
+
+
+
+    // return (
+    //     <div className={Styles.conteinerAll}>
+    //         <Snackbar
+    //             open={errorRequest}
+    //             autoHideDuration={6000}
+    //             onClose={handleClose}
+    //         >
+    //             <Alert onClose={handleClose} severity='error'>
+    //                 Error, verifique los datos.
+    //             </Alert>
+    //         </Snackbar>
+    //         <div className={Styles.formConteiner}>
+    //             <div className={Styles.inputs}>
+    //                 <div className={Styles.imgConteiner}>
+    //                     <img src={LogoNav} alt='Logo' />
+    //                 </div>
+    //                 <div className={Styles.textField}>
+    //                     <TextField
+    //                         label='Nombre'
+    //                         variant='outlined'
+    //                         id='name-input'
+    //                         type='text'
+    //                         name='name'
+    //                         autoComplete='off'
+    //                         size='small'
+    //                         value={input.name}
+    //                         onChange={(e) => handleInputChange(e)}
+    //                         {...(errors.name && {
+    //                             error: errors.name,
+    //                             helperText: 'Nombre invalido',
+    //                         })}
+    //                     />
+    //                 </div>
+    //                 <div className={Styles.textField}>
+    //                     <TextField
+    //                         label='Apellido'
+    //                         variant='outlined'
+    //                         id='lastname-input'
+    //                         type='text'
+    //                         name='lastname'
+    //                         autoComplete='off'
+    //                         size='small'
+    //                         value={input.lastname}
+    //                         onChange={(e) => handleInputChange(e)}
+    //                         {...(errors.lastname && {
+    //                             error: errors.lastname,
+    //                             helperText: 'Apellido invalido',
+    //                         })}
+    //                     />
+    //                 </div>
+    //                 <div className={Styles.textField}>
+    //                     <TextField
+    //                         label='DNI'
+    //                         variant='outlined'
+    //                         id='dni-input'
+    //                         type='tel'
+    //                         name='dni'
+    //                         autoComplete='off'
+    //                         size='small'
+    //                         value={input.dni}
+    //                         onChange={(e) => handleInputChange(e)}
+    //                         {...(errors.dni && {
+    //                             error: true,
+    //                             helperText: 'Dni invalido',
+    //                         })}
+    //                         inputProps={{ maxLength: 8 }}
+    //                     />
+    //                 </div>
+    //                 <div className={Styles.textField}>
+    //                     <TextField
+    //                         label='Fecha de nacimiento'
+    //                         variant='outlined'
+    //                         id='name-input'
+    //                         type='date'
+    //                         name='birthdate'
+    //                         autoComplete='off'
+    //                         size='small'
+    //                         value={input.birthdate}
+    //                         onChange={(e) => handleInputChange(e)}
+    //                     />
+    //                 </div>
+    //                 <div className={Styles.textField}>
+    //                     <label htmlFor='mail-input'>Root?</label>
+    //                     <Select
+    //                         label='Es root?'
+    //                         variant='outlined'
+    //                         id='mail-input'
+    //                         type='text'
+    //                         name='root'
+    //                         autoComplete='off'
+    //                         size='small'
+    //                         value={input.root}
+    //                         onChange={(e) => handleInputChange(e)}
+    //                     >
+    //                         <MenuItem value='true'>Si</MenuItem>
+    //                         <MenuItem value='false'>No</MenuItem>
+    //                     </Select>
+    //                 </div>
+    //                 <div className={Styles.textField}>
+    //                     <TextField
+    //                         label='E-mail'
+    //                         variant='outlined'
+    //                         id='mail-input'
+    //                         type='text'
+    //                         name='mail'
+    //                         autoComplete='off'
+    //                         size='small'
+    //                         value={input.mail}
+    //                         onChange={(e) => handleInputChange(e)}
+    //                         {...(errors.mail && {
+    //                             error: true,
+    //                             helperText: 'Mail invalido',
+    //                         })}
+    //                     />
+    //                 </div>
+
+    //                 <div className={Styles.textField}>
+    //                     <TextField
+    //                         label='phone'
+    //                         variant='outlined'
+    //                         id='phone-input'
+    //                         type='number'
+    //                         name='phone'
+    //                         autoComplete='off'
+    //                         size='small'
+    //                         value={input.phone}
+    //                         onChange={(e) => handleInputChange(e)}
+    //                         {...(errors.phoneNumber && {
+    //                             error: true,
+    //                             helperText: 'Telefono invalido',
+    //                         })}
+    //                     />
+    //                 </div>
+    //             </div>
+    //             <div>
+    //                 <Button
+    //                     variant='contained'
+    //                     color='primary'
+    //                     style={{ borderRadius: 100, margin: 10 }}
+    //                     onClick={handleClickOpen}
+    //                 >
+    //                     Agregar Admin
+    //                 </Button>
+    //             </div>
+    //         </div>
+    //     </div>
+    // );
