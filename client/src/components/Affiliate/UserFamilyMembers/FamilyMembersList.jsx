@@ -65,10 +65,10 @@ const headCells = [
         label: 'PHONE NUMBER',
     },
     {
-        id: 'ACTIONS',
+        id: 'actions',
         numeric: true,
         disablePadding: false,
-        label: 'actions',
+        label: 'ACTIONS',
     },
 ];
 
