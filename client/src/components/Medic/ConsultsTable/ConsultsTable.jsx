@@ -243,7 +243,7 @@ const EnhancedTableToolbar = (props) => {
                 id='tableTitle'
                 component='div'
             >
-                Mis consultas
+                MIS CONSULTAS
             </Typography>
         </Toolbar>
     );
