@@ -29,7 +29,7 @@ function MyPlan({ affiliateData }) {
             .select('name')
             .match({
                 family_group: affiliateData.family_group,
-                status: 'aceptado',
+                state: 'aceptado',
             });
         if (fetchFamilyGroup) return alert(fetchFamilyGroup.message);
         setNumberFamiliars(familyGroup.length);
