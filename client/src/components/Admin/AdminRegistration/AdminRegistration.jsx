@@ -13,22 +13,23 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import supabase from '../../../supabase.config';
 import Swal from 'sweetalert2';
+import Styles from './AdminRegistration.module.css';
 import withReactContent from 'sweetalert2-react-content';
 import 'firebase/auth';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-      display: 'flex',
-      flexWrap: 'wrap',
+        display: 'flex',
+        flexWrap: 'wrap',
     },
     margin: {
-      margin: theme.spacing(1),
+        margin: theme.spacing(1),
     },
     withoutLabel: {
-      marginTop: theme.spacing(3),
+        marginTop: theme.spacing(3),
     },
     textField: {
-      width: '300px',
+        width: '300px',
     },
     formControl: {
         margin: theme.spacing(1),
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     button: {
         backgroundColor: '#27978b',
         color: '#f0f0f0',
-    }
+    },
 }));
 
 function AdminRegistration({ firebase }) {
@@ -90,7 +91,7 @@ function AdminRegistration({ firebase }) {
                     dni: input.dni,
                     root: input.root,
                     email: input.mail,
-                    phone_number: input.phone
+                    phone_number: input.phone,
                 },
             ]);
 
@@ -189,7 +190,6 @@ function AdminRegistration({ firebase }) {
                 break;
             }
             case 'birthdate': {
-              
                 if (!value) {
                     errors.birthdate = true;
                 } else {
@@ -319,8 +319,13 @@ function AdminRegistration({ firebase }) {
                             />
                         </div>
                         <div className={styles.textField}>
-                            <FormControl variant="outlined" className={classes.formControl}>
-                            <InputLabel htmlFor="mail-input">Root</InputLabel>
+                            <FormControl
+                                variant='outlined'
+                                className={classes.formControl}
+                            >
+                                <InputLabel htmlFor='mail-input'>
+                                    Root
+                                </InputLabel>
                                 {/* <label htmlFor='mail-input'>Root?</label> */}
                                 <Select
                                     label='Root'
@@ -379,7 +384,7 @@ function AdminRegistration({ firebase }) {
                             })}
                         />
                     </div>
-              
+
                     {/* <div className={Styles.textField}>
                         <TextField
                             id='outlined-search'
