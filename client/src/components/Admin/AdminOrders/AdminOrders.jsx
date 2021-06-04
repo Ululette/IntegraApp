@@ -242,35 +242,35 @@ const EnhancedTableToolbar = (props) => {
     const filter = (value) => {
         let show = [];
         setToShowRows(rows);
-        if (value === 'autorizada') {
+        if (value === 'Autorizada') {
             value
                 ? setToShowRows(
                       (show = rows.filter(
-                          (r) => r.order_status.name === 'autorizada'
+                          (r) => r.order_status.name === 'Autorizada'
                       ))
                   )
                 : setToShowRows(rows);
-        } else if (value === 'rechazada') {
+        } else if (value === 'Rechazada') {
             value
                 ? setToShowRows(
                       (show = rows.filter(
-                          (r) => r.order_status.name === 'rechazada'
+                          (r) => r.order_status.name === 'Rechazada'
                       ))
                   )
                 : setToShowRows(rows);
-        } else if (value === 'en proceso') {
+        } else if (value === 'En proceso') {
             value
                 ? setToShowRows(
                       (show = rows.filter(
-                          (r) => r.order_status.name === 'en proceso'
+                          (r) => r.order_status.name === 'En proceso'
                       ))
                   )
                 : setToShowRows(rows);
-        } else if (value === 'recibida') {
+        } else if (value === 'Recibida') {
             value
                 ? setToShowRows(
                       (show = rows.filter(
-                          (r) => r.order_status.name === 'recibida'
+                          (r) => r.order_status.name === 'Recibida'
                       ))
                   )
                 : setToShowRows(rows);
