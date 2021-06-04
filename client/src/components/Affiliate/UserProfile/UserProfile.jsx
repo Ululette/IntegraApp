@@ -398,15 +398,14 @@ export default function UserProfile({ firebase }) {
 
     const picUpload = async (file) => {
         const extension = file.name.slice(file.name.lastIndexOf('.'));
-        const userUid = firebase.auth().currentUser.uid;
         try {
             await firebase
                 .storage()
-                .ref(`users/${userUid}/profile${extension}`)
+                .ref(`users/${userDni.dni}/profile${extension}`)
                 .put(file);
             let imgSrc = await firebase
                 .storage()
-                .ref(`users/${userUid}/profile${extension}`)
+                .ref(`users/${userDni.dni}/profile${extension}`)
                 .getDownloadURL();
             let newLS = { ...userDni, avatar_url: imgSrc };
 
