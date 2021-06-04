@@ -34,7 +34,7 @@ import MedicHome from '../MedicHome/MedicHome.jsx';
 import MedicPatients from '../MedicPatients/MedicPatients.jsx';
 import PrescriptionsAndOrders from '../PrescriptionsAndOrders/PrescriptionsAndOrders.jsx';
 import ConsultsTable from '../ConsultsTable/ConsultsTable.jsx';
-import MedicProfile from '../MedicProfile/MedicProfile'
+import MedicProfile from '../MedicProfile/MedicProfile';
 
 import styles from './MedicNav.module.css';
 import NotFound from '../../Status/NotFound.jsx';
@@ -144,7 +144,10 @@ function AdminNav({ firebase, window: windowMui }) {
                         <ListItemText primary='Inicio' />
                     </ListItem>
                 </NavLink>
-                <NavLink to={`/${userData.dni}/medic/profile`} className={styles.link}>
+                <NavLink
+                    to={`/${userData.dni}/medic/profile`}
+                    className={styles.link}
+                >
                     <ListItem button>
                         <FaceIcon />
                         <ListItemText primary='Mi cuenta' />
@@ -172,7 +175,7 @@ function AdminNav({ firebase, window: windowMui }) {
                 </NavLink>
 
                 <NavLink
-                    to={`/${userData.dni}/medic/prescriptions&orders`}
+                    to={`/${userData.dni}/medic/prescriptionsandorders`}
                     className={styles.link}
                     activeClassName={styles.activeLink}
                 >
@@ -286,21 +289,20 @@ function AdminNav({ firebase, window: windowMui }) {
                 {window.location.pathname === `/${userData.dni}/medic` ? (
                     <MedicHome medicData={medicData} />
                 ) : window.location.pathname ===
-                    `/${userData.dni}/medic/patients` ? (
+                  `/${userData.dni}/medic/patients` ? (
                     <MedicPatients />
                 ) : window.location.pathname ===
-                    `/${userData.dni}/medic/prescriptions&orders` ? (
+                  `/${userData.dni}/medic/prescriptionsandorders` ? (
                     <PrescriptionsAndOrders />
                 ) : window.location.pathname ===
-                    `/${userData.dni}/medic/myConsults` ? (
+                  `/${userData.dni}/medic/myConsults` ? (
                     <ConsultsTable />
                 ) : window.location.pathname ===
-                    `/${userData.dni}/medic/profile` ? (
+                  `/${userData.dni}/medic/profile` ? (
                     <MedicProfile firebase={firebase} />
-                ) :
-                    (
-                        <NotFound />
-                    )}
+                ) : (
+                    <NotFound />
+                )}
             </main>
         </div>
     );

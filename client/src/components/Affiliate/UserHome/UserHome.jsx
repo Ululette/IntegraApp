@@ -21,6 +21,7 @@ import {
     Receipt,
 } from '@material-ui/icons';
 import React, { useState, useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
 import supabase from '../../../supabase.config.js';
 import styles from './UserHome.module.css';
 
@@ -164,6 +165,7 @@ function UserHome() {
                                     />
                                 </ListItemIcon>
                             </ListItem>
+
                             <Divider />
                             {lastConsults.length > 0 ? (
                                 lastConsults.map((el, idx) => (
@@ -209,18 +211,23 @@ function UserHome() {
                     </article>
                     <article className={styles.payments}>
                         <List>
-                            <ListItem button>
-                                <ListItemIcon>
-                                    <Payment style={{ color: '00897b' }} />
-                                </ListItemIcon>
-                                <ListItemText primary='Pago Online' />
-                                <ListItemIcon>
-                                    <ArrowForwardIos
-                                        className={styles.arrowForward}
-                                        style={{ color: '00897b' }}
-                                    />
-                                </ListItemIcon>
-                            </ListItem>
+                            <NavLink
+                                style={{ color: '#000' }}
+                                to={`/${userData.dni}/affiliate/payment`}
+                            >
+                                <ListItem button>
+                                    <ListItemIcon>
+                                        <Payment style={{ color: '00897b' }} />
+                                    </ListItemIcon>
+                                    <ListItemText primary='Pago Online' />
+                                    <ListItemIcon>
+                                        <ArrowForwardIos
+                                            className={styles.arrowForward}
+                                            style={{ color: '00897b' }}
+                                        />
+                                    </ListItemIcon>
+                                </ListItem>
+                            </NavLink>
                         </List>
                         <Divider />
                         <div className={styles.boxPayments}>
@@ -275,18 +282,23 @@ function UserHome() {
                     </article>
                     <article className={styles.lastAuths}>
                         <List>
-                            <ListItem button>
-                                <ListItemIcon>
-                                    <Note style={{ color: '00897b' }} />
-                                </ListItemIcon>
-                                <ListItemText primary='Autorizaciones' />
-                                <ListItemIcon>
-                                    <ArrowForwardIos
-                                        className={styles.arrowForward}
-                                        style={{ color: '00897b' }}
-                                    />
-                                </ListItemIcon>
-                            </ListItem>
+                            <NavLink
+                                style={{ color: '#000' }}
+                                to={`/${userData.dni}/affiliate/myauthorizations`}
+                            >
+                                <ListItem button>
+                                    <ListItemIcon>
+                                        <Note style={{ color: '00897b' }} />
+                                    </ListItemIcon>
+                                    <ListItemText primary='Autorizaciones' />
+                                    <ListItemIcon>
+                                        <ArrowForwardIos
+                                            className={styles.arrowForward}
+                                            style={{ color: '00897b' }}
+                                        />
+                                    </ListItemIcon>
+                                </ListItem>
+                            </NavLink>
                             <Divider />
                             {authorizations.length > 0 ? (
                                 authorizations.map((el) => (
@@ -342,18 +354,23 @@ function UserHome() {
                 <section className={styles.rightSide}>
                     <article className={styles.lastStudies}>
                         <List>
-                            <ListItem button>
-                                <ListItemIcon>
-                                    <Note style={{ color: '00897b' }} />
-                                </ListItemIcon>
-                                <ListItemText primary='Estudios realizados' />
-                                <ListItemIcon>
-                                    <ArrowForwardIos
-                                        className={styles.arrowForward}
-                                        style={{ color: '00897b' }}
-                                    />
-                                </ListItemIcon>
-                            </ListItem>
+                            <NavLink
+                                style={{ color: '#000' }}
+                                to={`/${userData.dni}/affiliate/myauthorizations`}
+                            >
+                                <ListItem button>
+                                    <ListItemIcon>
+                                        <Note style={{ color: '00897b' }} />
+                                    </ListItemIcon>
+                                    <ListItemText primary='Estudios realizados' />
+                                    <ListItemIcon>
+                                        <ArrowForwardIos
+                                            className={styles.arrowForward}
+                                            style={{ color: '00897b' }}
+                                        />
+                                    </ListItemIcon>
+                                </ListItem>
+                            </NavLink>
                             <Divider />
                             {lastStudies.length > 0 ? (
                                 lastStudies.map((el) => (
@@ -400,18 +417,23 @@ function UserHome() {
                     </article>
                     <article className={styles.favorites}>
                         <List>
-                            <ListItem button>
-                                <ListItemIcon>
-                                    <Favorite style={{ color: '00897b' }} />
-                                </ListItemIcon>
-                                <ListItemText primary='Favoritos de cartilla' />
-                                <ListItemIcon>
-                                    <ArrowForwardIos
-                                        className={styles.arrowForward}
-                                        style={{ color: '00897b' }}
-                                    />
-                                </ListItemIcon>
-                            </ListItem>
+                            <NavLink
+                                style={{ color: '#000' }}
+                                to={`/${userData.dni}/affiliate/doctor`}
+                            >
+                                <ListItem button>
+                                    <ListItemIcon>
+                                        <Favorite style={{ color: '00897b' }} />
+                                    </ListItemIcon>
+                                    <ListItemText primary='Favoritos de cartilla' />
+                                    <ListItemIcon>
+                                        <ArrowForwardIos
+                                            className={styles.arrowForward}
+                                            style={{ color: '00897b' }}
+                                        />
+                                    </ListItemIcon>
+                                </ListItem>
+                            </NavLink>
                             <Divider />
                             {favorites.length > 0 ? (
                                 favorites.map((el) => (
@@ -448,18 +470,23 @@ function UserHome() {
                     </article>
                     <article className={styles.lastPrescriptions}>
                         <List>
-                            <ListItem button>
-                                <ListItemIcon>
-                                    <Receipt style={{ color: '00897b' }} />
-                                </ListItemIcon>
-                                <ListItemText primary='Ultimas recetas' />
-                                <ListItemIcon>
-                                    <ArrowForwardIos
-                                        className={styles.arrowForward}
-                                        style={{ color: '00897b' }}
-                                    />
-                                </ListItemIcon>
-                            </ListItem>
+                            <NavLink
+                                style={{ color: '#000' }}
+                                to={`/${userData.dni}/affiliate/ordersandpresc`}
+                            >
+                                <ListItem button>
+                                    <ListItemIcon>
+                                        <Receipt style={{ color: '00897b' }} />
+                                    </ListItemIcon>
+                                    <ListItemText primary='Ultimas recetas' />
+                                    <ListItemIcon>
+                                        <ArrowForwardIos
+                                            className={styles.arrowForward}
+                                            style={{ color: '00897b' }}
+                                        />
+                                    </ListItemIcon>
+                                </ListItem>
+                            </NavLink>
                             <Divider />
                             {lastPrescriptions.length > 0 ? (
                                 lastPrescriptions.map((el) => (
