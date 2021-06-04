@@ -276,8 +276,12 @@ export default function LandingPage() {
             <section data-aos='slide-left' className={styles.ourPlans}>
                 <InfoPlanes id='infoPlans' />
             </section>
-            <section data-aos='zoom-out-up' className={styles.contactSection}>
-                <div id='contact' className={styles.titlesContact}>
+            <section
+                id='contact'
+                data-aos='zoom-out-up'
+                className={styles.contactSection}
+            >
+                <div className={styles.titlesContact}>
                     <h1 data-aos='flip-down'>Estas a un solo paso</h1>
                     <h2 data-aos='flip-down'>de ser parte de Integra Salud</h2>
                 </div>
