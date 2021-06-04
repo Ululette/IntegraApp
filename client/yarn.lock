@@ -1274,7 +1274,7 @@
   resolved "https://registry.yarnpkg.com/@egjs/list-differ/-/list-differ-1.0.0.tgz#2277aff52e3e4bd9318d5c30ffc3ba3b6216f05e"
   integrity sha512-HsbMKc0ZAQH+EUeCmI/2PvTYSybmkaWwakU8QGDYYgMVIg9BQ5sM0A0Nnombjxo2+JzXHxmH+jw//yGX+y6GYw==
 
-"@egjs/react-flicking@^3.7.1":
+"@egjs/react-flicking@^3.7.2":
   version "3.7.2"
   resolved "https://registry.yarnpkg.com/@egjs/react-flicking/-/react-flicking-3.7.2.tgz#bd06c0c408dcc4ff7b424e89d2339911279b9128"
   integrity sha512-OpNEgvHxUqR7XU8VawR7XZYfbSaBUEu0Q36ssPhGV/A5wpF466hIN1xw78lbZbXxBEfAkq0EN46lIb2Stx+L0Q==
