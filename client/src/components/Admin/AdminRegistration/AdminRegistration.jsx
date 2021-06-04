@@ -49,6 +49,7 @@ function AdminRegistration({ firebase }) {
         dni: '',
         mail: '',
         birthdate: '',
+        phone: '',
         root: '',
     });
     const [errors, setErrors] = useState({
@@ -58,6 +59,7 @@ function AdminRegistration({ firebase }) {
         birthdate: false,
         root: false,
         mail: false,
+        phone: false,
     });
 
     const [errorRequest, setErrorRequest] = useState(false);
@@ -69,7 +71,8 @@ function AdminRegistration({ firebase }) {
             !errors.dni &&
             !errors.mail &&
             !errors.birthdate &&
-            !errors.root
+            !errors.root &&
+            !errors.phone
         ) {
             await supabase.from('users').insert([
                 {
@@ -86,6 +89,8 @@ function AdminRegistration({ firebase }) {
                     birthdate: input.birthdate,
                     dni: input.dni,
                     root: input.root,
+                    email: input.mail,
+                    phone_number: input.phone
                 },
             ]);
 
@@ -115,6 +120,7 @@ function AdminRegistration({ firebase }) {
                 mail: '',
                 birthdate: '',
                 root: '',
+                phone: '',
             });
         } else {
             setErrorRequest(true);
@@ -166,6 +172,14 @@ function AdminRegistration({ firebase }) {
                 }
                 break;
             }
+            case 'phone': {
+                if (!numberPattern.test(value) || value.length !== 10) {
+                    errors.phone = true;
+                } else {
+                    errors.phone = false;
+                }
+                break;
+            }
             case 'mail': {
                 if (!mailPattern.test(value)) {
                     errors.mail = true;
@@ -175,6 +189,7 @@ function AdminRegistration({ firebase }) {
                 break;
             }
             case 'birthdate': {
+              
                 if (!value) {
                     errors.birthdate = true;
                 } else {
@@ -346,6 +361,25 @@ function AdminRegistration({ firebase }) {
                             />
                         </div>
                     </div>
+
+                    <div className={Styles.textField}>
+                        <TextField
+                            label='phone'
+                            variant='outlined'
+                            id='phone-input'
+                            type='number'
+                            name='phone'
+                            autoComplete='off'
+                            size='small'
+                            value={input.phone}
+                            onChange={(e) => handleInputChange(e)}
+                            {...(errors.phoneNumber && {
+                                error: true,
+                                helperText: 'Telefono invalido',
+                            })}
+                        />
+                    </div>
+              
                     {/* <div className={Styles.textField}>
                         <TextField
                             id='outlined-search'
