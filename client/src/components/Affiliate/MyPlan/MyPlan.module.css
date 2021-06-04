@@ -87,20 +87,19 @@
 .buttonCompare {
     width: 200px;
     height: 80px;
-    border: 3px solid #45b0a9;
-    border-radius: 25px;
+    border-radius: 5px;
     font-size: 1.2rem;
     cursor: pointer;
-    background-color: transparent;
-    color: #0f5550;
     margin-top: 20px;
     margin-bottom: 30px;
+    background-color: #2c7f7b;
+    color:#fafafa;
 }
 
 .buttonCompare:hover {
     transition: 0.5s all ease-in-out;
-    background-color: #45b0a9;
-    color: black
+    background-color: #ffffff;
+    color: #2c7f7b;
 }
 .planCompCont{
     font-family: 'Nunito', sans-serif;
@@ -115,17 +114,17 @@
 .buttonBack {
     width: 100px;
     height: 40px;
-    border: 3px solid #45b0a9;
-    border-radius: 25px;
+    border-radius: 5px;
     cursor: pointer;
-    background-color: transparent;
-    color: #0f5550;
+    background-color: #2c7f7b;
+    color:#fafafa;
     margin-top: 20px;
     margin-bottom: 30px;
 }
 
 .buttonBack:hover {
     transition: 0.5s all ease-in-out;
-    background-color: #45b0a9;
-    color: black
+    background-color: #ffffff;
+    border: 3px solid #2c7f7b;
+    color: #2c7f7b;
 }

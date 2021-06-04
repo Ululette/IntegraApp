@@ -32,63 +32,60 @@ const DatosRevision = () => {
     return (
         <div className={styles.form}>
             <div className={styles.title}>
-                <h1>Revision de Datos <Divider></Divider> </h1>
+                <h1>
+                    Revision de Datos <Divider></Divider>{' '}
+                </h1>
             </div>
             <div id='lacolumna' className={styles.ajuste}>
                 <div className={styles.datos}>
-                    {/* <div className={styles.datosTitular}> */}
-                        <div className={styles.firstColumn}>
-                            <h2>Datos del Titular</h2>
-                            <Divider></Divider>
-                            <h4>Nombre: {datosTitular.first_name}</h4>
-                            <h4>Apellido: {datosTitular.last_name}</h4>
-                            <h4>Genero: {datosTitular.gender}</h4>
-                            <h4>DNI: {datosTitular.dni}</h4>
-                            <h4>CUIL: {datosTitular.cuil}</h4>
-                            <h4>Teléfono: {datosTitular.phone_number}</h4>
-                            <h4>Email: {datosTitular.email}</h4>
-                            <h4>Ocupación: {datosTitular.occupation}</h4>
-                            <h4>Estado civil: {datosTitular.marital_status}</h4>
-                            <h4>
-                                Fecha de nacimiento: {datosTitular.birth_date}
-                            </h4>
-                            <h4>Calle: {datosTitular.street_name}</h4>
-                            <h4>Numero: {datosTitular.number}</h4>
-                            {datosTitular.floor ? (
-                                <h4>Piso: {datosTitular.floor}</h4>
-                            ) : null}
-                            {datosTitular.apartment ? (
-                                <h4>Departamento: {datosTitular.apartment}</h4>
-                            ) : null}
-                            <h4>
-                                Provincia: {datosTitular.state.split('-')[1]}
-                            </h4>
-                            <h4>
-                                Localidad: {datosTitular.locality.split('-')[1]}
-                            </h4>
-                        </div>
-                        <div className={styles.datosEmpresa}>
-                            <h2>Datos del Empresa <Divider></Divider></h2>
+                    <div className={styles.firstColumn}>
+                        <h2>Datos del Titular</h2>
+                        <Divider></Divider>
+                        <h4>Nombre: {datosTitular.first_name}</h4>
+                        <h4>Apellido: {datosTitular.last_name}</h4>
+                        <h4>Genero: {datosTitular.gender}</h4>
+                        <h4>DNI: {datosTitular.dni}</h4>
+                        <h4>CUIL: {datosTitular.cuil}</h4>
+                        <h4>Teléfono: {datosTitular.phone_number}</h4>
+                        <h4>Email: {datosTitular.email}</h4>
+                        <h4>Ocupación: {datosTitular.occupation}</h4>
+                        <h4>Estado civil: {datosTitular.marital_status}</h4>
+                        <h4>Fecha de nacimiento: {datosTitular.birth_date}</h4>
+                        <h4>Calle: {datosTitular.street_name}</h4>
+                        <h4>Numero: {datosTitular.number}</h4>
+                        {datosTitular.floor ? (
+                            <h4>Piso: {datosTitular.floor}</h4>
+                        ) : null}
+                        {datosTitular.apartment ? (
+                            <h4>Departamento: {datosTitular.apartment}</h4>
+                        ) : null}
+                        <h4>Provincia: {datosTitular.state.split('-')[1]}</h4>
+                        <h4>
+                            Localidad: {datosTitular.locality.split('-')[1]}
+                        </h4>
+                    </div>
+                    <div className={styles.datosEmpresa}>
+                        <h2>
+                            Datos del Empresa <Divider></Divider>
+                        </h2>
 
-                            <h4>Razón Social:{datosEmpresa.bussines_name}</h4>
-                            <h4>
-                                Grupo empresarial:{datosEmpresa.bussines_group}
-                            </h4>
-                            <h4>
-                                Nombre y apellido del Referente de RRHH:
-                                {datosEmpresa.rh_name}
-                            </h4>
-                            <h4>Teléfono:{datosEmpresa.company_phone}</h4>
-                            <h4>E-mail:{datosEmpresa.company_email}</h4>
-                            <h4>CUIT:{datosEmpresa.company_cuit}</h4>
-                        </div>
-                    {/* </div> */}
+                        <h4>Razón Social:{datosEmpresa.bussines_name}</h4>
+                        <h4>Grupo empresarial:{datosEmpresa.bussines_group}</h4>
+                        <h4>
+                            Nombre y apellido del Referente de RRHH:
+                            {datosEmpresa.rh_name}
+                        </h4>
+                        <h4>Teléfono:{datosEmpresa.company_phone}</h4>
+                        <h4>E-mail:{datosEmpresa.company_email}</h4>
+                        <h4>CUIT:{datosEmpresa.company_cuit}</h4>
+                    </div>
 
                     <div ref={ref} id='Declaration' className={styles.salud}>
-                        <h2>Declaracion Jurada de Salud
-                        <Divider></Divider>
+                        <h2>
+                            Declaracion Jurada de Salud
+                            <Divider></Divider>
                         </h2>
-                    
+
                         <h4>DNI : {datosTitular.dni}</h4>
                         {datosDeclaration.diabetes === 'Si' ? (
                             <h4>
@@ -158,22 +155,19 @@ const DatosRevision = () => {
                                 {datosDeclaration.othersD}
                             </h4>
                         ) : null}
-                        
 
                         {datosDeclaration.surgeryProt === 'Si' ? (
                             <h4>
                                 {' '}
                                 Operaciones/Protesís <br></br>
                                 {datosDeclaration.surgeryProtD}
-                                                            </h4>
+                            </h4>
                         ) : null}
-                        
 
                         {datosDeclaration.hearing === 'Si' ? (
                             <h4>
                                 {' '}
                                 Dificultades Auditivas<br></br>
-                                
                                 {datosDeclaration.hearingD}
                             </h4>
                         ) : null}
@@ -199,12 +193,10 @@ const DatosRevision = () => {
                                 {datosDeclaration.faintingD}
                             </h4>
                         ) : null}
-                        
 
                         {datosDeclaration.psychological === 'Si' ? (
                             <h4>
                                 Tratamiento Psicologico<br></br>
-                                
                                 {datosDeclaration.psychologicalD}
                             </h4>
                         ) : null}
@@ -237,7 +229,7 @@ const DatosRevision = () => {
                         Descargar en Pdf
                     </Button>
                 )}
-              
+                {/* // <button onClick={}> probando ese pdf</button>} }
             </Pdf> */}
         </div>
     );

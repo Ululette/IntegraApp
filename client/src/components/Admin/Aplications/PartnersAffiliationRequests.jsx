@@ -105,6 +105,7 @@ function EnhancedTableHead(props) {
             <TableRow>
                 {headCells.map((headCell, index) => (
                     <TableCell
+                    className={classes.title}
                         key={`${headCell.id}-${index}`}
                         align='left'
                         padding='default'
@@ -653,6 +654,12 @@ export default function PartnersAffiliationRequests({ firebase }) {
                                                 </Tooltip>
                                             </TableCell>
                                             <TableCell
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                                align='left'
                                                 component='th'
                                                 id={labelId}
                                                 scope='row'
@@ -660,18 +667,46 @@ export default function PartnersAffiliationRequests({ firebase }) {
                                             >
                                                 {row.partners.name}
                                             </TableCell>
-                                            <TableCell align='right'>
+                                            <TableCell
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                                align='left'
+                                            >
                                                 {row.partners.lastname}
                                             </TableCell>
-                                            <TableCell align='right'>
+                                            <TableCell
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                                align='left'
+                                            >
                                                 {row.partner_dni}
                                             </TableCell>
-                                            <TableCell align='right'>
+                                            <TableCell
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                                align='left'
+                                            >
                                                 {calculateAge(
                                                     row.partners.birthdate
                                                 )}
                                             </TableCell>
-                                            <TableCell align='center'>
+                                            <TableCell 
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                                align='left'
+                                            >
                                                 <StatusSelector
                                                     current={row.partners.state}
                                                     setNewSatus={setNewSatus}

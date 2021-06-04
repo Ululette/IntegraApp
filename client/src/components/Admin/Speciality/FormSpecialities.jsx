@@ -28,7 +28,7 @@ const FormSpecialities = () => {
         //verificar que sean solo letras
         if (!/^[A-Za-z\s]+$/g.test(inputValue)){
             Swal.fire({
-                title: `La especialidad no puede ser un numero.`,
+                title: `La especialidad solo pueden ser letras.`,
                 icon: 'error',
             });
         } else {
@@ -53,13 +53,14 @@ const FormSpecialities = () => {
         
     };
 
+
     return (
         <div>
             {rows.length === 0 ? (
                 <CircularProgress/>
             ) : (
 
-                <TableSpecialities rows={rows} handlerButtonClick={handlerButtonClick}/>
+                <TableSpecialities rows={rows} handlerButtonClick={handlerButtonClick} />
             )}
         </div>
     );

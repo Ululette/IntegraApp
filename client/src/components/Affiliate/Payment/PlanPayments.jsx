@@ -42,10 +42,44 @@ function a11yProps(index) {
     };
 }
 
+// root: {
+//     flexGrow: 1,
+//     backgroundColor: theme.palette.background.paper,
+// },
+
 const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow: 1,
-        backgroundColor: theme.palette.background.paper,
+        width: '100%',
+        margin: '0px',
+        padding: '0px 0px 0px 0px',
+        marginTop: '10px',
+        alignItems: 'left',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        backgroundColor: '#ffffff',
+    },
+    tab: {
+        width: '100%',
+        margin: '0px',
+        padding: '0px 0px 0px 0px',
+        color: '#212121',
+        position: 'relative',
+        alignItems: 'left',
+        backgroundColor: '#fafafa',
+        display: 'flex',
+        justifyContent: 'center',
+        overflow: 'auto',
+    },
+    prueba: {
+        backgroundColor: 'rgba(255, 255, 255, 0)',
+        margin: '0px',
+        padding: '0px',
+        boxShadow: 'none',
+    },
+    prueba2: {
+        backgroundColor: 'rgb(112, 193, 189)',
+        fontWeight: 'bold',
     },
 }));
 
@@ -61,12 +95,17 @@ export default function PlanPayments() {
         <div className={classes.root}>
             <AppBar position='static'>
                 <Tabs
+                    className={classes.tab}
                     value={value}
                     onChange={handleChange}
                     aria-label='simple tabs example'
                 >
-                    <Tab label='Pagos pendientes' {...a11yProps(0)} />
-                    <Tab label='Historial de pagos' {...a11yProps(1)} />
+                    <Tab 
+                        className={classes.prueba2}
+                        label='Pagos pendientes' {...a11yProps(0)} />
+                    <Tab 
+                        className={classes.prueba2}
+                        label='Historial de pagos' {...a11yProps(1)} />
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
