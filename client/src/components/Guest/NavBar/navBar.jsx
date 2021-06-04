@@ -25,9 +25,9 @@ const NavBar = ({ history }) => {
                 <NavLink to='/login' className={styles.navL}>
                     <button className={styles.login}>Entrar</button>
                 </NavLink>
-                <NavLink to='/about' className={styles.navL}>
+                {/* <NavLink to='/about' className={styles.navL}>
                     <button className={styles.login}>About</button>
-                </NavLink>
+                </NavLink> */}
             </div>
         </nav>
     );
