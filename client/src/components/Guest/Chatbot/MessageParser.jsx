@@ -16,6 +16,11 @@ class MessageParser {
          if (/\d/.test(message) === true) {
         this.actionProvider.handleDni(message)
       }
+  /*     if (/\d/.test(message) === true && message.length === 3) {
+        this.actionProvider.handlePhoneNumber(message)
+      } */
+
+
       if (lowerCaseMessage.includes("emergencia") || lowerCaseMessage.includes("numeros")) {
         this.actionProvider.handleEmergencyList()
       }
@@ -39,7 +44,7 @@ class MessageParser {
      !lowerCaseMessage.includes("lugares") &&!lowerCaseMessage.includes("donde") &&!lowerCaseMessage.includes("pregunta") &&!lowerCaseMessage.includes("duda")
      &&!lowerCaseMessage.includes("planes") &&!lowerCaseMessage.includes("comprar") &&!lowerCaseMessage.includes("plan") && !lowerCaseMessage.includes("familia")
      &&!lowerCaseMessage.includes("emergencia") &&!lowerCaseMessage.includes("numeros")
-     &&!lowerCaseMessage.includes("hola") &&!lowerCaseMessage.includes("buenos dias") && !lowerCaseMessage.includes("buenas")  && !lowerCaseMessage.includes("ja") && !(/\d/.test(message) === true)) {
+     &&!lowerCaseMessage.includes("hola") &&!lowerCaseMessage.includes("buenos dias") && !lowerCaseMessage.includes("buenas")  && !lowerCaseMessage.includes("ja") && !/\d/.test(message) === true) {
         this.actionProvider.sorry()
       }  
      

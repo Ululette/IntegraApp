@@ -6,6 +6,7 @@ class ActionProvider {
     this.states = [];
     this.number = [];
     this.dni = [];
+    this.ok = []
     this.fetchState();
     this.fetchInstitutions();
     this.fetchDNI();
@@ -22,7 +23,7 @@ class ActionProvider {
   fetchDNI = async () => {
     let { data } = await supabase
       .from("partners")
-      .select("dni, name, birthdate, plans(id, name, price)");
+      .select("dni, name, birthdate, phone_number, plans(id, name, price)");
     this.dni.push(data);
     console.log(this.dni, "data");
   };
@@ -70,28 +71,61 @@ class ActionProvider {
     this.updateChatbotState(message);
   };
 
+  auxiliar = (dni) => {
+}
+
+
   handleDni = (dni) => {
-    console.log(typeof dni);
     let allDni = [];
     let selected = [];
     let index = 0
     let dniN = 0;
-    allDni = this.dni[0].map((d) => d.dni);
+    console.log(dni.length, 'length')
+    if(dni.length < 7 ){
+      console.log('enntre')
+      let message = this.createChatBotMessage("Tu DNI es demasiado corto");
+      this.updateChatbotState(message);
+    }
+    else {
+      allDni = this.dni[0].map((d) => d.dni);
     selected = allDni.filter((d) => {
       console.log(dni, "dni");
       return d == dni;
     });
-    if (selected.length > 0) {
+   if (selected.length > 0) {
       dniN = parseInt(dni);
       console.log(dniN, "n");
      index = allDni.indexOf(dniN);
-      let message = this.createChatBotMessage(`Hola ${this.dni[0][index].name}! Tu plan es: ${this.dni[0][index].plans.name}`);
+      let message = this.createChatBotMessage(`Hola ${this.dni[0][index].name}! Tu plan es: ${this.dni[0][index].plans.name} y el precio es: ${this.dni[0][index].plans.price}`);
+      this.ok.push(index)
       this.updateChatbotState(message);
-    } else {
-      let message = "tu plan no se encontro";
+    } 
+    else{
+      let message = this.createChatBotMessage("Tu plan no se encontro");
       this.updateChatbotState(message);
     }
+  }
   };
+  
+  handlePhoneNumber = (num) => {
+ let aux = 0
+ aux = this.ok[1]
+ console.log(this.ok,'this.ok')
+    if   (
+    this.dni[0][aux].phone_number[this.dni[0][aux].phone_numberphone_number.length] === num[2] &&  
+    this.dni[0][aux].phone_number[this.dni[0][aux].phone_numberphone_number.length -1] === num[1] && 
+    this.dni[0][aux].phone_number[this.dni[0][aux].phone_numberphone_number.length]-2 === num[0] ){
+
+      let message = this.createChatBotMessage(`Hola ${this.dni[0][aux].name}! Tu plan es: ${this.dni[0][aux].plans.name} y el precio es: ${this.dni[0].this.ok[1].plans.price}`);
+      this.updateChatbotState(message);
+    }
+      else {
+        let message = "tu plan no se encontro";
+        this.updateChatbotState(message);
+      }
+   
+  }
+
 
   handleFAQList = () => {
     const message = this.createChatBotMessage(
