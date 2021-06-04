@@ -87,8 +87,8 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import FamilyMembersList from './FamilyMembersList.jsx';
 import RegStepper from './FamilyStepper.jsx';
+import FamilyMembersList from './FamilyMembersList.jsx';
 //----FALTA CORREGIR
 /*
 1-ubicar tabla paralela linea tab izquierda
@@ -130,9 +130,9 @@ function a11yProps(index) {
 
 const useStyles = makeStyles(() => ({
     root: {
-        width: '100%',
-        margin: '0px',
-        padding: '0px 0px 0px 0px',
+        width:'100%',
+        margin:'0px',
+        padding:'0px 0px 0px 0px',
         alignItems: 'left',
         display: 'flex',
         flexDirection: 'column',
@@ -140,29 +140,29 @@ const useStyles = makeStyles(() => ({
         backgroundColor: '#ffffff',
     },
     tab: {
-        width: '100%',
-        margin: '0px',
-        padding: '0px',
-        color: '#212121',
+        width:'100%',
+        margin:'0px',
+        padding:'0px',
+        color:'#212121',
         position: 'relative',
         alignItems: 'left',
         backgroundColor: '#fafafa',
         display: 'flex',
         justifyContent: 'center',
-        overflow: 'auto',
+        overflow:'auto'
     },
-    prueba: {
+    prueba:{
         backgroundColor: '#ffffff',
-
+        
         //backgroundColor: 'rgb(217 222 222 / 56%)',
-        margin: '0px',
-        padding: '0px',
-        boxShadow: 'none',
+        margin:'0px',
+        padding:'0px',
+        boxShadow:'none'
     },
-    prueba2: {
+    prueba2:{
         backgroundColor: 'rgb(112, 193, 189)',
-        fontWeight: 'bold',
-    },
+        fontWeight:'bold'
+    }
 }));
 
 export default function AdminMedicTabs() {
@@ -176,21 +176,13 @@ export default function AdminMedicTabs() {
     return (
         <div className={classes.root}>
             <AppBar bgcolor='background.paper' className={classes.tab}>
-                <Tabs
+                <Tabs 
                     value={value}
                     onChange={handleChange}
                     aria-label='simple tabs example'
                 >
-                    <Tab
-                        label='Grupo familiar'
-                        {...a11yProps(0)}
-                        className={classes.prueba2}
-                    />
-                    <Tab
-                        label='Añadir familiar'
-                        {...a11yProps(1)}
-                        className={classes.prueba2}
-                    />
+                    <Tab label='Grupo familiar' {...a11yProps(0)} className={classes.prueba2} />
+                    <Tab label='Añadir familiar' {...a11yProps(1)} className={classes.prueba2}/>
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
