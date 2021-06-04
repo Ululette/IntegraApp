@@ -89,7 +89,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-export default function AdminMedicTabs() {
+export default function AdminMedicTabs({firebase}) {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
 
@@ -119,7 +119,7 @@ export default function AdminMedicTabs() {
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
-                <MedicsTable />
+                <MedicsTable firebase={firebase} />
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <FormSpecialities />

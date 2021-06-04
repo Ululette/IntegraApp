@@ -90,7 +90,7 @@ async function getData(query) {
         const { data, error: dataError } = await supabase
             .from(selection)
             .select(
-                `*, medical_consultations(partner: partner_dni(name, lastname))`
+                `*, medical_consultations(medic_dni, partner: partner_dni(name, lastname))`
             )
             .ilike(`${column}`, `%${param}%`);
         return data ? data : dataError;
@@ -113,6 +113,7 @@ export default function PrescriptionsAndOrders() {
     const allAffiliates = partners.filter((e) =>
         data.find((d) => d.medical_consultations.partner.lastname == e.lastname)
     );
+    const medicData = JSON.parse(localStorage.getItem('medicdata'));
 
     const handleChange = (event) => {
         setQuery({ ...query, [event.target.name]: event.target.value });
@@ -125,7 +126,7 @@ export default function PrescriptionsAndOrders() {
     useEffect(() => {
         dispatch(getAffiliates());
         getData(query).then(
-            (r) => setData(r),
+            (r) => setData(r.filter(e => e.medical_consultations.medic_dni === medicData.dni )),
             (err) => console.log(err)
         );
     }, [query]);
