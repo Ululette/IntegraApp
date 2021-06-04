@@ -15,11 +15,13 @@ const NavBar = ({ history }) => {
                 <NavLink to='/faqs'>
                     <button className={styles.logB}>FAQS</button>
                 </NavLink>
-                <button className={styles.logB}>
-                    <a className={styles.linkAsociate} href='#contact'>
-                        Asociate
-                    </a>
-                </button>
+                {location.includes('faqs')?null:(
+                    <button className={styles.logB}>
+                        <a className={styles.linkAsociate} href='#contact'>
+                            Asociate
+                        </a>
+                    </button>
+                )}
                 <NavLink to='/login' className={styles.navL}>
                     <button className={styles.login}>Entrar</button>
                 </NavLink>
