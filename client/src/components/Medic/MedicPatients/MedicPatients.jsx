@@ -51,8 +51,14 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'space-evenly',
         alignItems: 'center',
         width: '100%',
-        border: '1px solid #00897B',
-        color: '#00897B',
+        border: '1px solid #2c7f7b',
+        color: '#fafafa',
+        fontWeight:'bold',
+        backgroundColor:'#2c7f7b',
+        '&hover':{
+            backgroundColor:'red',
+            color:'red',
+        }
     },
     closeButton: {
         color: '#00897B',
@@ -66,6 +72,9 @@ const useStyles = makeStyles((theme) => ({
     closeStudy: {
         color: '#00897B',
     },
+    nuevo:{
+        
+    }
 }));
 
 function MedicPatients() {
@@ -191,16 +200,16 @@ function MedicPatients() {
                     <div key={`div-${idx}`} className={styles.eachPatient}>
                         <Button
                             variant='outlined'
-                            className={classes.buttonPatient}
+                            className={styles.buttonPatient}
                             key={`patient-${idx}`}
                             onClick={() => handleClickOpen(idx)}
                         >
-                            <ListItem>
-                                <ListItemText primary={`${pat.dni}`} />
+                            <ListItem >
+                                <ListItemText className={classes.nuevo} primary={`${pat.dni}`} />
                             </ListItem>
                             <ListItem>
                                 <ListItemText
-                                    primary={`${pat.name} ${pat.lastname}`}
+                                    primary={`${pat.name}, ${pat.lastname}`}
                                 />
                             </ListItem>
                         </Button>

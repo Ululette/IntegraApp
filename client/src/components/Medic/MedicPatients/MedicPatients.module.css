@@ -56,6 +56,7 @@
 
 .listItem {
     text-transform: capitalize;
+    
 }
 
 .titleContact {
@@ -65,15 +66,24 @@
 
 .buttonPatient {
     width: 100%;
-    color: rgb(29, 114, 104);
+    color: rgb(255, 255, 255) !important;
+    font-size: 30px;
+    background-color: #2c7f7b !important;
+   
 }
-
+.buttonPatient:hover{
+    background-color:rgb(255, 255, 255) !important;
+    color:#2c7f7b !important;
+    border: 3px solid #2c7f7b;
+    font-weight: bolder !important;
+}
 .buttonPatient span {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    font-weight: bolder !important;
 }
 
 .orders {

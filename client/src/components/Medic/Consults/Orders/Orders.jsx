@@ -155,6 +155,8 @@ export default function Orders({ handleEvent }) {
                         <Button
                             onClick={handleSave}
                             key={'savemed'}
+                            size='small'
+                            variant='outlined'
                             color='primary'
                         >
                             Guardar

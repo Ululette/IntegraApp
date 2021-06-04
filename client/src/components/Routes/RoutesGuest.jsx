@@ -6,13 +6,12 @@ import Footer from '../Guest/Footer/Footer.jsx';
 import FaqsPage from '../Guest/Faqs/FaqsPage.jsx';
 import ComparativaP from '../Guest/ComparativaP/ComparativaP.jsx';
 import RegStepper from '../Guest/RegStepForm/RegStepper';
-
 function RoutesGuest() {
     return (
         <>
             <Route
                 exact
-                path={['/', '/faqs', '/plandetails']}
+                path={['/', '/faqs', '/plandetails',"/step"]}
                 component={NavBar}
             />
             <Route exact path='/' component={LandingPage} />

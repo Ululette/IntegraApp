@@ -19,7 +19,8 @@
 }
 .ajuste {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    width: 100%;
 }
 
 .datosTitular {
@@ -27,27 +28,34 @@
     flex-direction: column;
 }
 .firstColumn {
-    padding: 5px;
     display: flex;
     flex-direction: column;
-    background: aliceblue;
+    background: rgb(65, 174, 169,0.3);
     height: fit-content;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    justify-content: space-around;
 }
 
 .datosEmpresa {
     margin-left: 10px;
     display: flex;
     flex-direction: column;
-    padding: 5px;
-    background: aliceblue;
+    padding: 10px;
+    background: rgb(65, 174, 169,0.3);
     height: fit-content;
+    border-radius: 10px;
+    justify-self: right;
 }
 .salud {
     display: flex;
     flex-direction: column;
     margin-left: 10px;
-    padding: 5px;
+    height: fit-content;
     padding: 10px;
+    background: rgb(65, 174, 169,0.3);
+    border-radius: 10px;
 }
 .segmentos {
     margin-top: 5px;

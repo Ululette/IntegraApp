@@ -256,24 +256,16 @@ export default function RegStepper() {
             <div>
                 {activeStep === steps.length ? (
                     <div>
-                        <Typography className={classes.instructions}>
-                            <div
-                                style={{ backgroundColor: '#41aea9' }}
-                                className={Styles.successRequestContent}
-                            >
-                                <p className={Styles.successRequestTitle}>
-                                    ¡Gracias por escribirnos!
-                                </p>
-                                <p className={Styles.successRequestSubTitle}>
-                                    {' '}
-                                    Un asesor se comunicara con vos
-                                </p>
-                                <p className={Styles.successRequestSubTitle}>
-                                    {' '}
-                                    para charlar sobre tu próximo plan.
-                                </p>
-                            </div>
-                        </Typography>
+                         <div className={style.cartel}>
+  <img src="../../assets/icons/medicrecordd.png"
+  alt="medicRecord"/>
+  
+  <div className={style.text}>
+  <h3 className={style.title}>Su Registro esta Completo</h3>
+
+        <h4 className={style.subtitle}>Muchas gracias por su tiempo.</h4>
+        </div>
+  </div>
 
                         {/* <Button onClick={handleReset}>Reset</Button> */}
                     </div>

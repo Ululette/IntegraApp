@@ -31,7 +31,7 @@ const Declaration = () => {
         medicines: 'No',
     });
     const [inputsText, setInputsText] = useState({
-        completeName: '',
+        
         diabetesD: '',
         heartD: '',
         herniaD: '',
@@ -51,12 +51,9 @@ const Declaration = () => {
         psychiatricD: '',
         medicinesD: '',
     });
-    // const [inputNum, setInputNum] = useState({ dniDeclaration: "" });
+    
     const [checkInput, setCheckInput] = useState({ accept: '' });
-    const [errors, setErrors] = useState({
-        completeName: '',
-        dniDeclaration: '',
-    });
+
     const handleRad = (e) => {
         let { name, value } = e.target;
         setInputsRad({
@@ -64,14 +61,14 @@ const Declaration = () => {
             [name]: value,
         });
     };
-    const handleName = (e) => {
-        let { name, value } = e.target;
-        validin(value, 'string');
-        setInputsText({
-            ...inputsText,
-            [name]: value,
-        });
-    };
+    // const handleName = (e) => {
+    //     let { name, value } = e.target;
+    //     validin(value, 'string');
+    //     setInputsText({
+    //         ...inputsText,
+    //         [name]: value,
+    //     });
+    // };
     const handleText = (e) => {
         let { name, value } = e.target;
         setInputsText({
@@ -84,22 +81,22 @@ const Declaration = () => {
         setCheckInput({ ...checkInput, [e.target.name]: e.target.checked });
     };
 
-    const validin = (input, type) => {
-        const ex_name = /^[a-z ,.'-]+$/i;
-        if (type === 'string') {
-            if (!ex_name.test(input)) {
-                setErrors({
-                    ...errors,
-                    completeName: 'Completar nombre y apellido',
-                });
-            } else {
-                setErrors({
-                    ...errors,
-                    completeName: '',
-                });
-            }
-        }
-    };
+    // const validin = (input, type) => {
+    //     const ex_name = /^[a-z ,.'-]+$/i;
+    //     if (type === 'string') {
+    //         if (!ex_name.test(input)) {
+    //             setErrors({
+    //                 ...errors,
+    //                 completeName: 'Completar nombre y apellido',
+    //             });
+    //         } else {
+    //             setErrors({
+    //                 ...errors,
+    //                 completeName: '',
+    //             });
+    //         }
+    //     }
+    // };
 
     function saveInLocalStorage() {
         localStorage.setItem(
@@ -107,14 +104,8 @@ const Declaration = () => {
             JSON.stringify({
                 ...inputsRad,
                 ...inputsText,
-                // ...inputNum,
                 ...checkInput,
             })
-        );
-
-        localStorage.setItem(
-            'errorsDeclaration',
-            JSON.stringify({ ...errors })
         );
     }
     useEffect(() => {
@@ -143,7 +134,6 @@ const Declaration = () => {
                 medicines: datosDeclaration.medicines,
             });
             setInputsText({
-                completeName: datosDeclaration.completeName,
                 diabetesD: datosDeclaration.diabetesD,
                 heartD: datosDeclaration.heartD,
                 herniaD: datosDeclaration.herniaD,
@@ -163,45 +153,15 @@ const Declaration = () => {
                 psychiatricD: datosDeclaration.psychiatricD,
                 medicinesD: datosDeclaration.medicinesD,
             });
-            // setInputNum({
-            //   dniDeclaration:datosDeclaration.dniDeclaration
-            // })
+          
             setCheckInput({ accept: datosDeclaration.accept });
-            validin(datosDeclaration.dniDeclaration, 'number');
-            validin(datosDeclaration.completeName, 'string');
+         
         }
         //eslint-disable-next-line
     }, []);
 
     return (
         <div name='masterCol' className={styles.mastercol}>
-            <TextField
-                className={styles.tfield}
-                name='completeName'
-                value={inputsText.completeName}
-                onChange={handleName}
-                label='NOMBRE Y APELLIDO'
-                onBlur={saveInLocalStorage}
-                {...(errors.completeName && {
-                    error: errors.completeName,
-                    helperText: errors.completeName,
-                })}
-            ></TextField>
-            {/* <TextField
-        name="dniDeclaration"
-        type="number"
-        value={inputNum.dniDeclaration}
-        onChange={handleNum}
-        label="DNI"
-        inputProps={{
-          min: 0,
-        }}
-        onBlur={saveInLocalStorage}
-        {...(errors.dniDeclaration && {
-          error: errors.dniDeclaration,
-          helperText: errors.dniDeclaration,
-        })}
-      ></TextField> */}
             <FormLabel>
                 <h4 className={styles.title}>
                     ¿Padece alguna de las siguientes enfermedades?

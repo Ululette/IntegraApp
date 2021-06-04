@@ -111,6 +111,7 @@ export default function PaymentsTable({ paymentStatus }) {
                                         variant='contained'
                                         color='primary'
                                         className={styles.prueba}
+                                        disabled
                                     >
                                         Ver detalle
                                     </Button>
