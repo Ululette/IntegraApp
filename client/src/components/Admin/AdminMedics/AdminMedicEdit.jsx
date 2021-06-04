@@ -15,7 +15,7 @@ import withReactContent from 'sweetalert2-react-content';
 import { statesMedic } from '../../../functions/states.js';
 import supabase from '../../../supabase.config.js';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+import './AdminMedicEdit.css';
 const useStyles = makeStyles((theme) => ({
     fab: {
         margin: theme.spacing(2),
@@ -117,10 +117,19 @@ function AdminMedicEdit({
             address.postalCode !== '' &&
             String(address.postalCode).length >= 4
         ) {
-            const { data } = await supabase
+            const { data, error: errorsito } = await supabase
                 .from('localities')
                 .select('name, postal_code, states (name)')
                 .eq('postal_code', address.postalCode);
+            console.log(errorsito, data);
+            if (errorsito || data.length === 0)
+                return MySwal.fire({
+                    title: 'No existe ese codigo postal.',
+                    icon: 'error',
+                    showCancelButton: false,
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#00897B',
+                });
             setLocalities(data);
             setAddress({ ...address, state: data[0].states.name });
         }
