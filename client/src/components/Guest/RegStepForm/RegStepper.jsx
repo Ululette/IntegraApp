@@ -235,7 +235,7 @@ export default function RegStepper() {
 
     return (
         <div className={classes.root}>
-            <Stepper activeStep={activeStep} alternativeLabel>
+            <Stepper activeStep={activeStep} alternativeLabel >
                 {steps.map((label) => (
                     <Step key={label}>
                         <StepLabel>{label}</StepLabel>
@@ -267,7 +267,7 @@ export default function RegStepper() {
                         <Typography className={classes.instructions}>
                             {getStepContent(activeStep)}
                         </Typography>
-                        <div>
+                        <div >
                             <Button
                                 disabled={activeStep === 0}
                                 onClick={handleBack}
