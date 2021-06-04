@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import Styles from '../../Guest/ContactForm/ContactForm.module.css';
+import { makeStyles } from '@material-ui/core/styles';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import styles from './AdminRegistration.module.css';
 import LogoNav from '../../../assets/logo-integra.png';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
@@ -9,10 +13,36 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import supabase from '../../../supabase.config';
 import Swal from 'sweetalert2';
+import Styles from './AdminRegistration.module.css';
 import withReactContent from 'sweetalert2-react-content';
 import 'firebase/auth';
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    margin: {
+        margin: theme.spacing(1),
+    },
+    withoutLabel: {
+        marginTop: theme.spacing(3),
+    },
+    textField: {
+        width: '300px',
+    },
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+    },
+    button: {
+        backgroundColor: '#27978b',
+        color: '#f0f0f0',
+    },
+}));
+
 function AdminRegistration({ firebase }) {
+    const classes = useStyles();
     const MySwal = withReactContent(Swal);
     const [input, setInput] = useState({
         name: '',
@@ -20,6 +50,7 @@ function AdminRegistration({ firebase }) {
         dni: '',
         mail: '',
         birthdate: '',
+        phone: '',
         root: '',
     });
     const [errors, setErrors] = useState({
@@ -29,6 +60,7 @@ function AdminRegistration({ firebase }) {
         birthdate: false,
         root: false,
         mail: false,
+        phone: false,
     });
 
     const [errorRequest, setErrorRequest] = useState(false);
@@ -40,7 +72,8 @@ function AdminRegistration({ firebase }) {
             !errors.dni &&
             !errors.mail &&
             !errors.birthdate &&
-            !errors.root
+            !errors.root &&
+            !errors.phone
         ) {
             await supabase.from('users').insert([
                 {
@@ -57,6 +90,8 @@ function AdminRegistration({ firebase }) {
                     birthdate: input.birthdate,
                     dni: input.dni,
                     root: input.root,
+                    email: input.mail,
+                    phone_number: input.phone,
                 },
             ]);
 
@@ -86,6 +121,7 @@ function AdminRegistration({ firebase }) {
                 mail: '',
                 birthdate: '',
                 root: '',
+                phone: '',
             });
         } else {
             setErrorRequest(true);
@@ -137,6 +173,14 @@ function AdminRegistration({ firebase }) {
                 }
                 break;
             }
+            case 'phone': {
+                if (!numberPattern.test(value) || value.length !== 10) {
+                    errors.phone = true;
+                } else {
+                    errors.phone = false;
+                }
+                break;
+            }
             case 'mail': {
                 if (!mailPattern.test(value)) {
                     errors.mail = true;
@@ -184,7 +228,7 @@ function AdminRegistration({ firebase }) {
     }
 
     return (
-        <div className={Styles.conteinerAll}>
+        <div className={styles.conteinerAll}>
             <Snackbar
                 open={errorRequest}
                 autoHideDuration={6000}
@@ -194,110 +238,153 @@ function AdminRegistration({ firebase }) {
                     Error, verifique los datos.
                 </Alert>
             </Snackbar>
-            <div className={Styles.formConteiner}>
-                <div className={Styles.inputs}>
-                    <div className={Styles.imgConteiner}>
-                        <img src={LogoNav} alt='Logo' />
+            <div className={styles.formConteiner}>
+                <div className={styles.imgConteiner}>
+                    <img src={LogoNav} className={styles.logo} alt='Logo' />
+                </div>
+                <div className={styles.inputs}>
+                    <div className={styles.firstColumn}>
+                        <div className={styles.textField}>
+                            <TextField
+                                label='Nombre'
+                                variant='outlined'
+                                id='name-input'
+                                type='text'
+                                name='name'
+                                autoComplete='off'
+                                className={classes.textField}
+                                // size='small'
+                                value={input.name}
+                                onChange={(e) => handleInputChange(e)}
+                                {...(errors.name && {
+                                    error: errors.name,
+                                    helperText: 'Nombre invalido',
+                                })}
+                            />
+                        </div>
+                        <div className={styles.textField}>
+                            <TextField
+                                label='Apellido'
+                                variant='outlined'
+                                id='lastname-input'
+                                type='text'
+                                name='lastname'
+                                autoComplete='off'
+                                className={classes.textField}
+                                // size='small'
+                                value={input.lastname}
+                                onChange={(e) => handleInputChange(e)}
+                                {...(errors.lastname && {
+                                    error: errors.lastname,
+                                    helperText: 'Apellido invalido',
+                                })}
+                            />
+                        </div>
+                        <div className={styles.textField}>
+                            <TextField
+                                label='DNI'
+                                variant='outlined'
+                                id='dni-input'
+                                type='tel'
+                                name='dni'
+                                autoComplete='off'
+                                className={classes.textField}
+                                // size='small'
+                                value={input.dni}
+                                onChange={(e) => handleInputChange(e)}
+                                {...(errors.dni && {
+                                    error: true,
+                                    helperText: 'Dni invalido',
+                                })}
+                                inputProps={{ maxLength: 8 }}
+                            />
+                        </div>
                     </div>
+                    <div className={styles.secondColumn}>
+                        <div className={styles.textField}>
+                            <TextField
+                                label='Fecha de nacimiento'
+                                variant='outlined'
+                                id='date-input'
+                                type='date'
+                                name='birthdate'
+                                autoComplete='off'
+                                className={classes.textField}
+                                // size='small'
+                                value={input.birthdate}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                onChange={(e) => handleInputChange(e)}
+                            />
+                        </div>
+                        <div className={styles.textField}>
+                            <FormControl
+                                variant='outlined'
+                                className={classes.formControl}
+                            >
+                                <InputLabel htmlFor='mail-input'>
+                                    Root
+                                </InputLabel>
+                                {/* <label htmlFor='mail-input'>Root?</label> */}
+                                <Select
+                                    label='Root'
+                                    variant='outlined'
+                                    id='mail-input'
+                                    type='text'
+                                    name='root'
+                                    autoComplete='off'
+                                    className={classes.textField}
+                                    // size='small'
+                                    value={input.root}
+                                    InputLabelProps={{
+                                        shrink: false,
+                                    }}
+                                    onChange={(e) => handleInputChange(e)}
+                                >
+                                    <MenuItem value='true'>Si</MenuItem>
+                                    <MenuItem value='false'>No</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </div>
+                        <div className={styles.textField}>
+                            <TextField
+                                label='E-mail'
+                                variant='outlined'
+                                id='mail-input'
+                                type='text'
+                                name='mail'
+                                autoComplete='off'
+                                className={classes.textField}
+                                // size='small'
+                                value={input.mail}
+                                onChange={(e) => handleInputChange(e)}
+                                {...(errors.mail && {
+                                    error: true,
+                                    helperText: 'Mail invalido',
+                                })}
+                            />
+                        </div>
+                    </div>
+
                     <div className={Styles.textField}>
                         <TextField
-                            label='Nombre'
+                            label='phone'
                             variant='outlined'
-                            id='name-input'
-                            type='text'
-                            name='name'
+                            id='phone-input'
+                            type='number'
+                            name='phone'
                             autoComplete='off'
                             size='small'
-                            value={input.name}
+                            value={input.phone}
                             onChange={(e) => handleInputChange(e)}
-                            {...(errors.name && {
-                                error: errors.name,
-                                helperText: 'Nombre invalido',
-                            })}
-                        />
-                    </div>
-                    <div className={Styles.textField}>
-                        <TextField
-                            label='Apellido'
-                            variant='outlined'
-                            id='lastname-input'
-                            type='text'
-                            name='lastname'
-                            autoComplete='off'
-                            size='small'
-                            value={input.lastname}
-                            onChange={(e) => handleInputChange(e)}
-                            {...(errors.lastname && {
-                                error: errors.lastname,
-                                helperText: 'Apellido invalido',
-                            })}
-                        />
-                    </div>
-                    <div className={Styles.textField}>
-                        <TextField
-                            label='DNI'
-                            variant='outlined'
-                            id='dni-input'
-                            type='tel'
-                            name='dni'
-                            autoComplete='off'
-                            size='small'
-                            value={input.dni}
-                            onChange={(e) => handleInputChange(e)}
-                            {...(errors.dni && {
+                            {...(errors.phoneNumber && {
                                 error: true,
-                                helperText: 'Dni invalido',
-                            })}
-                            inputProps={{ maxLength: 8 }}
-                        />
-                    </div>
-                    <div className={Styles.textField}>
-                        <TextField
-                            label='Fecha de nacimiento'
-                            variant='outlined'
-                            id='name-input'
-                            type='date'
-                            name='birthdate'
-                            autoComplete='off'
-                            size='small'
-                            value={input.birthdate}
-                            onChange={(e) => handleInputChange(e)}
-                        />
-                    </div>
-                    <div className={Styles.textField}>
-                        <label htmlFor='mail-input'>Root?</label>
-                        <Select
-                            label='Es root?'
-                            variant='outlined'
-                            id='mail-input'
-                            type='text'
-                            name='root'
-                            autoComplete='off'
-                            size='small'
-                            value={input.root}
-                            onChange={(e) => handleInputChange(e)}
-                        >
-                            <MenuItem value='true'>Si</MenuItem>
-                            <MenuItem value='false'>No</MenuItem>
-                        </Select>
-                    </div>
-                    <div className={Styles.textField}>
-                        <TextField
-                            label='E-mail'
-                            variant='outlined'
-                            id='mail-input'
-                            type='text'
-                            name='mail'
-                            autoComplete='off'
-                            size='small'
-                            value={input.mail}
-                            onChange={(e) => handleInputChange(e)}
-                            {...(errors.mail && {
-                                error: true,
-                                helperText: 'Mail invalido',
+                                helperText: 'Telefono invalido',
                             })}
                         />
                     </div>
+
                     {/* <div className={Styles.textField}>
                         <TextField
                             id='outlined-search'
@@ -339,7 +426,8 @@ function AdminRegistration({ firebase }) {
                     <Button
                         variant='contained'
                         color='primary'
-                        style={{ borderRadius: 100, margin: 10 }}
+                        // style={{ borderRadius: 100, margin: 10 }}
+                        className={classes.button}
                         onClick={handleClickOpen}
                     >
                         Agregar Admin

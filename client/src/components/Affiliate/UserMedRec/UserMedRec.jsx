@@ -54,7 +54,6 @@ function UserMedRec() {
             return err;
         }
     };
-    console.log('Medical record:', medicalRecord);
 
     if (medicalRecord) {
         return (

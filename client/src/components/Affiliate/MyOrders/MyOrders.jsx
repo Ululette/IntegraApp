@@ -335,7 +335,6 @@ export default function MyOrders() {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [toShowRows, setToShowRows] = React.useState([]);
     const [currentStudy, setCurrentStudy] = React.useState(false);
-    console.log(currentStudy);
     const [open, setOpen] = React.useState(false);
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));

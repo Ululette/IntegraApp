@@ -18,14 +18,11 @@ const DatosTitular = () => {
     };
     const localidades = async (provincia) => {
         let idprov = provincia.split('-')[0];
-        console.log(idprov);
-        const { data: local, error: errorlocal } = await supabase
+        const { data: local } = await supabase
             .from('localities')
             .select('id, state_id,name')
             .eq('state_id', Number(idprov));
-        console.log(errorlocal);
         setAllLocalities(local);
-        console.log(local);
 
         return local;
     };

@@ -206,7 +206,6 @@ function AdminPlans({ firebase }) {
     };
 
     const handleSubmitDelete = async (e, id) => {
-        console.log(id);
         e.preventDefault();
         try {
             let userData = JSON.parse(localStorage.getItem('userdata'));

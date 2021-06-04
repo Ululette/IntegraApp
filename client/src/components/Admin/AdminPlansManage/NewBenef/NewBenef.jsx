@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import supabase from '../../../../supabase.config';
 import { makeStyles, lighten } from '@material-ui/core/styles';
-// import { Autocomplete } from '@material-ui/lab';
 import { TextField, Button } from '@material-ui/core';
 import './NewBenef.css';
+import Swal from 'sweetalert2';
 
 const useStyles = makeStyles((theme) => ({
     nbcontainer: {
-        padding: 0,
+        paddingTop: 25,
+        paddingLeft: 25,
         backgroundColor: '#fafafa',
     },
     root: {
@@ -80,7 +81,7 @@ export default function NewBenef() {
     // }, [categories]);
 
     const [state, setState] = React.useState({
-        title: '',
+        title: null,
         description: '',
         // category: null,
     });
@@ -128,7 +129,6 @@ export default function NewBenef() {
                 break;
 
             case 'description':
-                console.log(event.target.value);
                 // let descreg =
                 //   /[0-9a-zA-ZÀ-ÿ\u00f1\u00d1\.]+[ ]?[0-9a-z A-ZÀ-ÿ\u00f1\u00d1][:punct:]*$/;
 
@@ -159,7 +159,6 @@ export default function NewBenef() {
 
     async function handlesubmit(e) {
         e.preventDefault();
-        console.log('vas a guardar:', state);
 
         // Agrega el nuevo beneficio en la tabla benefits.
         async function addNewBenef(state) {
@@ -173,11 +172,17 @@ export default function NewBenef() {
         }
         await addNewBenef(state);
 
-        alert('listo');
+        await Swal.fire({
+            title: 'Exito!',
+            text: 'Sus datos fueron guardados',
+            icon: 'success',
+            confirmButtonText: 'OK',
+        });
+
         // Luego limpia
         setState({ title: '', description: '', category: null });
         setError({
-            title: 'No puede quedar incompleto o en blanco.',
+            // title: 'No puede quedar incompleto o en blanco.',
             // description: 'No puede quedar incompleto o en blanco.',
             // category: 'Debe pertenecer al menos a una categoría.',
         });
@@ -243,7 +248,7 @@ export default function NewBenef() {
           )} */}
                 </div>
                 <div width='100%' align='right'>
-                    <Button
+                    {!!state.title && <Button
                         id='savebtn'
                         disabled={!validate()}
                         variant='contained'
@@ -251,7 +256,7 @@ export default function NewBenef() {
                         onClick={handlesubmit}
                     >
                         Guardar
-                    </Button>
+                    </Button>}
                 </div>
             </form>
         </div>

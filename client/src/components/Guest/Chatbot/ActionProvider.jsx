@@ -27,7 +27,6 @@ class ActionProvider {
                 'dni, name, birthdate, phone_number, plans(id, name, price)'
             );
         this.dni.push(data);
-        console.log(this.dni, 'data');
     };
 
     thanks() {
@@ -80,9 +79,7 @@ class ActionProvider {
         let selected = [];
         let index = 0;
         let dniN = 0;
-        console.log(dni.length, 'length');
         if (dni.length < 7) {
-            console.log('enntre');
             let message = this.createChatBotMessage(
                 'Tu DNI es demasiado corto'
             );
@@ -90,13 +87,11 @@ class ActionProvider {
         } else {
             allDni = this.dni[0].map((d) => d.dni);
             selected = allDni.filter((d) => {
-                console.log(dni, 'dni');
                 //eslint-disable-next-line
                 return d == dni;
             });
             if (selected.length > 0) {
                 dniN = parseInt(dni);
-                console.log(dniN, 'n');
                 index = allDni.indexOf(dniN);
                 let message = this.createChatBotMessage(
                     `Hola ${this.dni[0][index].name}! Tu plan es: ${this.dni[0][index].plans.name} y el precio es: ${this.dni[0][index].plans.price}`
@@ -115,7 +110,6 @@ class ActionProvider {
     handlePhoneNumber = (num) => {
         let aux = 0;
         aux = this.ok[1];
-        console.log(this.ok, 'this.ok');
         if (
             this.dni[0][aux].phone_number[
                 this.dni[0][aux].phone_numberphone_number.length

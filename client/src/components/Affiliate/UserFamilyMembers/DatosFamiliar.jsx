@@ -20,14 +20,11 @@ const DatosFamiliar = () => {
     };
     const localidades = async (provincia) => {
         let idprov = provincia.split('-')[0];
-        console.log(idprov);
-        const { data: local, error: errorlocal } = await supabase
+        const { data: local } = await supabase
             .from('localities')
             .select('id,name')
             .eq('state_id', Number(idprov));
-        console.log(errorlocal);
         setAllLocalities(local);
-        console.log(local);
 
         return local;
     };
@@ -41,7 +38,7 @@ const DatosFamiliar = () => {
         last_name: '',
         occupation: '',
     });
-    const [dniFamiliar,setDniFamiliar]=useState({dni: '',})
+    const [dniFamiliar, setDniFamiliar] = useState({ dni: '' });
     const [textInputsNum, setInputsTextNum] = useState({
         cuil: '',
         phone_number: '',
@@ -58,7 +55,7 @@ const DatosFamiliar = () => {
         gender: '',
         state: '',
         locality: '',
-        familyBond:""
+        familyBond: '',
     });
     const [emailInputs, setEmailInputs] = useState({ email: '' });
     const [apartmentInput, setApartmentInput] = useState({ apartment: '' });
@@ -73,8 +70,8 @@ const DatosFamiliar = () => {
             phone_number: '',
             number: '',
         },
-        dniErrors:{
-            dni:""
+        dniErrors: {
+            dni: '',
         },
         textMixErrors: {
             street_name: '',
@@ -85,7 +82,7 @@ const DatosFamiliar = () => {
             gender: '',
             locality: '',
             state: '',
-            familyBond:""
+            familyBond: '',
         },
         emailErrors: { email: '' },
     });
@@ -107,7 +104,7 @@ const DatosFamiliar = () => {
         //     });
         //     setEmailInputs({
         //         email: dataQuery.email,
-            // });
+        // });
         // }
         if (datosFamiliar) {
             setTextInputs({
@@ -121,8 +118,8 @@ const DatosFamiliar = () => {
                 number: datosFamiliar.number,
             });
             setDniFamiliar({
-                dni: datosFamiliar.dni
-            })
+                dni: datosFamiliar.dni,
+            });
             setInputsTextMix({
                 street_name: datosFamiliar.street_name,
             });
@@ -135,9 +132,9 @@ const DatosFamiliar = () => {
             setSelectInputs({
                 marital_status: datosFamiliar.marital_status,
                 gender: datosFamiliar.gender,
-                locality: datosFamiliar.locality, 
+                locality: datosFamiliar.locality,
                 state: datosFamiliar.state,
-                familyBond:datosFamiliar.familyBond
+                familyBond: datosFamiliar.familyBond,
             });
             setApartmentInput({ apartment: datosFamiliar.apartment });
 
@@ -162,7 +159,7 @@ const DatosFamiliar = () => {
                     },
                     'number'
                 ),
-                
+
                 //dni: datosFamiliar.dni,
             }));
             setErrors((errors) => ({
@@ -192,26 +189,26 @@ const DatosFamiliar = () => {
                     'email'
                 ),
             }));
-            setErrors((errors) => ({
-                ...errors,
-                selectErrors: validator(
-                    {
-                        marital_status: datosFamiliar.marital_status,
-                        gender: datosFamiliar.gender,
-                        locality: datosFamiliar.locality, 
-                        state: datosFamiliar.state,
-                        familyBond: datosFamiliar.familyBond
-                    },
-                    'radio'
-                ),
-            }),
-            setErrors((errors)=>({
-                ...errors,
-                dniErrors: validateDni(
-                    {
-                    dni:datosFamiliar.dni
-                })
-            }))
+            setErrors(
+                (errors) => ({
+                    ...errors,
+                    selectErrors: validator(
+                        {
+                            marital_status: datosFamiliar.marital_status,
+                            gender: datosFamiliar.gender,
+                            locality: datosFamiliar.locality,
+                            state: datosFamiliar.state,
+                            familyBond: datosFamiliar.familyBond,
+                        },
+                        'radio'
+                    ),
+                }),
+                setErrors((errors) => ({
+                    ...errors,
+                    dniErrors: validateDni({
+                        dni: datosFamiliar.dni,
+                    }),
+                }))
             );
         }
     }, []);
@@ -304,19 +301,21 @@ const DatosFamiliar = () => {
             ),
         });
     };
-    const handleDni=(e)=>{
+    const handleDni = (e) => {
         setDniFamiliar({
-            [e.target.name]: e.target.value})
+            [e.target.name]: e.target.value,
+        });
         setErrors({
             ...errors,
-            dniErrors: validateDni({[e.target.name]:e.target.value})
-        })
-        }
-    
-     const validateDni = (input)=>{
-        if(/^\d*$/.test(input.dni)&& input.dni.toString().length <= 8) return {dniComplete:true} 
-        else return {dni:"El dni debe tener menos de 8 digitos"} 
-    }
+            dniErrors: validateDni({ [e.target.name]: e.target.value }),
+        });
+    };
+
+    const validateDni = (input) => {
+        if (/^\d*$/.test(input.dni) && input.dni.toString().length <= 8)
+            return { dniComplete: true };
+        else return { dni: 'El dni debe tener menos de 8 digitos' };
+    };
 
     useEffect(() => {
         localidades(selectInputs.state);
@@ -331,9 +330,8 @@ const DatosFamiliar = () => {
         allLocalities
             // .filter((l) => l.state_id == selectInputs.state.split('-')[0])
             .map((l) => {
-                                return <option value={`${l.id}-${l.name}`}>{l.name}</option>;
+                return <option value={`${l.id}-${l.name}`}>{l.name}</option>;
             });
-    console.log("localities", localities);
     return (
         <div className={styles.form}>
             <div className={styles.personalData}>
@@ -478,10 +476,11 @@ const DatosFamiliar = () => {
                             >
                                 <option value={''}></option>
                                 <option value={'conyuge'}>Cónyuge</option>
-                                <option value={"concubino/a"}>Concubino/a</option>
-                                <option value={"hijo/a"}>Hijo/a</option>
-                                <option value={"Otro"}>Otro</option>
-                            
+                                <option value={'concubino/a'}>
+                                    Concubino/a
+                                </option>
+                                <option value={'hijo/a'}>Hijo/a</option>
+                                <option value={'Otro'}>Otro</option>
                             </Select>
                         </FormControl>
                     </div>

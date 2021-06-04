@@ -39,7 +39,7 @@ import FaceIcon from '@material-ui/icons/Face';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import NoteIcon from '@material-ui/icons/Note';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
-import PhoneAndroidIcon from '@material-ui/icons/PhoneAndroid';
+// import PhoneAndroidIcon from '@material-ui/icons/PhoneAndroid';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import PaymentIcon from '@material-ui/icons/Payment';
 import GroupIcon from '@material-ui/icons/Group';
@@ -269,10 +269,10 @@ function AdminNav({ firebase, window: windowMui }) {
                         <ListItemText primary='Mis recetas' />
                     </ListItem>
                 </NavLink>
-                <ListItem button>
+                {/* <ListItem button>
                     <PhoneAndroidIcon />
                     <ListItemText primary='Mi credencial' />
-                </ListItem>
+                </ListItem> */}
                 <NavLink
                     to={`/${userData.dni}/affiliate/doctor`}
                     className={styles.link}

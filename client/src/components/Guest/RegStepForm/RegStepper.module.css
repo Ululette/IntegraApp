@@ -82,3 +82,33 @@
   width: 90px;
   height: 30px;
 }
+.cartel{
+  background-color: #45b0a9;
+  width: 100%;  
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: space-around;
+  /* box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px; */
+}
+.title{
+max-width: fit-content;
+color:  white;
+}
+.subtitle{
+
+ max-width: fit-content;
+ margin-left: 40px;
+ color:  white;
+}
+.text{
+  align-items: center;
+  justify-content: center;
+  width: 400px;
+  height: 200px;
+  display:flex;
+  flex-direction: column;
+  border-radius: 20px;
+}

@@ -177,7 +177,6 @@ export default function MedicProfile({ firebase }) {
                 state_id: user.state_id,
                 postal_code: user.postal_code,
             });
-            console.log('cargué modInfo');
         }
     }, [user, modify]);
 
@@ -256,7 +255,6 @@ export default function MedicProfile({ firebase }) {
             case 'state':
                 // Si cambio la provincia tengo que sacar el código postal
                 // id de provincia y la localidad que estaba por defecto.
-                console.log('modificaste a', e.target.value);
                 function findStateId(provincia, allstates) {
                     let idfound = allstates.filter(
                         (state) => state.state_name === provincia
@@ -289,8 +287,6 @@ export default function MedicProfile({ firebase }) {
     // Cuando cambio una localidad setea el error, modifica
     // el estado (modInfo) en donde se guarda y el código postal.
     let handlechange2 = (e, value) => {
-        console.log('seleccionaste', value, modInfo);
-
         // Que no sea string vacío
         let cityregex = /[\S]/;
 
@@ -425,7 +421,6 @@ export default function MedicProfile({ firebase }) {
                 .storage()
                 .ref(`users/${userUid}/profile${extension}`)
                 .put(file);
-            console.log('Se subio exitosamente.');
             let imgSrc = await firebase
                 .storage()
                 .ref(`users/${userUid}/profile${extension}`)
@@ -724,7 +719,6 @@ export default function MedicProfile({ firebase }) {
                                                     }
                                                     error={error.locality}
                                                     helperText={error.locality}
-                                                    // getOptionLabel={(option) => console.log(option.name)}
                                                     renderOption={(option) =>
                                                         option
                                                     }

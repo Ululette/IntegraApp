@@ -135,7 +135,6 @@ export default function ModifyPlan({
                     </Button>
                     <Button
                         className={classes.popupBtn}
-                        onClick={() => console.log('modify button')}
                         type='submit'
                         color='primary'
                     >

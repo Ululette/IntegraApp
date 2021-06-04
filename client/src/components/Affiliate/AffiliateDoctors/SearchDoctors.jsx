@@ -229,8 +229,6 @@ const EnhancedTableToolbar = (props) => {
     const [specialities, setSpecialities] = React.useState();
     const [medicsToShow, setMedicsToShow] = React.useState([]);
 
-    console.log(affiliateData);
-
     const resetStates = async () => {
         setSelectedLocality();
         setSelectedSpeciality();
@@ -334,7 +332,6 @@ const EnhancedTableToolbar = (props) => {
                         'dni, name, lastname, medic_license, email, state, phone_number, profilePic, plans (id), medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name))))'
                     )
                     .eq('state', 'activo');
-                console.log(medics, 'medicsssssssssssssssssssssssss');
                 setMedicsToShow(
                     medics.filter((el) =>
                         el.plans.find(
@@ -347,8 +344,6 @@ const EnhancedTableToolbar = (props) => {
             }
         }
     };
-
-    console.log(medicsToShow);
 
     const getSpecialities = async () => {
         const { data: specialitiesData, error: errorFetchSpecialities } =

@@ -25,7 +25,6 @@ export function findSpeciality(name) {
                 .from('medical_specialities')
                 .select('name')
                 .eq('name', name);
-            console.log('pase por addSpeciality', speciality);
             dispatch({ type: FIND_SPECIALITY, payload: speciality });
         } catch (err) {
             console.error(err);
@@ -60,7 +59,6 @@ export function deleteSpeciality(id) {
                 )
                 .match({ id: id });
             dispatch({ type: DELETE_SPECIALITY, payload: specialities });
-            console.log('pase por delete', specialities);
         } catch (err) {
             console.error(err);
         }

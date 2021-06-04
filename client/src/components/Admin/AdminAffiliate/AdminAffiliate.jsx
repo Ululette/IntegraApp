@@ -335,7 +335,7 @@ const useStyles = makeStyles((theme) => ({
 function AdminAffiliate() {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('calories');
+    const [orderBy, setOrderBy] = React.useState('');
     const [page, setPage] = React.useState(0);
     const [maxId, setMaxId] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -412,7 +412,7 @@ function AdminAffiliate() {
             lastname: el.lastname,
             name: el.name,
             age: String(calculateAge(el.birthdate)),
-            plan: el.plans.name,
+            plan: el.plans ? el.plans.name : null,
             gender: el.gender,
             contact: el.phone_number,
             email: el.email,
@@ -772,7 +772,10 @@ function AdminAffiliate() {
                                                             handleEdit(row)
                                                         }
                                                     >
-                                                        <IconButton size='small' aria-label='edit'>
+                                                        <IconButton
+                                                            size='small'
+                                                            aria-label='edit'
+                                                        >
                                                             <EditIcon />
                                                         </IconButton>
                                                     </Tooltip>
@@ -787,7 +790,10 @@ function AdminAffiliate() {
                                                             )
                                                         }
                                                     >
-                                                        <IconButton size='small' aria-label='delete'>
+                                                        <IconButton
+                                                            size='small'
+                                                            aria-label='delete'
+                                                        >
                                                             <DeleteIcon />
                                                         </IconButton>
                                                     </Tooltip>

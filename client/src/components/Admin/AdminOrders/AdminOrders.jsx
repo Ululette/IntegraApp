@@ -20,13 +20,13 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import ClearAllIcon from "@material-ui/icons/ClearAll";
 import EditIcon from "@material-ui/icons/Edit";
-import blue from '@material-ui/core/colors/blue';
+import blue from "@material-ui/core/colors/blue";
 import "firebase/auth";
 import AdminMedicAdd from "../AdminMedics/AdminMedicAdd";
 import AdminOrdersEdit from "./AdminOrdersEdit";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import PopUp from './AdminOrderPop';
+import PopUp from "./AdminOrderPop";
 
 import {
   Avatar,
@@ -45,13 +45,13 @@ import calculateAge from "../../../functions/calculateAge";
 import supabase from "../../../supabase.config";
 
 function descendingComparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-        return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-        return 1;
-    }
-    return 0;
+  if (b[orderBy] < a[orderBy]) {
+    return -1;
+  }
+  if (b[orderBy] > a[orderBy]) {
+    return 1;
+  }
+  return 0;
 }
 
 function getComparator(order, orderBy) {
@@ -61,154 +61,150 @@ function getComparator(order, orderBy) {
 }
 
 function stableSort(array, comparator) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-        const order = comparator(a[0], b[0]);
-        if (order !== 0) return order;
-        return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+  return stabilizedThis.map((el) => el[0]);
 }
 
 const headCells = [
-    { id: 'actions', numeric: false, disablePadding: true, label: 'ACIONES' },
-    { id: 'date', numeric: false, disablePadding: true, label: 'FECHA' },
-    { id: 'lastname', numeric: false, disablePadding: false, label: 'MEDICO' },
-    {
-        id: 'lastname',
-        numeric: false,
-        disablePadding: false,
-        label: 'PACEINTE',
-    },
-    { id: 'dni', numeric: true, disablePadding: false, label: 'DNI SOCIO' },
-    { id: 'status', numeric: false, disablePadding: false, label: 'ESTADO' },
-    { id: 'view', numeric: false, disablePadding: false, label: 'VER' },
+  { id: "actions", numeric: false, disablePadding: true, label: "ACIONES" },
+  { id: "date", numeric: false, disablePadding: true, label: "FECHA" },
+  { id: "lastname", numeric: false, disablePadding: false, label: "MEDICO" },
+  {
+    id: "lastname",
+    numeric: false,
+    disablePadding: false,
+    label: "PACEINTE",
+  },
+  { id: "dni", numeric: true, disablePadding: false, label: "DNI SOCIO" },
+  { id: "status", numeric: false, disablePadding: false, label: "ESTADO" },
+  { id: "view", numeric: false, disablePadding: false, label: "VER" },
 ];
 
 function EnhancedTableHead(props) {
-    const {
-        classes,
-        onSelectAllClick,
-        order,
-        orderBy,
-        numSelected,
-        rowCount,
-        onRequestSort,
-    } = props;
-    const createSortHandler = (property) => (event) => {
-        onRequestSort(event, property);
-    };
+  const {
+    classes,
+    onSelectAllClick,
+    order,
+    orderBy,
+    numSelected,
+    rowCount,
+    onRequestSort,
+  } = props;
+  const createSortHandler = (property) => (event) => {
+    onRequestSort(event, property);
+  };
 
-    return (
-        <TableHead className={classes.title}>
-            <TableRow>
-                {headCells.map((headCell) => (
-                    <TableCell
-                        key={headCell.id}
-                        align='left'
-                        padding='default'
-                        sortDirection={orderBy === headCell.id ? order : false}
-                    >
-                        <TableSortLabel
-                            className={classes.title}
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={createSortHandler(headCell.id)}
-                        >
-                            {headCell.label}
-                            {orderBy === headCell.id ? (
-                                <span className={classes.visuallyHidden}>
-                                    {order === 'desc'
-                                        ? 'sorted descending'
-                                        : 'sorted ascending'}
-                                </span>
-                            ) : null}
-                        </TableSortLabel>
-                    </TableCell>
-                ))}
-            </TableRow>
-        </TableHead>
-    );
+  return (
+    <TableHead className={classes.title}>
+      <TableRow>
+        {headCells.map((headCell) => (
+          <TableCell
+            key={headCell.id}
+            align="left"
+            padding="default"
+            sortDirection={orderBy === headCell.id ? order : false}
+          >
+            <TableSortLabel
+              className={classes.title}
+              active={orderBy === headCell.id}
+              direction={orderBy === headCell.id ? order : "asc"}
+              onClick={createSortHandler(headCell.id)}
+            >
+              {headCell.label}
+              {orderBy === headCell.id ? (
+                <span className={classes.visuallyHidden}>
+                  {order === "desc" ? "sorted descending" : "sorted ascending"}
+                </span>
+              ) : null}
+            </TableSortLabel>
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+  );
 }
 
 EnhancedTableHead.propTypes = {
-    classes: PropTypes.object.isRequired,
-    numSelected: PropTypes.number.isRequired,
-    onRequestSort: PropTypes.func.isRequired,
-    onSelectAllClick: PropTypes.func.isRequired,
-    order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-    orderBy: PropTypes.string.isRequired,
-    rowCount: PropTypes.number.isRequired,
+  classes: PropTypes.object.isRequired,
+  numSelected: PropTypes.number.isRequired,
+  onRequestSort: PropTypes.func.isRequired,
+  onSelectAllClick: PropTypes.func.isRequired,
+  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
+  orderBy: PropTypes.string.isRequired,
+  rowCount: PropTypes.number.isRequired,
 };
 
-
 const useToolbarStyles = makeStyles((theme) => ({
-    root: {
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(1),
-        backgroundColor: lighten('#34a7a1', 0.3),
-    },
-    highlight:
-        theme.palette.type === 'light'
-            ? {
-                color: '#fafafa',
-                backgroundColor: lighten(blue[500], 0.5), //color barra superior cuando selecciono item
-                fontWeight: 'bold',
-                fontSize: '30px',
-            }
-            : {
-                color: theme.palette.text.primary,
-                backgroundColor: lighten('#34a7a1', 0.3),
-            },
-    title: {
-        flex: '1 1 100%',
-        fontWeight: 'bold',
-        fontSize: '1.4rem',
-        color: '#fafafa',
-        textAlign: 'center',
-    },
-    filters: {
-        display: 'flex',
-    },
-    iconFilter: {
-        color: '#fafafa',
-        fontWeight: 'bold',
-        '&:hover': {
-            backgroundColor: '#34a7a1',
+  root: {
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(1),
+    backgroundColor: lighten("#34a7a1", 0.3),
+  },
+  highlight:
+    theme.palette.type === "light"
+      ? {
+          color: "#fafafa",
+          backgroundColor: lighten(blue[500], 0.5), //color barra superior cuando selecciono item
+          fontWeight: "bold",
+          fontSize: "30px",
+        }
+      : {
+          color: theme.palette.text.primary,
+          backgroundColor: lighten("#34a7a1", 0.3),
         },
+  title: {
+    flex: "1 1 100%",
+    fontWeight: "bold",
+    fontSize: "1.4rem",
+    color: "#fafafa",
+    textAlign: "center",
+  },
+  filters: {
+    display: "flex",
+  },
+  iconFilter: {
+    color: "#fafafa",
+    fontWeight: "bold",
+    "&:hover": {
+      backgroundColor: "#34a7a1",
     },
-    iconBlock: {
-        color: '#fafafa',
-        fontWeight: 'bold',
-        '&:hover': {
-            backgroundColor: blue[500],
-        },
+  },
+  iconBlock: {
+    color: "#fafafa",
+    fontWeight: "bold",
+    "&:hover": {
+      backgroundColor: blue[500],
     },
-    popup: {
-        color: '#fafafa',
-        backgroundColor: '#2c7f7b',
-        fontWeight: 'bold',
-        fontSize: '30px',
-        marginBottom:'2rem'
-
+  },
+  popup: {
+    color: "#fafafa",
+    backgroundColor: "#2c7f7b",
+    fontWeight: "bold",
+    fontSize: "30px",
+    marginBottom: "2rem",
+  },
+  popupBtn: {
+    color: "#fafafa",
+    padding: theme.spacing(0.5),
+    border: "3px solid #2c7f7b",
+    backgroundColor: "#2c7f7b",
+    fontWeight: "bold",
+    fontSize: "15px",
+    "&:hover": {
+      backgroundColor: lighten("#fafafa", 0.2),
+      color: "#2c7f7b",
+      padding: theme.spacing(0.5),
     },
-    popupBtn: {
-        color: '#fafafa',
-        padding: theme.spacing(0.5),
-        border: '3px solid #2c7f7b',
-        backgroundColor: '#2c7f7b',
-        fontWeight: 'bold',
-        fontSize: '15px',
-        '&:hover': {
-            backgroundColor: lighten('#fafafa', 0.2),
-            color: '#2c7f7b',
-            padding: theme.spacing(0.5),
-        },
-    },
-  select:{
-    width: '100%',
-    marginBottom:'2rem'
-  }
+  },
+  select: {
+    width: "100%",
+    marginBottom: "2rem",
+  },
 }));
 
 const EnhancedTableToolbar = (props) => {
@@ -242,42 +238,44 @@ const EnhancedTableToolbar = (props) => {
   };
 
   const filter = (value) => {
-let show = []
-    setToShowRows(rows); 
-    if (value === "autorizada") {
+    let show = [];
+    setToShowRows(rows);
+    if (value === "Autorizada") {
       value
-      ? setToShowRows(
-       show = rows.filter( r => r.order_status.name === "autorizada")
-        )
-      : setToShowRows(rows);
- 
-    } else if (value === "rechazada") {
+        ? setToShowRows(
+            (show = rows.filter((r) => r.order_status.name === "Autorizada"))
+          )
+        : setToShowRows(rows);
+    } else if (value === "Realizada") {
       value
-      ? setToShowRows(
-       show = rows.filter( r => r.order_status.name === "rechazada")
-        )
-      : setToShowRows(rows);
-    } else if (value === "en proceso") {
+        ? setToShowRows(
+            (show = rows.filter((r) => r.order_status.name === "Realizada"))
+          )
+        : setToShowRows(rows);
+    } else if (value === "Rechazada") {
       value
-      ? setToShowRows(
-       show = rows.filter( r => r.order_status.name === "en proceso")
-        )
-      : setToShowRows(rows);
-     
-    } else if (value === "recibida") {
+        ? setToShowRows(
+            (show = rows.filter((r) => r.order_status.name === "Rechazada"))
+          )
+        : setToShowRows(rows);
+    } else if (value === "En proceso") {
       value
-      ? setToShowRows(
-       show = rows.filter( r => r.order_status.name === "recibida")
-        )
-      : setToShowRows(rows);
+        ? setToShowRows(
+            (show = rows.filter((r) => r.order_status.name === "En proceso"))
+          )
+        : setToShowRows(rows);
+    } else if (value === "Recibida") {
+      value
+        ? setToShowRows(
+            (show = rows.filter((r) => r.order_status.name === "Recibida"))
+          )
+        : setToShowRows(rows);
     } else setToShowRows(rows);
     setOpen(false);
   };
 
   return (
-    <Toolbar
-      className={classes.root}
-    >
+    <Toolbar className={classes.root}>
       <Typography
         className={classes.title}
         variant="h6"
@@ -287,21 +285,16 @@ let show = []
         AUATORIZACIONES
       </Typography>
       <Tooltip title="Clear" onClick={handleClose}>
-        <IconButton 
-            aria-label="reset"
-            className={classes.iconFilter}>
+        <IconButton aria-label="reset" className={classes.iconFilter}>
           <ClearAllIcon />
         </IconButton>
       </Tooltip>
       <Tooltip title="Filter list" onClick={handleClickOpen}>
-        <IconButton 
-            aria-label="filter list"
-            className={classes.iconFilter}
-            >
+        <IconButton aria-label="filter list" className={classes.iconFilter}>
           <FilterListIcon />
         </IconButton>
       </Tooltip>
-      
+
       <Dialog
         disableBackdropClick
         disableEscapeKeyDown
@@ -309,33 +302,34 @@ let show = []
         onClose={handleClose}
       >
         <DialogTitle className={classes.popup}>
-                FILTRADO POR ESTADO:
-        </DialogTitle>  
-        <form  onSubmit={handleSubmit} >
-        <DialogContent >  
-          <FormControl className={classes.select}>
-            {/* <InputLabel htmlFor="demo-dialog-native">Filtrar por</InputLabel> */}
-            <Select
-                variant='outlined'
-                size='medium'
+          FILTRADO POR ESTADO:
+        </DialogTitle>
+        <form onSubmit={handleSubmit}>
+          <DialogContent>
+            <FormControl className={classes.select}>
+              {/* <InputLabel htmlFor="demo-dialog-native">Filtrar por</InputLabel> */}
+              <Select
+                variant="outlined"
+                size="medium"
                 native
                 value={selectedOption}
                 onChange={handleChange}
                 input={<Input id="demo-dialog-native" />}
-            >
-              <option aria-label="None" value="" />
-              <option value="autorizada">Autorizada</option>
-              <option value="rechazada">Rechazada</option>
-              <option value="en proceso">En proceso</option>
-              <option value="recibida">Recibida</option>
-            </Select>
-          </FormControl>
-        </DialogContent>
+              >
+                <option aria-label="None" value="" />
+                <option value="Autorizada">Autorizada</option>
+                <option value="Rechazada">Rechazada</option>
+                <option value="En proceso">En proceso</option>
+                <option value="Recibida">Recibida</option>
+                <option value="Realizada">Realizada</option>
+              </Select>
+            </FormControl>
+          </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} className={classes.popupBtn}>
               Cancelar
             </Button>
-            <Button  type="submit" className={classes.popupBtn}>
+            <Button type="submit" className={classes.popupBtn}>
               Filtrar
             </Button>
           </DialogActions>
@@ -346,50 +340,50 @@ let show = []
 };
 
 EnhancedTableToolbar.propTypes = {
-    numSelected: PropTypes.number.isRequired,
+  numSelected: PropTypes.number.isRequired,
 };
 
 //-------------------- Style Table Orders
 const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
+  root: {
+    width: "100%",
+  },
+  paper: {
+    width: "100%",
+    marginBottom: theme.spacing(2),
+  },
+  table: {
+    minWidth: 750,
+  },
+  visuallyHidden: {
+    border: 0,
+    clip: "rect(0 0 0 0)",
+    height: 1,
+    margin: -1,
+    overflow: "hidden",
+    padding: 0,
+    position: "absolute",
+    top: 20,
+    width: 1,
+  },
+  title: {
+    color: "#212121",
+    fontWeight: "bold",
+    backgroundColor: lighten("#34a7a1", 0.6),
+  },
+  rowColor: {
+    backgroundColor: lighten("#e0e0e0", 0.3),
+    ":checked": {
+      color: blue[500],
     },
-    paper: {
-        width: '100%',
-        marginBottom: theme.spacing(2),
+  },
+  iconFilter: {
+    color: "rgba(0, 0, 0, 0.47)",
+    fontWeight: "bold",
+    "&:hover": {
+      backgroundColor: lighten("#34a7a1", 0.8),
     },
-    table: {
-        minWidth: 750,
-    },
-    visuallyHidden: {
-        border: 0,
-        clip: 'rect(0 0 0 0)',
-        height: 1,
-        margin: -1,
-        overflow: 'hidden',
-        padding: 0,
-        position: 'absolute',
-        top: 20,
-        width: 1,
-    },
-    title: {
-        color: '#212121',
-        fontWeight: 'bold',
-        backgroundColor: lighten('#34a7a1', 0.6),
-    },
-    rowColor: {
-        backgroundColor: lighten('#e0e0e0', 0.3),
-        ':checked': {
-            color: blue[500],
-        },
-    },
-    iconFilter: {
-        color: 'rgba(0, 0, 0, 0.47)',
-        fontWeight: 'bold',
-        '&:hover': {
-            backgroundColor: lighten('#34a7a1', 0.8),
-        },
-    }
+  },
 }));
 
 export default function EnhancedTable() {
@@ -408,51 +402,42 @@ export default function EnhancedTable() {
   const [toShowRows, setToShowRows] = React.useState([]);
   const MySwal = withReactContent(Swal);
   const [row, setRow] = React.useState({
-    date: '',
-    study_name: '',
+    date: "",
+    study_name: "",
     partners: {
-      name: '', 
-      lastname: '',
-      dni: '',
-    }, 
+      name: "",
+      lastname: "",
+      dni: "",
+    },
     medics: {
-      name: '', 
-      lastname: '',
+      name: "",
+      lastname: "",
     },
     medical_consultations: {
-      id: ''
-    }, 
-    order_status: {
-      name:'',
-    }, 
-    results: {
-      results : {
-        results: ''
-      }
+      id: "",
     },
-      order_status: {
-        name:''
-      }
-  
-    
-  })  
+    order_status: {
+      name: "",
+    },
+    results: {
+      results: {
+        results: "",
+      },
+    },
+    order_status: {
+      name: "",
+    },
+  });
   const [open, setOpen] = React.useState(false);
 
-
-
   const handleClickOpen = (row) => {
-    setRow(row)
+    setRow(row);
     setOpen(true);
   };
-
 
   const handleClose = () => {
     setOpen(false);
   };
-
-
-
-
 
   const fetchOrders = async () => {
     const { data: orders, error: errorFetchOrders } = await supabase
@@ -460,30 +445,28 @@ export default function EnhancedTable() {
       .select(
         "id, date, results, study_name, order_status(name), partners(dni, name, lastname), medics(dni, name, lastname), medical_consultations(id) "
       );
-      console.log(orders, 'hola')
 
-   orders &&  setRows(orders);
+    orders && setRows(orders);
   };
 
   const fetchOrder_status = async () => {
     const { data: statusDB, error: errorStatus } = await supabase
       .from("order_status")
-      .select('*' );
-    setStatus(statusDB)
+      .select("*");
+    setStatus(statusDB);
   };
 
   React.useEffect(() => {
     fetchOrder_status();
-        fetchOrders();
-    }, []); 
-    React.useEffect(() => {
-      setToShowRows(rows);
-      }, [rows]); 
+    fetchOrders();
+  }, []);
+  React.useEffect(() => {
+    setToShowRows(rows);
+  }, [rows]);
 
   const handleEdit = (data) => {
     setData(data);
     setEditActive(true);
-/*     console.log("Click en edit"); */
     if (editActive) setEditActive(false);
   };
 
@@ -531,14 +514,12 @@ export default function EnhancedTable() {
     setPage(0);
   };
 
- 
-
   /* const isSelected = (name) => selected.indexOf(name) !== -1; */
 
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-/*     setToShowRows(rows)
- */
+  /*     setToShowRows(rows)
+   */
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -552,7 +533,7 @@ export default function EnhancedTable() {
           <Table
             className={classes.table}
             aria-labelledby="tableTitle"
-            size="small" 
+            size="small"
             aria-label="enhanced table"
           >
             <EnhancedTableHead
@@ -579,78 +560,56 @@ export default function EnhancedTable() {
                       key={row.name}
                       /* selected={isItemSelected} */
                     >
-                      <TableCell 
-                        className={
-                            index % 2 === 1
-                                ? classes.rowColor
-                                : null
-                        }
-                        align="left">
-                        <Tooltip
-                            title='Edit'
-                            className={
-                                classes.iconFilter
-                            }
-                        >
-                            <IconButton size='small' aria-label='Edit'>
-                                <EditIcon onClick={() => handleEdit(row)} />
-                            </IconButton>
-                            
+                      <TableCell
+                        className={index % 2 === 1 ? classes.rowColor : null}
+                        align="left"
+                      >
+                        <Tooltip title="Edit" className={classes.iconFilter}>
+                          <IconButton size="small" aria-label="Edit">
+                            <EditIcon onClick={() => handleEdit(row)} />
+                          </IconButton>
                         </Tooltip>
-                        
                       </TableCell>
-                      <TableCell 
-                        className={
-                            index % 2 === 1
-                                ? classes.rowColor
-                                : null
-                        }
-                        align="left">{row.date}</TableCell>
-                      <TableCell 
-                        className={
-                            index % 2 === 1
-                                ? classes.rowColor
-                                : null
-                        }
-                        align="left">
+                      <TableCell
+                        className={index % 2 === 1 ? classes.rowColor : null}
+                        align="left"
+                      >
+                        {row.date}
+                      </TableCell>
+                      <TableCell
+                        className={index % 2 === 1 ? classes.rowColor : null}
+                        align="left"
+                      >
                         {row.medics.name} {row.medics.lastname}
                       </TableCell>
-                      <TableCell 
-                        className={
-                            index % 2 === 1
-                                ? classes.rowColor
-                                : null
-                        }
+                      <TableCell
+                        className={index % 2 === 1 ? classes.rowColor : null}
                         align="left"
                         key={index}
-                        >
+                      >
                         {row.partners.name} {row.partners.lastname}
                       </TableCell>
-                      <TableCell 
-                        className={
-                            index % 2 === 1
-                                ? classes.rowColor
-                                : null
-                        }
-                        align="left">{row.partners.dni}</TableCell>
-                      <TableCell 
-                        className={
-                            index % 2 === 1
-                                ? classes.rowColor
-                                : null
-                        }
-                        align="left">{row.order_status.name}</TableCell>
-                      <TableCell 
-                        className={
-                            index % 2 === 1
-                                ? classes.rowColor
-                                : null
-                        }
-                        align="left">
-                        <Button 
-                        className={classes.iconFilter}
-                        variant="outlined" 
-                        onClick={ () => handleClickOpen(row)}>
+                      <TableCell
+                        className={index % 2 === 1 ? classes.rowColor : null}
+                        align="left"
+                      >
+                        {row.partners.dni}
+                      </TableCell>
+                      <TableCell
+                        className={index % 2 === 1 ? classes.rowColor : null}
+                        align="left"
+                      >
+                        {row.order_status.name}
+                      </TableCell>
+                      <TableCell
+                        className={index % 2 === 1 ? classes.rowColor : null}
+                        align="left"
+                      >
+                        <Button
+                          className={classes.iconFilter}
+                          variant="outlined"
+                          onClick={() => handleClickOpen(row)}
+                        >
                           📝
                         </Button>
                       </TableCell>
@@ -658,7 +617,7 @@ export default function EnhancedTable() {
                   );
                 })}
               {emptyRows > 0 && (
-                <TableRow style={{ height:  33  * emptyRows }}>
+                <TableRow style={{ height: 33 * emptyRows }}>
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
@@ -676,18 +635,14 @@ export default function EnhancedTable() {
         />
       </Paper>
       {editActive ? (
-                <AdminOrdersEdit
-                    status={status}
-                    setEditActive={setEditActive}
-                    editActive={editActive}
-                    data={data}
-                />
-            ) : null}         
-                <PopUp
-                rows={row}
-                    handleClose={handleClose}
-                    open={open}
-                />
+        <AdminOrdersEdit
+          status={status}
+          setEditActive={setEditActive}
+          editActive={editActive}
+          data={data}
+        />
+      ) : null}
+      <PopUp rows={row} handleClose={handleClose} open={open} />
     </div>
   );
 }
