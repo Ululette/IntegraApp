@@ -358,6 +358,7 @@ export default function GuestsAplications() {
                                                         className={
                                                             classes.iconFilter
                                                         }
+                                                        size='small'
                                                         >
                                                         <DeleteIcon
                                                             size='small' aria-label='Delete'
