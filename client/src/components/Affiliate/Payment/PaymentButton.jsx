@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import styles from './PaymentsTable.module.css';
 import supabase from '../../../supabase.config';
 
 export default function PaymentButton({ product }) {
@@ -51,5 +51,5 @@ export default function PaymentButton({ product }) {
         //eslint-disable-next-line
     }, [preferenceId]);
 
-    return <form id={product.id} method='GET' />;
+    return <form id={product.id} method='GET' className={styles.prueba}/>;
 }

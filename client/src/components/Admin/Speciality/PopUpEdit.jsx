@@ -63,7 +63,7 @@ export default function FormDialog({ open, handleClose, handleEdit }) {
                             autoFocus
                             margin='dense'
                             id='name'
-                            label='Espacialidad'
+                            label='Especialidad'
                             type='string'
                             fullWidth
                         />

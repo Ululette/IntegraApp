@@ -41,6 +41,7 @@ export default function FamilyMembersList() {
                     .from('partners')
                     .select('*')
                     .eq('family_group', user[0].family_group)
+                    //.eq("state", "aceptado")
                     .neq('dni', user[0].dni);
 
                 setFamilyGroup(family);

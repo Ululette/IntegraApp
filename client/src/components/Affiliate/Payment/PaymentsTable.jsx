@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles,lighten } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -15,11 +15,50 @@ import PaymentButton from './PaymentButton.jsx';
 
 import styles from './PaymentsTable.module.css';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        padding: '0px 0px 0px 0px',
+    },
+    paper: {
+        width: '100%',
+        marginBottom: theme.spacing(2),
+    },
     table: {
         minWidth: 650,
     },
-});
+    visuallyHidden: {
+        border: 0,
+        clip: 'rect(0 0 0 0)',
+        height: 1,
+        margin: -1,
+        overflow: 'hidden',
+        padding: 0,
+        position: 'absolute',
+        top: 20,
+        width: 1,
+    },
+    title: {
+        color: '#212121',
+        fontWeight: 'bold',
+        backgroundColor: 'rgb(112, 193, 189)',
+    },
+    rowColor: {
+        backgroundColor: lighten('#e0e0e0', 0.3),
+    },
+    btn: {
+        margin: theme.spacing(1),
+        paddingLeft:theme.spacing(2),
+        backgroundColor: '#2c7f7b',
+        border:'2px solid #2c7f7b',
+        size:'small',
+        fontWeight:'bold',
+        '&:hover':{
+            backgroundColor: '#2c7f7b',
+            border:'2px solid #fafafa'
+        }
+    }
+}));
 
 export default function PaymentsTable({ paymentStatus }) {
     const classes = useStyles();
@@ -77,40 +116,76 @@ export default function PaymentsTable({ paymentStatus }) {
                 size='small'
                 aria-label='a dense table'
             >
-                <TableHead>
+                <TableHead className={classes.title}>
                     <TableRow>
-                        <TableCell>Concepto</TableCell>
-                        <TableCell align='right'>Fecha de Emisión</TableCell>
-                        <TableCell align='right'>
-                            Fecha de Vencimiento
+                        <TableCell>CONCEPTO</TableCell>
+                        <TableCell align='left'>FECHA EMISIÓN</TableCell>
+                        <TableCell align='left'>
+                            FECHA VENCIMIENTO
                         </TableCell>
-                        <TableCell align='right'>Monto</TableCell>
-                        <TableCell align='right'>Estado</TableCell>
-                        <TableCell align='right'>Acciones</TableCell>
+                        <TableCell align='left'>MONTO</TableCell>
+                        <TableCell align='left'>ESTADO</TableCell>
+                        <TableCell align='left'>ACCIONES</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {debt.map((row) => (
+                    {debt.map((row,index) => (
                         <TableRow key={row.concept}>
-                            <TableCell component='th' scope='row'>
+                            <TableCell 
+                            className={
+                                index % 2 === 1
+                                    ? classes.rowColor
+                                    : null
+                            }
+                            component='th' scope='row'>
                                 {row.concept}
                             </TableCell>
-                            <TableCell align='right'>
+                            <TableCell 
+                                className={
+                                    index % 2 === 1
+                                        ? classes.rowColor
+                                        : null
+                                }
+                                align='left'>
                                 {row.emission_date}
                             </TableCell>
-                            <TableCell align='right'>
+                            <TableCell 
+                                className={
+                                    index % 2 === 1
+                                        ? classes.rowColor
+                                        : null
+                                }
+                                align='left'>
                                 {row.expiration_date}
                             </TableCell>
-                            <TableCell align='right'>{row.amount}</TableCell>
-                            <TableCell align='right'>
+                            <TableCell 
+                                className={
+                                    index % 2 === 1
+                                        ? classes.rowColor
+                                        : null
+                                }
+                                align='left'>{row.amount}</TableCell>
+                            <TableCell 
+                                className={
+                                    index % 2 === 1
+                                        ? classes.rowColor
+                                        : null
+                                }
+                                align='left'>
                                 {row.payed ? 'Pagado' : 'Pendiente de pago'}
                             </TableCell>
-                            <TableCell align='right' id={row.id}>
+                            <TableCell 
+                                className={
+                                    index % 2 === 1
+                                        ? classes.rowColor
+                                        : null
+                                }
+                                align='center' id={row.id}>
                                 {row.payed ? (
                                     <Button
                                         variant='contained'
-                                        color='primary'
-                                        className={styles.prueba}
+                                        className={classes.btn}
+                                       
                                     >
                                         Ver detalle
                                     </Button>

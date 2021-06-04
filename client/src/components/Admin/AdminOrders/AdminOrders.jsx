@@ -71,14 +71,14 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-    { id: 'actions', numeric: false, disablePadding: true, label: 'ACIONES' },
+    { id: 'actions', numeric: false, disablePadding: true, label: 'ACCIONES' },
     { id: 'date', numeric: false, disablePadding: true, label: 'FECHA' },
     { id: 'lastname', numeric: false, disablePadding: false, label: 'MEDICO' },
     {
         id: 'lastname',
         numeric: false,
         disablePadding: false,
-        label: 'PACEINTE',
+        label: 'PACIENTE',
     },
     { id: 'dni', numeric: true, disablePadding: false, label: 'DNI SOCIO' },
     { id: 'status', numeric: false, disablePadding: false, label: 'ESTADO' },
@@ -286,7 +286,7 @@ const EnhancedTableToolbar = (props) => {
                 id='tableTitle'
                 component='div'
             >
-                AUATORIZACIONES
+                AUTORIZACIONES
             </Typography>
             <Tooltip title='Clear' onClick={handleClose}>
                 <IconButton aria-label='reset' className={classes.iconFilter}>
