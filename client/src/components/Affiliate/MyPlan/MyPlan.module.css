@@ -71,4 +71,61 @@
     background-color: #5e6eff;
     color: white;
     border-radius: 15px;
+    margin-bottom: 15px;
+}
+
+.divider{
+    width: 100%;
+    /* border-bottom-color: white;
+    border-top-color: rgb(204, 194, 194); */
+    border: 0;
+    height: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.buttonCompare {
+    width: 200px;
+    height: 80px;
+    border: 3px solid #45b0a9;
+    border-radius: 25px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    background-color: transparent;
+    color: #0f5550;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.buttonCompare:hover {
+    transition: 0.5s all ease-in-out;
+    background-color: #45b0a9;
+    color: black
+}
+.planCompCont{
+    font-family: 'Nunito', sans-serif;
+}
+
+.nuni{
+    font-size: 21px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+}
+
+.buttonBack {
+    width: 100px;
+    height: 40px;
+    border: 3px solid #45b0a9;
+    border-radius: 25px;
+    cursor: pointer;
+    background-color: transparent;
+    color: #0f5550;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.buttonBack:hover {
+    transition: 0.5s all ease-in-out;
+    background-color: #45b0a9;
+    color: black
 }
