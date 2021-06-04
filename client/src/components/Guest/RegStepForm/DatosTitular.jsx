@@ -21,7 +21,7 @@ const DatosTitular = () => {
         console.log(idprov);
         const { data: local, error: errorlocal } = await supabase
             .from('localities')
-            .select('state_id,name')
+            .select('id, state_id,name')
             .eq('state_id', Number(idprov));
         console.log(errorlocal);
         setAllLocalities(local);

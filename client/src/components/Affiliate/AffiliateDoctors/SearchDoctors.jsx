@@ -36,6 +36,8 @@ import {
 import { Button } from '@material-ui/core';
 import supabase from '../../../supabase.config';
 
+const affiliateData = JSON.parse(localStorage.getItem('affiliatedata'));
+
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
         return -1;
@@ -227,6 +229,8 @@ const EnhancedTableToolbar = (props) => {
     const [specialities, setSpecialities] = React.useState();
     const [medicsToShow, setMedicsToShow] = React.useState([]);
 
+    console.log(affiliateData);
+
     const resetStates = async () => {
         setSelectedLocality();
         setSelectedSpeciality();
@@ -327,10 +331,17 @@ const EnhancedTableToolbar = (props) => {
                 let { data: medics } = await supabase
                     .from('medics')
                     .select(
-                        'dni, name, lastname, medic_license, email, state, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name))))'
+                        'dni, name, lastname, medic_license, email, state, phone_number, profilePic, plans (id), medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name))))'
                     )
                     .eq('state', 'activo');
-                setMedicsToShow(medics);
+                console.log(medics, 'medicsssssssssssssssssssssssss');
+                setMedicsToShow(
+                    medics.filter((el) =>
+                        el.plans.find(
+                            (plan) => plan.id === affiliateData.plan_id
+                        )
+                    )
+                );
             } catch (err) {
                 console.error(err);
             }
@@ -604,12 +615,20 @@ export default function SearchDoctors() {
         const { data: medics, error: errorFetchMedics } = await supabase
             .from('medics')
             .select(
-                'dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name)))'
+                'dni, name, lastname, medic_license, email, phone_number, profilePic, plans (id), medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name)))'
             )
             .eq('state', 'activo');
         if (errorFetchMedics) return console.log(errorFetchMedics);
-        setToShowRows(medics);
-        setListMedics(medics);
+        setToShowRows(
+            medics.filter((el) =>
+                el.plans.find((plan) => plan.id === affiliateData.plan_id)
+            )
+        );
+        setListMedics(
+            medics.filter((el) =>
+                el.plans.find((plan) => plan.id === affiliateData.plan_id)
+            )
+        );
     };
 
     const fetchSpecialities = async () => {

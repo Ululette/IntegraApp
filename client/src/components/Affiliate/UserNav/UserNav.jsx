@@ -60,6 +60,7 @@ import NotFound from '../../Status/NotFound.jsx';
 import MyPlan from '../MyPlan/MyPlan';
 import MyOrders from '../MyOrders/MyOrders';
 import AffiliateOrdersAndPrescriptions from '../AffiliateOrdersAndPrescriptions/AffiliateOrdersAndPrescriptions';
+import { Receipt } from '@material-ui/icons';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction='down' ref={ref} {...props} />;
@@ -264,7 +265,7 @@ function AdminNav({ firebase, window: windowMui }) {
                     activeClassName={styles.activeLink}
                 >
                     <ListItem button>
-                        <DoneAllIcon />
+                        <Receipt />
                         <ListItemText primary='Mis recetas' />
                     </ListItem>
                 </NavLink>

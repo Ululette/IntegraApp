@@ -183,7 +183,7 @@ export default function RegStepper() {
                 idCompany = companyData[0].id;
             }
 
-            await supabase.from('partners').insert([
+            const { error: partner } = await supabase.from('partners').insert([
                 {
                     dni: datosTitular.dni,
                     name: datosTitular.first_name,
@@ -199,7 +199,10 @@ export default function RegStepper() {
                     gender: datosTitular.gender,
                 },
             ]);
-            await supabase.from('address').insert([
+
+            console.log(partner, 'error partner');
+
+            const { error: address } = await supabase.from('address').insert([
                 {
                     street: datosTitular.street_name,
                     street_number: datosTitular.number,
@@ -211,6 +214,8 @@ export default function RegStepper() {
                         datosTitular.apartment && datosTitular.apartment,
                 },
             ]);
+
+            console.log(address);
 
             await supabase.from('medical_records').insert([
                 {

@@ -6,7 +6,6 @@ import Swal from 'sweetalert2';
 import { Autocomplete } from '@material-ui/lab';
 import { Button, TextField } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
-import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import { AccountCircleRounded } from '@material-ui/icons';
 
 // Estilos usados en componentes de MUI.
@@ -155,7 +154,7 @@ export default function UserProfile({ firebase }) {
     }, [modify]);
 
     // Renderiza el selector de provincias cuando se carga allstates.
-    useEffect(() => { }, [allstates]);
+    useEffect(() => {}, [allstates]);
 
     // Estado local donde guarda los datos modificables del perfil del usuario.
     let [modInfo, setModInfo] = useState(null);
@@ -468,11 +467,13 @@ export default function UserProfile({ firebase }) {
                                             />
                                             <label htmlFor='icon-button-file'>
                                                 <IconButton
-                                                    color='primary'
+                                                    className={
+                                                        classes.picUpload
+                                                    }
                                                     aria-label='upload picture'
                                                     component='span'
                                                 >
-                                                    <PhotoCamera className='iconUpload' />
+                                                    Cambiar Imagen
                                                 </IconButton>
                                             </label>
                                         </div>
