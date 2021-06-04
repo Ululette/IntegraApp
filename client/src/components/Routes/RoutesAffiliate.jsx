@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 import { useFirebaseApp } from 'reactfire';
 import RenderPDF from '../Affiliate/UserMedRec/RenderPDF.jsx';
 import UserNav from '../Affiliate/UserNav/UserNav.jsx';
+import PaymentStatus from '../Affiliate/Payment/PaymentStatus';
 
 function RoutesAffiliate() {
     const firebase = useFirebaseApp();
@@ -17,6 +18,7 @@ function RoutesAffiliate() {
                 path='/:id/mymedicalrecords/pdf'
                 render={() => <RenderPDF firebase={firebase} />}
             />
+            <Route exact path='/success' component={PaymentStatus} />
         </>
     );
 }
