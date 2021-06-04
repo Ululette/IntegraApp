@@ -484,7 +484,7 @@ function AdminNav({ firebase, window: windowMui }) {
                     <Redirect to={`/${userData.dni}/admin/dashboard`} />
                 ) : window.location.pathname ===
                   `/${userData.dni}/admin/medics` ? (
-                    <AdminMedicTabs />
+                    <AdminMedicTabs firebase={firebase} />
                 ) : window.location.pathname ===
                   `/${userData.dni}/admin/profile` ? (
                     <AdminProfile firebase={firebase} />

@@ -85,7 +85,7 @@ const resetInputs = {
     specialities: [],
 };
 
-function AdminMedicAdd({ medicSpecialities }) {
+function AdminMedicAdd({ medicSpecialities, firebase }) {
     const classes = useStyles();
     const MySwal = withReactContent(Swal);
     const [input, setInput] = useState(resetInputs);
@@ -147,15 +147,51 @@ function AdminMedicAdd({ medicSpecialities }) {
             });
 
             MySwal.fire({
-                title: 'Se agrego al medico con exito.',
+                title: 'Se agregó al médico con éxito.',
                 icon: 'success',
-                timer: 2000,
-            }).then(() => window.location.reload());
+                timer: 2000
+            })
+
         } catch (error) {
-            console.log(error);
             MySwal.fire({
                 title: 'No se pudo agregar al medico.',
-                text: error,
+                text: error.message,
+                icon: 'error',
+            });
+        }
+        await supabase.from('users').insert([
+            {
+                dni: parseInt(input.dni),
+                role: 'medic',
+                email: input.email,
+                account: 'active',
+            },
+        ]);
+
+        await firebase
+            .auth()
+            .createUserWithEmailAndPassword(
+                input.email,
+                String(input.dni)
+            );
+
+        await firebase
+            .auth()
+            .sendPasswordResetEmail(input.email);
+
+         try {
+            MySwal.fire({
+                title: 'Se creó un nuevo usuario médico!.',
+                text: 'Debe resetear su password. Le llegará el link por mail.',
+                icon: 'success',
+                timer: 2000,
+            })
+            .then(()=> window.location.reload())
+            
+        } catch (error){
+            MySwal.fire({
+                title: 'No se pudo agregar al medico.',
+                text: error.message,
                 icon: 'error',
             });
         }

@@ -241,7 +241,7 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
-    const { numSelected, setToShowRows, toShowRows, rows, medicSpecialities } =
+    const { numSelected, setToShowRows, toShowRows, rows, medicSpecialities, firebase } =
         props;
     const [open, setOpen] = React.useState(false);
     const [selectedOption, setSelectedOption] = React.useState('');
@@ -323,7 +323,7 @@ const EnhancedTableToolbar = (props) => {
                 [classes.highlight]: numSelected > 0,
             })}
         >
-            <AdminMedicAdd medicSpecialities={medicSpecialities} />
+            <AdminMedicAdd medicSpecialities={medicSpecialities} firebase={firebase} />
             <Typography
                 className={classes.title}
                 variant='h6'
@@ -487,7 +487,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function MedicsTable() {
+export default function MedicsTable({firebase}) {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
@@ -598,6 +598,7 @@ export default function MedicsTable() {
                     toShowRows={toShowRows}
                     rows={rows}
                     medicSpecialities={medicSpecialities}
+                    firebase={firebase}
                 />
                 <TableContainer>
                     <Table

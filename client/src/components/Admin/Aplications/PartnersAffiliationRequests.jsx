@@ -450,7 +450,7 @@ export default function PartnersAffiliationRequests({ firebase }) {
                         .update({ state: newStatus, plan_id: 8 })
                         .eq('dni', request.partner_dni);
                 } catch (error) {
-                    throw new TypeError(error);
+                    throw error;
                 }
                 try {
                     await supabase.from('users').insert([
