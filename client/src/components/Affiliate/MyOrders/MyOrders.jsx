@@ -433,7 +433,7 @@ export default function MyOrders() {
                                                 }
                                             >
                                                 {row.status.name ===
-                                                'realizada' ? (
+                                                'Realizada' ? (
                                                     <Tooltip
                                                         title='Resultados'
                                                         className={
@@ -450,7 +450,7 @@ export default function MyOrders() {
                                                         </IconButton>
                                                     </Tooltip>
                                                 ) : row.status.name ===
-                                                  'rechazada' ? (
+                                                  'Rechazada' ? (
                                                     <Tooltip
                                                         title='Rechazada'
                                                         className={
