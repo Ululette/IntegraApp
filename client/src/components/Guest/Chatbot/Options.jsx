@@ -28,6 +28,7 @@ const Options = (props) => {
             handler: props.actionProvider.handleStatesList,
             id: 5,
         },
+        { text: 'Mi plan', handler: props.actionProvider.handleMyPlan, id: 6 },
     ];
 
     const optionsMarkup = options.map((option) => (
