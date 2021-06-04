@@ -36,7 +36,7 @@ const DatosRevision = () => {
             </div>
             <div id='lacolumna' className={styles.ajuste}>
                 <div className={styles.datos}>
-                    <div className={styles.datosTitular}>
+                    {/* <div className={styles.datosTitular}> */}
                         <div className={styles.firstColumn}>
                             <h2>Datos del Titular</h2>
                             <Divider></Divider>
@@ -82,7 +82,7 @@ const DatosRevision = () => {
                             <h4>E-mail:{datosEmpresa.company_email}</h4>
                             <h4>CUIT:{datosEmpresa.company_cuit}</h4>
                         </div>
-                    </div>
+                    {/* </div> */}
 
                     <div ref={ref} id='Declaration' className={styles.salud}>
                         <h2>Declaracion Jurada de Salud
@@ -227,7 +227,7 @@ const DatosRevision = () => {
                 </div>
             </div>
 
-            <Pdf targetRef={ref} filename={`Partner-${datosDeclaration.dni}`}>
+            {/* <Pdf targetRef={ref} filename={`Partner-${datosDeclaration.dni}`}>
                 {({ toPdf }) => (
                     <Button
                         className={classes.popupBtn}
@@ -238,7 +238,7 @@ const DatosRevision = () => {
                     </Button>
                 )}
               
-            </Pdf>
+            </Pdf> */}
         </div>
     );
 };
