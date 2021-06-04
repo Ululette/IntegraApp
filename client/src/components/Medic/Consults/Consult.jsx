@@ -11,6 +11,7 @@ import {
     Typography,
 } from '@material-ui/core';
 import 'firebase/auth';
+import calculateAge from '../../../functions/calculateAge';
 import { makeStyles } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
@@ -134,8 +135,10 @@ export default function Consult({ firebase }) {
     }, [patient]);
 
     const getAge = () =>
+
         Math.floor(
-            (new Date() - new Date(patient.birthdate).getTime()) / 3.15576e10
+            // (new Date() - new Date(patient.birthdate).getTime()) / 3.15576e10
+            2.3
         );
 
     function sendEmailConsult(props) {
@@ -166,18 +169,17 @@ export default function Consult({ firebase }) {
     });
 
     let [errors, setErrors] = useState({
-        reason: false,
-        diagnosis: false,
+        reason: true,
+        diagnosis: true,
         observations: false,
     });
 
-    function validate(inputName, value) {
+    function validate(inputName, value, errors) {
         const pattern = /^[A-Za-z0-9\s]+$/g;
-        let errors = {};
 
         switch (inputName) {
             case 'reason': {
-                if (!pattern.test(value) && value.length > 0) {
+                if (!pattern.test(value) || value.length === 0) {
                     errors.reason = true;
                 } else {
                     errors.reason = false;
@@ -185,7 +187,7 @@ export default function Consult({ firebase }) {
                 break;
             }
             case 'diagnosis': {
-                if (!pattern.test(value) && value.length > 0) {
+                if (!pattern.test(value) || value.length === 0) {
                     errors.diagnosis = true;
                 } else {
                     errors.diagnosis = false;
@@ -207,7 +209,8 @@ export default function Consult({ firebase }) {
     }
 
     const handleInputChange = (e) => {
-        setErrors(validate(e.target.name, e.target.value));
+        setErrors(validate(e.target.name, e.target.value,errors));
+        console.log(errors)
         setInput({
             ...input,
             [e.target.name]: e.target.value,
@@ -218,7 +221,8 @@ export default function Consult({ firebase }) {
         let medicines = JSON.parse(localStorage.getItem('medicines'));
         let orders = JSON.parse(localStorage.getItem('orders'));
         if (!errors.reason && !errors.diagnosis && !errors.observations) {
-            const { data: newConsult } = await supabase
+            console.log('paso los errores')
+            const { data: newConsult ,error:errorInsert} = await supabase
                 .from('medical_consultations')
                 .insert([
                     {
@@ -229,10 +233,11 @@ export default function Consult({ firebase }) {
                         observations: input.observations,
                     },
                 ]);
+                console.error(errorInsert);
 
             let consultationId = newConsult[0].id;
             if (newConsult) {
-                if (medicines.length) {
+                if (medicines) {
                     sendEmailConsult({
                         dr: medic,
                         patient: patient,
@@ -250,7 +255,7 @@ export default function Consult({ firebase }) {
                     });
                 }
             }
-            if (medicines.length) {
+            if (medicines) {
                 await supabase.from('prescriptions').insert([
                     {
                         medical_consultation_id: consultationId,
@@ -444,7 +449,7 @@ export default function Consult({ firebase }) {
                                                     variant='subtitle1'
                                                     component='h2'
                                                 >
-                                                    Edad: {getAge()}
+                                                    Edad: {calculateAge(patient.birthdate)}
                                                 </Typography>
                                             </ListItem>
                                         </div>
