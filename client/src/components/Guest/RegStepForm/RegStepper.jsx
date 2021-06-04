@@ -199,8 +199,6 @@ export default function RegStepper() {
                 },
             ]);
 
-            console.log(partner, 'error partner');
-
             const { error: address } = await supabase.from('address').insert([
                 {
                     street: datosTitular.street_name,
@@ -213,8 +211,6 @@ export default function RegStepper() {
                         datosTitular.apartment && datosTitular.apartment,
                 },
             ]);
-
-            console.log(address);
 
             await supabase.from('medical_records').insert([
                 {
