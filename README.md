@@ -1,4 +1,4 @@
-﻿# Proyecto Final Samurai 8
+﻿# Proyecto Final Integra App
 
 ## Tema general
 Web app para implementar en una obra social o prepaga para reducir el papelerio y tener toda la informacion necesaria de cada uno y su grupo familiar a mano y en la nube.
