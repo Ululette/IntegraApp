@@ -99,6 +99,13 @@ async function getData(query) {
     }
 }
 
+const getOrdersStatus = async () =>{
+    const { data: status, error: statusError } = await supabase
+    .from('order_status')
+    .select('*');
+    return status ? status : statusError
+}
+
 export default function PrescriptionsAndOrders() {
     const classes = useStyles();
     const dispatch = useDispatch();
@@ -114,6 +121,8 @@ export default function PrescriptionsAndOrders() {
         data.find((d) => d.medical_consultations.partner.lastname == e.lastname)
     );
 
+    const [ordersStatus, setOrdersStatus] = useState({})
+
     const handleChange = (event) => {
         setQuery({ ...query, [event.target.name]: event.target.value });
     };
@@ -126,9 +135,15 @@ export default function PrescriptionsAndOrders() {
         dispatch(getAffiliates());
         getData(query).then(
             (r) => setData(r),
-            (err) => console.log(err)
+            (err) => alert(err.message)
         );
     }, [query]);
+
+    useEffect(() => {
+        getOrdersStatus()
+        .then(r => r.forEach(s => setOrdersStatus({...ordersStatus, [s.id]: s.name })), err => alert(err.message))
+        //eslint-disable-next-line
+    }, [])
 
     useEffect(() => {
         setFilteredData(data);
@@ -275,7 +290,7 @@ export default function PrescriptionsAndOrders() {
                                                   align='left'
                                                   size='small'
                                               >
-                                                  {row.status}
+                                                  {ordersStatus[row.status]}
                                               </TableCell>
                                           ) : null}
                                           <TableCell align='left' size='small'>

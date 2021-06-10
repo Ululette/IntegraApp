@@ -84,6 +84,8 @@ const headCells = [
         disablePadding: false,
         label: 'APELLIDO',
     },
+    { id: 'adress', numeric: false, disablePadding: true, label: 'DIRECCION' },
+    { id: 'phone_number', numeric: false, disablePadding: true, label: 'TELEFONO' },
     {
         id: 'specialties',
         numeric: false,
@@ -783,7 +785,7 @@ export default function SearchDoctors() {
                                             row.name
                                         );
                                         const labelId = `enhanced-table-checkbox-${index}`;
-
+                                        const br = <br/>
                                         return (
                                             <TableRow
                                                 hover
@@ -870,6 +872,34 @@ export default function SearchDoctors() {
                                                     }
                                                 >
                                                     {row.lastname}
+                                                </TableCell>
+                                                <TableCell
+                                                    align='left'
+                                                    className={
+                                                        index % 2 === 1
+                                                            ? classes.rowColor
+                                                            : null
+                                                    }
+                                                >
+                                                   {
+                                                    `${row.address[0].street} ${row.address[0].street_number} `}
+                                                    {row.address[0].floor ? br : null}
+                                                    {`${row.address[0].floor ? `Piso: ${row.address[0].floor}`: ''}`}
+                                                    {`${row.address[0].department ? `Departamento: ${row.address[0].department}` : ''}`}
+                                                    {row.address[0].floor ? br : null}
+                                                    {`${row.address[0].localities.name} ${row.address[0].localities.states.name},
+                                                    CP: ${row.address[0].localities.postal_code}`
+                                                    }
+                                                </TableCell>
+                                                <TableCell
+                                                    align='left'
+                                                    className={
+                                                        index % 2 === 1
+                                                            ? classes.rowColor
+                                                            : null
+                                                    }
+                                                >
+                                                    {row.phone_number}
                                                 </TableCell>
                                                 <TableCell
                                                     className={
