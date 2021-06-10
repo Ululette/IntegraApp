@@ -19,7 +19,7 @@ function RoutesGuest() {
             <Route exact path='/step' component={RegStepper} />
             <Route exact path='/faqs' component={FaqsPage} />
             <Route exact path='/plandetails' component={ComparativaP} />
-            {/* <Route exact path='/about' component={About} /> */}
+            <Route exact path='/about' component={About} />
             <Route
                 exact
                 path={['/', '/faqs', '/plandetails']}

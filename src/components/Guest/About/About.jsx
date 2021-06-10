@@ -15,7 +15,114 @@ import github from './Images/github.png'
 export default function About(){
 
 return (
-<div className="row">
+  <div>
+    <div className="Cards">
+      <div id="curve" class="card">
+        <div class="footer">
+          <div class="connections">
+            <div class="connection github">
+              <div class="icon"></div>
+            </div>
+            <div class="connection linkedin">
+              <div class="icon"></div>
+            </div>
+            {/* <div class="connection behance">
+              <div class="icon"></div>
+            </div> */}
+          </div>
+          <svg id="curve">
+            <path
+              id="p"
+              d="M0,200 Q80,100 400,200 V150 H0 V50"
+              transform="translate(0 300)"
+            />
+            <rect
+              id="dummyRect"
+              x="0"
+              y="0"
+              height="450"
+              width="400"
+              fill="transparent"
+            />
+
+            <animate
+              href="#p"
+              attributeName="d"
+              to="M0,50 Q80,100 400,50 V150 H0 V50"
+              fill="freeze"
+              begin="dummyRect.mouseover"
+              end="dummyRect.mouseout"
+              dur="0.1s"
+              id="bounce1"
+            />
+
+            <animate
+              href="#p"
+              attributeName="d"
+              to="M0,50 Q80,0 400,50 V150 H0 V50"
+              fill="freeze"
+              begin="bounce1.end"
+              end="dummyRect.mouseout"
+              dur="0.15s"
+              id="bounce2"
+            />
+
+            <animate
+              href="#p"
+              attributeName="d"
+              to="M0,50 Q80,80 400,50 V150 H0 V50"
+              fill="freeze"
+              begin="bounce2.end"
+              end="dummyRect.mouseout"
+              dur="0.15s"
+              id="bounce3"
+            />
+
+            <animate
+              href="#p"
+              attributeName="d"
+              to="M0,50 Q80,45 400,50 V150 H0 V50"
+              fill="freeze"
+              begin="bounce3.end"
+              end="dummyRect.mouseout"
+              dur="0.1s"
+              id="bounce4"
+            />
+
+            <animate
+              href="#p"
+              attributeName="d"
+              to="M0,50 Q80,50 400,50 V150 H0 V50"
+              fill="freeze"
+              begin="bounce4.end"
+              end="dummyRect.mouseout"
+              dur="0.05s"
+              id="bounce5"
+            />
+
+            <animate
+              href="#p"
+              attributeName="d"
+              to="M0,200 Q80,100 400,200 V150 H0 V50"
+              fill="freeze"
+              begin="dummyRect.mouseout"
+              dur="0.15s"
+              id="bounceOut"
+            />
+          </svg>
+          <div class="info">
+            <div class="name">Alan Diaz</div>
+            <div class="job">Don del cielo</div>
+          </div>
+        </div>
+        <div class="card-blur"></div>
+      </div>
+    </div>
+    </div>
+  );
+
+
+{/* <div className="row">
 
   <div className="col-sm-6">
  
@@ -156,6 +263,5 @@ return (
         </a>           </div></div> 
  
  </div> 
- </div> 
-)
+ </div>  */}
  }
