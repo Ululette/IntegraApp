@@ -121,7 +121,7 @@ export default function PrescriptionsAndOrders() {
         data.find((d) => d.medical_consultations.partner.lastname == e.lastname)
     );
 
-    const [ordersStatus, setOrdersStatus] = useState({})
+    const [ordersStatus, setOrdersStatus] = useState([])
 
     const handleChange = (event) => {
         setQuery({ ...query, [event.target.name]: event.target.value });
@@ -141,9 +141,10 @@ export default function PrescriptionsAndOrders() {
 
     useEffect(() => {
         getOrdersStatus()
-        .then(r => r.forEach(s => setOrdersStatus({...ordersStatus, [s.id]: s.name })), err => alert(err.message))
+        .then(r => setOrdersStatus(r), err => alert(err.message))
+        console.log(ordersStatus)
         //eslint-disable-next-line
-    }, [])
+    }, [data])
 
     useEffect(() => {
         setFilteredData(data);
@@ -290,7 +291,7 @@ export default function PrescriptionsAndOrders() {
                                                   align='left'
                                                   size='small'
                                               >
-                                                  {ordersStatus[row.status]}
+                                                  {ordersStatus.find(s => s.id == row.status) && ordersStatus.find(s => s.id == row.status).name}
                                               </TableCell>
                                           ) : null}
                                           <TableCell align='left' size='small'>

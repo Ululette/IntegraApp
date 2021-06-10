@@ -85,7 +85,7 @@ const headCells = [
         label: 'APELLIDO',
     },
     { id: 'adress', numeric: false, disablePadding: true, label: 'DIRECCION' },
-    { id: 'phone_number', numeric: false, disablePadding: true, label: 'TELEFONO' },
+    { id: 'phone_number', numeric: true, disablePadding: true, label: 'TELEFONO' },
     {
         id: 'specialties',
         numeric: false,
