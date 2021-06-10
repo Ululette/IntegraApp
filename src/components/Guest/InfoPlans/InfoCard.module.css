@@ -39,7 +39,7 @@
     border: 1px solid rgb(211, 0, 0);
 }
 
-@media (max-width: 1366px) {
+@media (max-width: 1600px) {
     .media {
         height: fit-content;
     }

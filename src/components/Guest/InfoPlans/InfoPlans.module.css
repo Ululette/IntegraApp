@@ -20,6 +20,18 @@
     height: 100vh;
 }
 
+@media (max-width: 1366px) {
+    .card {
+        height: 100%;
+    }
+}
+
+@media (max-width: 1280px) {
+    .cardContainer {
+        height: 110vh;
+    }
+}
+
 @media (max-width: 500px) {
     .carousel {
         height: fit-content;

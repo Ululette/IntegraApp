@@ -459,7 +459,7 @@
     font-size: 70px;
 }
 
-@media (max-width: 1440px) {
+@media (max-width: 1600px) {
     .promotions {
         margin-top: 48%;
         background-color: #34a7a1;
@@ -496,6 +496,24 @@
 
     .titlesContact {
         margin-top: 1rem;
+    }
+}
+
+@media (max-width: 1366px) {
+    .promotions2 {
+        padding-top: 1.2rem;
+    }
+    .nov {
+        margin: 0;
+    }
+    .digital {
+        height: 110vh;
+    }
+}
+
+@media (max-width: 1280px) {
+    .ourPlans {
+        height: 110vh;
     }
 }
 

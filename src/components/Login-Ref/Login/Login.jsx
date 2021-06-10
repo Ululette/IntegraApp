@@ -273,7 +273,7 @@ function Login({ firebase }) {
                 </a>
             </aside>
             <form className={styles.formLogin} onSubmit={handleSubmit}>
-                <section>
+                <section className={styles.selectContainer}>
                     <label className={styles.labelRole} htmlFor='role'>
                         Ingresar como:
                     </label>
