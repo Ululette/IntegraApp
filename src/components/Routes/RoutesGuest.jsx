@@ -12,7 +12,7 @@ function RoutesGuest() {
         <>
             <Route
                 exact
-                path={['/', '/faqs', '/plandetails',"/step"]}
+                path={['/', '/faqs', '/plandetails', '/step']}
                 component={NavBar}
             />
             <Route exact path='/' component={LandingPage} />

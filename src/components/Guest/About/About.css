@@ -1,128 +1,179 @@
+.row {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: row;
+}
 
-.ih-item {
-    position: relative;
-    -webkit-transition: all 0.35s ease-in-out;
-    -moz-transition: all 0.35s ease-in-out;
-    transition: all 0.35s ease-in-out;
-  }
-  .ih-item,
-  .ih-item * {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-  }
-  .ih-item a {
-    color: #333;
-  }
-  .ih-item a:hover {
-    text-decoration: none;
-  }
-  .ih-item img {
-    width: 100%;
-    height: 100%;
-  }
-  
-  .ih-item.circle {
-    position: relative;
-    width: 220px;
-    height: 220px;
-    border-radius: 50%;
-  }
-  .ih-item.circle .img {
-    position: relative;
-    width: 220px;
-    height: 220px;
-    border-radius: 50%;
-  }
-  .ih-item.circle .img:before {
+.container {
+    margin: 1rem;
+}
+
+.background {
     position: absolute;
-    display: block;
-    content: '';
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    box-shadow: inset 0 0 0 16px rgba(255, 255, 255, 0.6), 0 1px 2px rgba(0, 0, 0, 0.3);
-    -webkit-transition: all 0.35s ease-in-out;
-    -moz-transition: all 0.35s ease-in-out;
-    transition: all 0.35s ease-in-out;
-  }
-  .ih-item.circle .img img {
-    border-radius: 50%;
-  }
-  .ih-item.circle .info {
+    top: -40px;
+    left: -40px;
+    height: 120%;
+    width: 120%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    -webkit-filter: blur(30px);
+    filter: blur(30px);
+}
+
+.card {
+    border-radius: 8px;
+    height: 350px;
+    width: 300px;
+    margin: auto;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-shadow: 0 0 80px -10px black;
+    overflow: hidden;
+}
+
+.card-blur {
     position: absolute;
-    top: 0;
+    height: 350px;
+    width: 301px;
+    background-color: black;
+    opacity: 0;
+    transition: opacity 0.15s ease-in;
+}
+
+.card:hover .card-blur {
+    opacity: 0.6;
+}
+
+.footer {
+    z-index: 1;
+    position: absolute;
+    height: 80px;
+    width: 300px;
     bottom: 0;
+}
+
+.footer svg {
+    position: relative;
+    fill: white;
+    left: 0;
+    bottom: 100;
+    width: 300px;
+    height: 350px;
+}
+
+.footer .connections {
+    height: 80px;
+    width: 300px;
+    position: absolute;
     left: 0;
     right: 0;
-    text-align: center;
-    border-radius: 50%;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-  }
-.ih-item.circle.effect3 .img {
-    z-index: 11;
-    -webkit-transition: all 0.35s ease-in-out;
-    -moz-transition: all 0.35s ease-in-out;
-    transition: all 0.35s ease-in-out;
-  }
-  .ih-item.circle.effect3.colored .info {
-    background: #1a4a72;
-  }
-  .ih-item.circle.effect3 .info {
-    background: #333333;
-    opacity: 0;
-    pointer-events: none;
-    -webkit-transition: all 0.35s ease-in-out;
-    -moz-transition: all 0.35s ease-in-out;
-    transition: all 0.35s ease-in-out;
-  }
-  .ih-item.circle.effect3 .info h3 {
+    bottom: 100px;
+    margin: auto;
+}
+
+.connection {
+    height: 25px;
+    width: 25px;
+    border-radius: 100%;
+    background-color: white;
+    display: inline-block;
+    padding: 5px;
+    margin-right: 25px;
+    transform: translateY(200px);
+    transition: transform 1s cubic-bezier(0.46, 1.48, 0.18, 0.81);
+}
+
+.card:hover .connection {
+    transform: translateY(0px);
+}
+
+.info {
     color: #fff;
-    text-transform: uppercase;
-    position: relative;
-    letter-spacing: 2px;
-    font-size: 22px;
-    margin: 0 30px;
-    padding: 55px 0 0 0;
-    height: 110px;
-    text-shadow: 0 0 1px white, 0 1px 2px rgba(0, 0, 0, 0.3);
-  }
-  .ih-item.circle.effect3 .info p {
-    color: #bbb;
-    padding: 10px 5px;
-    font-style: italic;
-    margin: 0 30px;
-    font-size: 12px;
-    border-top: 1px solid rgba(255, 255, 255, 0.5);
-  }
-  
-  .ih-item.circle.effect3.left_to_right .img {
-    -webkit-transform: scale(1) translateX(0);
-    -moz-transform: scale(1) translateX(0);
-    -ms-transform: scale(1) translateX(0);
-    -o-transform: scale(1) translateX(0);
-    transform: scale(1) translateX(0);
-  }
-  .ih-item.circle.effect3.left_to_right .info {
-    -webkit-transform: translateX(-100%);
-    -moz-transform: translateX(-100%);
-    -ms-transform: translateX(-100%);
-    -o-transform: translateX(-100%);
-    transform: translateX(-100%);
-  }
-  .ih-item.circle.effect3.left_to_right a:hover .img {
-    -webkit-transform: scale(0.5) translateX(100%);
-    -moz-transform: scale(0.5) translateX(100%);
-    -ms-transform: scale(0.5) translateX(100%);
-    -o-transform: scale(0.5) translateX(100%);
-    transform: scale(0.5) translateX(100%);
-  }
-  .ih-item.circle.effect3.left_to_right a:hover .info {
-    opacity: 1;
-    -webkit-transform: translateX(0);
-    -moz-transform: translateX(0);
-    -ms-transform: translateX(0);
-    -o-transform: translateX(0);
-    transform: translateX(0);
-  }
+    padding-left: 20px;
+    transform: translateY(250px);
+    transition: transform 1s cubic-bezier(0.31, 1.21, 0.64, 1.02);
+}
+
+.card:hover .info {
+    transform: translateY(0px);
+}
+
+.name {
+    font-weight: bolder;
+    padding-top: 5px;
+}
+
+.job {
+    margin-top: 10px;
+}
+
+.connection.facebook {
+    height: 35px;
+    width: 35px;
+    margin-left: 20px;
+    padding: 0px;
+    border-radius: 100%;
+    overflow: hidden;
+}
+
+.connection.twitter {
+    transition-delay: 0.06s;
+    height: 35px;
+    width: 35px;
+    margin-left: 20px;
+    padding: 0px;
+    border-radius: 100%;
+    overflow: hidden;
+}
+
+.connection.behance {
+    transition-delay: 0.12s;
+    height: 35px;
+    width: 35px;
+    margin-left: 20px;
+    padding: 0px;
+    border-radius: 100%;
+    overflow: hidden;
+}
+
+.connection.facebook .icon {
+    height: 100%;
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+    background-color: black;
+}
+
+.connection.twitter .icon {
+    height: 100%;
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+    background-color: black;
+}
+
+.connection.behance .icon {
+    height: 100%;
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+    background-color: white;
+}
+
+.connection.facebook .icon {
+    background-image: url('https://esemanal.mx/revista/wp-content/uploads/2020/09/LinkedIn-Icon-squircle-1.png');
+}
+
+.connection.twitter .icon {
+    background-image: url('https://www.pngitem.com/pimgs/m/249-2499939_url-chain-link-transparent-images-link-to-website.png');
+}
+
+.connection.behance .icon {
+    background-image: url('https://image.flaticon.com/icons/png/512/25/25231.png');
+}
