@@ -32,6 +32,7 @@ import {
     Select,
     Input,
     DialogActions,
+    CircularProgress,
 } from '@material-ui/core';
 import { Button } from '@material-ui/core';
 import supabase from '../../../supabase.config';
@@ -145,11 +146,8 @@ EnhancedTableHead.propTypes = {
 //------------------------makeStyle1---------------------------------------------------------------------------------------
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
-        // paddingLeft: theme.spacing(0),
-        // paddingRight: theme.spacing(0),
         backgroundColor: lighten('#34a7a1', 0.3),
         padding: '0px 0px 0px 0px',
-        //color barra superior '
     },
     highlight:
         theme.palette.type === 'light'
@@ -290,7 +288,6 @@ const EnhancedTableToolbar = (props) => {
                         'medics(dni, name, lastname, medic_license, email, phone_number, profilePic, medical_specialities (id, name), address(street, street_number, floor, department, localities(id_locality, name, postal_code,states(id,name)))))'
                     )
                     .eq('locality_id', idLocality);
-                // .eq('medical_specialities.id',idSpeciality)
                 let array = [];
                 let retorno = [];
                 for (let ad of medics) {
@@ -348,16 +345,26 @@ const EnhancedTableToolbar = (props) => {
     };
 
     const getSpecialities = async () => {
-        const { data: specialitiesData, error: errorFetchSpecialities } =
-            await supabase.from('medical_specialities').select('name, id');
-        if (errorFetchSpecialities) return console.log(errorFetchSpecialities);
-        setSpecialities(specialitiesData);
+        const arraySpecialities = medicsToShow.map((el) =>
+            el.medical_specialities.map((spec) => {
+                return { name: spec.name, id: spec.id };
+            })
+        );
+        const list = [];
+        for (let i of arraySpecialities) {
+            i.length > 1 ? i.forEach((el) => list.push(el)) : list.push(i[0]);
+        }
+
+        setSpecialities(
+            list.filter((v, i, a) => a.findIndex((t) => t.id === v.id) === i)
+        );
     };
 
     useEffect(() => {
-        getSpecialities(selectedState);
+        getSpecialities();
         //eslint-disable-next-line
-    }, []);
+    }, [medicsToShow]);
+
     useEffect(() => {
         getLocalities(selectedState);
     }, [selectedState]);
@@ -397,6 +404,8 @@ const EnhancedTableToolbar = (props) => {
         setOpen(false);
         setToShowRows(medicsToShow);
     };
+
+    if (medicsToShow.length === 0) return <CircularProgress />;
 
     return (
         <Toolbar

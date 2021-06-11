@@ -131,7 +131,11 @@ function AdminNav({ firebase, window: windowMui }) {
         let { data: familyGroup, error: fetchFamilyGroup } = await supabase
             .from('partners')
             .select('name, lastname')
-            .eq('family_group', affiliateData.family_group);
+            .match({
+                family_group: affiliateData.family_group,
+                state: 'aceptado',
+            })
+            .neq('dni', userData.dni);
         if (fetchFamilyGroup) {
             MySwal.fire({
                 title: 'Error con la base de datos!!',
