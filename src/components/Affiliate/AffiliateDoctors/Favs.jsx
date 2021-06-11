@@ -69,6 +69,8 @@ const headCells = [
         disablePadding: false,
         label: 'APELLIDO',
     },
+    { id: 'adress', numeric: false, disablePadding: true, label: 'DIRECCION' },
+    { id: 'phone_number', numeric: true, disablePadding: true, label: 'TELEFONO' },
     {
         id: 'specialties',
         numeric: false,
@@ -137,15 +139,15 @@ const useToolbarStyles = makeStyles((theme) => ({
     highlight:
         theme.palette.type === 'light'
             ? {
-                  color: '#fafafa',
-                  backgroundColor: lighten(blue[500], 0.5), //color barra superior cuando selecciono item
-                  fontWeight: 'bold',
-                  fontSize: '30px',
-              }
+                color: '#fafafa',
+                backgroundColor: lighten(blue[500], 0.5), //color barra superior cuando selecciono item
+                fontWeight: 'bold',
+                fontSize: '30px',
+            }
             : {
-                  color: theme.palette.text.primary,
-                  backgroundColor: lighten('#34a7a1', 0.3),
-              },
+                color: theme.palette.text.primary,
+                backgroundColor: lighten('#34a7a1', 0.3),
+            },
     title: {
         flex: '1 1 100%',
         fontWeight: 'bold',
@@ -328,10 +330,9 @@ export default function Favs() {
             html:
                 `<p>Email: ${medicData.email}</p>` +
                 `<p>Teléfono: ${medicData.phone_number}</p>` +
-                `<p>Dirección: ${
-                    medicData.address[0].street +
-                    ' ' +
-                    medicData.address[0].street_number
+                `<p>Dirección: ${medicData.address[0].street +
+                ' ' +
+                medicData.address[0].street_number
                 }</p>` +
                 `<p>${floor + ' ' + department}</p>` +
                 `<p>${medicData.address[0].localities.name}</p>` +
@@ -414,7 +415,7 @@ export default function Favs() {
                                 .map((row, index) => {
                                     const isItemSelected = isSelected(row.name);
                                     const labelId = `enhanced-table-checkbox-${index}`;
-
+                                    const br = <br/>
                                     return (
                                         <TableRow
                                             hover
@@ -499,6 +500,34 @@ export default function Favs() {
                                                 }
                                             >
                                                 {row.lastname}
+                                            </TableCell>
+                                            <TableCell
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
+                                                {
+                                                    `${row.address[0].street} ${row.address[0].street_number} `}
+                                                {row.address[0].floor ? br : null}
+                                                {`${row.address[0].floor ? `Piso: ${row.address[0].floor}` : ''}`}
+                                                {`${row.address[0].department ? `Departamento: ${row.address[0].department}` : ''}`}
+                                                {row.address[0].floor ? br : null}
+                                                {`${row.address[0].localities.name} ${row.address[0].localities.states.name},
+                                                    CP: ${row.address[0].localities.postal_code}`
+                                                }
+                                            </TableCell>
+                                            <TableCell
+                                                align='left'
+                                                className={
+                                                    index % 2 === 1
+                                                        ? classes.rowColor
+                                                        : null
+                                                }
+                                            >
+                                                {row.phone_number}
                                             </TableCell>
                                             <TableCell
                                                 className={

@@ -99,6 +99,13 @@ async function getData(query) {
     }
 }
 
+const getOrdersStatus = async () => {
+    const { data: status, error: statusError } = await supabase
+        .from('order_status')
+        .select('*');
+    return status ? status : statusError;
+};
+
 export default function PrescriptionsAndOrders() {
     const classes = useStyles();
     const dispatch = useDispatch();
@@ -115,6 +122,8 @@ export default function PrescriptionsAndOrders() {
     );
     const medicData = JSON.parse(localStorage.getItem('medicdata'));
 
+    const [ordersStatus, setOrdersStatus] = useState([]);
+
     const handleChange = (event) => {
         setQuery({ ...query, [event.target.name]: event.target.value });
     };
@@ -126,10 +135,19 @@ export default function PrescriptionsAndOrders() {
     useEffect(() => {
         dispatch(getAffiliates());
         getData(query).then(
-            (r) => setData(r.filter(e => e.medical_consultations.medic_dni === medicData.dni )),
-            (err) => console.log(err)
+            (r) => setData(r),
+            (err) => alert(err.message)
         );
     }, [query]);
+
+    useEffect(() => {
+        getOrdersStatus().then(
+            (r) => setOrdersStatus(r),
+            (err) => alert(err.message)
+        );
+        console.log(ordersStatus);
+        //eslint-disable-next-line
+    }, [data]);
 
     useEffect(() => {
         setFilteredData(data);
@@ -276,7 +294,13 @@ export default function PrescriptionsAndOrders() {
                                                   align='left'
                                                   size='small'
                                               >
-                                                  {row.status}
+                                                  {ordersStatus.find(
+                                                      (s) => s.id == row.status
+                                                  ) &&
+                                                      ordersStatus.find(
+                                                          (s) =>
+                                                              s.id == row.status
+                                                      ).name}
                                               </TableCell>
                                           ) : null}
                                           <TableCell align='left' size='small'>
